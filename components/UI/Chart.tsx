@@ -37,7 +37,6 @@ const Chart = () => {
   const handleChartStatus = (text: string) => {
     setSelectedStatus(text);
   };
-  console.log(selectedStatus);
 
   return (
     <View style={styles.container}>
@@ -93,7 +92,6 @@ const Chart = () => {
         xAxisColor="#455a64" // X-axis color
         yAxisColor="#455a64" // Y-axis color
       />
-      <View></View>
     </View>
   );
 };
