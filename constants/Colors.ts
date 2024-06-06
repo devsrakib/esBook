@@ -1,26 +1,27 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const tintColorLight = "#0a7ea4";
+const tintColorDark = "#fff";
 
 export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
+  mainColor: "#3B70D7",
+  orange: "#F19D1F",
+  green: "#0E947A",
+  red: "#FE5151",
+  white: "#ffffff",
+  black: "#000000",
+  darkCharcoal: "#333333",
+  OrangeRed: "#FE51511A",
+  JazzBerry: "#AB09501A",
+  VeroneseGreen: "#0E947A1A",
+  border: "#E6E6E6",
+  text: "#4C4C4C",
+  chartColor1: "#FE5151",
+  chartColor2: "",
+  chartLineColor1: "#FE5151",
+  chartLineColor2: "",
+  Lavender: "#E5EEFE",
+  background: "#F4F6FF",
+  tint: tintColorLight,
+  icon: "#687076",
+  tabIconDefault: "#687076",
+  tabIconSelected: tintColorLight,
 };
