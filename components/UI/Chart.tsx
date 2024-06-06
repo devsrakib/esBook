@@ -21,8 +21,22 @@ const data1 = [
   { value: 100, label: "Wed" },
   { value: 60, label: "Thu" },
   { value: 10, label: "Fri" },
+  { value: 50, label: "Sat" },
+  { value: 80, label: "Sun" },
+  { value: 90, label: "Mon" },
+  { value: 70, label: "Tue" },
+  { value: 100, label: "Wed" },
+  { value: 60, label: "Thu" },
+  { value: 10, label: "Fri" },
 ];
 const data2 = [
+  { value: 30, label: "Jan" },
+  { value: 50, label: "Feb" },
+  { value: 70, label: "Mar" },
+  { value: 50, label: "Apr" },
+  { value: 80, label: "May" },
+  { value: 70, label: "Jun" },
+  { value: 70, label: "Jun" },
   { value: 30, label: "Jan" },
   { value: 50, label: "Feb" },
   { value: 70, label: "Mar" },
@@ -74,9 +88,11 @@ const Chart = () => {
         showVerticalLines
         spacing={44}
         hideDataPoints
+        showXAxisIndices
+        showDataPointOnFocus
         isAnimated
         animationDuration={1500}
-        initialSpacing={20}
+        initialSpacing={30}
         color1={Colors.chartColor1}
         color2="blue"
         textColor1="green"
@@ -89,8 +105,6 @@ const Chart = () => {
         textShiftY={-2}
         textShiftX={5}
         textFontSize={Fonts.small}
-        xAxisColor="#455a64" // X-axis color
-        yAxisColor="#455a64" // Y-axis color
       />
     </View>
   );

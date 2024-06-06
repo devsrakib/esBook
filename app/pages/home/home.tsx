@@ -24,10 +24,10 @@ const Home = () => {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     backgroundColor: Colors.white,
-    gap: 20,
+    gap: 15,
   },
 });
 

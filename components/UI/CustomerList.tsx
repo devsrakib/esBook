@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: Fonts.medium,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: Colors.darkCharcoal,
   },
   date: {
