@@ -37,10 +37,10 @@ const data = [
 ];
 const Dashboard = () => {
   return (
-    <View style={[sharedStyle.grid, { paddingHorizontal: 10 }]}>
-      {data?.map((d) => {
+    <View style={[sharedStyle.grid, { marginTop: 14 }]}>
+      {data?.map((d, i) => {
         return (
-          <View style={styles.subContainer}>
+          <View key={i} style={styles.subContainer}>
             <View style={styles.textCon}>
               <Text style={styles.text1}>{d.text}</Text>
               <Text style={[styles.textAmount, { color: d.textColor }]}>
@@ -59,14 +59,15 @@ const Dashboard = () => {
 
 const styles = StyleSheet.create({
   subContainer: {
-    width: "48%",
+    width: "48.5%",
     backgroundColor: Colors.white,
-    borderRadius: radius.regular,
+    borderRadius: radius.medium,
     padding: 8,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
     paddingLeft: 10,
+    height: 80,
   },
   imgCon: {
     width: 40,

@@ -24,5 +24,5 @@ export const Colors = {
   tint: tintColorLight,
   icon: "#687076",
   tabIconDefault: "#687076",
-  tabIconSelected: tintColorLight,
+  page_bg: "#f3f3f9",
 };

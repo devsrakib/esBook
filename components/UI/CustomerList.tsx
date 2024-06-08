@@ -101,7 +101,7 @@ const CustomerList = () => {
 const renderItem = () => {
   return (
     <>
-      <Divider height={1} width={"100%"} />
+      <Divider height={1} width={"100%"} aligns={"center"} />
       <View style={styles.customerDetails}>
         <View style={styles.avatar}>
           <FontAwesome6 name="user-secret" size={24} color="black" />

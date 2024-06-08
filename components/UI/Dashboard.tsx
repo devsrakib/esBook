@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
+import { sharedStyle } from "@/constants/shared.style";
 
 const Dashboard = () => {
   const allStatuses = [
@@ -35,31 +36,20 @@ const Dashboard = () => {
   ];
 
   return (
-    <View>
-      {
-        <FlatList
-          data={allStatuses}
-          contentContainerStyle={{
-            gap: 15,
-          }}
-          numColumns={2}
-          renderItem={({ item }) => {
-            return (
-              <View style={[styles.container]}>
-                <View
-                  style={[styles.logoCon, { backgroundColor: item?.bg_color }]}
-                >
-                  <Image source={item?.icon} style={styles.logo} />
-                </View>
-                <Text style={styles.text}>{item?.text}</Text>
-                <Text style={[styles.amount, { color: item?.color }]}>
-                  ${item?.amount}
-                </Text>
-              </View>
-            );
-          }}
-        />
-      }
+    <View style={sharedStyle.grid}>
+      {allStatuses.map((item, index) => {
+        return (
+          <View key={index} style={[styles.container]}>
+            <View style={[styles.logoCon, { backgroundColor: item?.bg_color }]}>
+              <Image source={item?.icon} style={styles.logo} />
+            </View>
+            <Text style={styles.text}>{item?.text}</Text>
+            <Text style={[styles.amount, { color: item?.color }]}>
+              ${item?.amount}
+            </Text>
+          </View>
+        );
+      })}
     </View>
   );
 };
@@ -67,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.background,
     borderRadius: radius.small,
-    flex: 1,
+    width: "48.5%",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
