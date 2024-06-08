@@ -6,44 +6,77 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { LineChart } from "react-native-gifted-charts";
+import { BarChart, LineChart } from "react-native-gifted-charts";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { MaterialIcons } from "@expo/vector-icons";
 const customWidth = Dimensions.get("window").width;
 const chartStatusTime = ["Weekly", "Monthly", "Yearly"];
 
-const data1 = [
-  { value: 50, label: "Sat" },
-  { value: 80, label: "Sun" },
-  { value: 90, label: "Mon" },
-  { value: 70, label: "Tue" },
-  { value: 100, label: "Wed" },
-  { value: 60, label: "Thu" },
-  { value: 10, label: "Fri" },
-  { value: 50, label: "Sat" },
-  { value: 80, label: "Sun" },
-  { value: 90, label: "Mon" },
-  { value: 70, label: "Tue" },
-  { value: 100, label: "Wed" },
-  { value: 60, label: "Thu" },
-  { value: 10, label: "Fri" },
-];
-const data2 = [
-  { value: 30, label: "Jan" },
-  { value: 50, label: "Feb" },
-  { value: 70, label: "Mar" },
-  { value: 50, label: "Apr" },
-  { value: 80, label: "May" },
-  { value: 70, label: "Jun" },
-  { value: 70, label: "Jun" },
-  { value: 30, label: "Jan" },
-  { value: 50, label: "Feb" },
-  { value: 70, label: "Mar" },
-  { value: 50, label: "Apr" },
-  { value: 80, label: "May" },
-  { value: 70, label: "Jun" },
-  { value: 70, label: "Jun" },
+const barData = [
+  {
+    value: 230,
+    label: "Jan",
+    frontColor: "#4ABFF4",
+    sideColor: "#23A7F3",
+    topColor: "#92e6f6",
+  },
+  {
+    value: 180,
+    label: "Feb",
+    frontColor: "#79C3DB",
+    sideColor: "#68BCD7",
+    topColor: "#9FD4E5",
+  },
+  {
+    value: 195,
+    label: "Mar",
+    frontColor: "#28B2B3",
+    sideColor: "#0FAAAB",
+    topColor: "#66C9C9",
+  },
+  {
+    value: 250,
+    label: "Apr",
+    frontColor: "#4ADDBA",
+    sideColor: "#36D9B2",
+    topColor: "#7DE7CE",
+  },
+  {
+    value: 320,
+    label: "May",
+    frontColor: "#91E3E3",
+    sideColor: "#85E0E0",
+    topColor: "#B0EAEB",
+  },
+  {
+    value: 250,
+    label: "Apr",
+    frontColor: "#4ADDBA",
+    sideColor: "#36D9B2",
+    topColor: "#7DE7CE",
+  },
+  {
+    value: 320,
+    label: "May",
+    frontColor: "#91E3E3",
+    sideColor: "#85E0E0",
+    topColor: "#B0EAEB",
+  },
+  {
+    value: 250,
+    label: "Apr",
+    frontColor: "#4ADDBA",
+    sideColor: "#36D9B2",
+    topColor: "#7DE7CE",
+  },
+  {
+    value: 320,
+    label: "May",
+    frontColor: "#91E3E3",
+    sideColor: "#85E0E0",
+    topColor: "#B0EAEB",
+  },
 ];
 const Chart = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -78,33 +111,18 @@ const Chart = () => {
           })}
         </View>
       </View>
-      <LineChart
-        areaChart
-        curved
-        data={data1}
-        data2={data2}
-        height={250}
-        width={customWidth - 100}
-        showVerticalLines
-        spacing={44}
-        hideDataPoints
-        showXAxisIndices
-        showDataPointOnFocus
-        isAnimated
-        animationDuration={1500}
-        initialSpacing={30}
-        color1={Colors.chartColor1}
-        color2="blue"
-        textColor1="green"
-        dataPointsColor1="blue"
-        dataPointsColor2="black"
-        startFillColor1={Colors.chartColor1}
-        startFillColor2="skyblue"
-        startOpacity={0.2}
-        endOpacity={0}
-        textShiftY={-2}
-        textShiftX={5}
-        textFontSize={Fonts.small}
+      <BarChart
+        showFractionalValues
+        showYAxisIndices
+        hideRules
+        noOfSections={4}
+        maxValue={400}
+        data={barData}
+        barWidth={20}
+        sideWidth={10}
+        // isThreeD
+        side="right"
+        // capRadius={20}
       />
     </View>
   );

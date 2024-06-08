@@ -14,6 +14,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import Divider from "./Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { Link } from "expo-router";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
 const CustomerList = () => {
@@ -83,10 +84,12 @@ const CustomerList = () => {
                 source={require("../../assets/images/message.png")}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.addCustomer}>
-              <Fontisto name="plus-a" size={14} color={Colors.text} />
-              <Text style={styles.customerText}>Customer</Text>
-            </TouchableOpacity>
+            <Link href="/pages/Collection/collection" asChild>
+              <TouchableOpacity style={styles.addCustomer}>
+                <Fontisto name="plus-a" size={14} color={Colors.text} />
+                <Text style={styles.customerText}>Customer</Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
         <FlatList data={[1, 1, 1, 1, 1, 1]} renderItem={renderItem} />

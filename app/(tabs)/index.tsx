@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
-import Home from "../pages/home/home";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Home from "../pages/home/home";
 
 export default function HomeScreen() {
   const { bottom, top } = useSafeAreaInsets();

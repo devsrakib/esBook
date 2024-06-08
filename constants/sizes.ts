@@ -7,3 +7,7 @@ export const radius = {
   xxl: 14,
   xxxl: 16,
 };
+
+export const headerHeightWidth = {
+  headerH: 70,
+};
