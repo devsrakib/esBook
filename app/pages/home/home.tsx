@@ -5,7 +5,7 @@ import UserViewHome from "@/components/UI/UserViewHome";
 import Chart from "@/components/UI/Chart";
 import AmountCon from "@/components/UI/AmountCon";
 import Dashboard from "@/components/UI/Dashboard";
-import CustomerList from "@/components/UI/CustomerList";
+import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
 
 const Home = () => {
   return (
@@ -15,7 +15,7 @@ const Home = () => {
         <AmountCon />
         <Dashboard />
         <Chart />
-        <CustomerList />
+        <CustomerAndSupplierList bg={Colors.JazzBerry} />
       </View>
     </ScrollView>
   );

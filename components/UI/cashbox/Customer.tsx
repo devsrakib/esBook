@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     gap: 20,
     alignItems: "center",
     paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   imgCon: {
     width: 45,

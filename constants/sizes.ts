@@ -1,11 +1,11 @@
 export const radius = {
   small: 4,
-  medium: 6,
-  large: 8,
-  extraLarge: 10,
-  regular: 12,
-  xxl: 14,
-  xxxl: 16,
+  medium: 8,
+  large: 12,
+  regular: 10,
+  xl: 16,
+  xxl: 18,
+  xxxl: 20,
 };
 
 export const headerHeightWidth = {

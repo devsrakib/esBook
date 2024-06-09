@@ -17,7 +17,10 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Link } from "expo-router";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
-const CustomerList = () => {
+interface propsTypes {
+  bg: string;
+}
+const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const handleIndexChange = (index: number) => {
@@ -236,4 +239,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomerList;
+export default CustomerAndSupplierList;

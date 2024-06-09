@@ -30,7 +30,7 @@ const SearchCustomerAndAddCustomer = () => {
       </Link>
       <Link
         href={{
-          pathname: "/pages/addNewParties",
+          pathname: "/pages/parties/parties",
         }}
         asChild
       >

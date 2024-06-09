@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,12 +7,16 @@ import { Colors } from "@/constants/Colors";
 import SearchCustomerAndAddCustomer from "@/components/UI/cashbox/SearchCustomerAndAddCustomer";
 import { Feather } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
+import { radius } from "@/constants/sizes";
+import Button from "@/components/UI/Button";
 
 const page = () => {
   const route = useLocalSearchParams();
   const { bottom, top } = useSafeAreaInsets();
   console.log(route);
-
+  const handlelog = () => {
+    console.log("hello");
+  };
   return (
     <View
       style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
@@ -35,6 +39,14 @@ const page = () => {
           </Text>
         </View>
       </View>
+      <Button
+        title="save"
+        radius={radius.large}
+        titleColor={Colors.white}
+        bg={Colors.mainColor}
+        onPress={() => handlelog()}
+        width={"90%"}
+      />
     </View>
   );
 };
