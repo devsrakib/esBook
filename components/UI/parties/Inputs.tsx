@@ -1,5 +1,5 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -11,36 +11,59 @@ const inputs = [
   {
     label: "Full Name",
     icon: <Feather name="user" size={24} color="black" />,
+    key: "fullName",
   },
   {
     label: "Email",
     icon: (
       <MaterialCommunityIcons name="email-outline" size={24} color="black" />
     ),
+    key: "email",
   },
   {
     label: "Phone",
     icon: <Feather name="phone" size={24} color="black" />,
+    key: "phone",
   },
   {
     label: "Address",
     icon: <SimpleLineIcons name="location-pin" size={24} color="black" />,
+    key: "address",
   },
 ];
+
 const Inputs = () => {
+  const [data, setData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
+  });
+
+  const handleChange = (key: any, value: any) => {
+    setData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
+  console.log(data);
+
   return (
     <View style={styles.container}>
-      {inputs?.map((i) => {
-        return (
-          <Fragment>
-            <Text style={styles.label}>{i.label}</Text>
-            <View style={styles.inputContainer}>
-              <View style={styles.iconCon}>{i.icon}</View>
-              <TextInput style={styles.input} placeholder="Type here" />
-            </View>
-          </Fragment>
-        );
-      })}
+      {inputs.map((input) => (
+        <React.Fragment key={input.key}>
+          <Text style={styles.label}>{input.label}</Text>
+          <View style={styles.inputContainer}>
+            <View style={styles.iconCon}>{input.icon}</View>
+            <TextInput
+              onChangeText={(value) => handleChange(input.key, value)}
+              style={styles.input}
+              placeholder={`Enter ${input.key}`}
+            />
+          </View>
+        </React.Fragment>
+      ))}
     </View>
   );
 };

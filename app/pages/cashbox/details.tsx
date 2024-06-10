@@ -28,13 +28,15 @@ const page = () => {
       />
       <View style={styles.headerSection}>
         <Header height={70} title={route.text} titleColor={Colors.white} />
-        <SearchCustomerAndAddCustomer />
+        {(route.text === "Cash Sell" || route.text === "Due") && (
+          <SearchCustomerAndAddCustomer />
+        )}
       </View>
       <View style={styles.bodySection}>
         <View style={styles.dummyTextCon}>
           <Feather name="info" size={18} color={Colors.text} />
           <Text numberOfLines={1} style={styles.dummyText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit...adipiscing
+            Lorem ipsum dolor sit amet, consectetur adipiscing ...adipiscing
             elit...
           </Text>
         </View>
