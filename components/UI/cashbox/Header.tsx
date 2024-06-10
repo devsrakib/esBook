@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors";
 import GoBack from "../header/GoBack";
 import { Fonts } from "@/constants/Fonts";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import DatePicker from "../DatePicker";
 
 interface headerProps {
   height: number;
@@ -11,6 +13,8 @@ interface headerProps {
   titleColor: string;
 }
 const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
+  console.log(title);
+
   return (
     <View style={[styles.container, { height }]}>
       <GoBack color={Colors.white} />
@@ -22,10 +26,21 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
             size={18}
             color={Colors.white}
           />
-          <Text style={styles.reportText}>Report</Text>
+          <Link
+            href={{
+              pathname: "/pages/cashbox/report",
+            }}
+          >
+            <Text style={styles.reportText}>Report</Text>
+          </Link>
         </View>
       ) : (
-        <></>
+        <DatePicker
+          background={Colors.white}
+          iconSite="right"
+          iconColor={Colors.text}
+          iconSize={16}
+        />
       )}
     </View>
   );

@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-
 export const sharedStyle = StyleSheet.create({
   grid: {
     flexDirection: "row",

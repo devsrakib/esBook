@@ -2,13 +2,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useCallback, useMemo, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { AntDesign } from "@expo/vector-icons";
-import { format } from "date-fns";
 import Divider from "../Divider";
 import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
 import { IFeature } from "@/types/feature.interface";
+import DatePicker from "../DatePicker";
 
 const feature: IFeature[] = [
   {
@@ -56,53 +54,17 @@ const feature: IFeature[] = [
 ];
 
 const CashboxFeature = () => {
-  const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-    setShow(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
-    hideDatePicker();
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
         <Text style={styles.text1}>Cashbox Featured</Text>
-        <TouchableOpacity
-          onPress={() => {
-            showDatePicker();
-          }}
-          style={styles.calenderCon}
-        >
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode="date"
-              is24Hour={true}
-              display="default"
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || date;
-                setShow(false);
-                setDate(currentDate);
-              }}
-            />
-          )}
-          <Text style={styles.date}>{format(date, "dd MMM, yyyy")}</Text>
-          <AntDesign name="calendar" size={20} color={Colors.mainColor} />
-        </TouchableOpacity>
+        <DatePicker
+          background={Colors.white}
+          iconSite="right"
+          iconColor={Colors.mainColor}
+          iconSize={18}
+        />
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
       <View style={styles.bottomSection}>
@@ -126,21 +88,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
-  calenderCon: {
-    flexDirection: "row",
-    gap: 10,
-    borderRadius: radius.small,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  date: {
-    fontSize: Fonts.small,
-    color: Colors.text,
-  },
+
   bottomSection: {},
   text1: {
     fontSize: Fonts.medium,

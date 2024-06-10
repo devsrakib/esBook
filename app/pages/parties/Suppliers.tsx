@@ -18,7 +18,7 @@ const Suppliers = () => {
         <AddPhoneBookButton />
         <Inputs />
         <Button
-          title="Add New Customer"
+          title="Add New Supplier"
           titleColor={Colors.white}
           bg={Colors.mainColor}
           radius={radius.regular}
