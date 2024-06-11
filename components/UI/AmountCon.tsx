@@ -5,28 +5,39 @@ import { Colors } from "@/constants/Colors";
 
 const receiveAmount = 4000;
 
-const AmountCon = () => {
+interface amountProps {
+  bg_image: any;
+  logo1: any;
+  logo2?: any;
+  leftTextColor: string;
+  leftAmountTColor: string;
+}
+const AmountCon: React.FC<amountProps> = ({
+  bg_image,
+  logo1,
+  logo2,
+  leftAmountTColor,
+  leftTextColor,
+}) => {
   return (
     <ImageBackground
       imageStyle={{ borderRadius: 15 }}
       style={styles.container}
-      source={require("../../assets/images/amountFrame.png")}
+      source={bg_image}
     >
       <View style={[styles.amountCon, { flex: 1.3 }]}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/images/receive.png")}
-        />
+        <Image style={styles.logo} source={logo1} />
         <View>
-          <Text style={styles.text}>You will Receive</Text>
-          <Text style={styles.amount}>$ {receiveAmount}</Text>
+          <Text style={[styles.text, { color: leftTextColor }]}>
+            You will Receive
+          </Text>
+          <Text style={[styles.amount, { color: leftAmountTColor }]}>
+            $ {receiveAmount}
+          </Text>
         </View>
       </View>
       <View style={styles.amountCon}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/images/give.png")}
-        />
+        <Image style={styles.logo} source={logo2} />
         <View>
           <Text style={styles.text}>You will Give</Text>
           <Text style={styles.amount}>$ {receiveAmount}</Text>
@@ -41,7 +52,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 110,
     flexDirection: "row",
-    // padding: 4,
+    alignSelf: "center",
     gap: 10,
     resizeMode: "stretch",
   },
@@ -54,8 +65,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
   },
   text: {
     fontSize: Fonts.small,

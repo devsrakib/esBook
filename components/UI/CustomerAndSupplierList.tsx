@@ -15,6 +15,8 @@ import { Fonts } from "@/constants/Fonts";
 import Divider from "./Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import Filter from "./parties/filter";
+import Customers from "./shared/Customers";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
 interface propsTypes {
@@ -64,14 +66,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
           })}
         </View>
 
-        <TouchableOpacity style={styles.filter}>
-          <MaterialCommunityIcons
-            name="filter-outline"
-            size={16}
-            color={Colors.text}
-          />
-          <Text>Filter</Text>
-        </TouchableOpacity>
+        <Filter />
       </View>
       {/* customer list */}
       <View style={styles.usersCon}>
@@ -95,27 +90,14 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
             </Link>
           </View>
         </View>
-        <FlatList data={[1, 1, 1, 1, 1, 1]} renderItem={renderItem} />
+        <FlatList
+          data={[1, 1, 1, 1, 1, 1]}
+          renderItem={({ item }) => {
+            return <Customers />;
+          }}
+        />
       </View>
     </View>
-  );
-};
-
-const renderItem = () => {
-  return (
-    <>
-      <Divider height={1} width={"100%"} aligns={"center"} />
-      <View style={styles.customerDetails}>
-        <View style={styles.avatar}>
-          <FontAwesome6 name="user-secret" size={24} color="black" />
-        </View>
-        <View style={styles.nameSection}>
-          <Text style={styles.name}>Mehedi hasan</Text>
-          <Text style={styles.date}>3 Jun,2024</Text>
-        </View>
-        <Text>$23,000</Text>
-      </View>
-    </>
   );
 };
 
@@ -148,17 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  filter: {
-    flexDirection: "row",
-    borderRadius: radius.small,
-    borderColor: Colors.border,
-    backgroundColor: Colors.background,
-    paddingHorizontal: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-    borderWidth: 1,
-  },
+
   usersCon: {
     backgroundColor: Colors.background,
     marginVertical: 16,
@@ -208,34 +180,6 @@ const styles = StyleSheet.create({
   customerText: {
     color: Colors.text,
     fontSize: Fonts.regular,
-  },
-  customerDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 20,
-    height: 50,
-  },
-  nameSection: {
-    flex: 1,
-  },
-  avatar: {
-    borderWidth: 1,
-    borderRadius: radius.large,
-    padding: 6,
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: Colors.border,
-    width: 36,
-    height: 36,
-  },
-  name: {
-    fontSize: Fonts.medium,
-    fontWeight: "600",
-    color: Colors.darkCharcoal,
-  },
-  date: {
-    fontSize: Fonts.regular,
-    color: Colors.text,
   },
 });
 

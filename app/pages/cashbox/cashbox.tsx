@@ -1,11 +1,19 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { headerHeightWidth } from "@/constants/sizes";
+import { headerHeightWidth, radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import Dashboard from "@/components/UI/cashbox/Dashboard";
 import CashboxFeature from "@/components/UI/cashbox/CashboxFeature";
+import { Link } from "expo-router";
 
 export const Cashbox = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -16,6 +24,20 @@ export const Cashbox = () => {
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.headerText}>Cashbox</Text>
+          <Link
+            href={{
+              pathname: "/pages/cashbox/matchCashbox",
+            }}
+            asChild
+          >
+            <TouchableOpacity style={styles.matchCashbox}>
+              <Image
+                style={styles.matchLogo}
+                source={require("../../../assets/images/calculator.png")}
+              />
+              <Text style={styles.matchText}>Match Cashbox</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
         <View style={styles.bodySection}>
           <Dashboard />
@@ -35,8 +57,10 @@ const styles = StyleSheet.create({
     height: headerHeightWidth.headerH,
     backgroundColor: Colors.mainColor,
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
   headerText: {
     fontWeight: "500",
@@ -47,6 +71,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     gap: 20,
     paddingBottom: 20,
+  },
+  matchCashbox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: Colors.white,
+    borderRadius: radius.small,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+  },
+  matchLogo: {
+    width: 18,
+    height: 18,
+  },
+  matchText: {
+    fontSize: Fonts.regular,
+    color: Colors.mainColor,
   },
 });
 

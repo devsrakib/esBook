@@ -12,9 +12,6 @@ const MaterialTab = ({ tab }: any) => {
         tabBarActiveTintColor: Colors.mainColor,
         tabBarInactiveTintColor: Colors.text,
         tabBarLabelStyle: { fontSize: 16, textTransform: "capitalize" },
-        // tabBarStyle: {
-        //   backgroundColor: route.name === 'Screen1' ? Colors.activeBackground : Colors.inactiveBackground,
-        // },
       }}
     >
       {tab?.map((t: any, index: number) => {

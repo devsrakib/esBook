@@ -9,6 +9,7 @@ import { Feather } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import Button from "@/components/UI/Button";
+import DetailsPageInput from "@/components/UI/cashbox/DetailsPageInput";
 
 const page = () => {
   const route = useLocalSearchParams();
@@ -41,6 +42,7 @@ const page = () => {
           </Text>
         </View>
       </View>
+      <DetailsPageInput />
       <Button
         title="save"
         radius={radius.large}
@@ -56,6 +58,7 @@ const page = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   headerSection: {
     backgroundColor: Colors.mainColor,

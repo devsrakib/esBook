@@ -12,7 +12,13 @@ const Home = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={[Styles.container]}>
         <UserViewHome />
-        <AmountCon />
+        <AmountCon
+          bg_image={require("../../../assets/images/amountFrame.png")}
+          leftTextColor={Colors.white}
+          leftAmountTColor={Colors.white}
+          logo1={require("../../../assets/images/receive.png")}
+          logo2={require("../../../assets/images/give.png")}
+        />
         <Dashboard />
         <Chart />
         <CustomerAndSupplierList bg={Colors.JazzBerry} />
