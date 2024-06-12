@@ -1,15 +1,21 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { Fragment } from "react";
 import Divider from "../Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
+import { Link } from "expo-router";
 
 const Customers = () => {
   return (
-    <Fragment>
-      <View style={styles.customerDetails}>
+    <Link
+      href={{
+        pathname: "/pages/parties/CustomerView",
+      }}
+      asChild
+    >
+      <TouchableOpacity style={styles.customerDetails}>
         <View style={styles.avatar}>
           <FontAwesome6 name="user-secret" size={24} color="black" />
         </View>
@@ -18,8 +24,8 @@ const Customers = () => {
           <Text style={styles.date}>3 Jun,2024</Text>
         </View>
         <Text>$23,000</Text>
-      </View>
-    </Fragment>
+      </TouchableOpacity>
+    </Link>
   );
 };
 
