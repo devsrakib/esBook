@@ -108,9 +108,14 @@ const CustomerView = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
-        <FilterAndTextSection />
-        <View style={styles.transactionsContainer}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: 50,
+            paddingHorizontal: 20,
+          }}
+        >
+          <FilterAndTextSection />
           {transactions.map((transaction, index) => (
             <View key={index} style={styles.transactionCard}>
               <Text style={styles.transactionTitle}>
@@ -119,34 +124,34 @@ const CustomerView = () => {
               <Text style={styles.transactionType}>
                 {transaction.type} : {transaction.amount}
               </Text>
-              <Text style={styles.transactionDate}>{transaction.date}</Text>
-              <Text
-                style={[
-                  styles.transactionAmount,
-                  { color: transaction.textColor },
-                ]}
-              >
-                {transaction.dueAmount}
-              </Text>
-              <Text style={styles.transactionBalance}>
-                {transaction.balance}
-              </Text>
+
+              <View style={styles.amountCon}>
+                <Text style={styles.transactionDate}>{transaction.date}</Text>
+                <Text
+                  style={[
+                    styles.transactionAmount,
+                    { color: transaction.textColor },
+                  ]}
+                >
+                  {transaction.dueAmount}
+                </Text>
+              </View>
             </View>
           ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
       <View style={styles.footer}>
         <Button
           title="You gave"
-          bg={Colors.red}
-          width={"50%"}
+          bg={Colors.green}
+          width={"48%"}
           radius={50}
           titleColor={Colors.white}
         />
         <Button
           title="You gave"
           bg={Colors.red}
-          width={"50%"}
+          width={"48%"}
           radius={50}
           titleColor={Colors.white}
         />
@@ -157,7 +162,7 @@ const CustomerView = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     backgroundColor: Colors.white,
   },
   header: {
@@ -269,31 +274,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 4,
   },
-  transactionsContainer: {
-    paddingHorizontal: 16,
-  },
+  // transactionsContainer: {
+  //   paddingHorizontal: 16,
+  // },
   transactionCard: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lavender,
     padding: 16,
     borderRadius: 10,
     marginVertical: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
   },
   transactionTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "500",
+    marginBottom: 10,
   },
   transactionType: {
     fontSize: 14,
-    color: "gray",
+    color: Colors.text,
   },
   transactionDate: {
     fontSize: 12,
-    color: "gray",
+    color: Colors.text,
+  },
+  amountCon: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   transactionAmount: {
     fontSize: 16,
@@ -302,15 +308,21 @@ const styles = StyleSheet.create({
   },
   transactionBalance: {
     fontSize: 12,
-    color: "gray",
+    color: Colors.text,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 16,
     backgroundColor: Colors.white,
-    position: "absolute",
-    bottom: 0,
+    shadowColor: Colors.black,
+    elevation: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   footerButton: {
     flex: 1,
