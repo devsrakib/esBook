@@ -15,6 +15,7 @@ import { Colors } from "@/constants/Colors";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import { Fonts } from "@/constants/Fonts";
 import Button from "@/components/UI/Button";
+import GoBack from "@/components/UI/header/GoBack";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -78,7 +79,7 @@ const CustomerView = () => {
     >
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.header}>
-        <Ionicons name="arrow-back" size={24} color={Colors.white} />
+        <GoBack color={Colors.white} />
         <View style={styles.headerImageAndTextCon}>
           <Image style={styles.userImage} />
           <View>
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.mainColor,
     padding: 16,
-    gap: 20,
+    gap: 10,
   },
   headerImageAndTextCon: {
     flexDirection: "row",

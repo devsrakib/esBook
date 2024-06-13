@@ -7,8 +7,14 @@ import Header from "@/components/UI/header/Header";
 import { radius } from "@/constants/sizes";
 import MaterialTab from "@/routers/MaterialTab";
 import MoneySection from "@/components/UI/Collection_component/MoneySection";
+import Customers from "../parties/Customers";
+import Suppliers from "../parties/Suppliers";
 
-const customScreen = Dimensions.get("window").width;
+const tab: { tabName: string; component: any }[] = [
+  { tabName: "All", component: Customers },
+  { tabName: "Today", component: Suppliers },
+  { tabName: "Upcoming", component: Suppliers },
+];
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
   return (
@@ -28,7 +34,6 @@ const Page = () => {
       {/* main body section */}
       <View style={styles.bodySection}>
         <MoneySection />
-        <MaterialTab />
       </View>
     </View>
   );
@@ -41,10 +46,10 @@ const styles = StyleSheet.create({
   },
   bodySection: {
     backgroundColor: Colors.mainColor,
-    height: 300,
     borderBottomRightRadius: radius.regular,
     borderBottomLeftRadius: radius.regular,
     paddingHorizontal: 20,
+    paddingBottom: 20,
   },
 });
 

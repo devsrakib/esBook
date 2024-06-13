@@ -16,6 +16,7 @@ import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import Customers from "@/components/UI/shared/Customers";
 import AmountCon from "@/components/UI/AmountCon";
 import { AntDesign } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -53,7 +54,10 @@ const Parties = () => {
             return <Customers />;
           }}
         />
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          onPress={() => router.navigate("/pages/parties/addNewParties")}
+          style={styles.addButton}
+        >
           <AntDesign name="plus" size={18} color={Colors.white} />
           <Text style={styles.buttonText}>Add Parties</Text>
         </TouchableOpacity>

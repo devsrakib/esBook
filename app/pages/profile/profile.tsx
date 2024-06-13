@@ -14,6 +14,7 @@ import Divider from "@/components/UI/Divider";
 import Button from "@/components/UI/Button";
 import { Fonts } from "@/constants/Fonts";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import GoBack from "@/components/UI/header/GoBack";
 
 const Profile = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -23,7 +24,8 @@ const Profile = () => {
     address: "2118 Thornridge Cir. Syracuse, Connecticut 35624",
     phone: "014658933142",
     taxNumber: "GSTIN",
-    profileImage: "https://placekitten.com/200/200",
+    profileImage:
+      "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1810",
   };
 
   const infoData = [
@@ -79,7 +81,7 @@ const Profile = () => {
       ]}
     >
       <View style={styles.header}>
-        <Ionicons name="arrow-back" size={24} color="white" />
+        <GoBack color={Colors.white} />
         <Text style={styles.headerText}>Added Phone book</Text>
       </View>
       <View style={styles.profileContainer}>
@@ -137,6 +139,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 8,
+    resizeMode: "contain",
   },
   profileName: {
     color: "white",
