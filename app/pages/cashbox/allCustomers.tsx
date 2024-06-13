@@ -1,13 +1,24 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/UI/header/Header";
 import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Customer from "@/components/UI/cashbox/Customer";
+import { useSQLiteContext } from "expo-sqlite";
+import { getCustomers } from "@/databases/Database";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
+  const [customer, setCustomer] = useState<any>();
+  const db = useSQLiteContext();
+  useEffect(() => {
+    async function setup() {
+      const result = await getCustomers(db);
+      setCustomer(result);
+    }
+    setup();
+  }, []);
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -24,9 +35,9 @@ const Page = () => {
       />
       <View style={styles.bodySection}>
         <FlatList
-          data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
+          data={customer}
           renderItem={({ item }) => {
-            return <Customer />;
+            return <Customer item={item} />;
           }}
         />
       </View>

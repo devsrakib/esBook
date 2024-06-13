@@ -6,6 +6,8 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
+import { ICustomerDataInput } from "@/types/interfaces/input.interface";
+import { useSQLiteContext } from "expo-sqlite";
 
 const inputs = [
   {
@@ -23,7 +25,7 @@ const inputs = [
   {
     label: "Phone",
     icon: <Feather name="phone" size={24} color="black" />,
-    key: "phone",
+    key: "phoneNumber",
   },
   {
     label: "Address",
@@ -32,22 +34,16 @@ const inputs = [
   },
 ];
 
-const Inputs = () => {
-  const [data, setData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
-
+interface InputProps {
+  setData: React.Dispatch<React.SetStateAction<ICustomerDataInput>>;
+}
+const Inputs: React.FC<InputProps> = ({ setData }) => {
   const handleChange = (key: any, value: any) => {
     setData((prevData) => ({
       ...prevData,
       [key]: value,
     }));
   };
-
-  console.log(data);
 
   return (
     <View style={styles.container}>

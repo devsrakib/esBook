@@ -8,6 +8,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SQLiteProvider } from "expo-sqlite";
+import { migrateDbIfNeeded } from "@/databases/Database";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -28,7 +29,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SQLiteProvider databaseName="test.db">
+    <SQLiteProvider databaseName="Database.db" onInit={migrateDbIfNeeded}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />

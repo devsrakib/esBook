@@ -4,8 +4,9 @@ import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
+import { ICustomerDataInput } from "@/types/interfaces/input.interface";
 
-const Customer = () => {
+const Customer = ({ item }: { item: ICustomerDataInput }) => {
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.imgCon}>
@@ -13,7 +14,7 @@ const Customer = () => {
         <FontAwesome name="user-secret" size={24} color={Colors.text} />
       </View>
       <View style={styles.textCon}>
-        <Text style={styles.text1}>Leslie Allexandra</Text>
+        <Text style={styles.text1}>{item?.fullName}</Text>
         <Text style={styles.text2}>3 jun,2024</Text>
       </View>
     </TouchableOpacity>
