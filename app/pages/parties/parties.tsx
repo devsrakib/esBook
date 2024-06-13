@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -17,9 +17,27 @@ import Customers from "@/components/UI/shared/Customers";
 import AmountCon from "@/components/UI/AmountCon";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import { getCustomers, getSuppliers } from "@/databases/database";
+import { ICustomerDataInput } from "@/types/interfaces/input.interface";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = useState<number>(0);
+  const [customers, setCustomers] = useState<any>();
+  const [suppliers, setSuppliers] = useState<any>();
+
+  const db = useSQLiteContext();
+  useEffect(() => {
+    async function setup() {
+      const customers = await getCustomers(db);
+      const suppliers = await getSuppliers(db);
+      setCustomers(customers);
+      setSuppliers(suppliers);
+    }
+    setup();
+  }, []);
+
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
       <View style={styles.topSection}>
@@ -27,10 +45,28 @@ const Parties = () => {
           <Text style={styles.headerText}>Parties</Text>
         </View>
         <View style={styles.navigationCon}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.tabs,
+              {
+                borderBottomColor:
+                  activeTab === 0 ? Colors.white : "transparent",
+              },
+            ]}
+            onPress={() => setActiveTab(0)}
+          >
             <Text style={styles.navigationText}>Customers</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.tabs,
+              {
+                borderBottomColor:
+                  activeTab === 1 ? Colors.white : "transparent",
+              },
+            ]}
+            onPress={() => setActiveTab(1)}
+          >
             <Text style={styles.navigationText}>Suppliers</Text>
           </TouchableOpacity>
         </View>
@@ -44,16 +80,29 @@ const Parties = () => {
       </View>
       <View style={styles.bodySection}>
         <FilterAndTextSection />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 50,
-          }}
-          data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-          renderItem={({ item }) => {
-            return <Customers />;
-          }}
-        />
+        {activeTab === 0 ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 50,
+            }}
+            data={customers}
+            renderItem={({ item }) => {
+              return <Customers item={item} />;
+            }}
+          />
+        ) : (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 50,
+            }}
+            data={suppliers}
+            renderItem={({ item }) => {
+              return <Customers item={item} />;
+            }}
+          />
+        )}
         <TouchableOpacity
           onPress={() => router.navigate("/pages/parties/addNewParties")}
           style={styles.addButton}
@@ -117,6 +166,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.white,
     fontSize: Fonts.medium,
+  },
+  tabs: {
+    height: 25,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
   },
 });
 

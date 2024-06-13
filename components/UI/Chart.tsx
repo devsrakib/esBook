@@ -78,7 +78,7 @@ const barData = [
     topColor: "#B0EAEB",
   },
 ];
-const Chart = () => {
+const Chart = ({ setIsModalVisible }: { setIsModalVisible: Function }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const handleChartStatus = (text: string) => {
@@ -90,7 +90,10 @@ const Chart = () => {
       <View style={styles.statusContainer}>
         <Text style={styles.overview}>Overview</Text>
 
-        <TouchableOpacity style={styles.statusSelector}>
+        <TouchableOpacity
+          onPress={() => setIsModalVisible(true)}
+          style={styles.statusSelector}
+        >
           <Text style={styles.status}>{selectedStatus}</Text>
           <MaterialIcons
             name="keyboard-arrow-down"

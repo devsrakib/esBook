@@ -6,8 +6,11 @@ import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
+import { format, formatDate } from "date-fns";
 
-const Customers = () => {
+const Customers = ({ item }) => {
+  console.log(item);
+
   return (
     <Link
       href={{
@@ -20,8 +23,11 @@ const Customers = () => {
           <FontAwesome6 name="user-secret" size={24} color="black" />
         </View>
         <View style={styles.nameSection}>
-          <Text style={styles.name}>Mehedi hasan</Text>
-          <Text style={styles.date}>3 Jun,2024</Text>
+          <Text style={styles.name}>{item?.fullName}</Text>
+          <Text style={styles.date}>
+            {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
+            {item?.createdAt}
+          </Text>
         </View>
         <Text>$23,000</Text>
       </TouchableOpacity>

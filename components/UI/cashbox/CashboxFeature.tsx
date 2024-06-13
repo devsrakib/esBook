@@ -5,7 +5,7 @@ import { Colors } from "@/constants/Colors";
 import Divider from "../Divider";
 import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
-import { IFeature } from "@/types/feature.interface";
+import { IFeature } from "@/types/interfaces/feature.interface";
 import DatePicker from "../DatePicker";
 
 const feature: IFeature[] = [

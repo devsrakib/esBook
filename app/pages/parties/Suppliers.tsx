@@ -1,22 +1,39 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import ImageInput from "./ImageInput";
 import AddPhoneBookButton from "./AddPhoneBookButton";
 import Inputs from "@/components/UI/parties/Inputs";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
+import { createSuppliers, getSuppliers } from "@/databases/database";
+import { useSQLiteContext } from "expo-sqlite";
 
 const Suppliers = () => {
-  const handleLog = () => {
-    console.log("supplier");
+  const [supplierData, setSupplierData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+  });
+
+  const db = useSQLiteContext();
+
+  const handleSave = async () => {
+    const { fullName, email, phoneNumber, address } = supplierData;
+    if (!fullName || !email || !phoneNumber || !address) {
+      return;
+    } else {
+      await createSuppliers(db, supplierData);
+    }
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <ImageInput />
         <AddPhoneBookButton />
-        <Inputs />
+        <Inputs setData={setSupplierData} />
         <Button
           title="Add New Supplier"
           titleColor={Colors.white}
@@ -24,7 +41,7 @@ const Suppliers = () => {
           radius={radius.regular}
           width={"100%"}
           onPress={() => {
-            handleLog();
+            handleSave();
           }}
         />
       </View>

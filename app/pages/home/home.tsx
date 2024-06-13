@@ -1,13 +1,28 @@
 import { View, StyleSheet, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import UserViewHome from "@/components/UI/UserViewHome";
 import Chart from "@/components/UI/Chart";
 import AmountCon from "@/components/UI/AmountCon";
 import Dashboard from "@/components/UI/Dashboard";
 import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
+import { getSuppliers } from "@/databases/database";
+import { useSQLiteContext } from "expo-sqlite";
+import CustomModal from "@/components/UI/modal/Modal";
 
 const Home = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const db = useSQLiteContext();
+  useEffect(() => {
+    async function setup() {
+      const result = await getSuppliers(db);
+      console.log(result);
+
+      // setCustomer(result);
+    }
+    setup();
+  }, []);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={[Styles.container]}>
@@ -20,8 +35,14 @@ const Home = () => {
           logo2={require("../../../assets/images/give.png")}
         />
         <Dashboard />
-        <Chart />
+        <Chart setIsModalVisible={setIsModalVisible} />
         <CustomerAndSupplierList bg={Colors.JazzBerry} />
+        {isModalVisible && (
+          <CustomModal
+            isModalVisible={isModalVisible}
+            setIsModalVisible={setIsModalVisible}
+          />
+        )}
       </View>
     </ScrollView>
   );

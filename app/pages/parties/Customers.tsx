@@ -7,8 +7,7 @@ import ImageInput from "./ImageInput";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
 import { useSQLiteContext } from "expo-sqlite";
-import { ICustomerDataInput } from "@/types/interfaces/input.interface";
-import { createCustomers } from "@/databases/Database";
+import { createCustomers } from "@/databases/database";
 
 const Customers = () => {
   const [customerData, setCustomerData] = useState({
