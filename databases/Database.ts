@@ -135,103 +135,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 
-interface CustomerData {
-  profilePhoto?: string;
-  name: string;
-  email: string;
-  address: string;
-  phoneNumber: string;
-  taxNumber?: string;
-  createdAt?: string;
-}
+// ================================================================================================
+// ================================= customer table start from here ===============================
+// ================================================================================================
 
-interface SupplierData {
-  profilePhoto?: string;
-  name: string;
-  email: string;
-  address: string;
-  phoneNumber: string;
-  taxNumber?: string;
-  createdAt?: string;
-}
-
-interface CashSellData {
-  customerId: number;
-  saleAmount: number;
-  collectedAmount: number;
-  createdAt: string;
-  dueAmount: number;
-  extraAmount: number;
-  description: string;
-}
-
-interface CashBuyData {
-  supplierId: number;
-  amount: number;
-  date: string;
-  description?: string;
-  dueAmount?: number;
-  extraAmount?: number;
-}
-
-interface lend {
-  customerId: number;
-  amount: number;
-  date: string;
-  description?: string;
-}
-
-interface DueCollectionData {
-  customerId: number;
-  collectedAmount: number;
-  createdAt: string;
-  collectionPurpose: string;
-  description: string;
-}
-
-interface CollectionReminderData {
-  customerId: number;
-  createdAt: string;
-  collectionDate: string;
-}
-
-interface OwnerProfileData {
-  profilePhoto: string;
-  name: string;
-  email: string;
-  address: string;
-  phoneNumber: string;
-  taxNumber: string;
-  createdAt: string;
-}
-
-interface CashReportData {
-  date: string;
-  totalCash: number;
-}
-
-interface WithdrawData {
-  amount: number;
-  date: string;
-  description?: string;
-}
-
-interface ExpenseData {
-  amount: number;
-  date: string;
-  description?: string;
-}
-
-interface DepositData {
-  amount: number;
-  date: string;
-  description?: string;
-}
-
-//=================  ====================
 //=================  ====================
 //           customer table
-//=================  ====================
 //=================  ====================
 export const createCustomers = async (
   db: SQLiteDatabase,
@@ -251,32 +160,9 @@ export const createCustomers = async (
 
 //=================  ====================
 //=================  ====================
-//           supplier table
-//=================  ====================
-//=================  ====================
-export const createSuppliers = async (
-  db: SQLiteDatabase,
-  { name, email, phoneNumber, address, createdAt }: SupplierData
-) => {
-  try {
-    const timestamp = createdAt || new Date().toISOString();
-    await db.runAsync(
-      "INSERT INTO supplier (profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt) VALUES (?, ?, ?, ?, ?,?,?)",
-      [name, email, phoneNumber, address, timestamp]
-    );
-    console.log("Supplier created successfully");
-  } catch (error) {
-    console.error("Error creating supplier:", error);
-  }
-};
 
-//=================  ====================
-//=================  ====================
-
-//=================  ====================
 //=================  ====================
 //           cash_sell table
-//=================  ====================
 //=================  ====================
 export const cash_sell = async (
   db: SQLiteDatabase,
@@ -312,9 +198,7 @@ export const cash_sell = async (
 //=================  ====================
 
 //=================  ====================
-//=================  ====================
 //           due collection table
-//=================  ====================
 //=================  ====================
 export const due_collection = async (
   db: SQLiteDatabase,
@@ -341,9 +225,29 @@ export const due_collection = async (
 //=================  ====================
 
 //=================  ====================
-//=================  ====================
 //          collection reminder
 //=================  ====================
+export const customer_lend = async (
+  db: SQLiteDatabase,
+  { createdAt, amount, description }: lend
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO due_collection (  createdAt, amount, description) VALUES (?, ?, ?)",
+      [timestamp, amount, description]
+    );
+    console.log(" customer lend created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
+};
+
+//=================  ====================
+//=================  ====================
+
+//=================  ====================
+//          collection reminder
 //=================  ====================
 export const collection_reminder = async (
   db: SQLiteDatabase,
@@ -364,10 +268,101 @@ export const collection_reminder = async (
 //=================  ====================
 //=================  ====================
 
+export const getCustomers = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM customers");
+};
+
+// =====================================================================================================
+// =====================================================================================================
+
+// =====================================================================================================
+// ================================= supplier table start from here ====================================
+// =====================================================================================================
+
 //=================  ====================
+//           supplier table
+//=================  ====================
+export const createSuppliers = async (
+  db: SQLiteDatabase,
+  { name, email, phoneNumber, address, createdAt }: SupplierData
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO supplier (profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt) VALUES (?, ?, ?, ?, ?,?,?)",
+      [name, email, phoneNumber, address, timestamp]
+    );
+    console.log("Supplier created successfully");
+  } catch (error) {
+    console.error("Error creating supplier:", error);
+  }
+};
+
+//=================  ====================
+//=================  ====================
+
+//=================  ====================
+//           cash buy table
+//=================  ====================
+export const cash_buy = async (
+  db: SQLiteDatabase,
+  {
+    supplierId,
+    amount,
+    createdAt,
+    description,
+    dueAmount,
+    extraAmount,
+  }: CashBuyData
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO cash_sell (saleAmount, collectedAmount, createdAt, dueAmount, extraAmount, description) VALUES (?, ?, ?, ?, ?,?)",
+      [amount, createdAt, timestamp, dueAmount, extraAmount, description]
+    );
+    console.log("cash_sell created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
+};
+//=================  ====================
+//=================  ====================
+
 //=================  ====================
 //          collection reminder
 //=================  ====================
+export const supplier_lend = async (
+  db: SQLiteDatabase,
+  { createdAt, amount, description }: lend
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO due_collection (  createdAt, amount, description) VALUES (?, ?, ?)",
+      [timestamp, amount, description]
+    );
+    console.log(" supplier lend created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
+};
+
+//=================  ====================
+//=================  ====================
+
+export const getSuppliers = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM suppliers");
+};
+// =====================================================================================================
+// =====================================================================================================
+
+// =====================================================================================================
+// ================================= profile table start from here ====================================
+// =====================================================================================================
+
+//=================  ====================
+//          owner profile
 //=================  ====================
 export const Owner_profile = async (
   db: SQLiteDatabase,
@@ -384,7 +379,7 @@ export const Owner_profile = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection ( profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt,) VALUE (?, ?, ?, ?, ?, ?, ?",
+      "INSERT INTO due_collection ( profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt,) VALUE (?, ?, ?, ?, ?, ?, ?)",
       [profilePhoto, name, email, address, phoneNumber, taxNumber, timestamp]
     );
     console.log("Owner profile created successfully");
@@ -396,12 +391,200 @@ export const Owner_profile = async (
 //=================  ====================
 //=================  ====================
 
-export const getCustomers = async (db: SQLiteDatabase) => {
-  return await db.getAllAsync("SELECT * FROM customers");
+// =====================================================================================================
+// =====================================================================================================
+
+// =====================================================================================================
+// ================================= others table start from here ====================================
+// =====================================================================================================
+
+//=================  ====================
+//          cash report table
+//=================  ====================
+export const cash_report = async (
+  db: SQLiteDatabase,
+  { createdAt, totalCash }: CashReportData
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO cash_report ( createdAt, totalCash) VALUE (?, ?)",
+      [timestamp, totalCash]
+    );
+    console.log("Owner profile created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
 };
 
 //=================  ====================
 //=================  ====================
-export const getSuppliers = async (db: SQLiteDatabase) => {
-  return await db.getAllAsync("SELECT * FROM suppliers");
+
+//=================  ====================
+//          expense table
+//=================  ====================
+
+export const expense = async (
+  db: SQLiteDatabase,
+  { amount, createdAt, description }: ExpenseData
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO cash_report (amount ,createdAt, description) VALUE (?, ?, ?)",
+      [amount, timestamp, description]
+    );
+    console.log("Owner profile created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
 };
+
+//=================  ====================
+//=================  ====================
+
+//=================  ====================
+//          expense table
+//=================  ====================
+
+export const deposit = async (
+  db: SQLiteDatabase,
+  { amount, createdAt, description }: DepositData
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO deposit (amount ,createdAt, description) VALUE (?, ?, ?)",
+      [amount, timestamp, description]
+    );
+    console.log("Owner profile created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
+};
+
+//=================  ====================
+//=================  ====================
+
+//=================  ====================
+//          expense table
+//=================  ====================
+
+export const withdraw = async (
+  db: SQLiteDatabase,
+  { amount, createdAt, description }: WithdrawData
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO cash_report (amount ,createdAt, description) VALUE (?, ?, ?)",
+      [amount, timestamp, description]
+    );
+    console.log("Owner profile created successfully");
+  } catch (error) {
+    console.error("Error creating cash_sell:", error);
+  }
+};
+
+//=================  ====================
+//=================  ====================
+
+// =====================================================================================================
+// =====================================================================================================
+
+// =======================================================
+// ============= types are start from here ===============
+// =======================================================
+
+interface CustomerData {
+  profilePhoto?: string;
+  name: string;
+  email: string;
+  address: string;
+  phoneNumber: string;
+  taxNumber?: string;
+  createdAt?: string;
+}
+
+interface SupplierData {
+  profilePhoto?: string;
+  name: string;
+  email: string;
+  address: string;
+  phoneNumber: string;
+  taxNumber?: string;
+  createdAt?: string;
+}
+
+interface CashSellData {
+  customerId: number;
+  saleAmount: number;
+  collectedAmount: number;
+  createdAt: string;
+  dueAmount: number;
+  extraAmount: number;
+  description: string;
+}
+
+interface CashBuyData {
+  supplierId: number;
+  amount: number;
+  createdAt: string;
+  description: string;
+  dueAmount: number;
+  extraAmount: number;
+}
+
+interface lend {
+  customerId: number;
+  amount: number;
+  createdAt: string;
+  description: string;
+}
+
+interface DueCollectionData {
+  customerId: number;
+  collectedAmount: number;
+  createdAt: string;
+  collectionPurpose: string;
+  description: string;
+}
+
+interface CollectionReminderData {
+  customerId: number;
+  createdAt: string;
+  collectionDate: string;
+}
+
+interface OwnerProfileData {
+  profilePhoto: string;
+  name: string;
+  email: string;
+  address: string;
+  phoneNumber: string;
+  taxNumber: string;
+  createdAt: string;
+}
+
+interface CashReportData {
+  createdAt: string;
+  totalCash: number;
+}
+
+interface WithdrawData {
+  amount: number;
+  createdAt: string;
+  description: string;
+}
+
+interface ExpenseData {
+  amount: number;
+  createdAt: string;
+  description: string;
+}
+
+interface DepositData {
+  amount: number;
+  createdAt: string;
+  description: string;
+}
