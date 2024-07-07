@@ -7,8 +7,9 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
 import { format, formatDate } from "date-fns";
+import { currency } from "@/global/currency";
 
-const Customers = ({ item }) => {
+const Customers = ({ item }: any) => {
   console.log(item);
 
   return (
@@ -29,7 +30,7 @@ const Customers = ({ item }) => {
             {item?.createdAt}
           </Text>
         </View>
-        <Text>$23,000</Text>
+        <Text>{currency}23,000</Text>
       </TouchableOpacity>
     </Link>
   );

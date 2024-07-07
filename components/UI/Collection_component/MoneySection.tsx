@@ -6,7 +6,7 @@ import { Fonts } from "@/constants/Fonts";
 import Divider from "../Divider";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import MaterialTab from "@/routers/MaterialTab";
+import { currency } from "@/global/currency";
 const MoneySection = () => {
   return (
     <View style={styles.container}>
@@ -20,12 +20,12 @@ const MoneySection = () => {
         <View style={styles.textCon}>
           <Text style={styles.text1}>Collect Money 3x Faster</Text>
           <Text style={styles.textMoney}>
-            $234,500
+            {currency}234,500
             <Text style={styles.text2}> is with 20 Customer Set Date Now</Text>
           </Text>
         </View>
       </View>
-      <Divider height={1} width={"100%"} />
+      <Divider height={1} width={"100%"} aligns={"center"} />
       <TouchableOpacity style={styles.calender}>
         <Feather name="calendar" size={24} color={Colors.mainColor} />
         <Text style={styles.setText}>Set Collection Data</Text>

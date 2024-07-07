@@ -1,6 +1,4 @@
 import { SQLiteDatabase } from "expo-sqlite";
-import * as FileSystem from "expo-file-system";
-import { ICustomerDataInput } from "@/types/interfaces/input.interface";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   const DATABASE_VERSION = 2;
@@ -25,7 +23,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
-        phone TEXT NOT NULL,
+        phoneNumber TEXT NOT NULL,
         taxNumber TEXT,
         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
       );
@@ -36,7 +34,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
-        phone TEXT NOT NULL,
+        phoneNumber TEXT NOT NULL,
         taxNumber TEXT,
         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
       );
@@ -96,7 +94,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
-        phone TEXT NOT NULL,
+        phoneNumber TEXT NOT NULL,
         taxNumber TEXT,
         logout TEXT
       );
@@ -497,7 +495,7 @@ export const withdraw = async (
 // =======================================================
 
 interface CustomerData {
-  profilePhoto?: string;
+  profilePhoto: string;
   name: string;
   email: string;
   address: string;
