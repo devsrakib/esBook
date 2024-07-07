@@ -1,7 +1,5 @@
-import { View, Text, FlatList } from "react-native";
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Home from "@/app/pages/home/home";
 import { Colors } from "@/constants/Colors";
 
 const MaterialTab = ({ tab }: any) => {

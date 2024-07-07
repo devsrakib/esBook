@@ -6,7 +6,6 @@ import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
-import { format, formatDate } from "date-fns";
 import { currency } from "@/global/currency";
 
 const Customers = ({ item }: any) => {

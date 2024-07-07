@@ -5,7 +5,6 @@ import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MaterialTab from "@/routers/MaterialTab";
-import Home from "../home/home";
 import Customers from "./Customers";
 import Suppliers from "./Suppliers";
 

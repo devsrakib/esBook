@@ -142,13 +142,21 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 //=================  ====================
 export const createCustomers = async (
   db: SQLiteDatabase,
-  { name, email, phoneNumber, address, createdAt }: CustomerData
+  {
+    profilePhoto,
+    name,
+    email,
+    phoneNumber,
+    address,
+    taxNumber,
+    createdAt,
+  }: CustomerData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
       "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [name, email, phoneNumber, address, timestamp]
+      [profilePhoto, name, email, phoneNumber, address, taxNumber, timestamp]
     );
     console.log("Customer created successfully");
   } catch (error) {
@@ -210,7 +218,7 @@ export const due_collection = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (collectedAmount, createdAt, collectionPurpose, description) VALUES (?, ?, ?, ?, ?,?)",
+      "INSERT INTO due_collection (collectedAmount, createdAt, collectionPurpose, description) VALUES (?, ?, ?, ?)",
       [collectedAmount, timestamp, collectionPurpose, description]
     );
     console.log("due collection created successfully");
@@ -282,13 +290,21 @@ export const getCustomers = async (db: SQLiteDatabase) => {
 //=================  ====================
 export const createSuppliers = async (
   db: SQLiteDatabase,
-  { name, email, phoneNumber, address, createdAt }: SupplierData
+  {
+    profilePhoto,
+    name,
+    email,
+    phoneNumber,
+    address,
+    createdAt,
+    taxNumber,
+  }: SupplierData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
       "INSERT INTO supplier (profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt) VALUES (?, ?, ?, ?, ?,?,?)",
-      [name, email, phoneNumber, address, timestamp]
+      [profilePhoto, name, email, phoneNumber, address, timestamp, taxNumber]
     );
     console.log("Supplier created successfully");
   } catch (error) {
@@ -304,20 +320,13 @@ export const createSuppliers = async (
 //=================  ====================
 export const cash_buy = async (
   db: SQLiteDatabase,
-  {
-    supplierId,
-    amount,
-    createdAt,
-    description,
-    dueAmount,
-    extraAmount,
-  }: CashBuyData
+  { amount, createdAt, description, dueAmount, extraAmount }: CashBuyData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
       "INSERT INTO cash_sell (saleAmount, collectedAmount, createdAt, dueAmount, extraAmount, description) VALUES (?, ?, ?, ?, ?,?)",
-      [amount, createdAt, timestamp, dueAmount, extraAmount, description]
+      [amount, timestamp, dueAmount, extraAmount, description]
     );
     console.log("cash_sell created successfully");
   } catch (error) {
@@ -352,6 +361,7 @@ export const supplier_lend = async (
 export const getSuppliers = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM suppliers");
 };
+
 // =====================================================================================================
 // =====================================================================================================
 
@@ -500,18 +510,18 @@ interface CustomerData {
   email: string;
   address: string;
   phoneNumber: string;
-  taxNumber?: string;
-  createdAt?: string;
+  taxNumber: string;
+  createdAt: string;
 }
 
 interface SupplierData {
-  profilePhoto?: string;
+  profilePhoto: string;
   name: string;
   email: string;
   address: string;
   phoneNumber: string;
-  taxNumber?: string;
-  createdAt?: string;
+  taxNumber: string;
+  createdAt: string;
 }
 
 interface CashSellData {

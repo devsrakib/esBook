@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import Header from "@/components/UI/header/Header";
 import { radius } from "@/constants/sizes";
-import MaterialTab from "@/routers/MaterialTab";
 import MoneySection from "@/components/UI/Collection_component/MoneySection";
 import Customers from "../parties/Customers";
 import Suppliers from "../parties/Suppliers";
