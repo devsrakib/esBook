@@ -7,11 +7,11 @@ import ImageInput from "./ImageInput";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
 import { useSQLiteContext } from "expo-sqlite";
-import { createCustomers } from "@/databases/database";
+import { createCustomers, CustomerData } from "@/databases/Database";
 
 const Customers = () => {
-  const [customerData, setCustomerData] = useState({
-    fullName: "",
+  const [customerData, setCustomerData] = useState<CustomerData>({
+    name: "",
     email: "",
     phoneNumber: "",
     address: "",
@@ -20,12 +20,8 @@ const Customers = () => {
   const db = useSQLiteContext();
 
   const handleSave = async () => {
-    const { fullName, email, phoneNumber, address } = customerData;
-    if (!fullName || !email || !phoneNumber || !address) {
-      return;
-    } else {
-      await createCustomers(db, customerData);
-    }
+    await createCustomers(db, customerData);
+    console.log(customerData);
   };
   return (
     <ScrollView>

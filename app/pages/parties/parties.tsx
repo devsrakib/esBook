@@ -18,8 +18,9 @@ import AmountCon from "@/components/UI/AmountCon";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCustomers, getSuppliers } from "@/databases/database";
 import { ICustomerDataInput } from "@/types/interfaces/input.interface";
+import { getCustomers, getSuppliers } from "@/databases/Database";
+import EmptyUser from "@/components/UI/emptyUser";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -37,6 +38,7 @@ const Parties = () => {
     }
     setup();
   }, []);
+  console.log(customers, "hello");
 
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
@@ -81,16 +83,22 @@ const Parties = () => {
       <View style={styles.bodySection}>
         <FilterAndTextSection />
         {activeTab === 0 ? (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: 50,
-            }}
-            data={customers}
-            renderItem={({ item }) => {
-              return <Customers item={item} />;
-            }}
-          />
+          <>
+            {customers?.length === 0 ? (
+              <EmptyUser text="No Customer" />
+            ) : (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: 50,
+                }}
+                data={customers}
+                renderItem={({ item }) => {
+                  return <Customers item={item} />;
+                }}
+              />
+            )}
+          </>
         ) : (
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -119,6 +127,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    // backgroundColor: "red",
   },
   topSection: {
     backgroundColor: Colors.mainColor,

@@ -6,9 +6,9 @@ import Chart from "@/components/UI/Chart";
 import AmountCon from "@/components/UI/AmountCon";
 import Dashboard from "@/components/UI/Dashboard";
 import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
-import { getSuppliers } from "@/databases/database";
 import { useSQLiteContext } from "expo-sqlite";
 import CustomModal from "@/components/UI/modal/Modal";
+import { getSuppliers } from "@/databases/Database";
 
 const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);

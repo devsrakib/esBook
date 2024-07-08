@@ -6,22 +6,24 @@ import AddPhoneBookButton from "./AddPhoneBookButton";
 import Inputs from "@/components/UI/parties/Inputs";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
-import { createSuppliers, getSuppliers } from "@/databases/database";
 import { useSQLiteContext } from "expo-sqlite";
+import { createSuppliers, SupplierData } from "@/databases/Database";
 
 const Suppliers = () => {
-  const [supplierData, setSupplierData] = useState({
-    fullName: "",
+  const [supplierData, setSupplierData] = useState<SupplierData>({
+    profilePhoto: "",
+    name: "",
     email: "",
     phoneNumber: "",
     address: "",
+    createdAt: "",
   });
 
   const db = useSQLiteContext();
 
   const handleSave = async () => {
-    const { fullName, email, phoneNumber, address } = supplierData;
-    if (!fullName || !email || !phoneNumber || !address) {
+    const { name, email, phoneNumber, address } = supplierData;
+    if (!name || !email || !phoneNumber || !address) {
       return;
     } else {
       await createSuppliers(db, supplierData);

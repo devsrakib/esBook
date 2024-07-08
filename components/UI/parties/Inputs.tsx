@@ -7,13 +7,13 @@ import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { ICustomerDataInput } from "@/types/interfaces/input.interface";
-import { useSQLiteContext } from "expo-sqlite";
+import { CustomerData, SupplierData } from "@/databases/Database";
 
 const inputs = [
   {
     label: "Full Name",
     icon: <Feather name="user" size={24} color="black" />,
-    key: "fullName",
+    key: "name",
   },
   {
     label: "Email",
@@ -35,7 +35,7 @@ const inputs = [
 ];
 
 interface InputProps {
-  setData: React.Dispatch<React.SetStateAction<ICustomerDataInput>>;
+  setData: React.Dispatch<React.SetStateAction<CustomerData | SupplierData>>;
 }
 const Inputs: React.FC<InputProps> = ({ setData }) => {
   const handleChange = (key: any, value: any) => {

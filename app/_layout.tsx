@@ -3,7 +3,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SQLiteProvider } from "expo-sqlite";
-import { migrateDbIfNeeded } from "@/databases/database";
+import { migrateDbIfNeeded } from "@/databases/Database";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

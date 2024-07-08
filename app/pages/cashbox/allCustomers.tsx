@@ -4,10 +4,9 @@ import Header from "@/components/UI/header/Header";
 import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Customer from "@/components/UI/cashbox/Customer";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCustomers } from "@/databases/database";
 import Customers from "@/components/UI/shared/Customers";
+import { getCustomers } from "@/databases/Database";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();

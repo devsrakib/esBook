@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 2;
+  const DATABASE_VERSION = 4;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -24,7 +24,6 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
         phoneNumber TEXT NOT NULL,
-        taxNumber TEXT,
         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
       );
 
@@ -35,7 +34,6 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
         phoneNumber TEXT NOT NULL,
-        taxNumber TEXT,
         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
       );
 
@@ -44,7 +42,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         customerId INTEGER NOT NULL,
         saleAmount REAL NOT NULL,
         collectedAmount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         dueAmount REAL,
         extraAmount REAL,
         description TEXT,
@@ -55,7 +53,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         id INTEGER PRIMARY KEY NOT NULL,
         supplierId INTEGER NOT NULL,
         amount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT,
         dueAmount REAL,
         extraAmount REAL,
@@ -130,6 +128,14 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
+  if (currentDbVersion === 1) {
+    await db.execAsync(`
+      ALTER TABLE customer ADD COLUMN profilePhoto TEXT;
+      ALTER TABLE supplier ADD COLUMN profilePhoto TEXT;
+    `);
+    currentDbVersion = 2;
+  }
+
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 
@@ -142,21 +148,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 //=================  ====================
 export const createCustomers = async (
   db: SQLiteDatabase,
-  {
-    profilePhoto,
-    name,
-    email,
-    phoneNumber,
-    address,
-    taxNumber,
-    createdAt,
-  }: CustomerData
+  { profilePhoto, name, email, phoneNumber, address, createdAt }: CustomerData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [profilePhoto, name, email, phoneNumber, address, taxNumber, timestamp]
+      "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?,?)",
+      [profilePhoto, name, email, address, phoneNumber, timestamp]
     );
     console.log("Customer created successfully");
   } catch (error) {
@@ -275,7 +273,7 @@ export const collection_reminder = async (
 //=================  ====================
 
 export const getCustomers = async (db: SQLiteDatabase) => {
-  return await db.getAllAsync("SELECT * FROM customers");
+  return await db.getAllAsync("SELECT * FROM customer");
 };
 
 // =====================================================================================================
@@ -290,21 +288,13 @@ export const getCustomers = async (db: SQLiteDatabase) => {
 //=================  ====================
 export const createSuppliers = async (
   db: SQLiteDatabase,
-  {
-    profilePhoto,
-    name,
-    email,
-    phoneNumber,
-    address,
-    createdAt,
-    taxNumber,
-  }: SupplierData
+  { profilePhoto, name, email, phoneNumber, address, createdAt }: SupplierData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO supplier (profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt) VALUES (?, ?, ?, ?, ?,?,?)",
-      [profilePhoto, name, email, phoneNumber, address, timestamp, taxNumber]
+      "INSERT INTO supplier (profilePhoto,name, email, phoneNumber, address, createdAt) VALUES (?, ?, ?, ?, ?,?)",
+      [profilePhoto, name, email, phoneNumber, address, timestamp]
     );
     console.log("Supplier created successfully");
   } catch (error) {
@@ -359,7 +349,7 @@ export const supplier_lend = async (
 //=================  ====================
 
 export const getSuppliers = async (db: SQLiteDatabase) => {
-  return await db.getAllAsync("SELECT * FROM suppliers");
+  return await db.getAllAsync("SELECT * FROM supplier");
 };
 
 // =====================================================================================================
@@ -504,27 +494,25 @@ export const withdraw = async (
 // ============= types are start from here ===============
 // =======================================================
 
-interface CustomerData {
+export interface CustomerData {
   profilePhoto: string;
   name: string;
   email: string;
   address: string;
   phoneNumber: string;
-  taxNumber: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
-interface SupplierData {
+export interface SupplierData {
   profilePhoto: string;
   name: string;
   email: string;
   address: string;
   phoneNumber: string;
-  taxNumber: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
-interface CashSellData {
+export interface CashSellData {
   customerId: number;
   saleAmount: number;
   collectedAmount: number;
@@ -534,7 +522,7 @@ interface CashSellData {
   description: string;
 }
 
-interface CashBuyData {
+export interface CashBuyData {
   supplierId: number;
   amount: number;
   createdAt: string;
@@ -543,14 +531,14 @@ interface CashBuyData {
   extraAmount: number;
 }
 
-interface lend {
+export interface lend {
   customerId: number;
   amount: number;
   createdAt: string;
   description: string;
 }
 
-interface DueCollectionData {
+export interface DueCollectionData {
   customerId: number;
   collectedAmount: number;
   createdAt: string;
@@ -558,13 +546,13 @@ interface DueCollectionData {
   description: string;
 }
 
-interface CollectionReminderData {
+export interface CollectionReminderData {
   customerId: number;
   createdAt: string;
   collectionDate: string;
 }
 
-interface OwnerProfileData {
+export interface OwnerProfileData {
   profilePhoto: string;
   name: string;
   email: string;
@@ -574,24 +562,24 @@ interface OwnerProfileData {
   createdAt: string;
 }
 
-interface CashReportData {
+export interface CashReportData {
   createdAt: string;
   totalCash: number;
 }
 
-interface WithdrawData {
+export interface WithdrawData {
   amount: number;
   createdAt: string;
   description: string;
 }
 
-interface ExpenseData {
+export interface ExpenseData {
   amount: number;
   createdAt: string;
   description: string;
 }
 
-interface DepositData {
+export interface DepositData {
   amount: number;
   createdAt: string;
   description: string;
