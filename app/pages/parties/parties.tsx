@@ -18,7 +18,6 @@ import AmountCon from "@/components/UI/AmountCon";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { ICustomerDataInput } from "@/types/interfaces/input.interface";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import EmptyUser from "@/components/UI/emptyUser";
 
@@ -38,13 +37,21 @@ const Parties = () => {
     }
     setup();
   }, []);
-  console.log(customers, "hello");
+
+  const handleCustomerData = () => {
+    console.log("hello");
+  };
 
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
       <View style={styles.topSection}>
         <View style={styles.header}>
           <Text style={styles.headerText}>Parties</Text>
+          <View style={styles.customerLengthCon}>
+            <Text style={styles.customerLength}>
+              {activeTab === 0 ? customers?.length : suppliers?.length}
+            </Text>
+          </View>
         </View>
         <View style={styles.navigationCon}>
           <TouchableOpacity
@@ -94,7 +101,12 @@ const Parties = () => {
                 }}
                 data={customers}
                 renderItem={({ item }) => {
-                  return <Customers item={item} />;
+                  return (
+                    <Customers
+                      item={item}
+                      onPress={() => handleCustomerData()}
+                    />
+                  );
                 }}
               />
             )}
@@ -107,7 +119,7 @@ const Parties = () => {
             }}
             data={suppliers}
             renderItem={({ item }) => {
-              return <Customers item={item} />;
+              return <Customers item={item} onPress={handleCustomerData} />;
             }}
           />
         )}
@@ -138,12 +150,26 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 70,
-    justifyContent: "center",
+    // justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10,
   },
   headerText: {
     fontSize: Fonts.medium,
     color: Colors.white,
     fontWeight: "500",
+  },
+  customerLengthCon: {
+    width: 20,
+    height: 20,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.lavender,
+  },
+  customerLength: {
+    fontSize: Fonts.small,
   },
   navigationCon: {
     flexDirection: "row",

@@ -8,7 +8,7 @@ import Dashboard from "@/components/UI/Dashboard";
 import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
 import { useSQLiteContext } from "expo-sqlite";
 import CustomModal from "@/components/UI/modal/Modal";
-import { getSuppliers } from "@/databases/Database";
+import { getCash_sell, getSuppliers } from "@/databases/Database";
 
 const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -22,6 +22,14 @@ const Home = () => {
     }
     setup();
   }, []);
+
+  useEffect(() => {
+    async function cash_sell_data() {
+      const result = await getCash_sell(db);
+      console.log(result);
+    }
+    cash_sell_data();
+  });
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

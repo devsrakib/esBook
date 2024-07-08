@@ -20,7 +20,9 @@ const Page = () => {
     setup();
   }, []);
 
-  console.log(customer);
+  const handleCustomerData = () => {
+    console.log(customer);
+  };
 
   return (
     <View
@@ -40,7 +42,9 @@ const Page = () => {
         <FlatList
           data={customer}
           renderItem={({ item }) => {
-            return <Customers item={item} />;
+            return (
+              <Customers item={item} onPress={() => handleCustomerData()} />
+            );
           }}
         />
       </View>

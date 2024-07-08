@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/cashbox/Header";
@@ -10,14 +10,42 @@ import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import Button from "@/components/UI/Button";
 import DetailsPageInput from "@/components/UI/cashbox/DetailsPageInput";
+import { useSQLiteContext } from "expo-sqlite";
+import { cash_sell, expense } from "@/databases/Database";
 
 const page = () => {
   const route = useLocalSearchParams();
   const { bottom, top } = useSafeAreaInsets();
-  console.log(route);
-  const handlelog = () => {
-    console.log("hello");
+  const [transaction, setTransaction] = useState<any>();
+
+  const transactionData: any = {
+    customerId: route?.id,
+    saleAmount: transaction?.sale,
+    collectedAmount: transaction?.collect,
+    dueAmount: transaction?.sale - transaction?.collect,
+    extraAmount: transaction?.collect - transaction?.sale,
+    description: transaction?.description,
   };
+
+  const db = useSQLiteContext();
+
+  const handleCashSell = async () => {
+    await cash_sell(db, transactionData);
+    console.log(transactionData);
+  };
+
+  const handleExpense = async () => {
+    await expense(db, transactionData);
+  };
+
+  const handleInput = () => {
+    if (route?.text === "Cash Sell") {
+      handleCashSell();
+    } else if (route?.text === "Expenses") {
+      handleExpense();
+    }
+  };
+
   return (
     <View
       style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
@@ -42,13 +70,13 @@ const page = () => {
           </Text>
         </View>
       </View>
-      <DetailsPageInput />
+      <DetailsPageInput setTransaction={setTransaction} />
       <Button
         title="save"
         radius={radius.large}
         titleColor={Colors.white}
         bg={Colors.mainColor}
-        onPress={() => handlelog()}
+        onPress={() => handleCashSell()}
         width={"90%"}
       />
     </View>

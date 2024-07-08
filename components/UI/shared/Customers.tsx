@@ -8,36 +8,37 @@ import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
 import { currency } from "@/global/currency";
 import EmptyUser from "../emptyUser";
+import { useNavigation } from "@react-navigation/native";
 
 const Customers = ({ item }: any) => {
-  console.log(item, ":::::::::");
-
+  const navigation = useNavigation<any>();
   return (
     <Fragment>
-      {item?.length === 0 ? (
-        <EmptyUser text="No customer" />
-      ) : (
-        <Link
-          href={{
-            pathname: "/pages/parties/CustomerView",
-          }}
-          asChild
-        >
-          <TouchableOpacity style={styles.customerDetails}>
-            <View style={styles.avatar}>
-              <FontAwesome6 name="user-secret" size={24} color="black" />
-            </View>
-            <View style={styles.nameSection}>
-              <Text style={styles.name}>{item?.name}</Text>
-              <Text style={styles.date}>
-                {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
-                {item?.createdAt}
-              </Text>
-            </View>
-            <Text>{currency}23,000</Text>
-          </TouchableOpacity>
-        </Link>
-      )}
+      <Link
+        href={{
+          pathname: "/pages/cashbox/details",
+          params: {
+            id: item?.id,
+            text: "Cash Sell",
+            isCustomerOrSupplier: "yes",
+          },
+        }}
+        asChild
+      >
+        <TouchableOpacity style={styles.customerDetails}>
+          <View style={styles.avatar}>
+            <FontAwesome6 name="user-secret" size={24} color="black" />
+          </View>
+          <View style={styles.nameSection}>
+            <Text style={styles.name}>{item?.name}</Text>
+            <Text style={styles.date}>
+              {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
+              {item?.createdAt}
+            </Text>
+          </View>
+          <Text>{currency}23,000</Text>
+        </TouchableOpacity>
+      </Link>
     </Fragment>
   );
 };

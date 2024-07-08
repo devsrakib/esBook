@@ -21,7 +21,6 @@ const Customers = () => {
 
   const handleSave = async () => {
     await createCustomers(db, customerData);
-    console.log(customerData);
   };
   return (
     <ScrollView>

@@ -5,25 +5,45 @@ import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Entypo } from "@expo/vector-icons";
-const DetailsPageInput = () => {
+const DetailsPageInput = ({ setTransaction }: { setTransaction: Function }) => {
+  const handleChange = (key: any, value: any) => {
+    setTransaction((prevData: any) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Collected amount</Text>
+      <Text style={styles.label}>Sale amount</Text>
       <View style={styles.inputCon}>
-        <TextInput style={styles.input} placeholder="0.00" />
+        <TextInput
+          style={styles.input}
+          placeholder="0.00"
+          onChangeText={(e) => handleChange("sale", e)}
+        />
         <View style={styles.currencyCon}>
           <Text>{currency}</Text>
         </View>
       </View>
       <Text style={styles.label}>Collected amount</Text>
       <View style={styles.inputCon}>
-        <TextInput style={styles.input} placeholder="0.00" />
+        <TextInput
+          style={styles.input}
+          placeholder="0.00"
+          onChangeText={(e) => handleChange("collect", e)}
+        />
         <View style={styles.currencyCon}>
           <Entypo name="calendar" size={16} color={Colors.text} />
         </View>
       </View>
       <Text style={styles.label}>Collected amount</Text>
-      <TextInput style={styles.textArea} multiline placeholder="Type here" />
+      <TextInput
+        style={styles.textArea}
+        multiline
+        placeholder="Type here"
+        onChangeText={(e) => handleChange("description", e)}
+      />
     </View>
   );
 };
