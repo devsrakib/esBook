@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -6,72 +6,82 @@ import {
   Text,
   TextInput,
   ScrollView,
-  TouchableOpacity,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import Divider from "@/components/UI/Divider";
-import Button from "@/components/UI/Button";
 import { Fonts } from "@/constants/Fonts";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import GoBack from "@/components/UI/header/GoBack";
+import Button from "@/components/UI/Button";
+import { useSQLiteContext } from "expo-sqlite";
+import {
+  getExpense,
+  getOwnerProfile,
+  owner_profile,
+  OwnerProfileData,
+} from "@/databases/Database";
 
-const Profile = () => {
+const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const userData = {
-    name: "Mehedi Hasan Omi",
-    email: "nathan.roberts@example.com",
-    address: "2118 Thornridge Cir. Syracuse, Connecticut 35624",
-    phone: "014658933142",
-    taxNumber: "GSTIN",
-    profileImage:
-      "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1810",
+  const [getProfileData, setGetProfileData] = useState<
+    OwnerProfileData | any
+  >();
+  const [profileData, setProfileData] = useState<any>({
+    profilePhoto: "this is my photo",
+    name: "",
+    email: "",
+    address: "",
+    phoneNumber: "",
+  });
+
+  const handleInputChange = (value: any, key: any) => {
+    setProfileData((prevState: any) => ({
+      ...prevState,
+      [key]: value,
+    }));
   };
+
+  const db = useSQLiteContext();
 
   const infoData = [
     {
       icon: <Ionicons name="person-outline" size={18} color="gray" />,
       label: "Name",
-      value: userData.name,
+      value: profileData.name,
+      key: "name",
     },
     {
       icon: <MaterialIcons name="email" size={18} color="gray" />,
       label: "Email",
-      value: userData.email,
+      value: profileData.email,
+      key: "email",
     },
     {
       icon: <Ionicons name="location-outline" size={18} color="gray" />,
       label: "Address",
-      value: userData.address,
+      value: profileData.address,
+      key: "address",
     },
     {
       icon: <Ionicons name="call-outline" size={18} color="gray" />,
       label: "Phone",
-      value: userData.phone,
-    },
-    {
-      icon: <MaterialIcons name="attach-money" size={18} color="gray" />,
-      label: "Tax Number",
-      value: userData.taxNumber,
+      value: profileData.phone,
+      key: "phoneNumber",
     },
   ];
 
-  const InfoRow: React.FC<{ icon: any; label: string; value: any }> = ({
-    icon,
-    label,
-    value,
-  }) => (
-    <Fragment>
-      <View style={styles.infoRow}>
-        <View style={styles.iconCon}>{icon}</View>
-        <View style={styles.infoColumn}>
-          <Text style={styles.label}>{label}</Text>
-          <TextInput style={styles.input} value={value} />
-        </View>
-      </View>
-      <Divider height={1} width={"100%"} aligns={"center"} />
-    </Fragment>
-  );
+  const handleSaveProfileInfo = async () => {
+    await owner_profile(db, profileData);
+    console.log(profileData);
+  };
+
+  useEffect(() => {
+    async function profile() {
+      const expense = await getOwnerProfile(db);
+      setGetProfileData(expense);
+    }
+    profile();
+  }, []);
 
   return (
     <ScrollView
@@ -80,33 +90,38 @@ const Profile = () => {
         { paddingBottom: bottom, paddingTop: top },
       ]}
     >
-      <View style={styles.header}>
-        <GoBack color={Colors.white} />
-        <Text style={styles.headerText}>Added Phone book</Text>
-      </View>
       <View style={styles.profileContainer}>
         <Image
-          source={{ uri: userData.profileImage }}
+          source={{ uri: profileData.profileImage }}
           style={styles.profileImage}
         />
-        <Text style={styles.profileName}>{userData.name}</Text>
+        <Text style={styles.profileName}>{profileData.name}</Text>
       </View>
       <View style={styles.infoContainer}>
         {infoData.map((item, index) => (
-          <InfoRow
-            key={index}
-            icon={item.icon}
-            label={item.label}
-            value={item.value}
-          />
+          <Fragment key={index.toString()}>
+            <View style={styles.infoRow}>
+              <View style={styles.iconCon}>{item?.icon}</View>
+              <View style={styles.infoColumn}>
+                <Text style={styles.label}>{item?.label}</Text>
+                <TextInput
+                  style={styles.input}
+                  // value={value}
+                  onChangeText={(e) => handleInputChange(e, item?.key)}
+                />
+              </View>
+            </View>
+            <Divider height={1} width={"100%"} aligns={"center"} />
+          </Fragment>
         ))}
       </View>
       <Button
-        title="Delete Customer"
-        titleColor={Colors.red}
-        radius={50}
+        title="create profile"
+        bg={Colors.mainColor}
+        titleColor={Colors.white}
+        radius={20}
         width={"90%"}
-        bg={Colors.OrangeRed}
+        onPress={() => handleSaveProfileInfo()}
       />
     </ScrollView>
   );
@@ -117,22 +132,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: Colors.white,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.mainColor,
-    padding: 16,
-  },
-  headerText: {
-    color: "white",
-    fontSize: 18,
-    marginLeft: 16,
-  },
   profileContainer: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.mainColor,
-    paddingBottom: 24,
+    paddingBottom: 28,
+    paddingTop: 40,
   },
   profileImage: {
     width: 100,
@@ -183,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default OwnerProfile;

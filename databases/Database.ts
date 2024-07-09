@@ -92,9 +92,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
-        phoneNumber TEXT NOT NULL,
-        taxNumber TEXT,
-        logout TEXT
+        phoneNumber TEXT NOT NULL
       );
 
       CREATE TABLE IF NOT EXISTS cash_report (
@@ -131,6 +129,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   // if (currentDbVersion === 3) {
   //   await db.execAsync(`
   //     ALTER TABLE customer ADD COLUMN profilePhoto TEXT;
+  //   `);
+  //   currentDbVersion = 4;
+  // }
+  // if (currentDbVersion === 3) {
+  //   await db.execAsync(`
+  //     ALTER TABLE owner_profile ADD COLUMN createdAt TEXT NOT NULL DEFAULT (datetime('now'));
   //   `);
   //   currentDbVersion = 4;
   // }
@@ -374,28 +378,24 @@ export const getSuppliers = async (db: SQLiteDatabase) => {
 //=================  ====================
 //          owner profile
 //=================  ====================
-export const Owner_profile = async (
+export const owner_profile = async (
   db: SQLiteDatabase,
-  {
-    profilePhoto,
-    name,
-    email,
-    address,
-    phoneNumber,
-    taxNumber,
-    createdAt,
-  }: OwnerProfileData
+  { profilePhoto, name, email, address, phoneNumber }: OwnerProfileData
 ) => {
   try {
-    const timestamp = createdAt || new Date().toISOString();
+    // const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection ( profilePhoto, name, email, address, phoneNumber, taxNumber, createdAt,) VALUE (?, ?, ?, ?, ?, ?, ?)",
-      [profilePhoto, name, email, address, phoneNumber, taxNumber, timestamp]
+      "INSERT INTO owner_profile ( profilePhoto, name, email, address, phoneNumber) VALUES (?, ?, ?, ?, ?)",
+      [profilePhoto, name, email, address, phoneNumber]
     );
     console.log("Owner profile created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating Owner profile:", error);
   }
+};
+
+export const getOwnerProfile = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM owner_profile");
 };
 
 //=================  ====================
@@ -421,9 +421,9 @@ export const cash_report = async (
       "INSERT INTO cash_report ( createdAt, totalCash) VALUE (?, ?)",
       [timestamp, totalCash]
     );
-    console.log("Owner profile created successfully");
+    console.log("cash report created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating cash report:", error);
   }
 };
 
@@ -441,12 +441,12 @@ export const expense = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_report (amount ,createdAt, description) VALUE (?, ?, ?)",
+      "INSERT INTO expense (amount, createdAt, description) VALUES (?, ?, ?)",
       [amount, timestamp, description]
     );
-    console.log("Owner profile created successfully");
+    console.log("expense created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating expense:", error);
   }
 };
 
@@ -464,12 +464,12 @@ export const deposit = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO deposit (amount ,createdAt, description) VALUE (?, ?, ?)",
+      "INSERT INTO deposit (amount, createdAt, description) VALUES (?, ?, ?)",
       [amount, timestamp, description]
     );
-    console.log("Owner profile created successfully");
+    console.log("deposit created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating deposit:", error);
   }
 };
 
@@ -487,13 +487,23 @@ export const withdraw = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_report (amount ,createdAt, description) VALUE (?, ?, ?)",
+      "INSERT INTO withdraw (amount ,createdAt, description) VALUES (?, ?, ?)",
       [amount, timestamp, description]
     );
-    console.log("Owner profile created successfully");
+    console.log("withdraw created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating withdraw:", error);
   }
+};
+
+export const getExpense = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM expense");
+};
+export const getDeposit = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM deposit");
+};
+export const getWithdraw = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM withdraw");
 };
 
 //=================  ====================

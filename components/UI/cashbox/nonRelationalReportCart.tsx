@@ -5,46 +5,23 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { currency } from "@/global/currency";
 
-const ReportCart = ({ item, text }: any) => {
+const NonRelationReportCart = ({ item, text }: { item: any; text: string }) => {
   return (
     <View style={styles.container}>
       <View style={styles.textAndTimeCon}>
-        <View style={styles.dateCon}>
-          <Text
-            style={[
-              styles.title,
-              { color: text === "cash sell" ? Colors.green : "" },
-            ]}
-          >
-            Cash Buy
-          </Text>
+        <View style={styles.timeAndText}>
+          <Text style={styles.title}>{text}</Text>
           <Text style={styles.divider}>|</Text>
           <Text style={styles.time}>12:20 PM</Text>
         </View>
-        <Text style={styles.amount}>
-          {currency}
-          {item?.saleAmount}
-        </Text>
-      </View>
-      <Text style={[styles.dummyText]}>{item?.description}</Text>
-      <View>
-        <View style={styles.bottomSection}>
-          <Image style={styles.img} />
-          <Text style={styles.name}>Nazrul Islam</Text>
-          <Text style={styles.amountText}>
-            {text === "cash sell" ? "collection" : "buy amount"}:{" "}
-            <Text
-              style={{
-                color: text === "cash sell" ? Colors.green : "",
-                fontWeight: "600",
-                fontSize: Fonts.medium,
-              }}
-            >
-              {item?.collectedAmount}
-            </Text>
+        <View>
+          <Text style={styles.amount}>
+            {currency}
+            {item?.amount}
           </Text>
         </View>
       </View>
+      <Text style={styles.dummyText}>{item?.description}</Text>
     </View>
   );
 };
@@ -54,21 +31,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.regular,
     borderColor: Colors.border,
-    paddingTop: 12,
+    paddingVertical: 12,
     width: "90%",
     alignSelf: "center",
     rowGap: 10,
-  },
-  dateCon: {
-    flexDirection: "row",
-    gap: 10,
   },
   textAndTimeCon: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    paddingLeft: 10,
-    paddingRight: 20,
+    paddingHorizontal: 10,
     justifyContent: "space-between",
   },
   title: {
@@ -78,6 +50,11 @@ const styles = StyleSheet.create({
   },
   divider: {
     color: Colors.text,
+  },
+  timeAndText: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   time: {
     fontSize: Fonts.regular,
@@ -109,12 +86,10 @@ const styles = StyleSheet.create({
     fontSize: Fonts.regular,
     fontWeight: "600",
   },
-  amountText: {
-    color: Colors.text,
-  },
   amount: {
-    fontSize: Fonts.medium,
+    fontSize: Fonts.large,
+    color: Colors.red,
     fontWeight: "600",
   },
 });
-export default ReportCart;
+export default NonRelationReportCart;

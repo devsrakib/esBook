@@ -5,7 +5,7 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 
@@ -18,7 +18,9 @@ const items = [
   "Withdraw",
 ];
 
-const Chip = () => {
+const Chip = ({ setSelectedChip }: { setSelectedChip: Function }) => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
   return (
     <Fragment>
       <FlatList
@@ -30,10 +32,28 @@ const Chip = () => {
           gap: 10,
         }}
         data={items}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           return (
-            <TouchableOpacity style={styles.container}>
-              <Text>{item}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedChip(item);
+                setSelectedIndex(index);
+              }}
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    selectedIndex === index ? Colors.black : Colors.background2,
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color: selectedIndex === index ? Colors.white : Colors.black,
+                }}
+              >
+                {item}
+              </Text>
             </TouchableOpacity>
           );
         }}

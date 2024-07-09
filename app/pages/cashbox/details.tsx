@@ -11,21 +11,56 @@ import { radius } from "@/constants/sizes";
 import Button from "@/components/UI/Button";
 import DetailsPageInput from "@/components/UI/cashbox/DetailsPageInput";
 import { useSQLiteContext } from "expo-sqlite";
-import { cash_sell, expense } from "@/databases/Database";
+import {
+  cash_buy,
+  cash_report,
+  cash_sell,
+  deposit,
+  due_collection,
+  expense,
+  withdraw,
+} from "@/databases/Database";
 
 const page = () => {
   const route = useLocalSearchParams();
   const { bottom, top } = useSafeAreaInsets();
   const [transaction, setTransaction] = useState<any>();
 
-  const transactionData: any = {
-    customerId: route?.id,
-    saleAmount: transaction?.sale,
-    collectedAmount: transaction?.collect,
-    dueAmount: transaction?.sale - transaction?.collect,
-    extraAmount: transaction?.collect - transaction?.sale,
-    description: transaction?.description,
-  };
+  let transactionData: any;
+  if (route.text === "Cash Sell") {
+    transactionData = {
+      customerId: route?.id,
+      saleAmount: transaction?.sale,
+      collectedAmount: transaction?.collect,
+      dueAmount: transaction?.sale - transaction?.collect,
+      extraAmount: transaction?.collect - transaction?.sale,
+      description: transaction?.description,
+    };
+  } else if (route.text === "Cash Buy") {
+    transactionData = {
+      supplierId: route?.id,
+      buyAmount: transaction?.sale,
+      collectedAmount: transaction?.collect,
+      dueAmount: transaction?.sale - transaction?.collect,
+      extraAmount: transaction?.collect - transaction?.sale,
+      description: transaction?.description,
+    };
+  } else if (route.text === "Expenses") {
+    transactionData = {
+      amount: transaction?.sale,
+      description: transaction?.description,
+    };
+  } else if (route.text === "Deposited") {
+    transactionData = {
+      amount: transaction?.sale,
+      description: transaction?.description,
+    };
+  } else if (route.text === "Withdraw") {
+    transactionData = {
+      amount: transaction?.sale,
+      description: transaction?.description,
+    };
+  }
 
   const db = useSQLiteContext();
 
@@ -36,6 +71,27 @@ const page = () => {
 
   const handleExpense = async () => {
     await expense(db, transactionData);
+    console.log(transactionData);
+  };
+  const handleDeposit = async () => {
+    await deposit(db, transactionData);
+    console.log(transactionData);
+  };
+  const handleCashBuy = async () => {
+    await cash_buy(db, transactionData);
+    console.log(transactionData);
+  };
+  const handleWithdraw = async () => {
+    await withdraw(db, transactionData);
+    console.log(transactionData);
+  };
+  // const handleCashReport = async () => {
+  //   await cash_report(db, transactionData);
+  //   console.log(transactionData);
+  // };
+  const handleDue = async () => {
+    await due_collection(db, transactionData);
+    console.log(transactionData);
   };
 
   const handleInput = () => {
@@ -43,6 +99,14 @@ const page = () => {
       handleCashSell();
     } else if (route?.text === "Expenses") {
       handleExpense();
+    } else if (route?.text === "Deposited") {
+      handleDeposit();
+    } else if (route?.text === "Cash buy") {
+      handleCashBuy();
+    } else if (route?.text === "Due") {
+      handleDue();
+    } else {
+      handleWithdraw();
     }
   };
 
@@ -57,9 +121,9 @@ const page = () => {
       />
       <View style={styles.headerSection}>
         <Header height={70} title={route.text} titleColor={Colors.white} />
-        {(route.text === "Cash Sell" || route.text === "Due") && (
-          <SearchCustomerAndAddCustomer />
-        )}
+        {(route.text === "Cash Sell" ||
+          route.text === "Due" ||
+          route.text === "Cash buy") && <SearchCustomerAndAddCustomer />}
       </View>
       <View style={styles.bodySection}>
         <View style={styles.dummyTextCon}>
@@ -70,13 +134,13 @@ const page = () => {
           </Text>
         </View>
       </View>
-      <DetailsPageInput setTransaction={setTransaction} />
+      <DetailsPageInput setTransaction={setTransaction} text={route.text} />
       <Button
         title="save"
         radius={radius.large}
         titleColor={Colors.white}
         bg={Colors.mainColor}
-        onPress={() => handleCashSell()}
+        onPress={() => handleInput()}
         width={"90%"}
       />
     </View>

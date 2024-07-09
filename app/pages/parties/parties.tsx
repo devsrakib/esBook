@@ -112,16 +112,22 @@ const Parties = () => {
             )}
           </>
         ) : (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: 50,
-            }}
-            data={suppliers}
-            renderItem={({ item }) => {
-              return <Customers item={item} onPress={handleCustomerData} />;
-            }}
-          />
+          <>
+            {suppliers?.length === 0 ? (
+              <EmptyUser text="No Supplier" />
+            ) : (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: 50,
+                }}
+                data={suppliers}
+                renderItem={({ item }) => {
+                  return <Customers item={item} onPress={handleCustomerData} />;
+                }}
+              />
+            )}
+          </>
         )}
         <TouchableOpacity
           onPress={() => router.navigate("/pages/parties/addNewParties")}

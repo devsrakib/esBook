@@ -1,11 +1,17 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
-import React from "react";
+import React, { Fragment } from "react";
 import { currency } from "@/global/currency";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Entypo } from "@expo/vector-icons";
-const DetailsPageInput = ({ setTransaction }: { setTransaction: Function }) => {
+const DetailsPageInput = ({
+  setTransaction,
+  text,
+}: {
+  setTransaction: Function;
+  text: any;
+}) => {
   const handleChange = (key: any, value: any) => {
     setTransaction((prevData: any) => ({
       ...prevData,
@@ -15,7 +21,7 @@ const DetailsPageInput = ({ setTransaction }: { setTransaction: Function }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Sale amount</Text>
+      <Text style={styles.label}>{text} amount</Text>
       <View style={styles.inputCon}>
         <TextInput
           style={styles.input}
@@ -26,17 +32,21 @@ const DetailsPageInput = ({ setTransaction }: { setTransaction: Function }) => {
           <Text>{currency}</Text>
         </View>
       </View>
-      <Text style={styles.label}>Collected amount</Text>
-      <View style={styles.inputCon}>
-        <TextInput
-          style={styles.input}
-          placeholder="0.00"
-          onChangeText={(e) => handleChange("collect", e)}
-        />
-        <View style={styles.currencyCon}>
-          <Entypo name="calendar" size={16} color={Colors.text} />
-        </View>
-      </View>
+      {text === "Cash Sell" && (
+        <Fragment>
+          <Text style={styles.label}>Collected amount</Text>
+          <View style={styles.inputCon}>
+            <TextInput
+              style={styles.input}
+              placeholder="0.00"
+              onChangeText={(e) => handleChange("collect", e)}
+            />
+            <View style={styles.currencyCon}>
+              <Entypo name="calendar" size={16} color={Colors.text} />
+            </View>
+          </View>
+        </Fragment>
+      )}
       <Text style={styles.label}>Collected amount</Text>
       <TextInput
         style={styles.textArea}
