@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-09T11:26:34.263Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15" etag="a6v5MUYWLXckg5gVVLlK" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-10T10:29:08.396Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15" etag="x717BPbheCV_XUctGKJQ" version="24.6.4" type="github">
   <diagram name="Page-1" id="99Q6rMIf3dbpYMgP1Xtz">
-    <mxGraphModel dx="1890" dy="2073" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="373" dy="389" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1035,11 +1035,6 @@
         <mxCell id="P9HNjcv9NMFmDsiorf7a-79" value="total cash" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" parent="P9HNjcv9NMFmDsiorf7a-77" vertex="1">
           <mxGeometry x="30" width="150" height="30" as="geometry">
             <mxRectangle width="150" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="3eln5pBkpFIs-ewCyF8V-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="E6dUmz65pND26FQUCt2n-262" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="235.81481481481478" y="1024.9259259259259" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
