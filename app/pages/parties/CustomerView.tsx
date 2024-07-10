@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -7,66 +7,67 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  TextInput,
 } from "react-native";
-import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
-import { Stack } from "expo-router";
+import {
+  Ionicons,
+  MaterialIcons,
+  FontAwesome5,
+  AntDesign,
+} from "@expo/vector-icons";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import { Fonts } from "@/constants/Fonts";
 import Button from "@/components/UI/Button";
 import GoBack from "@/components/UI/header/GoBack";
+import {
+  customer_gave,
+  customer_lend,
+  getCashSellsByCustomerId,
+  getLendById,
+} from "@/databases/Database";
+import { useSQLiteContext } from "expo-sqlite";
+import Modal from "react-native-modal";
+import { radius } from "@/constants/sizes";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
+  const router = useLocalSearchParams<any>();
+  const [customerTransaction, setCustomerTransaction] = useState<any>([]);
+  const [amount, setAmount] = useState<number>(0);
+  const [description, setDescription] = useState<string>("");
+  const [lendDataById, setLendDataById] = useState<any>([]);
+  const [activeTab, setActiveTab] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const db = useSQLiteContext();
+  const lendData: any = {
+    customerId: router?.id,
+    amount: amount,
+    description: description,
+  };
+  const handleLend = async () => {
+    await customer_lend(db, lendData);
+    console.log(lendData);
+  };
+  const handleGave = async () => {
+    await customer_gave(db, lendData);
+    console.log(lendData);
+  };
 
-  const transactions = [
-    {
-      type: "Cash Sale",
-      amount: "$20,000",
-      date: "3 Jun,2024 - 10:42 AM",
-      balance: "$20,000",
-      status: "Due",
-      dueAmount: "$12,000",
-      textColor: "green",
-    },
-    {
-      type: "Bal",
-      amount: "$20,000",
-      date: "3 Jun,2024 - 10:42 AM",
-      balance: "$20,000",
-      status: "Due",
-      dueAmount: "$20,000",
-      textColor: "red",
-    },
-    {
-      type: "Cash Sale",
-      amount: "$20,000",
-      date: "3 Jun,2024 - 10:42 AM",
-      balance: "$20,000",
-      status: "Paid",
-      dueAmount: "$0.00",
-      textColor: "black",
-    },
-    {
-      type: "Bal",
-      amount: "$20,000",
-      date: "3 Jun,2024 - 10:42 AM",
-      balance: "$20,000",
-      status: "Due",
-      dueAmount: "$20,000",
-      textColor: "green",
-    },
-    {
-      type: "Cash Sale",
-      amount: "$20,000",
-      date: "3 Jun,2024 - 10:42 AM",
-      balance: "$20,000",
-      status: "Extra Paid",
-      dueAmount: "$10,000",
-      textColor: "red",
-    },
-  ];
+  useEffect(() => {
+    async function getDataById() {
+      const result = await getCashSellsByCustomerId(db, router?.id);
+      const lendData = await getLendById(db, router?.id);
+      setLendDataById(lendData);
+      setCustomerTransaction(result);
+    }
+    getDataById();
+  }, []);
+
+  const concatLendDataAndCustomerData =
+    customerTransaction.concat(lendDataById);
 
   const handlePress = () => {
     const phoneNumber = "tel:+8801601113299";
@@ -83,7 +84,7 @@ const CustomerView = () => {
         <View style={styles.headerImageAndTextCon}>
           <Image style={styles.userImage} />
           <View>
-            <Text style={styles.headerText}>Mehedi Hasan</Text>
+            <Text style={styles.headerText}>{router?.name}</Text>
             <Text style={styles.viewProfile}>View Profile</Text>
           </View>
         </View>
@@ -117,37 +118,46 @@ const CustomerView = () => {
           }}
         >
           <FilterAndTextSection />
-          {transactions.map((transaction, index) => (
-            <View key={index} style={styles.transactionCard}>
-              <Text style={styles.transactionTitle}>
-                By Transfer for my Paypal Account
-              </Text>
-              <Text style={styles.transactionType}>
-                {transaction.type} : {transaction.amount}
-              </Text>
-
-              <View style={styles.amountCon}>
-                <Text style={styles.transactionDate}>{transaction.date}</Text>
-                <Text
-                  style={[
-                    styles.transactionAmount,
-                    { color: transaction.textColor },
-                  ]}
-                >
-                  {transaction.dueAmount}
+          {concatLendDataAndCustomerData.map(
+            (transaction: any, index: number) => (
+              <View key={index} style={styles.transactionCard}>
+                <Text style={styles.transactionTitle}>
+                  By Transfer for my Paypal Account
                 </Text>
+                <Text style={styles.transactionType}>
+                  {transaction?.saleAmount ? "Cash sell" : "Bal"} :{" "}
+                  {transaction.saleAmount || transaction?.amount}
+                </Text>
+
+                <View style={styles.amountCon}>
+                  <Text style={styles.transactionDate}>
+                    {transaction?.createdAt}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.transactionAmount,
+                      { color: transaction.textColor },
+                    ]}
+                  >
+                    {transaction?.dueAmount || transaction?.amount}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ))}
+            )
+          )}
         </ScrollView>
       </View>
       <View style={styles.footer}>
         <Button
-          title="You gave"
+          title="You got"
           bg={Colors.green}
           width={"48%"}
           radius={50}
           titleColor={Colors.white}
+          onPress={() => {
+            setIsModalVisible(true);
+            setActiveTab("youGot");
+          }}
         />
         <Button
           title="You gave"
@@ -155,8 +165,54 @@ const CustomerView = () => {
           width={"48%"}
           radius={50}
           titleColor={Colors.white}
+          onPress={() => {
+            setIsModalVisible(true);
+            setActiveTab("youGave");
+          }}
         />
       </View>
+      <Modal isVisible={isModalVisible} style={styles.modal}>
+        <View style={styles.modalCon}>
+          <View style={styles.textAndCloseCon}>
+            <Text style={styles.lendText}>You Gave</Text>
+            <AntDesign
+              name="close"
+              size={24}
+              color="black"
+              onPress={() => setIsModalVisible(false)}
+            />
+          </View>
+          <TextInput
+            onChangeText={(e: any) => setAmount(e)}
+            style={styles.amountInput}
+            placeholder="Type Amount"
+          />
+          <TextInput
+            onChangeText={(e) => setDescription(e)}
+            style={styles.textArea}
+            placeholder="Description"
+          />
+          {activeTab === "youGot" ? (
+            <Button
+              bg={Colors.green}
+              title="Save"
+              titleColor={Colors.white}
+              radius={radius.regular}
+              width={"100%"}
+              onPress={() => handleLend()}
+            />
+          ) : (
+            <Button
+              bg={Colors.red}
+              title="Save"
+              titleColor={Colors.white}
+              radius={radius.regular}
+              width={"100%"}
+              onPress={() => handleGave()}
+            />
+          )}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -291,7 +347,8 @@ const styles = StyleSheet.create({
   },
   transactionType: {
     fontSize: 14,
-    color: Colors.text,
+    color: Colors.green,
+    fontWeight: "500",
   },
   transactionDate: {
     fontSize: 12,
@@ -340,6 +397,48 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 16,
     fontWeight: "bold",
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalCon: {
+    height: 350,
+    width: "100%",
+    backgroundColor: Colors.white,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    padding: 20,
+    gap: 20,
+  },
+  textAndCloseCon: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  lendText: {
+    fontSize: Fonts.large,
+    fontWeight: "500",
+  },
+  amountInput: {
+    height: 50,
+    width: "100%",
+    borderRadius: radius.regular,
+    borderColor: Colors.border,
+    paddingHorizontal: 10,
+    fontSize: Fonts.medium,
+    borderWidth: 1,
+  },
+  textArea: {
+    width: "100%",
+    borderRadius: radius.regular,
+    borderColor: Colors.border,
+    paddingHorizontal: 10,
+    fontSize: Fonts.medium,
+    borderWidth: 1,
+    height: 100,
+    textAlignVertical: "top",
+    paddingTop: 10,
   },
 });
 

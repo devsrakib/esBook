@@ -1,41 +1,73 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { sharedStyle } from "@/constants/shared.style";
 import { Fonts } from "@/constants/Fonts";
+import { useSQLiteContext } from "expo-sqlite";
+import { getCash_sell, getDeposit } from "@/databases/Database";
 
-const data = [
-  {
-    text: "Current Cash",
-    amount: "30,200",
-    icon: require("../../../assets/images/cash.png"),
-    color: Colors.mainColor,
-    textColor: Colors.mainColor,
-  },
-  {
-    text: "Today Sales",
-    amount: "30,200",
-    icon: require("../../../assets/images/cart.png"),
-    color: Colors.orange,
-    textColor: Colors.orange,
-  },
-  {
-    text: "Today i Receive",
-    amount: "30,200",
-    icon: require("../../../assets/images/sales.png"),
-    color: Colors.green,
-    textColor: Colors.green,
-  },
-  {
-    text: "Today I Gave",
-    amount: "30,200",
-    icon: require("../../../assets/images/coin.png"),
-    color: Colors.red,
-    textColor: Colors.red,
-  },
-];
 const Dashboard = () => {
+  const [currentAmount, setCurrentAmount] = useState(0);
+  const [collectedAmount, setCollectedAmount] = useState<any>([]);
+  const [deposit, setDeposit] = useState<any>([]);
+
+  const data = [
+    {
+      text: "Current Cash",
+      amount: currentAmount,
+      icon: require("../../../assets/images/cash.png"),
+      color: Colors.mainColor,
+      textColor: Colors.mainColor,
+    },
+    {
+      text: "Today Sales",
+      amount: "30,200",
+      icon: require("../../../assets/images/cart.png"),
+      color: Colors.orange,
+      textColor: Colors.orange,
+    },
+    {
+      text: "Today i Receive",
+      amount: "30,200",
+      icon: require("../../../assets/images/sales.png"),
+      color: Colors.green,
+      textColor: Colors.green,
+    },
+    {
+      text: "Today I Gave",
+      amount: "30,200",
+      icon: require("../../../assets/images/coin.png"),
+      color: Colors.red,
+      textColor: Colors.red,
+    },
+  ];
+
+  const db = useSQLiteContext();
+  useEffect(() => {
+    async function cash() {
+      const cash = await getCash_sell(db);
+      const deposit = await getDeposit(db);
+      setDeposit(deposit);
+      setCollectedAmount(cash);
+    }
+    cash();
+  }, []);
+
+  useEffect(() => {
+    const totalSaleAmount = collectedAmount?.reduce(
+      (sum: number, record: any) => sum + record?.collectedAmount,
+      0
+    );
+    const totalDeposit = deposit?.reduce(
+      (sum: number, record: any) => sum + record?.amount,
+      0
+    );
+    setCurrentAmount(totalSaleAmount + totalDeposit);
+  }, [collectedAmount, deposit]);
+
+  // console.log(sellAmount);
+
   return (
     <View style={[sharedStyle.grid, { marginTop: 14 }]}>
       {data?.map((d, i) => {

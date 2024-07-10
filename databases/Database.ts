@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 4;
+  const DATABASE_VERSION = 5;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -63,8 +63,17 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       CREATE TABLE IF NOT EXISTS customer_lend (
         id INTEGER PRIMARY KEY NOT NULL,
         customerId INTEGER NOT NULL,
-        amount REAL NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+        amount REAL NOT NULL,
+        description TEXT,
+        FOREIGN KEY (customerId) REFERENCES customer(id)
+      );
+      
+      CREATE TABLE IF NOT EXISTS customer_gave (
+        id INTEGER PRIMARY KEY NOT NULL,
+        customerId INTEGER NOT NULL,
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+        amount REAL NOT NULL,
         description TEXT,
         FOREIGN KEY (customerId) REFERENCES customer(id)
       );
@@ -238,17 +247,32 @@ export const due_collection = async (
 //=================  ====================
 export const customer_lend = async (
   db: SQLiteDatabase,
-  { createdAt, amount, description }: lend
+  { customerId, createdAt, amount, description }: lend
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (  createdAt, amount, description) VALUES (?, ?, ?)",
-      [timestamp, amount, description]
+      "INSERT INTO customer_lend (customerId, createdAt, amount, description) VALUES (?, ?, ?, ?)",
+      [customerId, timestamp, amount, description]
     );
     console.log(" customer lend created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating customer lend:", error);
+  }
+};
+export const customer_gave = async (
+  db: SQLiteDatabase,
+  { customerId, createdAt, amount, description }: lend
+) => {
+  try {
+    const timestamp = createdAt || new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO customer_gave (customerId, createdAt, amount, description) VALUES (?, ?, ?, ?)",
+      [customerId, timestamp, amount, description]
+    );
+    console.log(" customer gave created successfully");
+  } catch (error) {
+    console.error("Error creating customer gave:", error);
   }
 };
 
@@ -288,6 +312,28 @@ export const getCustomers = async (db: SQLiteDatabase) => {
 export const getCash_sell = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM cash_sell");
 };
+export const getLendById = async (db: SQLiteDatabase, customerId: number) => {
+  return await db.getAllAsync(
+    "SELECT * FROM customer_lend WHERE customerId = ?",
+    [customerId]
+  );
+};
+
+export const getCashSellsByCustomerId = async (
+  db: SQLiteDatabase,
+  customerId: number
+) => {
+  try {
+    const results = await db.getAllAsync(
+      "SELECT * FROM cash_sell WHERE customerId = ?",
+      [customerId]
+    );
+    return results;
+  } catch (error) {
+    console.error("Error fetching cash sells by customer ID:", error);
+  }
+};
+
 // =================================================
 // =================================================
 // =================================================
@@ -418,7 +464,7 @@ export const cash_report = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_report ( createdAt, totalCash) VALUE (?, ?)",
+      "INSERT INTO cash_report ( createdAt, totalCash) VALUES (?, ?)",
       [timestamp, totalCash]
     );
     console.log("cash report created successfully");

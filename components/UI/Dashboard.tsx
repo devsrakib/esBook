@@ -1,29 +1,35 @@
 import { View, Text, StyleSheet, FlatList, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { sharedStyle } from "@/constants/shared.style";
+import { useSQLiteContext } from "expo-sqlite";
+import { getCustomers, getSuppliers } from "@/databases/Database";
+import { currency } from "@/global/currency";
 
 const Dashboard = () => {
+  const [customers, setCustomers] = useState<number>(0);
+  const [suppliers, setSuppliers] = useState<number>(0);
+  const db = useSQLiteContext();
   const allStatuses = [
     {
       text: "Total Customers",
       icon: require("../../assets/images/DUser.png"),
-      amount: 1200,
+      quantity: customers,
       bg_color: Colors.lavender,
     },
     {
       text: "Total Supplier",
       icon: require("../../assets/images/DHouse.png"),
-      amount: 1200,
+      quantity: suppliers,
       bg_color: Colors.purpleHalf,
     },
     {
       text: "Total Cash",
       icon: require("../../assets/images/DMoney.png"),
-      amount: 1200,
+      amount: `${1200}`,
       bg_color: Colors.VeroneseGreen,
     },
     {
@@ -35,6 +41,16 @@ const Dashboard = () => {
     },
   ];
 
+  useEffect(() => {
+    async function customers() {
+      const customers = await getCustomers(db);
+      const suppliers = await getSuppliers(db);
+      setCustomers(customers?.length);
+      setSuppliers(suppliers?.length);
+    }
+    customers();
+  }, []);
+
   return (
     <View style={sharedStyle.grid}>
       {allStatuses.map((item, index) => {
@@ -45,7 +61,8 @@ const Dashboard = () => {
             </View>
             <Text style={styles.text}>{item?.text}</Text>
             <Text style={[styles.amount, { color: item?.color }]}>
-              ${item?.amount}
+              {item?.amount ? currency : null}
+              {item?.amount || item?.quantity}
             </Text>
           </View>
         );

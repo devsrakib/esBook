@@ -5,8 +5,8 @@ import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSQLiteContext } from "expo-sqlite";
-import Customers from "@/components/UI/shared/Customers";
 import { getCustomers } from "@/databases/Database";
+import AllCustomers from "@/components/UI/AllCustomers";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -43,7 +43,7 @@ const Page = () => {
           data={customer}
           renderItem={({ item }) => {
             return (
-              <Customers item={item} onPress={() => handleCustomerData()} />
+              <AllCustomers item={item} onPress={() => handleCustomerData()} />
             );
           }}
         />

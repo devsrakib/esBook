@@ -1,22 +1,20 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { Fragment } from "react";
-import Divider from "../Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
 import { currency } from "@/global/currency";
-import EmptyUser from "../emptyUser";
 import { useNavigation } from "@react-navigation/native";
 
-const Customers = ({ item }: any) => {
+const AllCustomers = ({ item }: any) => {
   const navigation = useNavigation<any>();
   return (
     <Fragment>
       <Link
         href={{
-          pathname: "/pages/parties/CustomerView",
+          pathname: "/pages/cashbox/details",
           params: {
             id: item?.id,
             name: item?.name,
@@ -78,4 +76,4 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
 });
-export default Customers;
+export default AllCustomers;
