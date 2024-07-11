@@ -8,7 +8,7 @@ import { Link } from "expo-router";
 import { currency } from "@/global/currency";
 import { useNavigation } from "@react-navigation/native";
 
-const AllCustomers = ({ item }: any) => {
+const AllSuppliers = ({ item }: any) => {
   const navigation = useNavigation<any>();
   return (
     <Fragment>
@@ -18,7 +18,7 @@ const AllCustomers = ({ item }: any) => {
           params: {
             id: item?.id,
             name: item?.name,
-            text: "Cash Sell",
+            text: "Cash buy",
             isCustomerOrSupplier: "yes",
             phone: item?.phoneNumber,
           },
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
 });
-export default AllCustomers;
+export default AllSuppliers;

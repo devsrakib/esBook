@@ -12,12 +12,18 @@ import { AntDesign } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
-const SearchCustomerAndAddCustomer = () => {
+const SearchCustomerAndAddCustomer = ({ text }: { text: string }) => {
+  const path =
+    text === "Customer" || text === "Customer"
+      ? "/pages/cashbox/allCustomers"
+      : "/pages/cashbox/allSuppliers";
+  console.log(text, ";;;;;;;");
+
   return (
     <View style={styles.container}>
       <Link
         href={{
-          pathname: "/pages/cashbox/allCustomers",
+          pathname: path,
         }}
         asChild
       >
@@ -25,7 +31,7 @@ const SearchCustomerAndAddCustomer = () => {
           <View style={styles.userIconCon}>
             <Feather name="user" size={24} color={Colors.text} />
           </View>
-          <Text style={styles.text}>Select customers</Text>
+          <Text style={styles.text}>Select {text}</Text>
         </TouchableOpacity>
       </Link>
       <Link

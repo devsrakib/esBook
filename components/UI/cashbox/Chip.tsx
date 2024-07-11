@@ -18,47 +18,60 @@ const items = [
   "Withdraw",
 ];
 
-const Chip = ({ setSelectedChip }: { setSelectedChip: Function }) => {
+const Chip = ({
+  setSelectedChip,
+  title,
+  selectedChip,
+}: {
+  setSelectedChip: Function;
+  title: any;
+  selectedChip: string;
+}) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
+  console.log(title, "====", selectedChip);
+
   return (
-    <Fragment>
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingVertical: 10,
-          gap: 10,
-        }}
-        data={items}
-        renderItem={({ item, index }) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedChip(item);
-                setSelectedIndex(index);
+    <FlatList
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        gap: 10,
+      }}
+      data={items}
+      renderItem={({ item, index }) => {
+        return (
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedChip(item);
+              setSelectedIndex(index);
+            }}
+            style={[
+              styles.container,
+              {
+                backgroundColor:
+                  selectedIndex === index || title === selectedChip
+                    ? Colors.black
+                    : Colors.background2,
+              },
+            ]}
+          >
+            <Text
+              style={{
+                color:
+                  selectedIndex === index || title === selectedChip
+                    ? Colors.white
+                    : Colors.black,
               }}
-              style={[
-                styles.container,
-                {
-                  backgroundColor:
-                    selectedIndex === index ? Colors.black : Colors.background2,
-                },
-              ]}
             >
-              <Text
-                style={{
-                  color: selectedIndex === index ? Colors.white : Colors.black,
-                }}
-              >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </Fragment>
+              {item}
+            </Text>
+          </TouchableOpacity>
+        );
+      }}
+    />
   );
 };
 

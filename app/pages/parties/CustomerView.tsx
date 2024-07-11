@@ -15,7 +15,7 @@ import {
   FontAwesome5,
   AntDesign,
 } from "@expo/vector-icons";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
@@ -70,9 +70,11 @@ const CustomerView = () => {
     customerTransaction.concat(lendDataById);
 
   const handlePress = () => {
-    const phoneNumber = "tel:+8801601113299";
+    const phoneNumber = `tel:+88${router?.phoneNumber}`;
     Linking.openURL(phoneNumber);
   };
+
+  // console.log(router?.id);
 
   return (
     <View
@@ -81,13 +83,21 @@ const CustomerView = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.header}>
         <GoBack color={Colors.white} />
-        <View style={styles.headerImageAndTextCon}>
-          <Image style={styles.userImage} />
-          <View>
-            <Text style={styles.headerText}>{router?.name}</Text>
-            <Text style={styles.viewProfile}>View Profile</Text>
-          </View>
-        </View>
+        <Link
+          href={{
+            pathname: "pages/profile/profile",
+            params: router,
+          }}
+          asChild
+        >
+          <TouchableOpacity style={styles.headerImageAndTextCon}>
+            <Image style={styles.userImage} />
+            <View>
+              <Text style={styles.headerText}>{router?.name}</Text>
+              <Text style={styles.viewProfile}>View Profile</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
         <TouchableOpacity
           onPress={() => {
             handlePress();

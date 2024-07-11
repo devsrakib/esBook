@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   ScrollView,
-  TouchableOpacity,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -15,63 +14,62 @@ import Button from "@/components/UI/Button";
 import { Fonts } from "@/constants/Fonts";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GoBack from "@/components/UI/header/GoBack";
+import { Stack, useLocalSearchParams } from "expo-router";
+import { deleteCustomerById, getCustomerById } from "@/databases/Database";
+import { useSQLiteContext } from "expo-sqlite";
 
 const Profile = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const userData = {
-    name: "Mehedi Hasan Omi",
-    email: "nathan.roberts@example.com",
-    address: "2118 Thornridge Cir. Syracuse, Connecticut 35624",
-    phone: "014658933142",
-    taxNumber: "GSTIN",
-    profileImage:
-      "https://wac-cdn.atlassian.com/dam/jcr:ba03a215-2f45-40f5-8540-b2015223c918/Max-R_Headshot%20(1).jpg?cdnVersion=1810",
-  };
+  const [userData, setUserData] = useState<any>({});
+  const router = useLocalSearchParams<any>();
+  console.log(router, "id");
+  const db = useSQLiteContext();
+  console.log(userData, "hello data");
 
   const infoData = [
     {
       icon: <Ionicons name="person-outline" size={18} color="gray" />,
       label: "Name",
-      value: userData.name,
+      value: userData?.name,
     },
     {
       icon: <MaterialIcons name="email" size={18} color="gray" />,
       label: "Email",
-      value: userData.email,
+      value: userData?.email,
     },
     {
       icon: <Ionicons name="location-outline" size={18} color="gray" />,
       label: "Address",
-      value: userData.address,
+      value: userData?.address,
     },
     {
       icon: <Ionicons name="call-outline" size={18} color="gray" />,
       label: "Phone",
-      value: userData.phone,
-    },
-    {
-      icon: <MaterialIcons name="attach-money" size={18} color="gray" />,
-      label: "Tax Number",
-      value: userData.taxNumber,
+      value: userData?.phoneNumber,
     },
   ];
 
-  const InfoRow: React.FC<{ icon: any; label: string; value: any }> = ({
-    icon,
-    label,
-    value,
-  }) => (
-    <Fragment>
-      <View style={styles.infoRow}>
-        <View style={styles.iconCon}>{icon}</View>
-        <View style={styles.infoColumn}>
-          <Text style={styles.label}>{label}</Text>
-          <TextInput style={styles.input} value={value} />
-        </View>
-      </View>
-      <Divider height={1} width={"100%"} aligns={"center"} />
-    </Fragment>
-  );
+  useEffect(() => {
+    async function getCustomer() {
+      try {
+        const customer = await getCustomerById(db, router?.id);
+        if (customer) {
+          setUserData(customer);
+        } else {
+          console.log("No customer found with this ID.");
+        }
+      } catch (error) {
+        console.error("Error fetching customer:", error);
+      }
+    }
+    if (router?.id) {
+      getCustomer();
+    }
+  }, [db, router?.id]);
+
+  const handleDeleteCustomer = async () => {
+    await deleteCustomerById(db, userData?.id);
+  };
 
   return (
     <ScrollView
@@ -80,26 +78,37 @@ const Profile = () => {
         { paddingBottom: bottom, paddingTop: top },
       ]}
     >
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
       <View style={styles.header}>
         <GoBack color={Colors.white} />
         <Text style={styles.headerText}>Added Phone book</Text>
       </View>
       <View style={styles.profileContainer}>
         <Image
-          source={{ uri: userData.profileImage }}
+          source={{ uri: userData?.profileImage }}
           style={styles.profileImage}
         />
-        <Text style={styles.profileName}>{userData.name}</Text>
+        <Text style={styles.profileName}>{userData?.name}</Text>
       </View>
       <View style={styles.infoContainer}>
-        {infoData.map((item, index) => (
-          <InfoRow
-            key={index}
-            icon={item.icon}
-            label={item.label}
-            value={item.value}
-          />
-        ))}
+        {infoData?.map((d, index: number) => {
+          return (
+            <Fragment key={index?.toString()}>
+              <View style={styles.infoRow}>
+                <View style={styles.iconCon}>{d?.icon}</View>
+                <View style={styles.infoColumn}>
+                  <Text style={styles.label}>{d?.label}</Text>
+                  <TextInput style={styles.input} value={d?.value} />
+                </View>
+              </View>
+              <Divider height={1} width={"100%"} aligns={"center"} />
+            </Fragment>
+          );
+        })}
       </View>
       <Button
         title="Delete Customer"
@@ -107,6 +116,7 @@ const Profile = () => {
         radius={50}
         width={"90%"}
         bg={Colors.OrangeRed}
+        onPress={() => handleDeleteCustomer()}
       />
     </ScrollView>
   );

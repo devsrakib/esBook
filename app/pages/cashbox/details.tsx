@@ -110,6 +110,8 @@ const page = () => {
     }
   };
 
+  console.log(route, "cush buy");
+
   return (
     <View
       style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
@@ -123,7 +125,17 @@ const page = () => {
         <Header height={70} title={route.text} titleColor={Colors.white} />
         {(route.text === "Cash Sell" ||
           route.text === "Due" ||
-          route.text === "Cash buy") && <SearchCustomerAndAddCustomer />}
+          route.text === "Cash buy") && (
+          <SearchCustomerAndAddCustomer
+            text={
+              route?.text === "Cash Sell"
+                ? "Customer"
+                : route?.text === "Due"
+                ? "Customer"
+                : route?.text === "Cash buy" && "Supplier"
+            }
+          />
+        )}
       </View>
       <View style={styles.bodySection}>
         <View style={styles.dummyTextCon}>

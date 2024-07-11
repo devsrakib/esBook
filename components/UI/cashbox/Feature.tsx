@@ -9,11 +9,14 @@ import { Link } from "expo-router";
 
 const Feature = ({ data }: any) => {
   const text = data?.text;
+
+  console.log(text);
+
   return (
     <Fragment>
       <Link
         href={{
-          pathname: "/pages/cashbox/details",
+          pathname: `${"/pages/cashbox/details"}`,
           params: { text: text },
         }}
         asChild

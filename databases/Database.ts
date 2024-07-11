@@ -308,6 +308,18 @@ export const collection_reminder = async (
 export const getCustomers = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM customer");
 };
+export const getCustomerById = async (db: SQLiteDatabase, id: number) => {
+  try {
+    const result = await db.getFirstAsync(
+      "SELECT * FROM customer WHERE id = ?",
+      [id]
+    );
+    return result;
+  } catch (error) {
+    console.error("Error fetching customer by ID:", error);
+    return null;
+  }
+};
 
 export const getCash_sell = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM cash_sell");
@@ -331,6 +343,19 @@ export const getCashSellsByCustomerId = async (
     return results;
   } catch (error) {
     console.error("Error fetching cash sells by customer ID:", error);
+  }
+};
+
+// Function to delete a user by ID
+export const deleteCustomerById = async (
+  db: SQLiteDatabase,
+  userId: number
+) => {
+  try {
+    await db.runAsync("DELETE FROM customer WHERE id = ?", [userId]);
+    console.log(`User with ID ${userId} deleted successfully`);
+  } catch (error) {
+    console.error("Error deleting user:", error);
   }
 };
 

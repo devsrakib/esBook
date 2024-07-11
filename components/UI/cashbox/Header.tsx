@@ -29,6 +29,7 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
           <Link
             href={{
               pathname: "/pages/cashbox/report",
+              params: { title },
             }}
           >
             <Text style={styles.reportText}>Report</Text>
