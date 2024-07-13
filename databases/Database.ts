@@ -148,6 +148,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //   currentDbVersion = 4;
   // }
 
+  if (currentDbVersion < 5) {
+    await db.execAsync(`
+      ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL;
+    `);
+  }
+
+
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 
@@ -221,17 +228,17 @@ export const cash_sell = async (
 export const due_collection = async (
   db: SQLiteDatabase,
   {
+    customerId,
     collectedAmount,
     createdAt,
-    collectionPurpose,
     description,
   }: DueCollectionData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (collectedAmount, createdAt, collectionPurpose, description) VALUES (?, ?, ?, ?)",
-      [collectedAmount, timestamp, collectionPurpose, description]
+      "INSERT INTO due_collection (customerId, collectedAmount, createdAt, description) VALUES (?, ?, ?,?)",
+      [customerId, collectedAmount, timestamp, description]
     );
     console.log("due collection created successfully");
   } catch (error) {
@@ -297,6 +304,24 @@ export const collection_reminder = async (
     console.error("Error creating cash_sell:", error);
   }
 };
+
+
+export const updateDueAmount = async (
+  db: SQLiteDatabase,
+  {id,
+    newDueAmount}: {id:number, newDueAmount:number}
+) => {
+  try {
+    await db.runAsync(
+      "UPDATE cash_sell SET dueAmount = ? WHERE id = ?",
+      [newDueAmount, id]
+    );
+    console.log(`Due amount updated successfully for ID ${id}`);
+  } catch (error) {
+    console.error("Error updating due amount:", error);
+  }
+};
+
 
 //=================  ====================
 //=================  ====================
@@ -397,17 +422,45 @@ export const createSuppliers = async (
 //=================  ====================
 export const cash_buy = async (
   db: SQLiteDatabase,
-  { amount, createdAt, description, dueAmount, extraAmount }: CashBuyData
+  {supplierId, amount, createdAt, description, collectedAmount, dueAmount, extraAmount }: CashBuyData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_sell (saleAmount, collectedAmount, createdAt, dueAmount, extraAmount, description) VALUES (?, ?, ?, ?, ?,?)",
-      [amount, timestamp, dueAmount, extraAmount, description]
+      "INSERT INTO cash_buy (supplierId, amount, createdAt, description, collectedAmount, dueAmount, extraAmount) VALUES (?, ?, ?, ?, ?,?, ?)",
+      [supplierId, amount, timestamp, description, collectedAmount, dueAmount, extraAmount]
     );
-    console.log("cash_sell created successfully");
+    console.log("cash buy created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating cash buy:", error);
+  }
+};
+
+
+export const getCashBuyBySupplierId = async (
+  db: SQLiteDatabase,
+  customerId: number
+) => {
+  try {
+    const results = await db.getAllAsync(
+      "SELECT * FROM cash_buy WHERE supplierId = ?",
+      [customerId]
+    );
+    return results;
+  } catch (error) {
+    console.error("Error fetching cash buy by supplier ID:", error);
+  }
+};
+export const getSupplierById = async (db: SQLiteDatabase, id: number) => {
+  try {
+    const result = await db.getFirstAsync(
+      "SELECT * FROM supplier WHERE id = ?",
+      [id]
+    );
+    return result;
+  } catch (error) {
+    console.error("Error fetching supplier by ID:", error);
+    return null;
   }
 };
 //=================  ====================
@@ -439,6 +492,10 @@ export const getSuppliers = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM supplier");
 };
 
+export const getCash_buy = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM cash_buy");
+};
+
 // =====================================================================================================
 // =====================================================================================================
 
@@ -468,6 +525,7 @@ export const owner_profile = async (
 export const getOwnerProfile = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM owner_profile");
 };
+
 
 //=================  ====================
 //=================  ====================
@@ -617,6 +675,7 @@ export interface CashSellData {
 export interface CashBuyData {
   supplierId: number;
   amount: number;
+  collectedAmount: number;
   createdAt: string;
   description: string;
   dueAmount: number;

@@ -5,35 +5,53 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { currency } from "@/global/currency";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCustomerById } from "@/databases/Database";
+import { getCashBuyBySupplierId, getCustomerById, getSupplierById } from "@/databases/Database";
 import { Link } from "expo-router";
+import FormatDate from "@/utils/FormatDate";
 
-const ReportCart = ({ item, text }: any) => {
-  console.log(item);
+const ReportCart = ({ item, text }:any) => {
   const [customer, setCustomer] = useState<any>({});
+  const [supplier, setSupplier] = useState<any>({});
   const db = useSQLiteContext();
 
-  console.log(text, "==============");
-
   useEffect(() => {
-    async function getCustomer() {
+    const fetchCustomer = async () => {
       try {
-        const customer = await getCustomerById(db, item?.customerId);
-        if (customer) {
-          setCustomer(customer);
-        } else {
+        const customerData = await getCustomerById(db, item?.customerId);
+        setCustomer(customerData || {});
+        if (!customerData) {
           console.log("No customer found with this ID.");
         }
       } catch (error) {
         console.error("Error fetching customer:", error);
       }
-    }
+    };
+
     if (item?.customerId) {
-      getCustomer();
+      fetchCustomer();
     }
   }, [db, item?.customerId]);
 
-  console.log(item?.dueAmount, ":::::::");
+  useEffect(() => {
+    const fetchSupplier = async () => {
+      try {
+        const supplierData = await getSupplierById(db, item?.supplierId);
+        setSupplier(supplierData || {});
+        if (!supplierData) {
+          console.log("No supplier found with this ID.");
+        }
+      } catch (error) {
+        console.error("Error fetching supplier:", error);
+      }
+    };
+
+    if (item?.supplierId) {
+      fetchSupplier();
+    }
+  }, [db, item?.supplierId]);
+
+  console.log(item?.dueAmount, text);
+  
 
   return (
     <View style={styles.container}>
@@ -43,26 +61,24 @@ const ReportCart = ({ item, text }: any) => {
             style={[
               styles.title,
               {
-                color:
-                  text === "cash sell"
-                    ? Colors.green
-                    : text === "Due"
-                    ? Colors.red
-                    : "",
+                color: 
+                  text === "cash sell" ? Colors.green :
+                  text === "Due" ? Colors.red :
+                  text === "cash buy" ? Colors.red : '',
               },
             ]}
           >
             {text}
           </Text>
           <Text style={styles.divider}>|</Text>
-          <Text style={styles.time}>12:20 PM</Text>
+          <Text style={styles.time}>{FormatDate(item?.createdAt)}</Text>
         </View>
         {text === "Due" ? (
           <Link
             href={{
               pathname: "pages/cashbox/details",
               params: {
-                id: item?.customerId,
+                id: item?.id,
                 text: text,
               },
             }}
@@ -75,37 +91,33 @@ const ReportCart = ({ item, text }: any) => {
         ) : (
           <Text style={styles.amount}>
             {currency}
-            {text === "Due" && item?.dueAmount
-              ? item?.dueAmount
-              : text === "cash sell" && item?.saleAmount}
+            {text === "Due" && item?.dueAmount > 0 ? item?.dueAmount : 
+             text === "cash sell" && item?.saleAmount}
           </Text>
         )}
       </View>
-      <Text style={[styles.dummyText]}>{item?.description}</Text>
+      <Text style={styles.dummyText}>{item?.description}</Text>
       <View>
         <View style={styles.bottomSection}>
           <Image style={styles.img} />
-          <Text style={styles.name}>{customer?.name}</Text>
+          <Text style={styles.name}>{customer?.name || supplier?.name}</Text>
           <Text style={styles.amountText}>
-            {text === "cash sell"
-              ? "collection"
-              : text === "Due"
-              ? "Amount"
-              : "buy amount"}
+            {text === "cash sell" ? "collection" :
+             text === "Due" ? "Amount" :
+             "buy amount"}
             :{" "}
             <Text
               style={{
-                color:
-                  text === "cash sell"
-                    ? Colors.green
-                    : text === "Due"
-                    ? Colors.red
-                    : null,
+                color: 
+                  text === "cash sell" ? Colors.green :
+                  text === "Due" ? Colors.red :
+                  text === "cash buy" ? Colors.red : '',
                 fontWeight: "600",
                 fontSize: Fonts.medium,
               }}
             >
-              {item?.collectedAmount}
+              {text === "Due" && item?.dueAmount > 0 ? item?.dueAmount : 
+             text === "cash sell" && item?.saleAmount}
             </Text>
           </Text>
         </View>
@@ -139,7 +151,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: Fonts.medium,
     fontWeight: "600",
-    color: Colors.red,
   },
   divider: {
     color: Colors.text,
@@ -182,4 +193,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
 export default ReportCart;

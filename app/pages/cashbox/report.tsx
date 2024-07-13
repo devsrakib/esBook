@@ -6,7 +6,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Chip from "@/components/UI/cashbox/Chip";
 import ReportCart from "@/components/UI/cashbox/ReportCart";
-import { getCash_sell, getDeposit, getExpense } from "@/databases/Database";
+import { getCash_buy, getCash_sell, getDeposit, getExpense } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import NonRelationReportCart from "@/components/UI/cashbox/nonRelationalReportCart";
 
@@ -17,6 +17,7 @@ const Page = () => {
   const [depositedReport, setDepositedReport] = useState<any>([]);
   const [withdrawReport, setWithdrawReport] = useState<any>([]);
   const [cashSellReport, setCashSellReport] = useState<any>([]);
+  const [cashBuyReport, setCashBuyReport] = useState<any>([]);
   const [dueReport, setDueReport] = useState<any>([]);
   const [selectedChip, setSelectedChip] = useState<any>(router?.title);
   const db = useSQLiteContext();
@@ -28,6 +29,7 @@ const Page = () => {
       const deposit = await getDeposit(db);
       const withdraw = await getDeposit(db);
       const cashSell = await getCash_sell(db);
+      const cash_buy = await getCash_buy(db);
       const due = (await getCash_sell(db)).filter(
         (item: any) => item?.dueAmount > 0
       );
@@ -36,11 +38,12 @@ const Page = () => {
       setDepositedReport(deposit);
       setWithdrawReport(withdraw);
       setCashSellReport(cashSell);
+      setCashBuyReport(cash_buy);
     }
     expense();
   }, []);
 
-  console.log(selectedChip);
+  console.log(dueReport?.length);
 
   return (
     <View
@@ -76,8 +79,8 @@ const Page = () => {
                 ? withdrawReport
                 : selectedChip === "Cash Sell"
                 ? cashSellReport
-                : selectedChip === "Due" && dueReport
-            }
+                : selectedChip === "Due" ? dueReport : selectedChip === 'Cash buy' && cashBuyReport
+             }
             renderItem={({ item }) => {
               return (
                 <Fragment>
@@ -89,7 +92,7 @@ const Page = () => {
                     <NonRelationReportCart item={item} text="Withdraw" />
                   ) : selectedChip === "Cash Sell" ? (
                     <ReportCart item={item} text="cash sell" />
-                  ) : (
+                  ) : selectedChip === 'Cash buy' ? <ReportCart item={item} text='cash buy'/> : (
                     selectedChip === "Due" && (
                       <ReportCart item={item} text="Due" />
                     )

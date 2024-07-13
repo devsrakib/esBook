@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
-import { format } from "date-fns";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 
@@ -19,7 +18,7 @@ const DatePicker: React.FC<datePickerProps> = ({
   iconColor,
   iconSize,
 }) => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<any>();
   const [show, setShow] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -53,7 +52,7 @@ const DatePicker: React.FC<datePickerProps> = ({
           }}
         />
       )}
-      <Text style={styles.date}>{format(date, "dd MMM, yyyy")}</Text>
+      <Text style={styles.date}>{date}</Text>
       <AntDesign name="calendar" size={iconSize} color={iconColor} />
     </TouchableOpacity>
   );

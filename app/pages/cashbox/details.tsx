@@ -18,16 +18,17 @@ import {
   deposit,
   due_collection,
   expense,
+  updateDueAmount,
   withdraw,
 } from "@/databases/Database";
 
 const page = () => {
-  const route = useLocalSearchParams();
+  const route = useLocalSearchParams<any>();
   const { bottom, top } = useSafeAreaInsets();
   const [transaction, setTransaction] = useState<any>();
 
   let transactionData: any;
-  if (route.text === "Cash Sell") {
+  if (route.text == "Cash Sell") {
     transactionData = {
       customerId: route?.id,
       saleAmount: transaction?.sale,
@@ -36,31 +37,40 @@ const page = () => {
       extraAmount: transaction?.collect - transaction?.sale,
       description: transaction?.description,
     };
-  } else if (route.text === "Cash Buy") {
+  } else if (route.text == "Cash buy") {
     transactionData = {
       supplierId: route?.id,
-      buyAmount: transaction?.sale,
+      amount: transaction?.sale,
       collectedAmount: transaction?.collect,
       dueAmount: transaction?.sale - transaction?.collect,
       extraAmount: transaction?.collect - transaction?.sale,
       description: transaction?.description,
     };
-  } else if (route.text === "Expenses") {
+  } else if (route.text == "Expenses") {
     transactionData = {
       amount: transaction?.sale,
       description: transaction?.description,
     };
-  } else if (route.text === "Deposited") {
+  } else if (route.text == "Deposited") {
     transactionData = {
       amount: transaction?.sale,
       description: transaction?.description,
     };
-  } else if (route.text === "Withdraw") {
+  } else if (route.text == "Withdraw") {
     transactionData = {
       amount: transaction?.sale,
+      description: transaction?.description,
+    };
+  }else if(route?.text == 'Due'){
+    transactionData = {
+      customerId: route?.id,
+      collectedAmount: transaction?.sale,
       description: transaction?.description,
     };
   }
+
+  console.log(transactionData, 'transaction data');
+  
 
   const db = useSQLiteContext();
 
@@ -80,6 +90,7 @@ const page = () => {
   const handleCashBuy = async () => {
     await cash_buy(db, transactionData);
     console.log(transactionData);
+    
   };
   const handleWithdraw = async () => {
     await withdraw(db, transactionData);
@@ -90,11 +101,15 @@ const page = () => {
   //   console.log(transactionData);
   // };
   const handleDue = async () => {
-    await due_collection(db, transactionData);
+    await updateDueAmount(db, transactionData);
     console.log(transactionData);
   };
 
+  console.log(route);
+  
+
   const handleInput = () => {
+    
     if (route?.text === "Cash Sell") {
       handleCashSell();
     } else if (route?.text === "Expenses") {
@@ -103,14 +118,27 @@ const page = () => {
       handleDeposit();
     } else if (route?.text === "Cash buy") {
       handleCashBuy();
+      console.log(transactionData);
     } else if (route?.text === "Due") {
       handleDue();
+      console.log('hello due');
+      console.log(transactionData);
+      
     } else {
       handleWithdraw();
     }
   };
 
-  console.log(route, "cush buy");
+
+  const customerTextMapping = {
+  "Cash Sell": "Customer",
+  "Due": "Customer",
+  "Cash buy": "Supplier",
+};
+
+const shouldRenderComponent = ["Cash Sell", "Due", "Cash buy"].includes(route?.text);
+
+
 
   return (
     <View
@@ -123,18 +151,10 @@ const page = () => {
       />
       <View style={styles.headerSection}>
         <Header height={70} title={route.text} titleColor={Colors.white} />
-        {(route.text === "Cash Sell" ||
-          route.text === "Due" ||
-          route.text === "Cash buy") && (
-          <SearchCustomerAndAddCustomer
-            text={
-              route?.text === "Cash Sell"
-                ? "Customer"
-                : route?.text === "Due"
-                ? "Customer"
-                : route?.text === "Cash buy" && "Supplier"
-            }
-          />
+        {shouldRenderComponent && (
+          
+    <SearchCustomerAndAddCustomer text={customerTextMapping[route?.text]} />
+  
         )}
       </View>
       <View style={styles.bodySection}>

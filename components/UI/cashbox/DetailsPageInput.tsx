@@ -32,7 +32,7 @@ const DetailsPageInput = ({
           <Text>{currency}</Text>
         </View>
       </View>
-      {text === "Cash Sell" && (
+      {(text === "Cash Sell" || text === 'Cash buy') && (
         <Fragment>
           <Text style={styles.label}>Collected amount</Text>
           <View style={styles.inputCon}>
