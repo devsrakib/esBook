@@ -84,8 +84,8 @@ const ReportCart = ({ item, text }:any) => {
             }}
             asChild
           >
-            <TouchableOpacity>
-              <Text>Collect</Text>
+            <TouchableOpacity style={styles.collectButton}>
+              <Text style={styles.buttonText}>Collect</Text>
             </TouchableOpacity>
           </Link>
         ) : (
@@ -192,6 +192,17 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     fontWeight: "600",
   },
+  collectButton:{
+    backgroundColor: Colors.mainColor,
+    width: 55,
+    height: 25,
+    borderRadius: radius.small,
+alignItems: 'center',
+justifyContent:'center'
+  },
+  buttonText:{
+    color: Colors.white,
+  }
 });
 
 export default ReportCart;

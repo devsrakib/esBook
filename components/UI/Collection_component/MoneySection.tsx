@@ -7,6 +7,7 @@ import Divider from "../Divider";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { currency } from "@/global/currency";
+import { Link } from "expo-router";
 const MoneySection = () => {
   return (
     <View style={styles.container}>
@@ -26,11 +27,16 @@ const MoneySection = () => {
         </View>
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
-      <TouchableOpacity style={styles.calender}>
+     <Link href={{
+      pathname: '/pages/Collection/SetCollectionDate',
+      params: {}
+     }} asChild>
+     <TouchableOpacity style={styles.calender}>
         <Feather name="calendar" size={24} color={Colors.mainColor} />
         <Text style={styles.setText}>Set Collection Data</Text>
         <AntDesign name="right" size={18} color={Colors.mainColor} />
       </TouchableOpacity>
+     </Link>
     </View>
   );
 };

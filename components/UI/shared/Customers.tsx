@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React, { Fragment } from "react";
 import Divider from "../Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -21,14 +21,18 @@ const Customers = ({ item }: any) => {
             id: item?.id,
             name: item?.name,
             text: "Cash Sell",
-            isCustomerOrSupplier: "yes",
+            profile: item?.profilePhoto
           },
         }}
         asChild
       >
         <TouchableOpacity style={styles.customerDetails}>
           <View style={styles.avatar}>
-            <FontAwesome6 name="user-secret" size={24} color="black" />
+            {item?.profilePhoto?
+              <Image style={styles.profile} source={{uri: item?.profilePhoto}}/>
+              :
+              <FontAwesome6 name="user-secret" size={24} color="black" />
+            }
           </View>
           <View style={styles.nameSection}>
             <Text style={styles.name}>{item?.name}</Text>
@@ -58,7 +62,6 @@ const styles = StyleSheet.create({
   avatar: {
     borderWidth: 1,
     borderRadius: radius.large,
-    padding: 6,
     alignItems: "center",
     justifyContent: "center",
     borderColor: Colors.border,
@@ -77,5 +80,10 @@ const styles = StyleSheet.create({
     fontSize: Fonts.regular,
     color: Colors.text,
   },
+  profile:{
+    width: '100%',
+    height: '100%',
+    borderRadius: radius.medium
+  }
 });
 export default Customers;

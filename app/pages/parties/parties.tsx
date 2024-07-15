@@ -42,6 +42,9 @@ const Parties = () => {
     console.log("hello");
   };
 
+  console.log(customers);
+  
+
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
       <View style={styles.topSection}>

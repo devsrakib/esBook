@@ -88,10 +88,17 @@ const Profile = () => {
         <Text style={styles.headerText}>Added Phone book</Text>
       </View>
       <View style={styles.profileContainer}>
-        <Image
-          source={{ uri: userData?.profileImage }}
-          style={styles.profileImage}
-        />
+        {userData?.profilePhoto ? (
+          <Image
+            source={{ uri: userData?.profilePhoto }}
+            style={styles.profileImage}
+          />
+        ) : (
+          <Image
+            source={require("../../../assets/images/placeholder.jpeg")}
+            style={styles.profileImage}
+          />
+        )}
         <Text style={styles.profileName}>{userData?.name}</Text>
       </View>
       <View style={styles.infoContainer}>
@@ -149,7 +156,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 8,
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   profileName: {
     color: "white",

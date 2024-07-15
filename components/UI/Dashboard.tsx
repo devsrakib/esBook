@@ -6,12 +6,19 @@ import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { sharedStyle } from "@/constants/shared.style";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCustomers, getSuppliers } from "@/databases/Database";
+import {
+  getCash_sell,
+  getCustomers,
+  getExpense,
+  getSuppliers,
+} from "@/databases/Database";
 import { currency } from "@/global/currency";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState<number>(0);
   const [suppliers, setSuppliers] = useState<number>(0);
+  const [cashSell, setCashSell] = useState<any>(0);
+  const [expense, setExpense] = useState<any>(0);
   const db = useSQLiteContext();
   const allStatuses = [
     {
@@ -29,13 +36,13 @@ const Dashboard = () => {
     {
       text: "Total Cash",
       icon: require("../../assets/images/DMoney.png"),
-      amount: `${1200}`,
+      amount: `${cashSell}`,
       bg_color: Colors.VeroneseGreen,
     },
     {
       text: "Total Expenses",
       icon: require("../../assets/images/DDollar.png"),
-      amount: 1200,
+      amount: `${expense}`,
       bg_color: Colors.OrangeRed,
       color: Colors.red,
     },
@@ -45,11 +52,23 @@ const Dashboard = () => {
     async function customers() {
       const customers = await getCustomers(db);
       const suppliers = await getSuppliers(db);
+      const cash_sell = await getCash_sell(db);
+      const expense = await getExpense(db);
       setCustomers(customers?.length);
       setSuppliers(suppliers?.length);
+      const totalSaleAmount = cash_sell?.reduce(
+        (sum: number, record: any) => sum + record?.collectedAmount,
+        0
+      );
+      const totalExpenseAmount = expense?.reduce(
+        (sum: number, record: any) => sum + record?.amount,
+        0
+      );
+      setCashSell(totalSaleAmount);
+      setExpense(totalExpenseAmount);
     }
     customers();
-  }, []);
+  }, [cashSell, expense]);
 
   return (
     <View style={sharedStyle.grid}>

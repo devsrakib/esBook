@@ -75,6 +75,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
             Will Receive / <Text style={{ color: Colors.red }}>Will Give</Text>
           </Text>
           <View style={styles.messageAndCustomerCon}>
+          <Link href="/pages/Collection/collection" asChild>
             <TouchableOpacity style={styles.message}>
               <Image
                 style={styles.messageIcon}
@@ -82,7 +83,8 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
                 source={require("../../assets/images/message.png")}
               />
             </TouchableOpacity>
-            <Link href="/pages/Collection/collection" asChild>
+            </Link>
+            <Link href="/pages/parties/addNewParties" asChild>
               <TouchableOpacity style={styles.addCustomer}>
                 <Fontisto name="plus-a" size={14} color={Colors.text} />
                 <Text style={styles.customerText}>Customer</Text>

@@ -20,7 +20,6 @@ const DatePicker: React.FC<datePickerProps> = ({
 }) => {
   const [date, setDate] = useState<any>();
   const [show, setShow] = useState(false);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
     setShow(true);

@@ -5,7 +5,7 @@ import { Colors } from "@/constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import { ICustomerDataInput } from "@/types/interfaces/input.interface";
-import { format } from "date-fns";
+import FormatDate from "@/utils/FormatDate";
 
 const Customer = ({ item }: { item: ICustomerDataInput }) => {
   return (
@@ -17,7 +17,7 @@ const Customer = ({ item }: { item: ICustomerDataInput }) => {
       <View style={styles.textCon}>
         <Text style={styles.text1}>{item?.fullName}</Text>
         <Text style={styles.text2}>
-          {format(item?.createdAt, "dd MMM, yyyy")}
+          {FormatDate(item?.createdAt)}
         </Text>
       </View>
     </TouchableOpacity>

@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 5;
+  const DATABASE_VERSION = 6;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -21,6 +21,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
       CREATE TABLE IF NOT EXISTS customer (
         id INTEGER PRIMARY KEY NOT NULL,
+        profilePhoto TEXT NOT NULL,
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
@@ -135,12 +136,11 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
-  // if (currentDbVersion === 3) {
-  //   await db.execAsync(`
-  //     ALTER TABLE customer ADD COLUMN profilePhoto TEXT;
-  //   `);
-  //   currentDbVersion = 4;
-  // }
+  if (currentDbVersion < 6) {
+    await db.execAsync(`
+      ALTER TABLE customer ADD COLUMN profilePhoto TEXT NOT NULL;
+    `);
+  }
   // if (currentDbVersion === 3) {
   //   await db.execAsync(`
   //     ALTER TABLE owner_profile ADD COLUMN createdAt TEXT NOT NULL DEFAULT (datetime('now'));
@@ -154,7 +154,6 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     `);
   }
 
-
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 
@@ -167,13 +166,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 //=================  ====================
 export const createCustomers = async (
   db: SQLiteDatabase,
-  { name, email, phoneNumber, address, createdAt }: CustomerData
+  { profilePhoto, name, email, phoneNumber, address, createdAt }: CustomerData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO customer ( name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?)",
-      [name, email, address, phoneNumber, timestamp]
+      "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
+      [profilePhoto, name, email, address, phoneNumber, timestamp]
     );
     console.log("Customer created successfully");
   } catch (error) {
@@ -227,12 +226,7 @@ export const cash_sell = async (
 //=================  ====================
 export const due_collection = async (
   db: SQLiteDatabase,
-  {
-    customerId,
-    collectedAmount,
-    createdAt,
-    description,
-  }: DueCollectionData
+  { customerId, collectedAmount, createdAt, description }: DueCollectionData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
@@ -291,13 +285,13 @@ export const customer_gave = async (
 //=================  ====================
 export const collection_reminder = async (
   db: SQLiteDatabase,
-  { createdAt, collectionDate }: CollectionReminderData
+  { customerId, createdAt, collectionDate }: CollectionReminderData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (  createdAt, collectionDate,) VALUES (?, ?)",
-      [timestamp, collectionDate]
+      "INSERT INTO due_collection (customerId, createdAt, collectionDate,) VALUES (?, ?, ?)",
+      [customerId, timestamp, collectionDate]
     );
     console.log("collection reminder created successfully");
   } catch (error) {
@@ -305,23 +299,20 @@ export const collection_reminder = async (
   }
 };
 
-
 export const updateDueAmount = async (
   db: SQLiteDatabase,
-  {id,
-    newDueAmount}: {id:number, newDueAmount:number}
+  { id, newDueAmount }: { id: number; newDueAmount: number }
 ) => {
   try {
-    await db.runAsync(
-      "UPDATE cash_sell SET dueAmount = ? WHERE id = ?",
-      [newDueAmount, id]
-    );
+    await db.runAsync("UPDATE cash_sell SET dueAmount = ? WHERE id = ?", [
+      newDueAmount,
+      id,
+    ]);
     console.log(`Due amount updated successfully for ID ${id}`);
   } catch (error) {
     console.error("Error updating due amount:", error);
   }
 };
-
 
 //=================  ====================
 //=================  ====================
@@ -422,20 +413,35 @@ export const createSuppliers = async (
 //=================  ====================
 export const cash_buy = async (
   db: SQLiteDatabase,
-  {supplierId, amount, createdAt, description, collectedAmount, dueAmount, extraAmount }: CashBuyData
+  {
+    supplierId,
+    amount,
+    createdAt,
+    description,
+    collectedAmount,
+    dueAmount,
+    extraAmount,
+  }: CashBuyData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
       "INSERT INTO cash_buy (supplierId, amount, createdAt, description, collectedAmount, dueAmount, extraAmount) VALUES (?, ?, ?, ?, ?,?, ?)",
-      [supplierId, amount, timestamp, description, collectedAmount, dueAmount, extraAmount]
+      [
+        supplierId,
+        amount,
+        timestamp,
+        description,
+        collectedAmount,
+        dueAmount,
+        extraAmount,
+      ]
     );
     console.log("cash buy created successfully");
   } catch (error) {
     console.error("Error creating cash buy:", error);
   }
 };
-
 
 export const getCashBuyBySupplierId = async (
   db: SQLiteDatabase,
@@ -525,7 +531,6 @@ export const owner_profile = async (
 export const getOwnerProfile = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM owner_profile");
 };
-
 
 //=================  ====================
 //=================  ====================
@@ -646,6 +651,7 @@ export const getWithdraw = async (db: SQLiteDatabase) => {
 // =======================================================
 
 export interface CustomerData {
+  profilePhoto: string;
   name: string;
   email: string;
   address: string;
@@ -699,7 +705,7 @@ export interface DueCollectionData {
 
 export interface CollectionReminderData {
   customerId: number;
-  createdAt: string;
+  createdAt?: string;
   collectionDate: string;
 }
 

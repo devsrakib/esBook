@@ -11,8 +11,8 @@ import { Colors } from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
-const ImageInput = () => {
-  const [selectedImage, setSelectedImage] = useState<any>(null);
+const ImageInput = ({selectedImage, setSelectedImage}:any) => {
+  
 
   const pickImage = async () => {
     const permissionResult =
@@ -51,10 +51,16 @@ const ImageInput = () => {
 
   return (
     <TouchableOpacity onPress={() => pickImage()} style={styles.container}>
-      <Image
-        style={styles.img}
-        source={require("../../../assets/images/gallery.png")}
-      />
+     {
+       
+      selectedImage ?<Image
+      style={styles.profile}
+      source={{uri: selectedImage}}
+    /> : <Image
+      style={styles.img}
+      source={require("../../../assets/images/gallery.png")}
+    />
+     }
     </TouchableOpacity>
   );
 };
@@ -75,6 +81,13 @@ const styles = StyleSheet.create({
     height: 32,
     resizeMode: "contain",
   },
+  profile:{
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
+    resizeMode:"cover"
+
+  }
 });
 
 export default ImageInput;

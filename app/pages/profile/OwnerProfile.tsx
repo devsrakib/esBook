@@ -47,25 +47,25 @@ const OwnerProfile = () => {
     {
       icon: <Ionicons name="person-outline" size={18} color="gray" />,
       label: "Name",
-      value: profileData.name,
+      value: getProfileData?.name,
       key: "name",
     },
     {
       icon: <MaterialIcons name="email" size={18} color="gray" />,
       label: "Email",
-      value: profileData.email,
+      value: getProfileData?.email,
       key: "email",
     },
     {
       icon: <Ionicons name="location-outline" size={18} color="gray" />,
       label: "Address",
-      value: profileData.address,
+      value: getProfileData?.address,
       key: "address",
     },
     {
       icon: <Ionicons name="call-outline" size={18} color="gray" />,
       label: "Phone",
-      value: profileData.phone,
+      value: getProfileData?.phoneNumber,
       key: "phoneNumber",
     },
   ];
@@ -77,11 +77,33 @@ const OwnerProfile = () => {
 
   useEffect(() => {
     async function profile() {
-      const expense = await getOwnerProfile(db);
-      setGetProfileData(expense);
+      const profile = await getOwnerProfile(db);
+      setGetProfileData(profile);
     }
     profile();
   }, []);
+
+  console.log(getProfileData);
+  
+  useEffect(() => {
+    async function getProfile() {
+      try {
+        const profileArray = await getOwnerProfile(db);
+        if (profileArray && profileArray.length > 0) {
+          const profile = profileArray[0];
+          setGetProfileData(profile);
+        } else {
+          console.log("No customer found with this ID.");
+        }
+      } catch (error) {
+        console.error("Error fetching customer:", error);
+      }
+    }
+    if (!getProfileData) { // assuming you meant to call getProfile only if getProfileData is not already set
+      getProfile();
+    }
+  }, [db, getProfileData]);
+  
 
   return (
     <ScrollView
@@ -91,11 +113,18 @@ const OwnerProfile = () => {
       ]}
     >
       <View style={styles.profileContainer}>
+       {
+        profileData?.profileImage? 
         <Image
-          source={{ uri: profileData.profileImage }}
-          style={styles.profileImage}
-        />
-        <Text style={styles.profileName}>{profileData.name}</Text>
+        source={{ uri: profileData.profileImage }}
+        style={styles.profileImage}
+      />:
+      <Image
+      source={require('../../../assets/images/placeholder.jpeg')}
+      style={styles.profileImage}
+    />
+       }
+        <Text style={styles.profileName}>{getProfileData?.name}</Text>
       </View>
       <View style={styles.infoContainer}>
         {infoData.map((item, index) => (
@@ -106,7 +135,7 @@ const OwnerProfile = () => {
                 <Text style={styles.label}>{item?.label}</Text>
                 <TextInput
                   style={styles.input}
-                  // value={value}
+                  value={item?.value}
                   onChangeText={(e) => handleInputChange(e, item?.key)}
                 />
               </View>

@@ -91,7 +91,7 @@ const CustomerView = () => {
           asChild
         >
           <TouchableOpacity style={styles.headerImageAndTextCon}>
-            <Image style={styles.userImage} />
+            <Image style={styles.userImage} source={{uri: router?.profile}} />
             <View>
               <Text style={styles.headerText}>{router?.name}</Text>
               <Text style={styles.viewProfile}>View Profile</Text>
