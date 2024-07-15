@@ -10,6 +10,7 @@ const CustomDatePicker = ({
   setModalVisible,
   date,
   setDate,
+  handleSave,
 }: any) => {
   const handleDateChange = (field: any, value: any) => {
     setDate({ ...date, [field]: value });
@@ -68,7 +69,10 @@ const CustomDatePicker = ({
           width={"90%"}
           titleColor={Colors.white}
           radius={50}
-          onPress={() => setModalVisible(false)}
+          onPress={() => {
+            handleSave();
+            setModalVisible(false);
+          }}
         />
       </View>
     </Modal>

@@ -9,12 +9,14 @@ import Button from "../Button";
 import CustomDatePicker from "../CustomDatePicker";
 import { collection_reminder, getCustomerById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
+import { currency } from "@/global/currency";
 
 const ListItem = ({ text, item }: { text: string; item: any }) => {
   const [date, setDate] = useState({ dd: "", mm: "", yyyy: "" });
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>("");
+  const [data, setData] = useState<any>();
   const db = useSQLiteContext();
 
   useEffect(() => {
@@ -43,19 +45,20 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     if (item?.customerId) {
       getCustomer();
     }
-  }, [db, item?.customerId]);
+  }, [db, item?.customerId, item?.dueAmount]);
 
-  const reminderData: { customerId: number; collectionDate: string } = {
-    customerId: item?.customerId,
+  const reminderData: any = {
+    customerId: String(item?.customerId),
     collectionDate: currentDate,
+    amount: item?.dueAmount,
   };
+  console.log(item, "hello");
 
   const handleSave = async () => {
     await collection_reminder(db, reminderData);
     setModalVisible(false);
   };
-
-  console.log(reminderData);
+  console.log(item);
 
   return (
     <TouchableOpacity style={styles.container}>
@@ -77,12 +80,15 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
         <Text style={styles.name}>{customer?.name}</Text>
       </View>
       <View style={styles.dateContainer}>
-        <Text style={styles.amount}>{item?.dueAmount}</Text>
+        <Text style={styles.amount}>
+          {currency}
+          {item?.dueAmount}
+        </Text>
         <View style={styles.iconContainer}>
           {text === "date" ? (
             <>
               <AntDesign name="checkcircle" size={12} color={Colors.green} />
-              <Text style={styles.date}>{"14/07/2024"}</Text>
+              <Text style={styles.date}> Added {"14/07/2024"}</Text>
             </>
           ) : (
             <TouchableOpacity
@@ -101,6 +107,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
         setDate={setDate}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        handleSave={handleSave}
       />
     </TouchableOpacity>
   );

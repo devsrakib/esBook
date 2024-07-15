@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 6;
+  const DATABASE_VERSION = 9;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -91,7 +91,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       CREATE TABLE IF NOT EXISTS collection_reminder (
         id INTEGER PRIMARY KEY NOT NULL,
         customerId INTEGER NOT NULL,
-        generalDate TEXT NOT NULL DEFAULT (datetime('now')),
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         collectionDate TEXT NOT NULL,
         FOREIGN KEY (customerId) REFERENCES customer(id)
       );
@@ -136,9 +136,9 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
-  if (currentDbVersion < 6) {
+  if (currentDbVersion < 9) {
     await db.execAsync(`
-      ALTER TABLE customer ADD COLUMN profilePhoto TEXT NOT NULL;
+      ALTER TABLE collection_reminder ADD COLUMN amount REAL;
     `);
   }
   // if (currentDbVersion === 3) {
@@ -290,12 +290,12 @@ export const collection_reminder = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (customerId, createdAt, collectionDate,) VALUES (?, ?, ?)",
+      "INSERT INTO collection_reminder (customerId, createdAt, collectionDate) VALUES (?, ?, ?)",
       [customerId, timestamp, collectionDate]
     );
     console.log("collection reminder created successfully");
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    console.error("Error creating collection_reminder:", error);
   }
 };
 
@@ -372,6 +372,14 @@ export const deleteCustomerById = async (
     console.log(`User with ID ${userId} deleted successfully`);
   } catch (error) {
     console.error("Error deleting user:", error);
+  }
+};
+
+export const getCollectionReminder = async (db: SQLiteDatabase) => {
+  try {
+    return await db.getAllAsync("SELECT * FROM collection_reminder");
+  } catch {
+    console.log("error get collection_reminder");
   }
 };
 

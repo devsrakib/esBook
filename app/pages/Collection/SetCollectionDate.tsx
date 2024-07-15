@@ -111,7 +111,7 @@ const SetCollectionDate = () => {
       <FlatList
         data={dueCollection}
         renderItem={({ item }) => {
-          return <ListItem item={item} text="" />;
+          return <ListItem item={item} text="added" />;
         }}
       />
 

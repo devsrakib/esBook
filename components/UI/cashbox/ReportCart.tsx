@@ -5,11 +5,15 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { currency } from "@/global/currency";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCashBuyBySupplierId, getCustomerById, getSupplierById } from "@/databases/Database";
+import {
+  getCashBuyBySupplierId,
+  getCustomerById,
+  getSupplierById,
+} from "@/databases/Database";
 import { Link } from "expo-router";
 import FormatDate from "@/utils/FormatDate";
 
-const ReportCart = ({ item, text }:any) => {
+const ReportCart = ({ item, text }: any) => {
   const [customer, setCustomer] = useState<any>({});
   const [supplier, setSupplier] = useState<any>({});
   const db = useSQLiteContext();
@@ -51,7 +55,6 @@ const ReportCart = ({ item, text }:any) => {
   }, [db, item?.supplierId]);
 
   console.log(item?.dueAmount, text);
-  
 
   return (
     <View style={styles.container}>
@@ -61,10 +64,14 @@ const ReportCart = ({ item, text }:any) => {
             style={[
               styles.title,
               {
-                color: 
-                  text === "cash sell" ? Colors.green :
-                  text === "Due" ? Colors.red :
-                  text === "cash buy" ? Colors.red : '',
+                color:
+                  text === "cash sell"
+                    ? Colors.green
+                    : text === "Due"
+                    ? Colors.red
+                    : text === "cash buy"
+                    ? Colors.red
+                    : "",
               },
             ]}
           >
@@ -91,33 +98,44 @@ const ReportCart = ({ item, text }:any) => {
         ) : (
           <Text style={styles.amount}>
             {currency}
-            {text === "Due" && item?.dueAmount > 0 ? item?.dueAmount : 
-             text === "cash sell" && item?.saleAmount}
+            {text === "Due" && item?.dueAmount > 0
+              ? item?.dueAmount
+              : text === "cash sell" && item?.saleAmount}
           </Text>
         )}
       </View>
       <Text style={styles.dummyText}>{item?.description}</Text>
       <View>
         <View style={styles.bottomSection}>
-          <Image style={styles.img} />
+          <Image
+            style={styles.img}
+            source={{ uri: customer?.profilePhoto || supplier?.profilePhoto }}
+          />
           <Text style={styles.name}>{customer?.name || supplier?.name}</Text>
           <Text style={styles.amountText}>
-            {text === "cash sell" ? "collection" :
-             text === "Due" ? "Amount" :
-             "buy amount"}
+            {text === "cash sell"
+              ? "collection"
+              : text === "Due"
+              ? "Amount"
+              : "buy amount"}
             :{" "}
             <Text
               style={{
-                color: 
-                  text === "cash sell" ? Colors.green :
-                  text === "Due" ? Colors.red :
-                  text === "cash buy" ? Colors.red : '',
+                color:
+                  text === "cash sell"
+                    ? Colors.green
+                    : text === "Due"
+                    ? Colors.red
+                    : text === "cash buy"
+                    ? Colors.red
+                    : "",
                 fontWeight: "600",
                 fontSize: Fonts.medium,
               }}
             >
-              {text === "Due" && item?.dueAmount > 0 ? item?.dueAmount : 
-             text === "cash sell" && item?.saleAmount}
+              {text === "Due" && item?.dueAmount > 0
+                ? item?.dueAmount
+                : text === "cash sell" && item?.collectedAmount}
             </Text>
           </Text>
         </View>
@@ -192,17 +210,17 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     fontWeight: "600",
   },
-  collectButton:{
+  collectButton: {
     backgroundColor: Colors.mainColor,
     width: 55,
     height: 25,
     borderRadius: radius.small,
-alignItems: 'center',
-justifyContent:'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
-  buttonText:{
+  buttonText: {
     color: Colors.white,
-  }
+  },
 });
 
 export default ReportCart;
