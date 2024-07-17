@@ -27,14 +27,18 @@ const page = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [transaction, setTransaction] = useState<any>();
 
+  const ensureNonNegative = (value: number) => {
+    return value < 0 ? 0 : value;
+  };
+
   let transactionData: any;
   if (route.text == "Cash Sell") {
     transactionData = {
       customerId: route?.id,
       saleAmount: transaction?.sale,
       collectedAmount: transaction?.collect,
-      dueAmount: transaction?.sale - transaction?.collect,
-      extraAmount: transaction?.collect - transaction?.sale,
+      dueAmount: ensureNonNegative(transaction?.sale - transaction?.collect),
+      extraAmount: ensureNonNegative(transaction?.collect - transaction?.sale),
       description: transaction?.description,
     };
   } else if (route.text == "Cash buy") {
@@ -42,8 +46,8 @@ const page = () => {
       supplierId: route?.id,
       amount: transaction?.sale,
       collectedAmount: transaction?.collect,
-      dueAmount: transaction?.sale - transaction?.collect,
-      extraAmount: transaction?.collect - transaction?.sale,
+      dueAmount: ensureNonNegative(transaction?.sale - transaction?.collect),
+      extraAmount: ensureNonNegative(transaction?.collect - transaction?.sale),
       description: transaction?.description,
     };
   } else if (route.text == "Expenses") {
@@ -61,7 +65,7 @@ const page = () => {
       amount: transaction?.sale,
       description: transaction?.description,
     };
-  }else if(route?.text == 'Due'){
+  } else if (route?.text == "Due") {
     transactionData = {
       customerId: route?.id,
       collectedAmount: transaction?.sale,
@@ -69,8 +73,7 @@ const page = () => {
     };
   }
 
-  console.log(transactionData, 'transaction data');
-  
+  console.log(transactionData, "transaction data");
 
   const db = useSQLiteContext();
 
@@ -90,7 +93,6 @@ const page = () => {
   const handleCashBuy = async () => {
     await cash_buy(db, transactionData);
     console.log(transactionData);
-    
   };
   const handleWithdraw = async () => {
     await withdraw(db, transactionData);
@@ -106,10 +108,8 @@ const page = () => {
   };
 
   console.log(route);
-  
 
   const handleInput = () => {
-    
     if (route?.text === "Cash Sell") {
       handleCashSell();
     } else if (route?.text === "Expenses") {
@@ -121,24 +121,22 @@ const page = () => {
       console.log(transactionData);
     } else if (route?.text === "Due") {
       handleDue();
-      console.log('hello due');
+      console.log("hello due");
       console.log(transactionData);
-      
     } else {
       handleWithdraw();
     }
   };
 
-
   const customerTextMapping = {
-  "Cash Sell": "Customer",
-  "Due": "Customer",
-  "Cash buy": "Supplier",
-};
+    "Cash Sell": "Customer",
+    Due: "Customer",
+    "Cash buy": "Supplier",
+  };
 
-const shouldRenderComponent = ["Cash Sell", "Due", "Cash buy"].includes(route?.text);
-
-
+  const shouldRenderComponent = ["Cash Sell", "Due", "Cash buy"].includes(
+    route?.text
+  );
 
   return (
     <View
@@ -152,9 +150,9 @@ const shouldRenderComponent = ["Cash Sell", "Due", "Cash buy"].includes(route?.t
       <View style={styles.headerSection}>
         <Header height={70} title={route.text} titleColor={Colors.white} />
         {shouldRenderComponent && (
-          
-    <SearchCustomerAndAddCustomer text={customerTextMapping[route?.text]} />
-  
+          <SearchCustomerAndAddCustomer
+            text={customerTextMapping[route?.text]}
+          />
         )}
       </View>
       <View style={styles.bodySection}>

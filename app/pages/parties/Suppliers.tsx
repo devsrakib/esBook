@@ -10,8 +10,9 @@ import { useSQLiteContext } from "expo-sqlite";
 import { createSuppliers, SupplierData } from "@/databases/Database";
 
 const Suppliers = () => {
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const [supplierData, setSupplierData] = useState<SupplierData>({
-    profilePhoto: "",
+    profilePhoto: selectedImage ? selectedImage : "",
     name: "",
     email: "",
     phoneNumber: "",
@@ -20,20 +21,23 @@ const Suppliers = () => {
   });
 
   const db = useSQLiteContext();
-
+  useEffect(() => {
+    setSupplierData((prevData) => ({
+      ...prevData,
+      profilePhoto: selectedImage ? selectedImage : "",
+    }));
+  }, [selectedImage]);
   const handleSave = async () => {
-    const { name, email, phoneNumber, address } = supplierData;
-    if (!name || !email || !phoneNumber || !address) {
-      return;
-    } else {
-      await createSuppliers(db, supplierData);
-    }
+    await createSuppliers(db, supplierData);
   };
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <ImageInput />
+        <ImageInput
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+        />
         <AddPhoneBookButton />
         <Inputs setData={setSupplierData} />
         <Button

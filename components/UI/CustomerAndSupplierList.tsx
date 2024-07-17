@@ -6,7 +6,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fontisto } from "@expo/vector-icons";
@@ -17,6 +17,8 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import Filter from "./parties/filter";
 import Customers from "./shared/Customers";
+import { getCustomers, getSuppliers } from "@/databases/Database";
+import { useSQLiteContext } from "expo-sqlite";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
 interface propsTypes {
@@ -24,6 +26,20 @@ interface propsTypes {
 }
 const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [customer, setCustomer] = useState<any>([]);
+  const [supplier, setSupplier] = useState<any>([]);
+
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    async function getCustomer() {
+      const result = await getCustomers(db);
+      const supplier = await getSuppliers(db);
+      setCustomer(result);
+      setSupplier(supplier);
+    }
+    getCustomer();
+  }, []);
 
   const handleIndexChange = (index: number) => {
     setSelectedIndex(index);
@@ -75,14 +91,14 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
             Will Receive / <Text style={{ color: Colors.red }}>Will Give</Text>
           </Text>
           <View style={styles.messageAndCustomerCon}>
-          <Link href="/pages/Collection/collection" asChild>
-            <TouchableOpacity style={styles.message}>
-              <Image
-                style={styles.messageIcon}
-                resizeMode="contain"
-                source={require("../../assets/images/message.png")}
-              />
-            </TouchableOpacity>
+            <Link href="/pages/Collection/collection" asChild>
+              <TouchableOpacity style={styles.message}>
+                <Image
+                  style={styles.messageIcon}
+                  resizeMode="contain"
+                  source={require("../../assets/images/message.png")}
+                />
+              </TouchableOpacity>
             </Link>
             <Link href="/pages/parties/addNewParties" asChild>
               <TouchableOpacity style={styles.addCustomer}>
@@ -92,12 +108,21 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
             </Link>
           </View>
         </View>
-        <FlatList
-          data={[1, 1, 1, 1, 1, 1]}
-          renderItem={({ item }) => {
-            return <Customers />;
-          }}
-        />
+        {selectedIndex === 0 ? (
+          <FlatList
+            data={customer}
+            renderItem={({ item }) => {
+              return <Customers item={item} />;
+            }}
+          />
+        ) : (
+          <FlatList
+            data={supplier}
+            renderItem={({ item }) => {
+              return <Customers item={item} />;
+            }}
+          />
+        )}
       </View>
     </View>
   );

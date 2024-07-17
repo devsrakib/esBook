@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 9;
+  const DATABASE_VERSION = 11;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -31,6 +31,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
       CREATE TABLE IF NOT EXISTS supplier (
         id INTEGER PRIMARY KEY NOT NULL,
+        profilePhoto TEXT,
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
@@ -90,6 +91,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
       CREATE TABLE IF NOT EXISTS collection_reminder (
         id INTEGER PRIMARY KEY NOT NULL,
+        amount REAL,
         customerId INTEGER NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         collectionDate TEXT NOT NULL,
@@ -136,11 +138,11 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
-  if (currentDbVersion < 9) {
-    await db.execAsync(`
-      ALTER TABLE collection_reminder ADD COLUMN amount REAL;
-    `);
-  }
+  // if (currentDbVersion < 11) {
+  //   await db.execAsync(`
+  //     ALTER TABLE collection_reminder ADD COLUMN amount REAL;
+  //   `);
+  // }
   // if (currentDbVersion === 3) {
   //   await db.execAsync(`
   //     ALTER TABLE owner_profile ADD COLUMN createdAt TEXT NOT NULL DEFAULT (datetime('now'));
@@ -148,11 +150,11 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //   currentDbVersion = 4;
   // }
 
-  if (currentDbVersion < 5) {
-    await db.execAsync(`
-      ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL;
-    `);
-  }
+  // if (currentDbVersion < 5) {
+  //   await db.execAsync(`
+  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL;
+  //   `);
+  // }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
@@ -285,13 +287,13 @@ export const customer_gave = async (
 //=================  ====================
 export const collection_reminder = async (
   db: SQLiteDatabase,
-  { customerId, createdAt, collectionDate }: CollectionReminderData
+  { amount, customerId, createdAt, collectionDate }: CollectionReminderData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO collection_reminder (customerId, createdAt, collectionDate) VALUES (?, ?, ?)",
-      [customerId, timestamp, collectionDate]
+      "INSERT INTO collection_reminder (amount, customerId, createdAt, collectionDate) VALUES (?, ?, ?, ?)",
+      [amount, customerId, timestamp, collectionDate]
     );
     console.log("collection reminder created successfully");
   } catch (error) {
@@ -399,13 +401,13 @@ export const getCollectionReminder = async (db: SQLiteDatabase) => {
 //=================  ====================
 export const createSuppliers = async (
   db: SQLiteDatabase,
-  { name, email, phoneNumber, address, createdAt }: SupplierData
+  { profilePhoto, name, email, phoneNumber, address, createdAt }: SupplierData
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO supplier (name, email, phoneNumber, address, createdAt) VALUES (?, ?, ?, ?, ?)",
-      [name, email, phoneNumber, address, timestamp]
+      "INSERT INTO supplier (profilePhoto,name, email, phoneNumber, address, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
+      [profilePhoto, name, email, phoneNumber, address, timestamp]
     );
     console.log("Supplier created successfully");
   } catch (error) {
@@ -712,6 +714,7 @@ export interface DueCollectionData {
 }
 
 export interface CollectionReminderData {
+  amount: number;
   customerId: number;
   createdAt?: string;
   collectionDate: string;

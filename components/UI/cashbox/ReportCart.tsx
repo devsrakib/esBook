@@ -100,6 +100,8 @@ const ReportCart = ({ item, text }: any) => {
             {currency}
             {text === "Due" && item?.dueAmount > 0
               ? item?.dueAmount
+              : text === "cash buy"
+              ? item?.amount
               : text === "cash sell" && item?.saleAmount}
           </Text>
         )}
@@ -134,6 +136,8 @@ const ReportCart = ({ item, text }: any) => {
               }}
             >
               {text === "Due" && item?.dueAmount > 0
+                ? item?.dueAmount
+                : text === "cash buy"
                 ? item?.dueAmount
                 : text === "cash sell" && item?.collectedAmount}
             </Text>

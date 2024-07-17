@@ -42,8 +42,7 @@ const Parties = () => {
     console.log("hello");
   };
 
-  console.log(customers);
-  
+  console.log(suppliers);
 
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>

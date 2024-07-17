@@ -32,7 +32,7 @@ const DetailsPageInput = ({
           <Text>{currency}</Text>
         </View>
       </View>
-      {(text === "Cash Sell" || text === 'Cash buy') && (
+      {(text === "Cash Sell" || text === "Cash buy") && (
         <Fragment>
           <Text style={styles.label}>Collected amount</Text>
           <View style={styles.inputCon}>
@@ -47,7 +47,7 @@ const DetailsPageInput = ({
           </View>
         </Fragment>
       )}
-      <Text style={styles.label}>Collected amount</Text>
+      <Text style={styles.label}>Description</Text>
       <TextInput
         style={styles.textArea}
         multiline

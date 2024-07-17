@@ -45,21 +45,19 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     if (item?.customerId) {
       getCustomer();
     }
-  }, [db, item?.customerId, item?.dueAmount]);
-
-  const reminderData: any = {
-    customerId: String(item?.customerId),
-    collectionDate: currentDate,
-    amount: item?.dueAmount,
-  };
-  console.log(item, "hello");
+  }, [db, item?.customerId]);
 
   const handleSave = async () => {
+    const reminderData: any = {
+      customerId: String(item?.customerId),
+      collectionDate: currentDate,
+      amount: item?.dueAmount,
+    };
     await collection_reminder(db, reminderData);
     setModalVisible(false);
+    console.log(reminderData, ":::::::::");
   };
-  console.log(item);
-
+  // handleSave();
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.profileContainer}>
@@ -82,7 +80,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
       <View style={styles.dateContainer}>
         <Text style={styles.amount}>
           {currency}
-          {item?.dueAmount}
+          {item?.dueAmount || item?.amount}
         </Text>
         <View style={styles.iconContainer}>
           {text === "date" ? (

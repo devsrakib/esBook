@@ -1,7 +1,10 @@
 import { View, Text, ImageBackground, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Fonts } from "@/constants/Fonts";
 import { Colors } from "@/constants/Colors";
+import { getCash_buy, getCash_sell } from "@/databases/Database";
+import { useSQLiteContext } from "expo-sqlite";
+import { currency } from "@/global/currency";
 
 const receiveAmount = 4000;
 
@@ -19,6 +22,30 @@ const AmountCon: React.FC<amountProps> = ({
   leftAmountTColor,
   leftTextColor,
 }) => {
+  const [receive, setReceive] = useState<number>(0);
+  const [cashBuyDue, setCashBuyDue] = useState<number>(0);
+
+  const db = useSQLiteContext();
+  useEffect(() => {
+    async function getReceive() {
+      const result = await getCash_sell(db);
+      const cash_buy = await getCash_buy(db);
+      const totalCollectedAmount = result?.reduce(
+        (sum: number, record: any) => sum + record?.dueAmount,
+        0
+      );
+      const totalCash_buy = cash_buy?.reduce(
+        (sum: number, record: any) => sum + record?.dueAmount,
+        0
+      );
+      setReceive(totalCollectedAmount);
+      setCashBuyDue(totalCash_buy);
+    }
+    getReceive();
+  }, []);
+
+  console.log(receive);
+
   return (
     <ImageBackground
       imageStyle={{ borderRadius: 15 }}
@@ -32,7 +59,7 @@ const AmountCon: React.FC<amountProps> = ({
             You will Receive
           </Text>
           <Text style={[styles.amount, { color: leftAmountTColor }]}>
-            $ {receiveAmount}
+            {currency} {receive}
           </Text>
         </View>
       </View>
@@ -40,7 +67,9 @@ const AmountCon: React.FC<amountProps> = ({
         <Image style={styles.logo} source={logo2} />
         <View>
           <Text style={styles.text}>You will Give</Text>
-          <Text style={styles.amount}>$ {receiveAmount}</Text>
+          <Text style={styles.amount}>
+            {currency} {cashBuyDue}
+          </Text>
         </View>
       </View>
     </ImageBackground>

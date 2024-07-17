@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React, { Fragment } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
@@ -27,7 +27,11 @@ const AllSuppliers = ({ item }: any) => {
       >
         <TouchableOpacity style={styles.customerDetails}>
           <View style={styles.avatar}>
-            <FontAwesome6 name="user-secret" size={24} color="black" />
+            {item?.profilePhoto ? (
+              <Image style={styles.img} source={{ uri: item?.profilePhoto }} />
+            ) : (
+              <FontAwesome6 name="user-secret" size={24} color="black" />
+            )}
           </View>
           <View style={styles.nameSection}>
             <Text style={styles.name}>{item?.name}</Text>
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
   avatar: {
     borderWidth: 1,
     borderRadius: radius.large,
-    padding: 6,
     alignItems: "center",
     justifyContent: "center",
     borderColor: Colors.border,
@@ -75,6 +78,11 @@ const styles = StyleSheet.create({
   date: {
     fontSize: Fonts.regular,
     color: Colors.text,
+  },
+  img: {
+    width: "100%",
+    height: "100%",
+    borderRadius: radius.medium,
   },
 });
 export default AllSuppliers;
