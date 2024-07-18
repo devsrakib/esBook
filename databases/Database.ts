@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 11;
+  const DATABASE_VERSION = 12;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -104,7 +104,8 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         name VARCHAR NOT NULL,
         email VARCHAR NOT NULL,
         address VARCHAR NOT NULL,
-        phoneNumber TEXT NOT NULL
+        phoneNumber TEXT NOT NULL,
+        taxNumber INTEGER
       );
 
       CREATE TABLE IF NOT EXISTS cash_report (
@@ -143,11 +144,11 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //     ALTER TABLE collection_reminder ADD COLUMN amount REAL;
   //   `);
   // }
-  // if (currentDbVersion === 3) {
+  // if (currentDbVersion < 12) {
   //   await db.execAsync(`
-  //     ALTER TABLE owner_profile ADD COLUMN createdAt TEXT NOT NULL DEFAULT (datetime('now'));
-  //   `);
-  //   currentDbVersion = 4;
+  //     ALTER TABLE owner_profile ADD COLUMN taxNumber INTEGER;
+  //    `);
+  //   currentDbVersion = 11;
   // }
 
   // if (currentDbVersion < 5) {
@@ -157,6 +158,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   // }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
+  console.log(currentDbVersion);
 }
 
 // ================================================================================================
@@ -524,13 +526,20 @@ export const getCash_buy = async (db: SQLiteDatabase) => {
 //=================  ====================
 export const owner_profile = async (
   db: SQLiteDatabase,
-  { profilePhoto, name, email, address, phoneNumber }: OwnerProfileData
+  {
+    profilePhoto,
+    name,
+    email,
+    address,
+    phoneNumber,
+    taxNumber,
+  }: OwnerProfileData
 ) => {
   try {
     // const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO owner_profile ( profilePhoto, name, email, address, phoneNumber) VALUES (?, ?, ?, ?, ?)",
-      [profilePhoto, name, email, address, phoneNumber]
+      "INSERT INTO owner_profile ( profilePhoto, name, email, address, phoneNumber, taxNumber) VALUES (?, ?, ?, ?, ?, ?)",
+      [profilePhoto, name, email, address, phoneNumber, taxNumber]
     );
     console.log("Owner profile created successfully");
   } catch (error) {
