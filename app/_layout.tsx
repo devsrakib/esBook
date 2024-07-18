@@ -10,7 +10,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [profile, setProfile] = useState<any>([]);
-  // const db = useSQLiteContext();
+  const db = useSQLiteContext();
   const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
