@@ -1,8 +1,10 @@
 import Button from "@/components/UI/Button";
 import Header from "@/components/UI/header/Header";
 import { Colors } from "@/constants/Colors";
+import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import { owner_profile } from "@/databases/Database";
+import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
 import {
@@ -19,7 +21,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function CreateOwnerProfile() {
   const { bottom, top } = useSafeAreaInsets();
   const [profile, setProfileData] = useState<any>();
-  // const db = useSQLiteContext();
+  const router = useRouter();
+  const db = useSQLiteContext();
   const handleInputChange = (value: any, key: any) => {
     setProfileData((prevState: any) => ({
       ...prevState,
@@ -27,19 +30,23 @@ export default function CreateOwnerProfile() {
     }));
   };
 
-  // const handleCreateProfile = async () => {
-  //   await owner_profile(db, profile);
-  // };
+  const handleCreateProfile = async () => {
+    const result = await owner_profile(db, profile);
+    if (result.success) {
+      router.push("/(tabs)");
+    } else {
+      // Show error message in UI
+      console.error(result.message);
+    }
+  };
 
   return (
     <View
       style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
     >
-      <Header
-        textColor={Colors.white}
-        children="Create Profile"
-        backgroundColor={Colors.mainColor}
-      />
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Create Profile</Text>
+      </View>
       <ScrollView>
         <View style={styles.bodyContainer}>
           <View style={styles.profileImageContainer}>
@@ -107,7 +114,7 @@ export default function CreateOwnerProfile() {
         bg={Colors.mainColor}
         radius={radius.regular}
         width={"90%"}
-        // onPress={() => handleCreateProfile()}
+        onPress={() => handleCreateProfile()}
       />
     </View>
   );
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   button: {
-    backgroundColor: "#3366FF",
+    backgroundColor: Colors.mainColor,
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: "center",
@@ -170,5 +177,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  header: {
+    height: 70,
+    backgroundColor: Colors.mainColor,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontSize: Fonts.large,
+    color: Colors.white,
   },
 });

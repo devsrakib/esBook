@@ -178,9 +178,9 @@ export const createCustomers = async (
       "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
       [profilePhoto, name, email, address, phoneNumber, timestamp]
     );
-    console.log("Customer created successfully");
-  } catch (error) {
-    console.error("Error creating customer:", error);
+    return { success: true, message: "Customer Created Successfully" };
+  } catch (error: any) {
+    return { success: false, message: error.message };
   }
 };
 
@@ -541,9 +541,9 @@ export const owner_profile = async (
       "INSERT INTO owner_profile ( profilePhoto, name, email, address, phoneNumber, taxNumber) VALUES (?, ?, ?, ?, ?, ?)",
       [profilePhoto, name, email, address, phoneNumber, taxNumber]
     );
-    console.log("Owner profile created successfully");
+    return { success: true, message: "owner profile Created Successfully" };
   } catch (error) {
-    console.error("Error creating Owner profile:", error);
+    return { success: false, message: error };
   }
 };
 
