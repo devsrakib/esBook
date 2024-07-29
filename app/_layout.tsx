@@ -36,6 +36,7 @@ const InitialLayout = () => {
   }, [initialRouteName, router]);
 
   useEffect(() => {
+    // if (!isLoading) return;
     if (!isLoading && initialRouteName !== "") {
       router.replace(initialRouteName);
     }

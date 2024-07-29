@@ -67,8 +67,9 @@ const page = () => {
     };
   } else if (route?.text == "Due") {
     transactionData = {
-      customerId: route?.id,
-      collectedAmount: transaction?.sale,
+      customerId: route?.customerId,
+      id: route?.id,
+      newDueAmount: transaction?.sale,
       description: transaction?.description,
     };
   }
@@ -104,7 +105,7 @@ const page = () => {
   // };
   const handleDue = async () => {
     await updateDueAmount(db, transactionData);
-    console.log(transactionData);
+    console.log(transactionData, "===========");
   };
 
   console.log(route);
@@ -164,7 +165,11 @@ const page = () => {
           </Text>
         </View>
       </View>
-      <DetailsPageInput setTransaction={setTransaction} text={route.text} />
+      <DetailsPageInput
+        setTransaction={setTransaction}
+        text={route.text}
+        amount={route.dueAmount}
+      />
       <Button
         title="save"
         radius={radius.large}

@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 12;
+  const DATABASE_VERSION = 13;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -55,6 +55,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         id INTEGER PRIMARY KEY NOT NULL,
         supplierId INTEGER NOT NULL,
         amount REAL NOT NULL,
+        collectedAmount REAL NOT NULL
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT,
         dueAmount REAL,
@@ -144,11 +145,11 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //     ALTER TABLE collection_reminder ADD COLUMN amount REAL;
   //   `);
   // }
-  // if (currentDbVersion < 12) {
+  // if (currentDbVersion < 13) {
   //   await db.execAsync(`
-  //     ALTER TABLE owner_profile ADD COLUMN taxNumber INTEGER;
+  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
   //    `);
-  //   currentDbVersion = 11;
+  //   currentDbVersion = 12;
   // }
 
   // if (currentDbVersion < 5) {
@@ -305,14 +306,23 @@ export const collection_reminder = async (
 
 export const updateDueAmount = async (
   db: SQLiteDatabase,
-  { id, newDueAmount }: { id: number; newDueAmount: number }
+  {
+    id,
+    customerId,
+    dueAmount,
+  }: { id: number; customerId: number; dueAmount: number }
 ) => {
   try {
-    await db.runAsync("UPDATE cash_sell SET dueAmount = ? WHERE id = ?", [
-      newDueAmount,
-      id,
-    ]);
-    console.log(`Due amount updated successfully for ID ${id}`);
+    if (id === undefined || customerId === undefined) {
+      throw new Error("ID or customerId is undefined");
+    }
+    await db.runAsync(
+      "UPDATE cash_sell SET dueAmount = ? WHERE id = ? AND customerId = ?",
+      [dueAmount, id, customerId]
+    );
+    console.log(
+      `Due amount updated successfully for ID ${id} and Customer ID ${customerId}`
+    );
   } catch (error) {
     console.error("Error updating due amount:", error);
   }
@@ -547,6 +557,32 @@ export const owner_profile = async (
   }
 };
 
+export const update_owner_profile = async (
+  db: SQLiteDatabase,
+  {
+    id,
+    name,
+    email,
+    address,
+    phoneNumber,
+    taxNumber,
+    profilePhoto,
+  }: UpdateOwnerProfile
+) => {
+  try {
+    if (id === undefined) {
+      throw new Error("ID is undefined");
+    }
+    await db.runAsync(
+      "UPDATE owner_profile SET profilePhoto = ?, name = ?, email = ?, address = ?, phoneNumber = ?, taxNumber = ? WHERE id = ?",
+      [profilePhoto, name, email, address, phoneNumber, taxNumber, id]
+    );
+    console.log(`Owner profile updated successfully for ID ${id}`);
+  } catch (error) {
+    console.error("Error updating owner profile:", error);
+  }
+};
+
 export const getOwnerProfile = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM owner_profile");
 };
@@ -760,4 +796,14 @@ export interface DepositData {
   amount: number;
   createdAt: string;
   description: string;
+}
+
+export interface UpdateOwnerProfile {
+  id: number;
+  name: string;
+  email: string;
+  address: string;
+  phoneNumber: number;
+  taxNumber: number;
+  profilePhoto: string;
 }

@@ -26,6 +26,7 @@ import {
   customer_gave,
   customer_lend,
   getCashSellsByCustomerId,
+  getCustomerById,
   getLendById,
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
@@ -41,6 +42,7 @@ const CustomerView = () => {
   const [lendDataById, setLendDataById] = useState<any>([]);
   const [activeTab, setActiveTab] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [customer, setCustomer] = useState<any>([]);
   const db = useSQLiteContext();
   const lendData: any = {
     customerId: router?.id,
@@ -70,11 +72,19 @@ const CustomerView = () => {
     customerTransaction.concat(lendDataById);
 
   const handlePress = () => {
-    const phoneNumber = `tel:+88${router?.phoneNumber}`;
+    const phoneNumber = `tel:+88${
+      router?.phoneNumber || customer?.phoneNumber
+    }`;
     Linking.openURL(phoneNumber);
   };
 
-  // console.log(router?.id);
+  useEffect(() => {
+    const getCustomer = async () => {
+      const result = await getCustomerById(db, router.id);
+      const getDate = await setCustomer(result);
+    };
+    getCustomer();
+  }, []);
 
   return (
     <View
@@ -91,9 +101,14 @@ const CustomerView = () => {
           asChild
         >
           <TouchableOpacity style={styles.headerImageAndTextCon}>
-            <Image style={styles.userImage} source={{uri: router?.profile}} />
+            <Image
+              style={styles.userImage}
+              source={{ uri: router?.profile || customer?.profilePhoto }}
+            />
             <View>
-              <Text style={styles.headerText}>{router?.name}</Text>
+              <Text style={styles.headerText}>
+                {router?.name || customer.name}
+              </Text>
               <Text style={styles.viewProfile}>View Profile</Text>
             </View>
           </TouchableOpacity>

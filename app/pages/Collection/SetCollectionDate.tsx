@@ -60,6 +60,8 @@ const SetCollectionDate = () => {
     dueCollection();
   }, []);
 
+  console.log(dueCollection);
+
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}

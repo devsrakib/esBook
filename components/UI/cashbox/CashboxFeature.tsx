@@ -8,6 +8,7 @@ import Feature from "./Feature";
 import { IFeature } from "@/types/interfaces/feature.interface";
 import DatePicker from "../DatePicker";
 import {
+  getCash_buy,
   getCash_sell,
   getDeposit,
   getExpense,
@@ -24,6 +25,11 @@ const CashboxFeature = () => {
   const [totalExpense, setTotalExpense] = useState<number>(0);
   const [totalCash, setTotalCash] = useState<number>(0);
   const [totalDeposit, setTotalDeposit] = useState<number>(0);
+  const [due, setDue] = useState<any>([]);
+  const [totalDue, setTotalDue] = useState<number>(0);
+  const [totalCashBuy, setTotalCashBuy] = useState<number>(0);
+  const [cashBuy, setCashBuy] = useState<any>([]);
+
   const db = useSQLiteContext();
   const feature: IFeature[] = [
     {
@@ -36,14 +42,14 @@ const CashboxFeature = () => {
     {
       icon: require("../../../assets/images/expense.png"),
       text: "Due",
-      amount: 30000,
+      amount: totalDue,
       color: Colors.OrangeRed,
       textColor: Colors.red,
     },
     {
       icon: require("../../../assets/images/expense.png"),
       text: "Cash buy",
-      amount: 30000,
+      amount: totalCashBuy,
       color: Colors.OrangeRed,
       textColor: Colors.red,
     },
@@ -76,10 +82,16 @@ const CashboxFeature = () => {
       const deposit = await getDeposit(db);
       const withdraw = await getWithdraw(db);
       const expense = await getExpense(db);
+      const cash_buy = await getCash_buy(db);
+      const due = (await getCash_sell(db)).filter(
+        (item: any) => item?.dueAmount > 0
+      );
       setGetAllCashSell(cash);
       setDeposit(deposit);
       setWithdraw(withdraw);
       setExpense(expense);
+      setDue(due);
+      setCashBuy(cash_buy);
     }
     getCash();
   }, []);
@@ -101,11 +113,21 @@ const CashboxFeature = () => {
       (sum: number, record: any) => sum + record?.amount,
       0
     );
+    const totalDue = due?.reduce(
+      (sum: number, record: any) => sum + record?.dueAmount,
+      0
+    );
+    const total_cash_buy = cashBuy?.reduce(
+      (sum: number, record: any) => sum + record?.dueAmount,
+      0
+    );
     setTotalCash(totalCollectedAmount);
     setTotalDeposit(totalDeposit);
     setTotalWithdraw(totalWithdraw);
     setTotalExpense(totalExpense);
-  }, [getAllCashSell, deposit, withdraw, expense]);
+    setTotalDue(totalDue);
+    setTotalCashBuy(total_cash_buy);
+  }, [getAllCashSell, deposit, withdraw, expense, due]);
 
   return (
     <View style={styles.container}>

@@ -8,9 +8,11 @@ import { Entypo } from "@expo/vector-icons";
 const DetailsPageInput = ({
   setTransaction,
   text,
+  amount,
 }: {
   setTransaction: Function;
   text: any;
+  amount: number;
 }) => {
   const handleChange = (key: any, value: any) => {
     setTransaction((prevData: any) => ({
@@ -25,7 +27,8 @@ const DetailsPageInput = ({
       <View style={styles.inputCon}>
         <TextInput
           style={styles.input}
-          placeholder="0.00"
+          placeholder={`${text === "Due" && amount ? amount : "0.00"}`}
+          keyboardType="numeric"
           onChangeText={(e) => handleChange("sale", e)}
         />
         <View style={styles.currencyCon}>
@@ -39,6 +42,7 @@ const DetailsPageInput = ({
             <TextInput
               style={styles.input}
               placeholder="0.00"
+              keyboardType="numeric"
               onChangeText={(e) => handleChange("collect", e)}
             />
             <View style={styles.currencyCon}>

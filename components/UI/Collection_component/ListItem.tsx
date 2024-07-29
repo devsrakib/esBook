@@ -10,13 +10,13 @@ import CustomDatePicker from "../CustomDatePicker";
 import { collection_reminder, getCustomerById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
+import { Link } from "expo-router";
 
 const ListItem = ({ text, item }: { text: string; item: any }) => {
   const [date, setDate] = useState({ dd: "", mm: "", yyyy: "" });
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>("");
-  const [data, setData] = useState<any>();
   const db = useSQLiteContext();
 
   useEffect(() => {
@@ -58,56 +58,69 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     console.log(reminderData, ":::::::::");
   };
   // handleSave();
+
+  console.log(item?.customerId, "=============");
+
   return (
-    <TouchableOpacity style={styles.container}>
-      <View style={styles.profileContainer}>
-        {customer?.profilePhoto ? (
-          <Image
-            source={{ uri: customer?.profilePhoto }}
-            style={styles.profileImage}
-          />
-        ) : (
-          <View style={styles.profilePlaceholder}>
-            <Text style={styles.profileInitials}>
-              {customer?.name?.slice(0, 1)}
-            </Text>
-          </View>
-        )}
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.name}>{customer?.name}</Text>
-      </View>
-      <View style={styles.dateContainer}>
-        <Text style={styles.amount}>
-          {currency}
-          {item?.dueAmount || item?.amount}
-        </Text>
-        <View style={styles.iconContainer}>
-          {text === "date" ? (
-            <>
-              <AntDesign name="checkcircle" size={12} color={Colors.green} />
-              <Text style={styles.date}> Added {"14/07/2024"}</Text>
-            </>
+    <Link
+      href={{
+        pathname: "/pages/parties/CustomerView",
+        params: {
+          id: item?.customerId,
+        },
+      }}
+      asChild
+    >
+      <TouchableOpacity style={styles.container}>
+        <View style={styles.profileContainer}>
+          {customer?.profilePhoto ? (
+            <Image
+              source={{ uri: customer?.profilePhoto }}
+              style={styles.profileImage}
+            />
           ) : (
-            <TouchableOpacity
-              onPress={() => setModalVisible(!modalVisible)}
-              style={styles.calenderCon}
-            >
-              <AntDesign name="calendar" size={14} color={Colors.text} />
-              <Text style={styles.date}>{"Set Date"}</Text>
-            </TouchableOpacity>
+            <View style={styles.profilePlaceholder}>
+              <Text style={styles.profileInitials}>
+                {customer?.name?.slice(0, 1)}
+              </Text>
+            </View>
           )}
         </View>
-      </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.name}>{customer?.name}</Text>
+        </View>
+        <View style={styles.dateContainer}>
+          <Text style={styles.amount}>
+            {currency}
+            {item?.dueAmount || item?.amount}
+          </Text>
+          <View style={styles.iconContainer}>
+            {text === "date" ? (
+              <>
+                <AntDesign name="checkcircle" size={12} color={Colors.green} />
+                <Text style={styles.date}> Added {"14/07/2024"}</Text>
+              </>
+            ) : (
+              <TouchableOpacity
+                onPress={() => setModalVisible(!modalVisible)}
+                style={styles.calenderCon}
+              >
+                <AntDesign name="calendar" size={14} color={Colors.text} />
+                <Text style={styles.date}>{"Set Date"}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
 
-      <CustomDatePicker
-        date={date}
-        setDate={setDate}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        handleSave={handleSave}
-      />
-    </TouchableOpacity>
+        <CustomDatePicker
+          date={date}
+          setDate={setDate}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          handleSave={handleSave}
+        />
+      </TouchableOpacity>
+    </Link>
   );
 };
 

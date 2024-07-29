@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -15,95 +16,96 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Button from "@/components/UI/Button";
 import { useSQLiteContext } from "expo-sqlite";
 import {
-  getExpense,
   getOwnerProfile,
-  owner_profile,
+  update_owner_profile,
   OwnerProfileData,
 } from "@/databases/Database";
+import useImagePicker from "@/utils/UseImagePicker";
 
 const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const [getProfileData, setGetProfileData] = useState<
-    OwnerProfileData | any
-  >();
+  const [getProfileData, setGetProfileData] = useState<any | null>(null);
+  const { selectedImage, pickImage } = useImagePicker();
   const [profileData, setProfileData] = useState<any>({
-    profilePhoto: "this is my photo",
+    id: 0,
+    profilePhoto: "",
     name: "",
     email: "",
     address: "",
     phoneNumber: "",
+    taxNumber: "", // Added taxNumber to match the table schema
   });
 
-  const handleInputChange = (value: any, key: any) => {
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const profileArray = await getOwnerProfile(db);
+        if (profileArray && profileArray.length > 0) {
+          const profile = profileArray[0];
+          setGetProfileData(profile);
+          setProfileData(profile); // Initialize profileData after fetching
+        } else {
+          console.log("No profile found.");
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchProfileData();
+  }, [db]);
+
+  const handleInputChange = (value: any, key: string) => {
     setProfileData((prevState: any) => ({
       ...prevState,
       [key]: value,
     }));
   };
 
-  const db = useSQLiteContext();
+  useEffect(() => {
+    if (selectedImage) {
+      setProfileData((prevState: any) => ({
+        ...prevState,
+        profilePhoto: selectedImage,
+      }));
+    }
+  }, [selectedImage]);
+
+  const handleSaveProfileInfo = async () => {
+    try {
+      await update_owner_profile(db, profileData);
+      console.log("Profile updated successfully:", profileData);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
 
   const infoData = [
     {
       icon: <Ionicons name="person-outline" size={18} color="gray" />,
       label: "Name",
-      value: getProfileData?.name,
       key: "name",
     },
     {
       icon: <MaterialIcons name="email" size={18} color="gray" />,
       label: "Email",
-      value: getProfileData?.email,
       key: "email",
     },
     {
       icon: <Ionicons name="location-outline" size={18} color="gray" />,
       label: "Address",
-      value: getProfileData?.address,
       key: "address",
     },
     {
       icon: <Ionicons name="call-outline" size={18} color="gray" />,
       label: "Phone",
-      value: getProfileData?.phoneNumber,
       key: "phoneNumber",
     },
   ];
 
-  const handleSaveProfileInfo = async () => {
-    await owner_profile(db, profileData);
-    console.log(profileData);
-  };
-
-  useEffect(() => {
-    async function profile() {
-      const profile = await getOwnerProfile(db);
-      setGetProfileData(profile);
-    }
-    profile();
-  }, []);
-
-  console.log(getProfileData);
-  
-  useEffect(() => {
-    async function getProfile() {
-      try {
-        const profileArray = await getOwnerProfile(db);
-        if (profileArray && profileArray.length > 0) {
-          const profile = profileArray[0];
-          setGetProfileData(profile);
-        } else {
-          console.log("No customer found with this ID.");
-        }
-      } catch (error) {
-        console.error("Error fetching customer:", error);
-      }
-    }
-    if (!getProfileData) { // assuming you meant to call getProfile only if getProfileData is not already set
-      getProfile();
-    }
-  }, [db, getProfileData]);
-  
+  console.log(profileData);
 
   return (
     <ScrollView
@@ -112,31 +114,34 @@ const OwnerProfile = () => {
         { paddingBottom: bottom, paddingTop: top },
       ]}
     >
-      <View style={styles.profileContainer}>
-       {
-        profileData?.profileImage? 
-        <Image
-        source={{ uri: profileData.profileImage }}
-        style={styles.profileImage}
-      />:
-      <Image
-      source={require('../../../assets/images/placeholder.jpeg')}
-      style={styles.profileImage}
-    />
-       }
-        <Text style={styles.profileName}>{getProfileData?.name}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => pickImage()}
+        style={styles.profileContainer}
+      >
+        {profileData.profilePhoto ? (
+          <Image
+            source={{ uri: profileData.profilePhoto }}
+            style={styles.profileImage}
+          />
+        ) : (
+          <Image
+            source={require("../../../assets/images/placeholder.jpeg")}
+            style={styles.profileImage}
+          />
+        )}
+        <Text style={styles.profileName}>{profileData.name}</Text>
+      </TouchableOpacity>
       <View style={styles.infoContainer}>
         {infoData.map((item, index) => (
           <Fragment key={index.toString()}>
             <View style={styles.infoRow}>
-              <View style={styles.iconCon}>{item?.icon}</View>
+              <View style={styles.iconCon}>{item.icon}</View>
               <View style={styles.infoColumn}>
-                <Text style={styles.label}>{item?.label}</Text>
+                <Text style={styles.label}>{item.label}</Text>
                 <TextInput
                   style={styles.input}
-                  value={item?.value}
-                  onChangeText={(e) => handleInputChange(e, item?.key)}
+                  value={profileData[item.key as keyof OwnerProfileData] || ""}
+                  onChangeText={(e) => handleInputChange(e, item.key)}
                 />
               </View>
             </View>
@@ -145,12 +150,12 @@ const OwnerProfile = () => {
         ))}
       </View>
       <Button
-        title="create profile"
+        title="Save Profile"
         bg={Colors.mainColor}
         titleColor={Colors.white}
         radius={20}
         width={"90%"}
-        onPress={() => handleSaveProfileInfo()}
+        onPress={handleSaveProfileInfo}
       />
     </ScrollView>
   );
@@ -173,7 +178,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 8,
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   profileName: {
     color: "white",

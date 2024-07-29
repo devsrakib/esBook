@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import { owner_profile } from "@/databases/Database";
+import useImagePicker from "@/utils/UseImagePicker";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
@@ -21,6 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function CreateOwnerProfile() {
   const { bottom, top } = useSafeAreaInsets();
   const [profile, setProfileData] = useState<any>();
+  const { selectedImage, pickImage } = useImagePicker();
   const router = useRouter();
   const db = useSQLiteContext();
   const handleInputChange = (value: any, key: any) => {
@@ -49,11 +51,21 @@ export default function CreateOwnerProfile() {
       </View>
       <ScrollView>
         <View style={styles.bodyContainer}>
-          <View style={styles.profileImageContainer}>
-            <Image
-              style={styles.profileImage}
-              source={{ uri: "https://via.placeholder.com/100x100" }} // Placeholder image URL
-            />
+          <TouchableOpacity
+            onPress={() => pickImage()}
+            style={styles.profileImageContainer}
+          >
+            {selectedImage ? (
+              <Image
+                style={styles.profileImage}
+                source={{ uri: selectedImage }} // Placeholder image URL
+              />
+            ) : (
+              <Image
+                style={styles.profileImage}
+                source={{ uri: "https://via.placeholder.com/100x100" }} // Placeholder image URL
+              />
+            )}
             <TouchableOpacity style={styles.cameraIcon}>
               <Image
                 style={styles.icon}
@@ -62,7 +74,7 @@ export default function CreateOwnerProfile() {
                 }} // Placeholder icon URL
               />
             </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Name</Text>
             <TextInput

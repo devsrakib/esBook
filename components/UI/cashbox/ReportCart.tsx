@@ -87,6 +87,9 @@ const ReportCart = ({ item, text }: any) => {
               params: {
                 id: item?.id,
                 text: text,
+                customerId: item?.customerId,
+                dueAmount: `due ${item?.dueAmount}`,
+                data: "::::::",
               },
             }}
             asChild
