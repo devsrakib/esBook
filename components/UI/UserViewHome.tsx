@@ -1,20 +1,38 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { Fontisto } from "@expo/vector-icons";
 import { FontW, Fonts } from "@/constants/Fonts";
+import { useSQLiteContext } from "expo-sqlite";
+import { getOwnerProfile } from "@/databases/Database";
 
 const UserViewHome = () => {
+  const [data, setData] = useState<any>({});
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const result = await getOwnerProfile(db);
+      const user_data = result?.length > 0 ? result[0] : null;
+      setData(user_data);
+    };
+    getProfile();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* <Image style={styles.userAvatar} /> */}
       <View style={styles.avatarContainer}>
-        <Fontisto name="user-secret" size={22} color={Colors.icon} />
+        {data?.profilePhoto ? (
+          <Image />
+        ) : (
+          <Text style={styles.placeholder}>{data?.name?.slice(0, 1)}</Text>
+        )}
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.text1}>Hello,</Text>
-        <Text style={styles.userName}>Nazrul Islam</Text>
+        <Text style={styles.userName}>{data?.name}</Text>
       </View>
       <TouchableOpacity style={styles.magnify}>
         <Ionicons name="search" size={18} color={Colors.darkCharcoal} />
@@ -58,6 +76,10 @@ const styles = StyleSheet.create({
     height: 30,
     alignItems: "center",
     justifyContent: "center",
+  },
+  placeholder: {
+    fontSize: Fonts.large,
+    color: Colors.text, // Use the function to get a random color
   },
 });
 export default UserViewHome;

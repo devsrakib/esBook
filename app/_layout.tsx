@@ -1,61 +1,68 @@
 import { useFonts } from "expo-font";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { getOwnerProfile, migrateDbIfNeeded } from "@/databases/Database";
-import { openDatabaseAsync, SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import { openDatabaseAsync, SQLiteProvider } from "expo-sqlite";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const [profile, setProfile] = useState<any>();
+const InitialLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [initialRouteName, setInitialRouteName] = useState<string>("");
-
+  const [initialRouteName, setInitialRouteName] = useState<string | any>("");
+  const router = useRouter();
   useEffect(() => {
     const initialize = async () => {
-      const db = await openDatabaseAsync("database.db");
-      console.log(db, "::::::: db ::::::");
-
-      await migrateDbIfNeeded(db);
-
       try {
-        const result = await getOwnerProfile(db);
-        const profile = result?.length > 0 ? result[0] : null;
-        console.log(profile, ":::::::");
-        setProfile(profile);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
+        const db = await openDatabaseAsync("database.db");
+        await migrateDbIfNeeded(db);
 
-      // Hide the splash screen
-      await SplashScreen.hideAsync();
-      setIsLoading(false);
+        const result = await getOwnerProfile(db);
+        const user_data = result?.length > 0 ? result[0] : null;
+        const routeName = user_data && "(tabs)";
+        console.log(user_data);
+        setInitialRouteName(routeName);
+      } catch (error) {
+        console.error("Error during initialization:", error);
+      } finally {
+        await SplashScreen.hideAsync();
+        setIsLoading(false);
+      }
     };
 
     initialize();
-  }, []);
+  }, [initialRouteName, router]);
 
   useEffect(() => {
-    if (!isLoading) {
-      const routeName = profile ? "(tabs)" : "index"; // Adjust this as per your actual routes
-      setInitialRouteName(routeName);
+    if (!isLoading && initialRouteName !== "") {
+      router.replace(initialRouteName);
     }
-  }, [isLoading, profile, initialRouteName]);
+  }, [isLoading, initialRouteName]);
 
-  if (isLoading || initialRouteName === "") {
-    return null; // Or a loading indicator
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
-  console.log(profile, initialRouteName);
+  console.log(initialRouteName);
 
   return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
+  );
+};
+
+export default function RootLayout() {
+  return (
     <SQLiteProvider databaseName="database.db" onInit={migrateDbIfNeeded}>
-      <Stack initialRouteName={initialRouteName}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <InitialLayout />
     </SQLiteProvider>
   );
 }
