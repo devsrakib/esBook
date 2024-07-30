@@ -21,15 +21,12 @@ import {
   updateDueAmount,
   withdraw,
 } from "@/databases/Database";
+import { ensureNonNegative } from "@/utils/ensureNonNegative";
 
 const page = () => {
   const route = useLocalSearchParams<any>();
   const { bottom, top } = useSafeAreaInsets();
   const [transaction, setTransaction] = useState<any>();
-
-  const ensureNonNegative = (value: number) => {
-    return value < 0 ? 0 : value;
-  };
 
   let transactionData: any;
   if (route.text == "Cash Sell") {
