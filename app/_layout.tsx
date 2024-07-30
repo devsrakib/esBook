@@ -1,18 +1,19 @@
 import { useFonts } from "expo-font";
-import { Stack, useRouter, useSegments } from "expo-router";
+import { Stack, useRouter, Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { getOwnerProfile, migrateDbIfNeeded } from "@/databases/Database";
 import { openDatabaseAsync, SQLiteProvider } from "expo-sqlite";
-import { ActivityIndicator, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const InitialLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [initialRouteName, setInitialRouteName] = useState<string | any>("");
+  const [initialRouteName, setInitialRouteName] = useState<string>("");
   const router = useRouter();
+
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -20,9 +21,8 @@ const InitialLayout = () => {
         await migrateDbIfNeeded(db);
 
         const result = await getOwnerProfile(db);
-        const user_data = result?.length > 0 ? result[0] : null;
-        const routeName = user_data && "(tabs)";
-        console.log(user_data);
+        const user_data = result?.length > 0;
+        const routeName = user_data ? "(tabs)" : "index";
         setInitialRouteName(routeName);
       } catch (error) {
         console.error("Error during initialization:", error);
@@ -33,14 +33,13 @@ const InitialLayout = () => {
     };
 
     initialize();
-  }, [initialRouteName, router]);
+  }, [router]);
 
   useEffect(() => {
-    // if (!isLoading) return;
-    if (!isLoading && initialRouteName !== "") {
+    if (!isLoading) {
       router.replace(initialRouteName);
     }
-  }, [isLoading, initialRouteName]);
+  }, [isLoading, router, initialRouteName]);
 
   if (isLoading) {
     return (
@@ -50,10 +49,9 @@ const InitialLayout = () => {
     );
   }
 
-  console.log(initialRouteName);
-
+  // Ensure a Slot or navigator is rendered
   return (
-    <Stack>
+    <Stack initialRouteName="(tabs)">
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>

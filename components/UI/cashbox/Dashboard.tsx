@@ -5,12 +5,26 @@ import { radius } from "@/constants/sizes";
 import { sharedStyle } from "@/constants/shared.style";
 import { Fonts } from "@/constants/Fonts";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCash_sell, getDeposit } from "@/databases/Database";
+import {
+  getCash_buy,
+  getCash_sell,
+  getDeposit,
+  getExpense,
+  getWithdraw,
+} from "@/databases/Database";
 
-const Dashboard = () => {
+const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
   const [currentAmount, setCurrentAmount] = useState(0);
   const [collectedAmount, setCollectedAmount] = useState<any>([]);
   const [deposit, setDeposit] = useState<any>([]);
+  const [todayIReceive, setTodayIReceive] = useState(0);
+  const [todayISells, setTodayISells] = useState(0);
+  const [todayIGave, setTodayIGave] = useState(0);
+  const [cashBuy, setCashBuy] = useState<any>([]);
+  const [withdraw, setWithdraw] = useState<any>([]);
+  const [expense, setExpense] = useState<any>([]);
+
+  setCurrentCash(currentAmount);
 
   const data = [
     {
@@ -22,21 +36,21 @@ const Dashboard = () => {
     },
     {
       text: "Today Sales",
-      amount: "30,200",
+      amount: todayISells,
       icon: require("../../../assets/images/cart.png"),
       color: Colors.orange,
       textColor: Colors.orange,
     },
     {
       text: "Today i Receive",
-      amount: "30,200",
+      amount: todayIReceive,
       icon: require("../../../assets/images/sales.png"),
       color: Colors.green,
       textColor: Colors.green,
     },
     {
       text: "Today I Gave",
-      amount: "30,200",
+      amount: todayIGave,
       icon: require("../../../assets/images/coin.png"),
       color: Colors.red,
       textColor: Colors.red,
@@ -48,6 +62,12 @@ const Dashboard = () => {
     async function cash() {
       const cash = await getCash_sell(db);
       const deposit = await getDeposit(db);
+      const cashBuy = await getCash_buy(db);
+      const withdraw = await getWithdraw(db);
+      const expense = await getExpense(db);
+      setWithdraw(withdraw);
+      setExpense(expense);
+      setCashBuy(cashBuy);
       setDeposit(deposit);
       setCollectedAmount(cash);
     }
@@ -63,8 +83,23 @@ const Dashboard = () => {
       (sum: number, record: any) => sum + record?.amount,
       0
     );
+    const totalCashBuy = cashBuy?.reduce(
+      (sum: number, record: any) => sum + record?.amount,
+      0
+    );
+    const totalWithdraw = expense?.reduce(
+      (sum: number, record: any) => sum + record?.amount,
+      0
+    );
+    const totalExpense = withdraw?.reduce(
+      (sum: number, record: any) => sum + record?.amount,
+      0
+    );
     setCurrentAmount(totalSaleAmount + totalDeposit);
-  }, [collectedAmount, deposit]);
+    setTodayIReceive(totalDeposit);
+    setTodayISells(totalSaleAmount);
+    setTodayIGave(totalCashBuy + totalExpense + totalWithdraw);
+  }, [collectedAmount, deposit, cashBuy, withdraw, expense]);
 
   // console.log(sellAmount);
 

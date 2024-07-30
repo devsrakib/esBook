@@ -6,7 +6,7 @@ import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { currency } from "@/global/currency";
 
-const MatchTopSection = () => {
+const MatchTopSection = ({ amount }: { amount: number }) => {
   return (
     <View style={styles.container}>
       <View style={styles.bookImgCon}>
@@ -17,7 +17,10 @@ const MatchTopSection = () => {
       </View>
       <View style={styles.dataCon}>
         <Text style={styles.text}>Current Cash</Text>
-        <Text style={styles.amount}>{currency}1,500</Text>
+        <Text style={styles.amount}>
+          {currency}
+          {amount}
+        </Text>
       </View>
       <TouchableOpacity style={styles.reportButtonCon}>
         <MaterialCommunityIcons

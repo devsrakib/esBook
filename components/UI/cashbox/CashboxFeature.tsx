@@ -82,9 +82,7 @@ const CashboxFeature = () => {
       const deposit = await getDeposit(db);
       const withdraw = await getWithdraw(db);
       const expense = await getExpense(db);
-      const cash_buy = (await getCash_buy(db)).filter(
-        (item: any) => item?.dueAmount > 0
-      );
+      const cash_buy = await getCash_buy(db);
       const due = (await getCash_sell(db)).filter(
         (item: any) => item?.dueAmount > 0
       );
@@ -120,7 +118,7 @@ const CashboxFeature = () => {
       0
     );
     const total_cash_buy = cashBuy?.reduce(
-      (sum: number, record: any) => sum + record?.dueAmount,
+      (sum: number, record: any) => sum + record?.amount,
       0
     );
     setTotalCash(totalCollectedAmount);
@@ -129,7 +127,7 @@ const CashboxFeature = () => {
     setTotalExpense(totalExpense);
     setTotalDue(totalDue);
     setTotalCashBuy(total_cash_buy);
-  }, [getAllCashSell, deposit, withdraw, expense, due]);
+  }, [getAllCashSell, deposit, withdraw, expense, due, cashBuy]);
 
   return (
     <View style={styles.container}>

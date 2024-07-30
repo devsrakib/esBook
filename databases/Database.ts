@@ -52,16 +52,16 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       );
 
       CREATE TABLE IF NOT EXISTS cash_buy (
-        id INTEGER PRIMARY KEY NOT NULL,
-        supplierId INTEGER NOT NULL,
-        amount REAL NOT NULL,
-        collectedAmount REAL NOT NULL
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        description TEXT,
-        dueAmount REAL,
-        extraAmount REAL,
-        FOREIGN KEY (supplierId) REFERENCES supplier(id)
-      );
+  id INTEGER PRIMARY KEY NOT NULL,
+  supplierId INTEGER NOT NULL,
+  amount REAL NOT NULL,
+  collectedAmount REAL NOT NULL, -- Added missing comma here
+  createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  description TEXT,
+  dueAmount REAL,
+  extraAmount REAL,
+  FOREIGN KEY (supplierId) REFERENCES supplier(id)
+);
 
       CREATE TABLE IF NOT EXISTS customer_lend (
         id INTEGER PRIMARY KEY NOT NULL,
@@ -145,12 +145,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //     ALTER TABLE collection_reminder ADD COLUMN amount REAL;
   //   `);
   // }
-  if (currentDbVersion < 14) {
-    await db.execAsync(`
-      ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
-     `);
-    currentDbVersion = 13;
-  }
+  // if (currentDbVersion < 14) {
+  //   await db.execAsync(`
+  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
+  //    `);
+  //   currentDbVersion = 13;
+  // }
 
   // if (currentDbVersion < 5) {
   //   await db.execAsync(`
