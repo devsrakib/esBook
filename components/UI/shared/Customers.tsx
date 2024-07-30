@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Divider from "../Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
@@ -7,11 +7,28 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
 import { currency } from "@/global/currency";
-import EmptyUser from "../emptyUser";
 import { useNavigation } from "@react-navigation/native";
+import { useSQLiteContext } from "expo-sqlite";
+import { getCashSellsByCustomerId } from "@/databases/Database";
 
-const Customers = ({ item }: any) => {
+const Customers = ({ item, text }: any) => {
   const navigation = useNavigation<any>();
+  const [totalDue, setTotalDue] = useState<any>([]);
+  const db = useSQLiteContext();
+  useEffect(() => {
+    const getTotalDue = async () => {
+      const result = (await getCashSellsByCustomerId(db, item?.id)).filter(
+        (item: any) => item?.dueAmount > 0
+      );
+      setTotalDue(result);
+    };
+    getTotalDue();
+  }, []);
+
+  const due = totalDue?.reduce(
+    (sum: number, record: any) => sum + record?.dueAmount,
+    0
+  );
   return (
     <Fragment>
       <Link
@@ -20,19 +37,22 @@ const Customers = ({ item }: any) => {
           params: {
             id: item?.id,
             name: item?.name,
-            text: "Cash Sell",
-            profile: item?.profilePhoto
+            text: text,
+            profile: item?.profilePhoto,
           },
         }}
         asChild
       >
         <TouchableOpacity style={styles.customerDetails}>
           <View style={styles.avatar}>
-            {item?.profilePhoto?
-              <Image style={styles.profile} source={{uri: item?.profilePhoto}}/>
-              :
+            {item?.profilePhoto ? (
+              <Image
+                style={styles.profile}
+                source={{ uri: item?.profilePhoto }}
+              />
+            ) : (
               <FontAwesome6 name="user-secret" size={24} color="black" />
-            }
+            )}
           </View>
           <View style={styles.nameSection}>
             <Text style={styles.name}>{item?.name}</Text>
@@ -41,7 +61,10 @@ const Customers = ({ item }: any) => {
               {item?.createdAt}
             </Text>
           </View>
-          <Text>{currency}23,000</Text>
+          <Text>
+            {currency}
+            {due}
+          </Text>
         </TouchableOpacity>
       </Link>
     </Fragment>
@@ -80,10 +103,10 @@ const styles = StyleSheet.create({
     fontSize: Fonts.regular,
     color: Colors.text,
   },
-  profile:{
-    width: '100%',
-    height: '100%',
-    borderRadius: radius.medium
-  }
+  profile: {
+    width: "100%",
+    height: "100%",
+    borderRadius: radius.medium,
+  },
 });
 export default Customers;

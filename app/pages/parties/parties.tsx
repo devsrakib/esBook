@@ -107,6 +107,7 @@ const Parties = () => {
                     <Customers
                       item={item}
                       onPress={() => handleCustomerData()}
+                      text={"Customer"}
                     />
                   );
                 }}
@@ -125,7 +126,13 @@ const Parties = () => {
                 }}
                 data={suppliers}
                 renderItem={({ item }) => {
-                  return <Customers item={item} onPress={handleCustomerData} />;
+                  return (
+                    <Customers
+                      item={item}
+                      onPress={handleCustomerData}
+                      text={"Supplier"}
+                    />
+                  );
                 }}
               />
             )}

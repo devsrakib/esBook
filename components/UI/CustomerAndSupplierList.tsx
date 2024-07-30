@@ -112,14 +112,14 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
           <FlatList
             data={customer}
             renderItem={({ item }) => {
-              return <Customers item={item} />;
+              return <Customers item={item} text={"Customer"} />;
             }}
           />
         ) : (
           <FlatList
             data={supplier}
             renderItem={({ item }) => {
-              return <Customers item={item} />;
+              return <Customers item={item} text={"Supplier"} />;
             }}
           />
         )}

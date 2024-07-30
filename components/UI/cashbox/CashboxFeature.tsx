@@ -82,7 +82,9 @@ const CashboxFeature = () => {
       const deposit = await getDeposit(db);
       const withdraw = await getWithdraw(db);
       const expense = await getExpense(db);
-      const cash_buy = await getCash_buy(db);
+      const cash_buy = (await getCash_buy(db)).filter(
+        (item: any) => item?.dueAmount > 0
+      );
       const due = (await getCash_sell(db)).filter(
         (item: any) => item?.dueAmount > 0
       );

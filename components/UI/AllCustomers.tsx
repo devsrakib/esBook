@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
@@ -7,9 +7,32 @@ import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
 import { currency } from "@/global/currency";
 import { useNavigation } from "@react-navigation/native";
+import { getCash_sell, getCashSellsByCustomerId } from "@/databases/Database";
+import { useSQLiteContext } from "expo-sqlite";
 
 const AllCustomers = ({ item }: any) => {
   const navigation = useNavigation<any>();
+  const [totalDue, setTotalDue] = useState<any>([]);
+  const db = useSQLiteContext();
+  useEffect(() => {
+    const getTotalDue = async () => {
+      const result = (await getCashSellsByCustomerId(db, item?.id)).filter(
+        (item: any) => item?.dueAmount > 0
+      );
+      setTotalDue(result);
+    };
+    getTotalDue();
+  }, []);
+
+  const totalCash_buy = totalDue?.reduce(
+    (sum: number, record: any) => sum + record?.dueAmount,
+    0
+  );
+
+  console.log(item);
+
+  console.log(totalCash_buy, "::::::");
+
   return (
     <Fragment>
       <Link
@@ -43,7 +66,10 @@ const AllCustomers = ({ item }: any) => {
               {item?.createdAt}
             </Text>
           </View>
-          <Text>{currency}23,000</Text>
+          <Text>
+            {currency}
+            {totalCash_buy}
+          </Text>
         </TouchableOpacity>
       </Link>
     </Fragment>

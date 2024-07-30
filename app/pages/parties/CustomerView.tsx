@@ -26,8 +26,10 @@ import {
   customer_gave,
   customer_lend,
   getCashSellsByCustomerId,
+  getCollectionReminderByCustomerId,
   getCustomerById,
   getLendById,
+  getSupplierById,
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import Modal from "react-native-modal";
@@ -42,7 +44,9 @@ const CustomerView = () => {
   const [lendDataById, setLendDataById] = useState<any>([]);
   const [activeTab, setActiveTab] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [customer, setCustomer] = useState<any>([]);
+  const [collectionDate, SetCollectionDate] = useState<any>([]);
+  const [customer, setCustomer] = useState<any>();
+  const [supplier, setSupplier] = useState<any>([]);
   const db = useSQLiteContext();
   const lendData: any = {
     customerId: router?.id,
@@ -62,8 +66,13 @@ const CustomerView = () => {
     async function getDataById() {
       const result = await getCashSellsByCustomerId(db, router?.id);
       const lendData = await getLendById(db, router?.id);
+      const collectionReminder: any = await getCollectionReminderByCustomerId(
+        db,
+        router?.id ? router?.id : customer?.id
+      );
       setLendDataById(lendData);
       setCustomerTransaction(result);
+      SetCollectionDate(collectionReminder[0]);
     }
     getDataById();
   }, []);
@@ -80,11 +89,15 @@ const CustomerView = () => {
 
   useEffect(() => {
     const getCustomer = async () => {
-      const result = await getCustomerById(db, router.id);
-      const getDate = await setCustomer(result);
+      const result = await getCustomerById(db, router?.id);
+      const supplier = await getSupplierById(db, router?.id);
+      setSupplier(supplier);
+      setCustomer(result);
     };
     getCustomer();
   }, []);
+
+  console.log(router);
 
   return (
     <View
@@ -126,13 +139,26 @@ const CustomerView = () => {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>You Will Give</Text>
-            <Text style={styles.cardSubtitle}>Customer</Text>
+            <Text style={styles.cardSubtitle}>
+              {router?.text === "Customer" ? "Customer" : "Supplier"}
+            </Text>
           </View>
           <Text style={styles.amount}>$1,500</Text>
-          <TouchableOpacity style={styles.reminderButton}>
-            <Ionicons name="calendar-outline" size={16} color="black" />
-            <Text style={styles.reminderText}>Set Collection Reminder</Text>
-          </TouchableOpacity>
+          {collectionDate &&
+          collectionDate?.collectionDate &&
+          router.text === "Customer" ? (
+            <View style={styles.reminderButton}>
+              <Ionicons name="calendar-outline" size={16} color="black" />
+              <Text style={styles.reminderText}>
+                {collectionDate?.collectionDate}
+              </Text>
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.reminderButton}>
+              <Ionicons name="calendar-outline" size={16} color="black" />
+              <Text style={styles.reminderText}>Set Collection Reminder</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <View style={{ flex: 1 }}>

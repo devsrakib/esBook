@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 13;
+  const DATABASE_VERSION = 14;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -145,12 +145,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //     ALTER TABLE collection_reminder ADD COLUMN amount REAL;
   //   `);
   // }
-  // if (currentDbVersion < 13) {
-  //   await db.execAsync(`
-  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
-  //    `);
-  //   currentDbVersion = 12;
-  // }
+  if (currentDbVersion < 14) {
+    await db.execAsync(`
+      ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
+     `);
+    currentDbVersion = 13;
+  }
 
   // if (currentDbVersion < 5) {
   //   await db.execAsync(`
@@ -301,6 +301,21 @@ export const collection_reminder = async (
     console.log("collection reminder created successfully");
   } catch (error) {
     console.error("Error creating collection_reminder:", error);
+  }
+};
+
+export const getCollectionReminderByCustomerId = async (
+  db: SQLiteDatabase,
+  customerId: number
+) => {
+  try {
+    const results = await db.getAllAsync(
+      "SELECT * FROM collection_reminder WHERE customerId = ?",
+      [customerId]
+    );
+    return results;
+  } catch (error) {
+    console.error("Error fetching cash sells by customer ID:", error);
   }
 };
 
