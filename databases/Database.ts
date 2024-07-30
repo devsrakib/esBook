@@ -52,16 +52,16 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       );
 
       CREATE TABLE IF NOT EXISTS cash_buy (
-  id INTEGER PRIMARY KEY NOT NULL,
-  supplierId INTEGER NOT NULL,
-  amount REAL NOT NULL,
-  collectedAmount REAL NOT NULL, -- Added missing comma here
-  createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-  description TEXT,
-  dueAmount REAL,
-  extraAmount REAL,
-  FOREIGN KEY (supplierId) REFERENCES supplier(id)
-);
+        id INTEGER PRIMARY KEY NOT NULL,
+        supplierId INTEGER NOT NULL,
+        amount REAL NOT NULL,
+        collectedAmount REAL NOT NULL, -- Added missing comma here
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+        description TEXT,
+        dueAmount REAL,
+        extraAmount REAL,
+        FOREIGN KEY (supplierId) REFERENCES supplier(id)
+      );
 
       CREATE TABLE IF NOT EXISTS customer_lend (
         id INTEGER PRIMARY KEY NOT NULL,
