@@ -26,6 +26,7 @@ const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [getProfileData, setGetProfileData] = useState<any | null>(null);
   const { selectedImage, pickImage } = useImagePicker();
+  const [focusInput, setFocusInput] = useState<boolean>(false);
   const [profileData, setProfileData] = useState<any>({
     id: 0,
     profilePhoto: "",
@@ -142,6 +143,7 @@ const OwnerProfile = () => {
                   style={styles.input}
                   value={profileData[item.key as keyof OwnerProfileData] || ""}
                   onChangeText={(e) => handleInputChange(e, item.key)}
+                  onTouchEnd={() => setFocusInput(true)}
                 />
               </View>
             </View>
@@ -149,14 +151,16 @@ const OwnerProfile = () => {
           </Fragment>
         ))}
       </View>
-      <Button
-        title="Save Profile"
-        bg={Colors.mainColor}
-        titleColor={Colors.white}
-        radius={20}
-        width={"90%"}
-        onPress={handleSaveProfileInfo}
-      />
+      {focusInput && (
+        <Button
+          title="Update"
+          bg={Colors.mainColor}
+          titleColor={Colors.white}
+          radius={20}
+          width={"90%"}
+          onPress={handleSaveProfileInfo}
+        />
+      )}
     </ScrollView>
   );
 };

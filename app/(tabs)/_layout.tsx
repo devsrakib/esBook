@@ -7,12 +7,11 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           height: 70,
           paddingVertical: 10,
