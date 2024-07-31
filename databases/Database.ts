@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 14;
+  const DATABASE_VERSION = 16;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -111,7 +111,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
       CREATE TABLE IF NOT EXISTS cash_report (
         id INTEGER PRIMARY KEY NOT NULL,
-        date TEXT NOT NULL,
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         totalCash REAL NOT NULL
       );
 
@@ -140,11 +140,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
-  // if (currentDbVersion < 11) {
+  // if (currentDbVersion < 16) {
   //   await db.execAsync(`
-  //     ALTER TABLE collection_reminder ADD COLUMN amount REAL;
+  //     ALTER TABLE date RENAME TO cash_report;
   //   `);
+  //   currentDbVersion = 15;
   // }
+
   // if (currentDbVersion < 14) {
   //   await db.execAsync(`
   //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
@@ -622,7 +624,7 @@ export const cash_report = async (
   try {
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_report ( createdAt, totalCash) VALUES (?, ?)",
+      "INSERT INTO cash_report (createdAt, totalCash) VALUES (?, ?)",
       [timestamp, totalCash]
     );
     console.log("cash report created successfully");

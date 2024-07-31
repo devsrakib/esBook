@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, TextInput, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -12,6 +20,8 @@ import { Feather } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import Divider from "@/components/UI/Divider";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
+import { useSQLiteContext } from "expo-sqlite";
+import { cash_report } from "@/databases/Database";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -23,7 +33,9 @@ const Page = () => {
   const [lessButton, setLessButton] = useState<boolean>(false);
   const [balanced, setBalanced] = useState<boolean>(false);
   const [dummyText, setDummyText] = useState<string>("");
-  const amount = parseFloat(route?.amount) || 0;
+  const totalCash: any = parseFloat(route?.amount) || 0;
+
+  const db = useSQLiteContext();
 
   const handleMatch = () => {
     setIsCardShow(true);
@@ -35,43 +47,43 @@ const Page = () => {
     navigation.push("/(tabs)/cashbox");
   };
 
-  const handleBalanced = () => {
-    console.log("balanced");
+  const handleBalanced = async () => {
+    await cash_report(db, totalCash);
     setBalanced(true);
   };
 
   const label =
-    inputCash > amount
+    inputCash > totalCash
       ? "Extra Cash"
-      : inputCash < amount
+      : inputCash < totalCash
       ? "Less Cash"
       : "Balanced";
-  const difference = inputCash - amount;
+  const difference = inputCash - totalCash;
 
   const handleButton = () => {
-    if (inputCash > amount) {
+    if (inputCash > totalCash) {
       handleMatch();
-    } else if (inputCash < amount) {
+    } else if (inputCash < totalCash) {
       setLessButton(true);
       handleLessButton();
-    } else if (inputCash === amount) {
+    } else if (inputCash === totalCash) {
       handleBalanced();
       setBalanced(true);
     }
   };
 
   const handleNextButton = () => {
-    if (inputCash > amount) {
+    if (inputCash > totalCash) {
       setMatchButton(true);
       setDummyText(
         "Additional amount will be entered as “Cash Sale (Combined)”"
       );
-    } else if (inputCash < amount) {
+    } else if (inputCash < totalCash) {
       setLessButton(true);
       setDummyText(
         "Please match the cash by entering Cash Purchases, Expenses or Ownership."
       );
-    } else if (inputCash === amount) {
+    } else if (inputCash === totalCash) {
       setBalanced(true);
       setDummyText("Your cashbox and current cash amount are equal");
     }
@@ -87,78 +99,68 @@ const Page = () => {
           headerShown: false,
         }}
       />
-      <Header
-        textColor={Colors.white}
-        children="Match Cashbox"
-        backgroundColor={Colors.mainColor}
-      />
-      <View style={styles.topSection}>
-        <MatchTopSection amount={amount} />
-      </View>
-      <View style={styles.bodySection}>
-        <View style={styles.inputCon}>
-          <Text style={styles.text}>Counting Cash</Text>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={{ fontSize: Fonts.large, fontWeight: "700" }}>
-              {currency}
-            </Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              onTouchEnd={() => {
-                setMatchButton(false), setIsCardShow(false);
-              }}
-              placeholder={`0.00`}
-              onChangeText={(e) => setInputCash(parseFloat(e) || 0)}
-            />
+      <ScrollView style={{ flex: 1 }}>
+        <Header
+          textColor={Colors.white}
+          children="Match Cashbox"
+          backgroundColor={Colors.mainColor}
+        />
+        <View style={styles.topSection}>
+          <MatchTopSection amount={totalCash} />
+        </View>
+        <View style={styles.bodySection}>
+          <View style={styles.inputCon}>
+            <Text style={styles.text}>Counting Cash</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontSize: Fonts.large, fontWeight: "700" }}>
+                {currency}
+              </Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                onTouchEnd={() => {
+                  setMatchButton(false), setIsCardShow(false);
+                }}
+                placeholder={`0.00`}
+                onChangeText={(e) => setInputCash(parseFloat(e) || 0)}
+              />
+            </View>
           </View>
+          <View style={styles.dummyCon}>
+            <Feather name="info" size={12} color={Colors.text} />
+            <Text style={styles.dummy}>
+              Enter the total amount after counting the cash
+            </Text>
+          </View>
+          {isCardShow && (
+            <Animated.View
+              entering={FadeInUp.delay(50).duration(600).springify()}
+              exiting={FadeOutUp.delay(10).duration(600)}
+              style={styles.totalCashCon}
+            >
+              <View style={styles.textCon}>
+                <Text style={styles.text2}>Total Cashbox</Text>
+                <Text>
+                  {currency} {inputCash.toFixed(2)}
+                </Text>
+              </View>
+              <Divider height={1} width={"100%"} aligns={"center"} />
+              <View style={styles.textCon}>
+                <Text style={styles.text2}>{label}</Text>
+                <Text>
+                  {currency} {Math.abs(difference).toFixed(2)}
+                </Text>
+              </View>
+              <Text style={styles.appStatus}>App doesn't entry</Text>
+            </Animated.View>
+          )}
         </View>
-        <View style={styles.dummyCon}>
-          <Feather name="info" size={12} color={Colors.text} />
-          <Text style={styles.dummy}>
-            Enter the total amount after counting the cash
-          </Text>
-        </View>
-        {isCardShow && (
-          <Animated.View
-            entering={FadeInUp.delay(50).duration(600).springify()}
-            exiting={FadeOutUp.delay(10).duration(600)}
-            style={styles.totalCashCon}
-          >
-            <View style={styles.textCon}>
-              <Text style={styles.text2}>Total Cashbox</Text>
-              <Text>
-                {currency} {inputCash.toFixed(2)}
-              </Text>
-            </View>
-            <Divider height={1} width={"100%"} aligns={"center"} />
-            <View style={styles.textCon}>
-              <Text style={styles.text2}>{label}</Text>
-              <Text>
-                {currency} {Math.abs(difference).toFixed(2)}
-              </Text>
-            </View>
-            <Text style={styles.appStatus}>App doesn't entry</Text>
-          </Animated.View>
-        )}
-      </View>
+      </ScrollView>
       <Text numberOfLines={2} style={styles.dummyText}>
         {dummyText}
       </Text>
-      <Button
-        title={
-          matchButton
-            ? "Match"
-            : lessButton
-            ? "Okay"
-            : balanced
-            ? "Okay"
-            : "Next"
-        }
-        bg={Colors.mainColor}
-        radius={radius.regular}
-        width={"90%"}
-        titleColor={Colors.white}
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => {
           if (matchButton || lessButton || balanced) {
             handleButton();
@@ -166,7 +168,17 @@ const Page = () => {
             handleNextButton();
           }
         }}
-      />
+      >
+        <Text style={styles.buttonText}>
+          {matchButton
+            ? "Match"
+            : lessButton
+            ? "Okay"
+            : balanced
+            ? "Okay"
+            : "Next"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -246,6 +258,21 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: Fonts.medium,
     color: Colors.text,
+  },
+  button: {
+    width: "90%",
+    height: 45,
+    borderRadius: radius.large,
+    alignSelf: "center",
+    backgroundColor: Colors.mainColor,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+    marginTop: "auto",
+  },
+  buttonText: {
+    fontSize: Fonts.large,
+    color: Colors.white,
   },
 });
 

@@ -6,30 +6,19 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import Button from "../Button";
-import CustomDatePicker from "../CustomDatePicker";
 import { collection_reminder, getCustomerById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
 import { Link } from "expo-router";
+import DatePicker from "../DatePicker";
 
 const ListItem = ({ text, item }: { text: string; item: any }) => {
-  const [date, setDate] = useState({ dd: "", mm: "", yyyy: "" });
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>("");
   const db = useSQLiteContext();
 
   useEffect(() => {
-    const getCurrentDateAsString = () => {
-      const today = new Date();
-      const dd = String(today.getDate()).padStart(2, "0");
-      const mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
-      const yyyy = today.getFullYear();
-      return `${dd}/${mm}/${yyyy}`;
-    };
-
-    setCurrentDate(getCurrentDateAsString());
-
     async function getCustomer() {
       try {
         const customer = await getCustomerById(db, item?.customerId);
@@ -112,12 +101,11 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
           </View>
         </View>
 
-        <CustomDatePicker
-          date={date}
-          setDate={setDate}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          handleSave={handleSave}
+        <DatePicker
+          background={Colors.white}
+          iconSite={"left"}
+          iconColor={Colors.text}
+          iconSize={24}
         />
       </TouchableOpacity>
     </Link>
