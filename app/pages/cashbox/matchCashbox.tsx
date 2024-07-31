@@ -3,12 +3,7 @@ import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MatchTopSection from "@/components/UI/cashbox/MatchTopSection";
-import {
-  Stack,
-  useLocalSearchParams,
-  useNavigation,
-  useRouter,
-} from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import Header from "@/components/UI/header/Header";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
@@ -27,9 +22,9 @@ const Page = () => {
   const [matchButton, setMatchButton] = useState<boolean>(false);
   const [lessButton, setLessButton] = useState<boolean>(false);
   const [balanced, setBalanced] = useState<boolean>(false);
+  const [dummyText, setDummyText] = useState<string>("");
   const amount = parseFloat(route?.amount) || 0;
 
-  let dummyText = "";
   const handleMatch = () => {
     setIsCardShow(true);
     navigation.push("/(tabs)/cashbox");
@@ -68,14 +63,17 @@ const Page = () => {
   const handleNextButton = () => {
     if (inputCash > amount) {
       setMatchButton(true);
-      dummyText = "Additional amount will be entered as “Cash Sale (Combined)”";
+      setDummyText(
+        "Additional amount will be entered as “Cash Sale (Combined)”"
+      );
     } else if (inputCash < amount) {
       setLessButton(true);
-      dummyText =
-        "Please match the cash by entering Cash Purchases, Expenses or Ownership.";
+      setDummyText(
+        "Please match the cash by entering Cash Purchases, Expenses or Ownership."
+      );
     } else if (inputCash === amount) {
       setBalanced(true);
-      dummyText = "Your cashbox and current cash amount are equal";
+      setDummyText("Your cashbox and current cash amount are equal");
     }
     setIsCardShow(true);
   };
@@ -144,7 +142,9 @@ const Page = () => {
           </Animated.View>
         )}
       </View>
-      <Text style={styles.dummy}>{dummyText};laksdflkasdflk</Text>
+      <Text numberOfLines={2} style={styles.dummyText}>
+        {dummyText}
+      </Text>
       <Button
         title={
           matchButton
@@ -216,6 +216,14 @@ const styles = StyleSheet.create({
   dummy: {
     fontSize: 12,
     color: Colors.text,
+    textAlign: "center",
+    marginVertical: 20,
+  },
+  dummyText: {
+    fontSize: Fonts.medium,
+    color: Colors.text,
+    textAlign: "center",
+    marginVertical: 20,
   },
   totalCashCon: {
     borderWidth: 1,
