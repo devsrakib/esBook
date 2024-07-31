@@ -13,7 +13,7 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import Dashboard from "@/components/UI/cashbox/Dashboard";
 import CashboxFeature from "@/components/UI/cashbox/CashboxFeature";
-import { Link } from "expo-router";
+import { Link, Stack } from "expo-router";
 
 export const Cashbox = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -22,6 +22,11 @@ export const Cashbox = () => {
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
     >
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.headerText}>Cashbox</Text>

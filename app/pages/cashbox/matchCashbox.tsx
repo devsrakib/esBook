@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MatchTopSection from "@/components/UI/cashbox/MatchTopSection";
-import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  Stack,
+  useLocalSearchParams,
+  useNavigation,
+  useRouter,
+} from "expo-router";
 import Header from "@/components/UI/header/Header";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
@@ -16,22 +21,28 @@ import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
   const route = useLocalSearchParams<any>();
-  const navigation = useNavigation<any>();
+  const navigation = useRouter();
   const [inputCash, setInputCash] = useState<number>(0);
   const [isCardShow, setIsCardShow] = useState<boolean>(false);
+  const [matchButton, setMatchButton] = useState<boolean>(false);
+  const [lessButton, setLessButton] = useState<boolean>(false);
+  const [balanced, setBalanced] = useState<boolean>(false);
   const amount = parseFloat(route?.amount) || 0;
 
-  let restAmount: number;
-
+  let dummyText = "";
   const handleMatch = () => {
-    restAmount = inputCash - amount;
-    console.log(restAmount);
     setIsCardShow(true);
-    navigation.navigate("/pages/cashbox/cashbox");
+    navigation.push("/(tabs)/cashbox");
   };
 
-  const handleOk = () => {
-    console.log("hello :::::::");
+  const handleLessButton = () => {
+    console.log("okay");
+    navigation.push("/(tabs)/cashbox");
+  };
+
+  const handleBalanced = () => {
+    console.log("balanced");
+    setBalanced(true);
   };
 
   const label =
@@ -43,12 +54,32 @@ const Page = () => {
   const difference = inputCash - amount;
 
   const handleButton = () => {
-    if (label === "Extra Cash") {
+    if (inputCash > amount) {
       handleMatch();
-    } else if (label === "Balanced") {
-      handleOk();
+    } else if (inputCash < amount) {
+      setLessButton(true);
+      handleLessButton();
+    } else if (inputCash === amount) {
+      handleBalanced();
+      setBalanced(true);
     }
   };
+
+  const handleNextButton = () => {
+    if (inputCash > amount) {
+      setMatchButton(true);
+      dummyText = "Additional amount will be entered as “Cash Sale (Combined)”";
+    } else if (inputCash < amount) {
+      setLessButton(true);
+      dummyText =
+        "Please match the cash by entering Cash Purchases, Expenses or Ownership.";
+    } else if (inputCash === amount) {
+      setBalanced(true);
+      dummyText = "Your cashbox and current cash amount are equal";
+    }
+    setIsCardShow(true);
+  };
+
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -76,7 +107,9 @@ const Page = () => {
             <TextInput
               style={styles.input}
               keyboardType="numeric"
-              onTouchEnd={() => setIsCardShow(false)}
+              onTouchEnd={() => {
+                setMatchButton(false), setIsCardShow(false);
+              }}
               placeholder={`0.00`}
               onChangeText={(e) => setInputCash(parseFloat(e) || 0)}
             />
@@ -110,21 +143,30 @@ const Page = () => {
             <Text style={styles.appStatus}>App doesn't entry</Text>
           </Animated.View>
         )}
-        <Button
-          title={
-            label === "Extra Cash"
-              ? "Match"
-              : label === "Balanced"
-              ? "Ok"
-              : "Next"
-          }
-          bg={Colors.mainColor}
-          radius={radius.regular}
-          width={"90%"}
-          titleColor={Colors.white}
-          onPress={() => handleButton()}
-        />
       </View>
+      <Text style={styles.dummy}>{dummyText};laksdflkasdflk</Text>
+      <Button
+        title={
+          matchButton
+            ? "Match"
+            : lessButton
+            ? "Okay"
+            : balanced
+            ? "Okay"
+            : "Next"
+        }
+        bg={Colors.mainColor}
+        radius={radius.regular}
+        width={"90%"}
+        titleColor={Colors.white}
+        onPress={() => {
+          if (matchButton || lessButton || balanced) {
+            handleButton();
+          } else {
+            handleNextButton();
+          }
+        }}
+      />
     </View>
   );
 };
