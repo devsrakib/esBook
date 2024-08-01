@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -140,33 +146,35 @@ const page = () => {
     <View
       style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
     >
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
-      <View style={styles.headerSection}>
-        <Header height={70} title={route.text} titleColor={Colors.white} />
-        {shouldRenderComponent && (
-          <SearchCustomerAndAddCustomer
-            text={customerTextMapping[route?.text]}
-          />
-        )}
-      </View>
-      <View style={styles.bodySection}>
-        <View style={styles.dummyTextCon}>
-          <Feather name="info" size={18} color={Colors.text} />
-          <Text numberOfLines={1} style={styles.dummyText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing ...adipiscing
-            elit...
-          </Text>
+      <ScrollView style={{ flex: 1 }}>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+        />
+        <View style={styles.headerSection}>
+          <Header height={70} title={route.text} titleColor={Colors.white} />
+          {shouldRenderComponent && (
+            <SearchCustomerAndAddCustomer
+              text={customerTextMapping[route?.text]}
+            />
+          )}
         </View>
-      </View>
-      <DetailsPageInput
-        setTransaction={setTransaction}
-        text={route.text}
-        amount={route.dueAmount}
-      />
+        <View style={styles.bodySection}>
+          <View style={styles.dummyTextCon}>
+            <Feather name="info" size={18} color={Colors.text} />
+            <Text numberOfLines={1} style={styles.dummyText}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing ...adipiscing
+              elit...
+            </Text>
+          </View>
+        </View>
+        <DetailsPageInput
+          setTransaction={setTransaction}
+          text={route.text}
+          amount={route.dueAmount}
+        />
+      </ScrollView>
       <Button
         title="save"
         radius={radius.large}

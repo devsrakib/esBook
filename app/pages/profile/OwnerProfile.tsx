@@ -104,6 +104,11 @@ const OwnerProfile = () => {
       label: "Phone",
       key: "phoneNumber",
     },
+    {
+      icon: <Ionicons name="call-outline" size={18} color="gray" />,
+      label: "Tax Number",
+      key: "taxNumber",
+    },
   ];
 
   console.log(profileData);
@@ -136,14 +141,14 @@ const OwnerProfile = () => {
         {infoData.map((item, index) => (
           <Fragment key={index.toString()}>
             <View style={styles.infoRow}>
-              <View style={styles.iconCon}>{item.icon}</View>
+              <View style={styles.iconCon}>{item?.icon}</View>
               <View style={styles.infoColumn}>
-                <Text style={styles.label}>{item.label}</Text>
+                <Text style={styles.label}>{item?.label}</Text>
                 <TextInput
                   style={styles.input}
-                  value={profileData[item.key as keyof OwnerProfileData] || ""}
-                  onChangeText={(e) => handleInputChange(e, item.key)}
-                  onEndEditing={() => setFocusInput(true)}
+                  value={profileData[item?.key as keyof OwnerProfileData] || ""}
+                  onChangeText={(e) => handleInputChange(e, item?.key)}
+                  onTouchStart={() => setFocusInput(true)}
                 />
               </View>
             </View>
