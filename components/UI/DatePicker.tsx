@@ -1,38 +1,54 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 
-interface datePickerProps {
+interface DatePickerProps {
   background: string;
-  iconSite: string;
+  iconSite: "left" | "right";
   iconColor: string;
   iconSize: number;
 }
-const DatePicker: React.FC<datePickerProps> = ({
+
+const DatePicker: React.FC<DatePickerProps> = ({
   background,
   iconSite,
   iconColor,
   iconSize,
 }) => {
-  const [date, setDate] = useState<any>();
-  const [show, setShow] = useState(false);
+  const [date, setDate] = useState<Date>(new Date()); // Initialize with the current date
+  const [show, setShow] = useState<boolean>(false);
 
   const showDatePicker = () => {
     setShow(true);
   };
+
+  const handleDateChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const formatDate = (date: Date) => {
+    // Format date to a readable string (e.g., 'Aug 1, 2024')
+    return date.toLocaleDateString();
+  };
+
   return (
     <TouchableOpacity
-      onPress={() => {
-        showDatePicker();
-      }}
+      onPress={showDatePicker}
       style={[
         styles.calenderCon,
         {
-          flexDirection: iconSite == "left" ? "row-reverse" : "row",
+          flexDirection: iconSite === "left" ? "row-reverse" : "row",
           backgroundColor: background,
         },
       ]}
@@ -44,14 +60,11 @@ const DatePicker: React.FC<datePickerProps> = ({
           mode="date"
           is24Hour={true}
           display="default"
-          onChange={(event, selectedDate) => {
-            const currentDate = selectedDate || date;
-            setShow(false);
-            setDate(currentDate);
-          }}
+          onChange={handleDateChange}
         />
       )}
-      <Text style={styles.date}>{date}</Text>
+      <Text style={styles.date}>{formatDate(date)}</Text>
+      {/* Ensure date is a string */}
       <AntDesign name="calendar" size={iconSize} color={iconColor} />
     </TouchableOpacity>
   );
@@ -74,4 +87,5 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
 });
+
 export default DatePicker;

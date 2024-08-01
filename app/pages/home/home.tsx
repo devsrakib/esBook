@@ -1,4 +1,10 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import UserViewHome from "@/components/UI/UserViewHome";
@@ -8,6 +14,7 @@ import Dashboard from "@/components/UI/Dashboard";
 import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
 import { useSQLiteContext } from "expo-sqlite";
 import CustomModal from "@/components/UI/modal/Modal";
+import Modal from "react-native-modal";
 import { getCash_sell, getSuppliers } from "@/databases/Database";
 
 const Home = () => {
@@ -46,10 +53,15 @@ const Home = () => {
         <Chart setIsModalVisible={setIsModalVisible} />
         <CustomerAndSupplierList bg={Colors.JazzBerry} />
         {isModalVisible && (
-          <CustomModal
-            isModalVisible={isModalVisible}
-            setIsModalVisible={setIsModalVisible}
-          />
+          // <Modal
+          //   isVisible={isModalVisible}
+          //   onBackdropPress={() => setIsModalVisible(false)}
+          // >
+          //   <View>
+          //     <TouchableOpacity></TouchableOpacity>
+          //   </View>
+          // </Modal>
+          <></>
         )}
       </View>
     </ScrollView>
