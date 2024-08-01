@@ -48,8 +48,9 @@ const Page = () => {
   };
 
   const handleBalanced = async () => {
-    await cash_report(db, totalCash);
+    await cash_report(db, { totalCash: totalCash });
     setBalanced(true);
+    console.log(totalCash);
   };
 
   const label =

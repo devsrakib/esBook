@@ -5,6 +5,7 @@ import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { currency } from "@/global/currency";
+import { Link } from "expo-router";
 
 const MatchTopSection = ({ amount }: { amount: number }) => {
   return (
@@ -22,14 +23,16 @@ const MatchTopSection = ({ amount }: { amount: number }) => {
           {amount}
         </Text>
       </View>
-      <TouchableOpacity style={styles.reportButtonCon}>
-        <MaterialCommunityIcons
-          name="calendar-text-outline"
-          size={18}
-          color={Colors.red}
-        />
-        <Text style={styles.reportText}>Report</Text>
-      </TouchableOpacity>
+      <Link href={{ pathname: "pages/cashbox/cashReport" }} asChild>
+        <TouchableOpacity style={styles.reportButtonCon}>
+          <MaterialCommunityIcons
+            name="calendar-text-outline"
+            size={18}
+            color={Colors.red}
+          />
+          <Text style={styles.reportText}>Report</Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 };

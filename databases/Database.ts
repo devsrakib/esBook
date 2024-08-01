@@ -111,7 +111,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
       CREATE TABLE IF NOT EXISTS cash_report (
         id INTEGER PRIMARY KEY NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+        date TEXT NOT NULL DEFAULT (datetime('now')),
         totalCash REAL NOT NULL
       );
 
@@ -619,12 +619,12 @@ export const getOwnerProfile = async (db: SQLiteDatabase) => {
 //=================  ====================
 export const cash_report = async (
   db: SQLiteDatabase,
-  { createdAt, totalCash }: CashReportData
+  { date, totalCash }: CashReportData
 ) => {
   try {
-    const timestamp = createdAt || new Date().toISOString();
+    const timestamp = date || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_report (createdAt, totalCash) VALUES (?, ?)",
+      "INSERT INTO cash_report (date, totalCash) VALUES (?, ?)",
       [timestamp, totalCash]
     );
     console.log("cash report created successfully");
@@ -793,7 +793,7 @@ export interface OwnerProfileData {
 }
 
 export interface CashReportData {
-  createdAt: string;
+  date: string;
   totalCash: number;
 }
 

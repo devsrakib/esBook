@@ -24,8 +24,6 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
   const [withdraw, setWithdraw] = useState<any>([]);
   const [expense, setExpense] = useState<any>([]);
 
-  setCurrentCash(currentAmount);
-
   const data = [
     {
       text: "Current Cash",
@@ -96,6 +94,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
       0
     );
     setCurrentAmount(totalSaleAmount + totalDeposit);
+    setCurrentCash(totalSaleAmount + totalDeposit);
     setTodayIReceive(totalDeposit);
     setTodayISells(totalSaleAmount);
     setTodayIGave(totalCashBuy + totalExpense + totalWithdraw);
