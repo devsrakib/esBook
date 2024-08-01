@@ -143,7 +143,7 @@ const OwnerProfile = () => {
                   style={styles.input}
                   value={profileData[item.key as keyof OwnerProfileData] || ""}
                   onChangeText={(e) => handleInputChange(e, item.key)}
-                  onTouchEnd={() => setFocusInput(true)}
+                  onEndEditing={() => setFocusInput(true)}
                 />
               </View>
             </View>

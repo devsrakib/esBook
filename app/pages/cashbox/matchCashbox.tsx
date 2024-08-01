@@ -6,8 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  AppState,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MatchTopSection from "@/components/UI/cashbox/MatchTopSection";
@@ -21,7 +22,8 @@ import { Fonts } from "@/constants/Fonts";
 import Divider from "@/components/UI/Divider";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import { useSQLiteContext } from "expo-sqlite";
-import { cash_report } from "@/databases/Database";
+import { cash_report, getCash_sell, getDeposit } from "@/databases/Database";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -32,10 +34,62 @@ const Page = () => {
   const [matchButton, setMatchButton] = useState<boolean>(false);
   const [lessButton, setLessButton] = useState<boolean>(false);
   const [balanced, setBalanced] = useState<boolean>(false);
+  const [currentAmount, setCurrentAmount] = useState(0);
+  const [collectedAmount, setCollectedAmount] = useState<any>([]);
+
   const [dummyText, setDummyText] = useState<string>("");
-  const totalCash: any = parseFloat(route?.amount) || 0;
+  const amount: number = parseFloat(route?.amount) || 0;
 
   const db = useSQLiteContext();
+
+  useEffect(() => {
+    const checkTimeAndCallFunction = async () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      if (hours === 0 && minutes === 0) {
+        await handleBalanced();
+      }
+    };
+
+    const loadAmount = async () => {
+      try {
+        const cash = await getCash_sell(db);
+        const deposit = await getDeposit(db);
+
+        const totalSaleAmount = cash?.reduce(
+          (sum: number, record: any) => sum + record?.collectedAmount,
+          0
+        );
+        const totalDeposit = deposit?.reduce(
+          (sum: number, record: any) => sum + record?.amount,
+          0
+        );
+        const storedAmount: any = totalSaleAmount + totalDeposit;
+        if (storedAmount !== null) {
+          setInputCash(parseFloat(storedAmount));
+        }
+      } catch (error) {
+        console.error("Failed to load amount from storage", error);
+      }
+    };
+
+    loadAmount();
+
+    const interval = setInterval(checkTimeAndCallFunction, 60000); // Check every minute
+
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        checkTimeAndCallFunction();
+      }
+    });
+
+    return () => {
+      clearInterval(interval);
+      subscription.remove();
+    };
+  }, []);
 
   const handleMatch = () => {
     setIsCardShow(true);
@@ -48,43 +102,43 @@ const Page = () => {
   };
 
   const handleBalanced = async () => {
-    await cash_report(db, { totalCash: totalCash });
+    await cash_report(db, { totalCash: amount });
     setBalanced(true);
-    console.log(totalCash);
+    console.log(amount);
   };
 
   const label =
-    inputCash > totalCash
+    inputCash > amount
       ? "Extra Cash"
-      : inputCash < totalCash
+      : inputCash < amount
       ? "Less Cash"
       : "Balanced";
-  const difference = inputCash - totalCash;
+  const difference = inputCash - amount;
 
   const handleButton = () => {
-    if (inputCash > totalCash) {
+    if (inputCash > amount) {
       handleMatch();
-    } else if (inputCash < totalCash) {
+    } else if (inputCash < amount) {
       setLessButton(true);
       handleLessButton();
-    } else if (inputCash === totalCash) {
+    } else if (inputCash === amount) {
       handleBalanced();
       setBalanced(true);
     }
   };
 
   const handleNextButton = () => {
-    if (inputCash > totalCash) {
+    if (inputCash > amount) {
       setMatchButton(true);
       setDummyText(
         "Additional amount will be entered as “Cash Sale (Combined)”"
       );
-    } else if (inputCash < totalCash) {
+    } else if (inputCash < amount) {
       setLessButton(true);
       setDummyText(
         "Please match the cash by entering Cash Purchases, Expenses or Ownership."
       );
-    } else if (inputCash === totalCash) {
+    } else if (inputCash === amount) {
       setBalanced(true);
       setDummyText("Your cashbox and current cash amount are equal");
     }
@@ -107,7 +161,7 @@ const Page = () => {
           backgroundColor={Colors.mainColor}
         />
         <View style={styles.topSection}>
-          <MatchTopSection amount={totalCash} />
+          <MatchTopSection amount={amount} />
         </View>
         <View style={styles.bodySection}>
           <View style={styles.inputCon}>

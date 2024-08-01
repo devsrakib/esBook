@@ -712,6 +712,10 @@ export const getWithdraw = async (db: SQLiteDatabase) => {
   return await db.getAllAsync("SELECT * FROM withdraw");
 };
 
+export const getCashReport = async (db: SQLiteDatabase) => {
+  return await db.getAllAsync("SELECT * FROM cash_report");
+};
+
 //=================  ====================
 //=================  ====================
 
@@ -793,7 +797,7 @@ export interface OwnerProfileData {
 }
 
 export interface CashReportData {
-  date: string;
+  date?: string;
   totalCash: number;
 }
 
