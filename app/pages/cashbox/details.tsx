@@ -72,7 +72,7 @@ const page = () => {
     transactionData = {
       customerId: route?.customerId,
       id: route?.id,
-      newDueAmount: transaction?.sale,
+      dueAmount: transaction?.sale,
       description: transaction?.description,
     };
   }
@@ -108,7 +108,6 @@ const page = () => {
   // };
   const handleDue = async () => {
     await updateDueAmount(db, transactionData);
-    console.log(transactionData, "===========");
   };
 
   console.log(route);
@@ -134,7 +133,7 @@ const page = () => {
 
   const customerTextMapping = {
     "Cash Sell": "Customer",
-    Due: "Customer",
+    "Due": "Customer",
     "Cash buy": "Supplier",
   };
 

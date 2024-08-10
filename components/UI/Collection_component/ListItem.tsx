@@ -11,11 +11,17 @@ import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
 import { Link } from "expo-router";
 import DatePicker from "../DatePicker";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import FormatDate from "@/utils/FormatDate";
 
 const ListItem = ({ text, item }: { text: string; item: any }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [date, setDate] = useState<Date>(new Date());
   const [customer, setCustomer] = useState<any>();
   const [currentDate, setCurrentDate] = useState<string>("");
+  const [show, setShow] = useState<boolean>(false);
   const db = useSQLiteContext();
 
   useEffect(() => {
@@ -36,7 +42,26 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     }
   }, [db, item?.customerId]);
 
-  const handleSave = async () => {
+  // const handleSave = async () => {
+  //   const reminderData: any = {
+  //     customerId: String(item?.customerId),
+  //     collectionDate: date,
+  //     amount: item?.dueAmount,
+  //   };
+  //   await collection_reminder(db, reminderData);
+  //   setModalVisible(false);
+  //   console.log(reminderData, ":::::::::");
+  // };
+  // handleSave();
+
+  const handleDateChange = async (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+
     const reminderData: any = {
       customerId: String(item?.customerId),
       collectionDate: currentDate,
@@ -44,11 +69,11 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     };
     await collection_reminder(db, reminderData);
     setModalVisible(false);
-    console.log(reminderData, ":::::::::");
+    
+    console.log(reminderData, "::::::::");
   };
-  // handleSave();
 
-  console.log(item?.customerId, "=============");
+  
 
   return (
     <Link
@@ -91,22 +116,30 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
               </>
             ) : (
               <TouchableOpacity
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => setShow(!show)}
                 style={styles.calenderCon}
               >
                 <AntDesign name="calendar" size={14} color={Colors.text} />
-                <Text style={styles.date}>{"Set Date"}</Text>
+                <Text style={styles.date}>{date ? FormatDate(date) : "Set Date"}</Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
 
-        <DatePicker
+        {/* <DatePicker
           background={Colors.white}
           iconSite={"left"}
           iconColor={Colors.text}
           iconSize={24}
-        />
+        /> */}
+{show &&        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          is24Hour={true}
+          display="default"
+          onChange={handleDateChange}
+        />}
       </TouchableOpacity>
     </Link>
   );

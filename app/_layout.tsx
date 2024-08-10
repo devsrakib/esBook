@@ -1,5 +1,4 @@
-import { useFonts } from "expo-font";
-import { Stack, useRouter, Slot } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { getOwnerProfile, migrateDbIfNeeded } from "@/databases/Database";
@@ -7,7 +6,7 @@ import { openDatabaseAsync, SQLiteProvider } from "expo-sqlite";
 import { ActivityIndicator, View } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const InitialLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,24 +21,27 @@ const InitialLayout = () => {
 
         const result = await getOwnerProfile(db);
         const user_data = result?.length > 0;
-        const routeName = user_data ? "(tabs)" : "index";
+        console.log(user_data, "++++++++++");
+
+        const routeName = user_data ? "(tabs)" : "/index";
+        console.log(routeName);
+
         setInitialRouteName(routeName);
       } catch (error) {
         console.error("Error during initialization:", error);
       } finally {
-        await SplashScreen.hideAsync();
         setIsLoading(false);
       }
     };
 
     initialize();
-  }, [router]);
+  }, []);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && initialRouteName) {
       router.replace(initialRouteName);
     }
-  }, [isLoading, router, initialRouteName]);
+  }, [isLoading, initialRouteName, router]);
 
   if (isLoading) {
     return (
@@ -49,9 +51,9 @@ const InitialLayout = () => {
     );
   }
 
-  // Ensure a Slot or navigator is rendered
+  // Render the navigation stack once the initial route is determined
   return (
-    <Stack initialRouteName="(tabs)">
+    <Stack initialRouteName={initialRouteName}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>

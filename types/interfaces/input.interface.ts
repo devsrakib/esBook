@@ -3,4 +3,5 @@ export interface ICustomerDataInput {
   email: string;
   phoneNumber: string;
   address: string;
+  createdAt: Date
 }

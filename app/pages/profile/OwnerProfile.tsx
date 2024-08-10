@@ -34,7 +34,7 @@ const OwnerProfile = () => {
     email: "",
     address: "",
     phoneNumber: "",
-    taxNumber: "", // Added taxNumber to match the table schema
+    taxNumber: "",
   });
 
   const db = useSQLiteContext();
@@ -109,9 +109,15 @@ const OwnerProfile = () => {
       label: "Tax Number",
       key: "taxNumber",
     },
+    {
+      icon: <Ionicons name="call-outline" size={18} color="gray" />,
+      label: "Tax Number",
+      key: "taxNumber",
+    },
   ];
 
-  console.log(profileData);
+console.log(getProfileData, "getProfileData");
+
 
   return (
     <ScrollView
@@ -146,7 +152,7 @@ const OwnerProfile = () => {
                 <Text style={styles.label}>{item?.label}</Text>
                 <TextInput
                   style={styles.input}
-                  value={profileData[item?.key as keyof OwnerProfileData] || ""}
+                  value={profileData[item?.key ]}
                   onChangeText={(e) => handleInputChange(e, item?.key)}
                   onTouchStart={() => setFocusInput(true)}
                 />

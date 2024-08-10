@@ -50,7 +50,7 @@ const Home = () => {
           logo2={require("../../../assets/images/give.png")}
         />
         <Dashboard />
-        <Chart setIsModalVisible={setIsModalVisible} />
+        <Chart />
         <CustomerAndSupplierList bg={Colors.JazzBerry} />
         {isModalVisible && (
           // <Modal

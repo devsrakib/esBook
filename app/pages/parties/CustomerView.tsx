@@ -72,10 +72,16 @@ const CustomerView = () => {
       );
       setLendDataById(lendData);
       setCustomerTransaction(result);
-      SetCollectionDate(collectionReminder[0]);
+      SetCollectionDate(collectionReminder);
+      
     }
     getDataById();
   }, []);
+  
+  console.log(collectionDate);
+
+  // console.log(router?.id);
+  
 
   const concatLendDataAndCustomerData =
     customerTransaction.concat(lendDataById);
@@ -120,7 +126,7 @@ const CustomerView = () => {
             />
             <View>
               <Text style={styles.headerText}>
-                {router?.name || customer.name}
+                {router?.name || customer?.name}
               </Text>
               <Text style={styles.viewProfile}>View Profile</Text>
             </View>

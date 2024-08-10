@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -13,6 +13,7 @@ import {
   getSuppliers,
 } from "@/databases/Database";
 import { currency } from "@/global/currency";
+import { Link } from "expo-router";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState<number>(0);
@@ -26,18 +27,21 @@ const Dashboard = () => {
       icon: require("../../assets/images/DUser.png"),
       quantity: customers,
       bg_color: Colors.lavender,
+      link: '/pages/cashbox/allCustomers'
     },
     {
       text: "Total Supplier",
       icon: require("../../assets/images/DHouse.png"),
       quantity: suppliers,
       bg_color: Colors.purpleHalf,
+      link: '/pages/cashbox/allSuppliers'
     },
     {
       text: "Total Cash",
       icon: require("../../assets/images/DMoney.png"),
       amount: `${cashSell}`,
       bg_color: Colors.VeroneseGreen,
+      link: '/pages/cashbox/allCustomers'
     },
     {
       text: "Total Expenses",
@@ -45,6 +49,7 @@ const Dashboard = () => {
       amount: `${expense}`,
       bg_color: Colors.OrangeRed,
       color: Colors.red,
+      link: ''
     },
   ];
 
@@ -72,21 +77,30 @@ const Dashboard = () => {
 
   return (
     <View style={sharedStyle.grid}>
-      {allStatuses.map((item, index) => {
-        return (
-          <View key={index} style={[styles.container]}>
-            <View style={[styles.logoCon, { backgroundColor: item?.bg_color }]}>
-              <Image source={item?.icon} style={styles.logo} />
-            </View>
-            <Text style={styles.text}>{item?.text}</Text>
-            <Text style={[styles.amount, { color: item?.color }]}>
-              {item?.amount ? currency : null}
-              {item?.amount || item?.quantity}
-            </Text>
+    {allStatuses.map((item, index) => {
+      const StatusContent = (
+        <TouchableOpacity activeOpacity={item?.link ? .7 : 1} key={index} style={styles.container}>
+          <View style={[styles.logoCon, { backgroundColor: item?.bg_color }]}>
+            <Image source={item?.icon} style={styles.logo} />
           </View>
-        );
-      })}
-    </View>
+          <Text style={styles.text}>{item?.text}</Text>
+          <Text style={[styles.amount, { color: item?.color }]}>
+            {item?.amount ? currency : null}
+            {item?.amount || item?.quantity}
+          </Text>
+        </TouchableOpacity>
+      );
+
+      return item?.link ? (
+        <Link key={index} href={item?.link} asChild>
+          {StatusContent}
+        </Link>
+      ) : (
+        StatusContent
+      );
+    })}
+  </View>
+
   );
 };
 const styles = StyleSheet.create({

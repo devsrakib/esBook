@@ -333,17 +333,40 @@ export const updateDueAmount = async (
     if (id === undefined || customerId === undefined) {
       throw new Error("ID or customerId is undefined");
     }
-    await db.runAsync(
-      "UPDATE cash_sell SET dueAmount = ? WHERE id = ? AND customerId = ?",
-      [dueAmount, id, customerId]
+
+    // Retrieve the current collectedAmount
+    const result = await db.getAllAsync(
+      "SELECT collectedAmount FROM cash_sell WHERE id = ? AND customerId = ?",
+      [id, customerId]
     );
+
+    if (!result) {
+      throw new Error("Record not found");
+    }
+    
+    const currentCollectedAmount = result[0]?.collectedAmount || 0;
+
+    // Calculate the new collectedAmount
+    
+    const newCollectedAmount = currentCollectedAmount + Number(dueAmount);
+  
+    // Update the dueAmount and collectedAmount
+    await db.runAsync(
+      "UPDATE cash_sell SET dueAmount = ?, collectedAmount = ? WHERE id = ? AND customerId = ?",
+      [Number(dueAmount), newCollectedAmount, id, customerId]
+    );
+
     console.log(
-      `Due amount updated successfully for ID ${id} and Customer ID ${customerId}`
+      `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${customerId}`
     );
   } catch (error) {
-    console.error("Error updating due amount:", error);
+    console.error("Error updating due amount and collected amount:", error);
   }
 };
+
+
+
+
 
 //=================  ====================
 //=================  ====================

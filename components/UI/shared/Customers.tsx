@@ -10,11 +10,22 @@ import { currency } from "@/global/currency";
 import { useNavigation } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCashSellsByCustomerId } from "@/databases/Database";
+import FormatDate from "@/utils/FormatDate";
 
 const Customers = ({ item, text }: any) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
+
+  const getInitials = (name:string) => {
+    return name
+      ?.split(" ")
+      .map((word) => word[0])
+      .slice(0, 2)
+      .join("");
+  };
+
+
   useEffect(() => {
     const getTotalDue = async () => {
       const result = (await getCashSellsByCustomerId(db, item?.id)).filter(
@@ -29,6 +40,31 @@ const Customers = ({ item, text }: any) => {
     (sum: number, record: any) => sum + record?.dueAmount,
     0
   );
+
+  
+  const stringToColor = (str:string) => {
+    console.log(str);
+    
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    console.log(hash);
+    
+    // Extract RGB components
+    const r = (hash >> 16) & 0xff;
+    const g = (hash >> 16) & 0xff;
+    const b = hash & 0xff;
+    console.log(r,g,b);
+    
+    // Return the color with 50% transparency
+    return `rgba(${r}, ${g}, ${b}, 0.5)`;
+  };
+  
+
+  const initials = getInitials(item?.name);
+  const backgroundColor = stringToColor(initials);
+
   return (
     <Fragment>
       <Link
@@ -44,21 +80,21 @@ const Customers = ({ item, text }: any) => {
         asChild
       >
         <TouchableOpacity style={styles.customerDetails}>
-          <View style={styles.avatar}>
+          <View style={[styles.avatar, {backgroundColor: backgroundColor}]}>
             {item?.profilePhoto ? (
               <Image
                 style={styles.profile}
                 source={{ uri: item?.profilePhoto }}
               />
             ) : (
-              <FontAwesome6 name="user-secret" size={24} color="black" />
+<Text style={styles.initials}>{initials}</Text>
             )}
           </View>
           <View style={styles.nameSection}>
             <Text style={styles.name}>{item?.name}</Text>
             <Text style={styles.date}>
               {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
-              {item?.createdAt}
+              {FormatDate(item?.createdAt)}
             </Text>
           </View>
           <Text>
@@ -108,5 +144,11 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: radius.medium,
   },
+  initials:{
+    textDecorationStyle: 'solid',
+    textTransform: 'uppercase',
+    fontSize: Fonts.medium,
+    fontWeight: '600'
+  }
 });
 export default Customers;
