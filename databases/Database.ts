@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 16;
+  const DATABASE_VERSION = 17;
   let result = await db.getFirstAsync<{
     user_version: number;
   }>("PRAGMA user_version");
@@ -335,7 +335,7 @@ export const updateDueAmount = async (
     }
 
     // Retrieve the current collectedAmount
-    const result = await db.getAllAsync(
+    const result:any = await db.getAllAsync(
       "SELECT collectedAmount FROM cash_sell WHERE id = ? AND customerId = ?",
       [id, customerId]
     );
@@ -397,6 +397,12 @@ export const getCash_sell = async (db: SQLiteDatabase) => {
 export const getLendById = async (db: SQLiteDatabase, customerId: number) => {
   return await db.getAllAsync(
     "SELECT * FROM customer_lend WHERE customerId = ?",
+    [customerId]
+  );
+};
+export const getGaveLendById = async (db: SQLiteDatabase, customerId: number) => {
+  return await db.getAllAsync(
+    "SELECT * FROM customer_gave WHERE customerId = ?",
     [customerId]
   );
 };

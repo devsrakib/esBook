@@ -34,6 +34,7 @@ import {
 import { useSQLiteContext } from "expo-sqlite";
 import Modal from "react-native-modal";
 import { radius } from "@/constants/sizes";
+import { currency } from "@/global/currency";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -66,11 +67,12 @@ const CustomerView = () => {
     async function getDataById() {
       const result = await getCashSellsByCustomerId(db, router?.id);
       const lendData = await getLendById(db, router?.id);
+      const gaveLand = await getLendById(db, router?.id);
       const collectionReminder: any = await getCollectionReminderByCustomerId(
         db,
         router?.id ? router?.id : customer?.id
       );
-      setLendDataById(lendData);
+      setLendDataById(lendData.concat(gaveLand));
       setCustomerTransaction(result);
       SetCollectionDate(collectionReminder);
       
@@ -175,33 +177,37 @@ const CustomerView = () => {
           }}
         >
           <FilterAndTextSection />
-          {concatLendDataAndCustomerData.map(
-            (transaction: any, index: number) => (
-              <View key={index} style={styles.transactionCard}>
-                <Text style={styles.transactionTitle}>
-                  By Transfer for my Paypal Account
-                </Text>
-                <Text style={styles.transactionType}>
-                  {transaction?.saleAmount ? "Cash sell" : "Bal"} :{" "}
-                  {transaction.saleAmount || transaction?.amount}
-                </Text>
+          {concatLendDataAndCustomerData?.map(
+  (transaction: any, index: number) => (
+    <View key={index} style={styles.transactionCard}>
+      <Text style={styles.transactionTitle}>
+        By Transfer for my Paypal Account
+      </Text>
+      <View style={[styles.badge, { backgroundColor: transaction?.dueAmount ? Colors.red : transaction?.extraAmount ? Colors.green : 'transparent' }]} >
+        <Text style={styles.badgeText}>{transaction?.dueAmount ? 'due' : transaction?.extraAmount ? 'extra' : null}</Text>
+      </View>
+      <Text style={styles.transactionType}>
+        {transaction?.saleAmount ? "Cash sell: " : "Bal : "}
+        {transaction?.saleAmount || transaction?.amount || "N/A"} {/* Provide a default value */}
+      </Text>
 
-                <View style={styles.amountCon}>
-                  <Text style={styles.transactionDate}>
-                    {transaction?.createdAt}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.transactionAmount,
-                      { color: transaction.textColor },
-                    ]}
-                  >
-                    {transaction?.dueAmount || transaction?.amount}
-                  </Text>
-                </View>
-              </View>
-            )
-          )}
+      <View style={styles.amountCon}>
+        <Text style={styles.transactionDate}>
+          {transaction?.createdAt || "Date not available"}
+        </Text>
+        <Text
+          style={[
+            styles.transactionAmount,
+            { color: transaction?.textColor || "black" }, // Default color
+          ]}
+        >{currency}{' '}
+          {transaction?.dueAmount || transaction?.amount || transaction?.extraAmount} {/* Provide a default value */}
+        </Text>
+      </View>
+    </View>
+  )
+)}
+
         </ScrollView>
       </View>
       <View style={styles.footer}>
@@ -497,6 +503,21 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     paddingTop: 10,
   },
+  badge:{
+    width: 46,
+    height: 22,
+    justifyContent: 'center',
+    alignItems: "center",
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
+  badgeText:{
+    fontSize: Fonts.regular,
+    color: Colors.white
+  }
 });
 
 export default CustomerView;

@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSQLiteContext } from "expo-sqlite";
 import { getSuppliers } from "@/databases/Database";
 import AllSuppliers from "@/components/UI/AllSuppliers";
+import EmptyUser from "@/components/UI/emptyUser";
 
 const page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -34,12 +35,13 @@ const page = () => {
         backgroundColor={Colors.mainColor}
         textColor={Colors.white}
       />
-      <FlatList
+
+      {suppliers?.length === 0 ? <EmptyUser text="No Supplier"/> :<FlatList
         data={suppliers}
         renderItem={({ item }) => {
           return <AllSuppliers item={item} />;
         }}
-      />
+      />}
     </View>
   );
 };
