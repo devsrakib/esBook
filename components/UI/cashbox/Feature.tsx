@@ -27,7 +27,7 @@ const Feature = ({ data }: any) => {
           <View style={styles.amountCon}>
             <Text style={[styles.amount, { color: data?.textColor }]}>
               {currency}
-              {data?.amount}
+              {data?.amount?.toLocaleString('en-US') || '0'}
             </Text>
             <AntDesign name="right" size={16} color={Colors.text} />
           </View>

@@ -1,4 +1,46 @@
-import React, { Fragment, useEffect, useState } from "react";
+/**
+ * CustomerView Component
+ *
+ * This component is responsible for displaying detailed information about a specific customer or supplier,
+ * including their transaction history and contact information. The view adapts based on whether the user
+ * is viewing a customer or supplier, adjusting the displayed data and actions accordingly.
+ *
+ * Key Features:
+ * - **Profile Information**: Displays the profile photo, name, and an option to view the full profile of the customer or supplier.
+ * - **Transaction Data**: Fetches and displays a list of transactions, including details such as the transaction amount,
+ *   date, and type (cash sell, balance, due, or extra amounts).
+ * - **Reminder**: Allows users to set or view a collection reminder date for a customer.
+ * - **Contact Options**: Provides a button to call the customer or supplier directly using the device's phone app.
+ * - **Modal for Adding Transactions**: Includes a modal that allows users to record new transactions, either as "You Got" or "You Gave".
+ *
+ * State Management:
+ * - `customerTransaction`: Stores the list of transactions associated with the customer.
+ * - `amount`, `description`: Used to capture input values when recording new transactions.
+ * - `lendDataById`: Stores specific lend data fetched by customer ID.
+ * - `activeTab`: Determines whether the "You Got" or "You Gave" tab is active in the modal.
+ * - `isModalVisible`: Controls the visibility of the modal for adding transactions.
+ * - `collectionDate`: Holds the reminder date information for collecting amounts due.
+ * - `customer`, `supplier`: Stores customer or supplier data fetched by ID.
+ *
+ * Database Operations:
+ * - Fetches data from the SQLite database using functions like `getCustomerById`, `getSupplierById`, and transaction-related methods.
+ * - Updates the database when new transactions are recorded via `customer_lend` and `customer_gave`.
+ *
+ * Usage:
+ * This component is used within the application to provide users with a detailed view of customer or supplier
+ * interactions, including financial transactions and contact management.
+ *
+ * Dependencies:
+ * - Relies on `expo-sqlite` for database interactions.
+ * - Uses `react-native-modal` for the modal implementation.
+ * - Uses `expo-router` for navigation between different app screens.
+ * - Custom UI components like `Button`, `GoBack`, and `FilterAndTextSection` are used for consistent design and interaction.
+ */
+
+
+
+
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -28,6 +70,7 @@ import {
   getCashSellsByCustomerId,
   getCollectionReminderByCustomerId,
   getCustomerById,
+  getGaveLendById,
   getLendById,
   getSupplierById,
 } from "@/databases/Database";
@@ -47,6 +90,7 @@ const CustomerView = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [collectionDate, SetCollectionDate] = useState<any>([]);
   const [customer, setCustomer] = useState<any>();
+  const [totalGiveAmount, setTotalGiveAmount] = useState<number>(0);
   const [supplier, setSupplier] = useState<any>([]);
   const db = useSQLiteContext();
   const lendData: any = {
@@ -55,57 +99,85 @@ const CustomerView = () => {
     description: description,
   };
   const handleLend = async () => {
-    await customer_lend(db, lendData);
-    console.log(lendData);
+    try {
+      await customer_lend(db, lendData);
+      console.log(lendData);
+    } catch (error) {
+      console.error("Error lending amount:", error);
+    }
   };
   const handleGave = async () => {
-    await customer_gave(db, lendData);
-    console.log(lendData);
+    try {
+      await customer_gave(db, lendData);
+      console.log(lendData);
+    } catch (error) {
+      console.error("Error giving amount:", error);
+    }
   };
 
   useEffect(() => {
     async function getDataById() {
-      const result = await getCashSellsByCustomerId(db, router?.id);
-      const lendData = await getLendById(db, router?.id);
-      const gaveLand = await getLendById(db, router?.id);
-      const collectionReminder: any = await getCollectionReminderByCustomerId(
-        db,
-        router?.id ? router?.id : customer?.id
-      );
-      setLendDataById(lendData.concat(gaveLand));
-      setCustomerTransaction(result);
-      SetCollectionDate(collectionReminder);
+     if(router?.text === "Supplier") {
+        const supplier = await getSupplierById(db, router?.id);
+        setSupplier(supplier)
+      }else{
+        const result = await getCashSellsByCustomerId(db, router?.id);
+        const lendData = await getLendById(db, router?.id);
+        const gaveLand = await getGaveLendById(db, router?.id);
+        const collectionReminder: any = await getCollectionReminderByCustomerId(
+          db,
+          router?.id ? router?.id : customer?.id
+        );
+
+        const gaveLandAmount = gaveLand?.reduce(
+          (sum: number, record: any) => sum + record?.amount,
+          0
+        );
+        const customerExtraAmount:any = result?.reduce(
+          (sum: number, record: any) => sum + record?.extraAmount,
+          0
+        );
+        setTotalGiveAmount( gaveLandAmount + customerExtraAmount);
+        setLendDataById(lendData.concat(gaveLand));
+        setCustomerTransaction(result);
+        SetCollectionDate(collectionReminder);
+
+       
+      }
       
     }
     getDataById();
   }, []);
   
-  console.log(collectionDate);
 
-  // console.log(router?.id);
+
+  const concatLendDataAndCustomerData = useMemo(
+    () => customerTransaction.concat(lendDataById),
+    [customerTransaction, lendDataById]
+  );
   
-
-  const concatLendDataAndCustomerData =
-    customerTransaction.concat(lendDataById);
-
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     const phoneNumber = `tel:+88${
       router?.phoneNumber || customer?.phoneNumber
     }`;
     Linking.openURL(phoneNumber);
-  };
+  }, [router?.phoneNumber, customer?.phoneNumber]);
 
   useEffect(() => {
     const getCustomer = async () => {
-      const result = await getCustomerById(db, router?.id);
-      const supplier = await getSupplierById(db, router?.id);
-      setSupplier(supplier);
-      setCustomer(result);
+      if(router?.text === "Supplier") {
+        const supplier = await getSupplierById(db, router?.id);
+        setSupplier(supplier);
+        
+      }else if(router?.text === "Customer") {
+        const result = await getCustomerById(db, router?.id);
+        setCustomer(result);
+      }
     };
     getCustomer();
   }, []);
 
-  console.log(router);
+
 
   return (
     <View
@@ -151,7 +223,7 @@ const CustomerView = () => {
               {router?.text === "Customer" ? "Customer" : "Supplier"}
             </Text>
           </View>
-          <Text style={styles.amount}>$1,500</Text>
+          <Text style={styles.amount}>{currency} {totalGiveAmount?.toLocaleString('en-US')}</Text>
           {collectionDate &&
           collectionDate?.collectionDate &&
           router.text === "Customer" ? (
@@ -198,10 +270,10 @@ const CustomerView = () => {
         <Text
           style={[
             styles.transactionAmount,
-            { color: transaction?.textColor || "black" }, // Default color
+            { color: transaction?.dueAmount ? Colors.red : transaction?.extraAmount ? Colors.red : Colors.green }, // Default color
           ]}
         >{currency}{' '}
-          {transaction?.dueAmount || transaction?.amount || transaction?.extraAmount} {/* Provide a default value */}
+          {(transaction?.dueAmount || transaction?.amount || transaction?.extraAmount)?.toLocaleString('en-US') || '0'} {/* Provide a default value */}
         </Text>
       </View>
     </View>

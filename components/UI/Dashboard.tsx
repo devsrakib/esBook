@@ -39,14 +39,14 @@ const Dashboard = () => {
     {
       text: "Total Cash",
       icon: require("../../assets/images/DMoney.png"),
-      amount: `${cashSell}`,
+      amount: `${cashSell?.toLocaleString('en-US') || '0'}`,
       bg_color: Colors.VeroneseGreen,
       link: '/pages/cashbox/allCustomers'
     },
     {
       text: "Total Expenses",
       icon: require("../../assets/images/DDollar.png"),
-      amount: `${expense}`,
+      amount: `${expense?.toLocaleString('en-US') || '0'}`,
       bg_color: Colors.OrangeRed,
       color: Colors.red,
       link: ''
@@ -86,7 +86,7 @@ const Dashboard = () => {
           <Text style={styles.text}>{item?.text}</Text>
           <Text style={[styles.amount, { color: item?.color }]}>
             {item?.amount ? currency : null}
-            {item?.amount || item?.quantity}
+            {(item?.amount || item?.quantity)}
           </Text>
         </TouchableOpacity>
       );

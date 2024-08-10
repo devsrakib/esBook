@@ -52,7 +52,7 @@ const cashReport = () => {
                   </View>
                 </View>
                 <Text style={styles.amount}>
-                  {currency} {item?.totalCash}
+                  {currency} {item?.totalCash?.toLocaleString("en-US")}
                 </Text>
               </View>
             );

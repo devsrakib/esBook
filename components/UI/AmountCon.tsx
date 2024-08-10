@@ -59,7 +59,7 @@ const AmountCon: React.FC<amountProps> = ({
             You will Receive
           </Text>
           <Text style={[styles.amount, { color: leftAmountTColor }]}>
-            {currency} {receive}
+            {currency} {receive?.toLocaleString('en-US') || '0'}
           </Text>
         </View>
       </View>
@@ -68,7 +68,7 @@ const AmountCon: React.FC<amountProps> = ({
         <View>
           <Text style={styles.text}>You will Give</Text>
           <Text style={styles.amount}>
-            {currency} {cashBuyDue}
+            {currency} {cashBuyDue?.toLocaleString('en-US') || '0'}
           </Text>
         </View>
       </View>

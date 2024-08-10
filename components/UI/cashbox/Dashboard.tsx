@@ -101,6 +101,22 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
   }, [collectedAmount, deposit, cashBuy, withdraw, expense]);
 
   // console.log(sellAmount);
+  useEffect(() => {
+    const resetAtMidnight = () => {
+      const now = new Date();
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        setCurrentAmount(0);
+        setCurrentCash(0);
+        setTodayIReceive(0);
+        setTodayISells(0);
+        setTodayIGave(0);
+      }
+    };
+
+    const intervalId = setInterval(resetAtMidnight, 60000); // Check every minute
+
+    return () => clearInterval(intervalId); // Clean up on unmount
+  }, []);
 
   return (
     <View style={[sharedStyle.grid, { marginTop: 14 }]}>
@@ -110,7 +126,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
             <View style={styles.textCon}>
               <Text style={styles.text1}>{d.text}</Text>
               <Text style={[styles.textAmount, { color: d.textColor }]}>
-                ${d.amount}
+                ${d.amount?.toLocaleString('en-US') || '0'}
               </Text>
             </View>
             <View style={[styles.imgCon, { backgroundColor: d.color }]}>

@@ -20,7 +20,7 @@ const MatchTopSection = ({ amount }: { amount: number }) => {
         <Text style={styles.text}>Current Cash</Text>
         <Text style={styles.amount}>
           {currency}
-          {amount}
+          {amount?.toLocaleString(("en-US"))}
         </Text>
       </View>
       <Link href={{ pathname: "pages/cashbox/cashReport" }} asChild>
