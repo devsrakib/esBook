@@ -15,17 +15,19 @@ import { radius } from "@/constants/sizes";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import Customers from "@/components/UI/shared/Customers";
 import AmountCon from "@/components/UI/AmountCon";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { AntDesign, Feather, FontAwesome5 } from "@expo/vector-icons";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import Empty from "@/components/UI/Empty";
+import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [customers, setCustomers] = useState<any>();
-  const [suppliers, setSuppliers] = useState<any>();
+  const [customers, setCustomers] = useState<any>([]);
+  const [suppliers, setSuppliers] = useState<any>([]);
+  const routerData = useLocalSearchParams();
 
   const db = useSQLiteContext();
   useEffect(() => {
@@ -42,12 +44,32 @@ const Parties = () => {
     console.log("hello");
   };
 
-  console.log(suppliers);
+  
+  
+  useEffect(() => {
+    if (routerData?.text === 'Total Customers') {
+      setActiveTab(0);  // Set to Customer tab
+    } else if (routerData?.text === 'Total Supplier') {
+      setActiveTab(1);  // Set to Supplier tab
+    }
+  }, [routerData?.text]);
+
 
   return (
-    <View style={[styles.container, { paddingBottom: bottom }]}>
+    <View style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}>
+      <Stack.Screen options={{
+        headerShown: false,
+      }}/>
       <View style={styles.topSection}>
         <View style={styles.header}>
+        {routerData?.text && (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => router.back()}
+            >
+              <Feather name="arrow-left" size={24} color={Colors.white} />
+            </TouchableOpacity>
+          )}
           <Text style={styles.headerText}>Parties</Text>
           <View style={styles.customerLengthCon}>
             <Text style={styles.customerLength}>
@@ -222,6 +244,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderBottomWidth: 1,
   },
+  backButton:{
+    width: 30,
+    height: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10
+  }
 });
 
 export default Parties;

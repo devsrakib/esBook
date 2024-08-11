@@ -27,21 +27,21 @@ const Dashboard = () => {
       icon: require("../../assets/images/DUser.png"),
       quantity: customers,
       bg_color: Colors.lavender,
-      link: '/pages/cashbox/allCustomers'
+      link: '/pages/parties/parties'
     },
     {
       text: "Total Supplier",
       icon: require("../../assets/images/DHouse.png"),
       quantity: suppliers,
       bg_color: Colors.purpleHalf,
-      link: '/pages/cashbox/allSuppliers'
+      link: '/pages/parties/parties'
     },
     {
       text: "Total Cash",
       icon: require("../../assets/images/DMoney.png"),
       amount: `${cashSell?.toLocaleString('en-US') || '0'}`,
       bg_color: Colors.VeroneseGreen,
-      link: '/pages/cashbox/allCustomers'
+      link: ''
     },
     {
       text: "Total Expenses",
@@ -92,7 +92,12 @@ const Dashboard = () => {
       );
 
       return item?.link ? (
-        <Link key={index} href={item?.link} asChild>
+        <Link key={index} href={{
+          pathname:item?.link,
+          params: {
+            text: item?.text,
+          }
+          }} asChild>
           {StatusContent}
         </Link>
       ) : (

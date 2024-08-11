@@ -51,8 +51,7 @@ export default function CreateOwnerProfile() {
       </View>
       <ScrollView>
         <View style={styles.bodyContainer}>
-          <TouchableOpacity
-            onPress={() => pickImage()}
+          <View
             style={styles.profileImageContainer}
           >
             {selectedImage ? (
@@ -66,7 +65,7 @@ export default function CreateOwnerProfile() {
                 source={{ uri: "https://via.placeholder.com/100x100" }} // Placeholder image URL
               />
             )}
-            <TouchableOpacity style={styles.cameraIcon}>
+            <TouchableOpacity onPress={() => pickImage()} style={styles.cameraIcon}>
               <Image
                 style={styles.icon}
                 source={{
@@ -74,7 +73,7 @@ export default function CreateOwnerProfile() {
                 }} // Placeholder icon URL
               />
             </TouchableOpacity>
-          </TouchableOpacity>
+          </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Name</Text>
             <TextInput
