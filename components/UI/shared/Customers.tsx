@@ -12,7 +12,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getCashBuyBySupplierId, getCashSellsByCustomerId } from "@/databases/Database";
 import FormatDate from "@/utils/FormatDate";
 
-const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selectedIndex: number}) => {
+const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selectedIndex?: number}) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();

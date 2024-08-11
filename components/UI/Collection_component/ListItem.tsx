@@ -85,6 +85,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
         pathname: "/pages/parties/CustomerView",
         params: {
           id: item?.customerId,
+          text: 'Customer',
         },
       }}
       asChild

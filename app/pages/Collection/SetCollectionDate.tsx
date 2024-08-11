@@ -60,7 +60,6 @@ const SetCollectionDate = () => {
     dueCollection();
   }, []);
 
-  console.log(dueCollection);
 
   return (
     <View

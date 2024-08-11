@@ -37,6 +37,9 @@ const SearchCustomerAndAddCustomer = ({ text }: { text: string }) => {
       <Link
         href={{
           pathname: "/pages/parties/parties",
+          params: {
+            text: "Add Customer",
+          }
         }}
         asChild
       >

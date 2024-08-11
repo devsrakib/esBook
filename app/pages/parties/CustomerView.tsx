@@ -78,6 +78,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import Modal from "react-native-modal";
 import { radius } from "@/constants/sizes";
 import { currency } from "@/global/currency";
+import FormatDate from "@/utils/FormatDate";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -140,7 +141,7 @@ const CustomerView = () => {
         setTotalGiveAmount( gaveLandAmount + customerExtraAmount);
         setLendDataById(lendData.concat(gaveLand));
         setCustomerTransaction(result);
-        SetCollectionDate(collectionReminder);
+        SetCollectionDate(collectionReminder[0]);
 
        
       }
@@ -170,7 +171,7 @@ const CustomerView = () => {
         setSupplier(supplier);
         
       }else if(router?.text === "Customer") {
-        const result = await getCustomerById(db, router?.id);
+        const result = await getCustomerById(db, router?.id || router?.customerId);
         setCustomer(result);
       }
     };
@@ -178,6 +179,8 @@ const CustomerView = () => {
   }, []);
 
 
+console.log(collectionDate);
+console.log(customer);
 
   return (
     <View
@@ -230,7 +233,7 @@ const CustomerView = () => {
             <View style={styles.reminderButton}>
               <Ionicons name="calendar-outline" size={16} color="black" />
               <Text style={styles.reminderText}>
-                {collectionDate?.collectionDate}
+                {FormatDate(collectionDate?.collectionDate)}
               </Text>
             </View>
           ) : (

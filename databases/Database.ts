@@ -147,12 +147,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //   currentDbVersion = 15;
   // }
 
-  if (currentDbVersion < 14) {
-    await db.execAsync(`
-      ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
-     `);
-    currentDbVersion = 13;
-  }
+  // if (currentDbVersion < 14) {
+  //   await db.execAsync(`
+  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
+  //    `);
+  //   currentDbVersion = 13;
+  // }
 
   // if (currentDbVersion < 5) {
   //   await db.execAsync(`
@@ -299,8 +299,8 @@ export const collection_reminder = async (
 
     // Check if a record with the same customerId and collectionDate already exists
     const existingRecord = await db.getFirstAsync(
-      "SELECT * FROM collection_reminder WHERE customerId = ? AND collectionDate = ?",
-      [customerId, collectionDate]
+      "SELECT * FROM collection_reminder WHERE customerId = ?",
+      [customerId]
     );
 
     if (existingRecord) {

@@ -24,7 +24,7 @@ import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [customers, setCustomers] = useState<any>([]);
   const [suppliers, setSuppliers] = useState<any>([]);
   const routerData = useLocalSearchParams();
@@ -47,10 +47,10 @@ const Parties = () => {
   
   
   useEffect(() => {
-    if (routerData?.text === 'Total Customers') {
-      setActiveTab(0);  // Set to Customer tab
+    if (routerData?.text === 'Total Customers' || routerData?.text === 'Add Customer') {
+      setSelectedIndex(0);  // Set to Customer tab
     } else if (routerData?.text === 'Total Supplier') {
-      setActiveTab(1);  // Set to Supplier tab
+      setSelectedIndex(1);  // Set to Supplier tab
     }
   }, [routerData?.text]);
 
@@ -73,7 +73,7 @@ const Parties = () => {
           <Text style={styles.headerText}>Parties</Text>
           <View style={styles.customerLengthCon}>
             <Text style={styles.customerLength}>
-              {activeTab === 0 ? customers?.length : suppliers?.length}
+              {selectedIndex === 0 ? customers?.length : suppliers?.length}
             </Text>
           </View>
         </View>
@@ -83,10 +83,10 @@ const Parties = () => {
               styles.tabs,
               {
                 borderBottomColor:
-                  activeTab === 0 ? Colors.white : "transparent",
+                  selectedIndex === 0 ? Colors.white : "transparent",
               },
             ]}
-            onPress={() => setActiveTab(0)}
+            onPress={() => setSelectedIndex(0)}
           >
             <Text style={styles.navigationText}>Customers</Text>
           </TouchableOpacity>
@@ -95,10 +95,10 @@ const Parties = () => {
               styles.tabs,
               {
                 borderBottomColor:
-                  activeTab === 1 ? Colors.white : "transparent",
+                  selectedIndex === 1 ? Colors.white : "transparent",
               },
             ]}
-            onPress={() => setActiveTab(1)}
+            onPress={() => setSelectedIndex(1)}
           >
             <Text style={styles.navigationText}>Suppliers</Text>
           </TouchableOpacity>
@@ -113,7 +113,7 @@ const Parties = () => {
       </View>
       <View style={styles.bodySection}>
         <FilterAndTextSection />
-        {activeTab === 0 ? (
+        {selectedIndex === 0 ? (
           <>
             {customers?.length === 0 ? (
               <Empty text="No Customer" icon={<FontAwesome5 name="user-alt-slash" size={40} color={Colors.text} />} />
@@ -128,7 +128,7 @@ const Parties = () => {
                   return (
                     <Customers
                       item={item}
-                      onPress={() => handleCustomerData()}
+                      selectedIndex={selectedIndex}
                       text={"Customer"}
                     />
                   );
@@ -151,7 +151,7 @@ const Parties = () => {
                   return (
                     <Customers
                       item={item}
-                      onPress={handleCustomerData}
+                      selectedIndex={selectedIndex}
                       text={"Supplier"}
                     />
                   );
