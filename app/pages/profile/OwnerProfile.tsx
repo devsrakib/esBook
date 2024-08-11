@@ -126,9 +126,10 @@ console.log(getProfileData, "getProfileData");
         { paddingBottom: bottom, paddingTop: top },
       ]}
     >
-      <TouchableOpacity
+     <View style={styles.profileContainer}>
+     <TouchableOpacity
         onPress={() => pickImage()}
-        style={styles.profileContainer}
+        
       >
         {profileData.profilePhoto ? (
           <Image
@@ -141,8 +142,9 @@ console.log(getProfileData, "getProfileData");
             style={styles.profileImage}
           />
         )}
-        <Text style={styles.profileName}>{profileData.name}</Text>
       </TouchableOpacity>
+        <Text style={styles.profileName}>{profileData.name}</Text>
+     </View>
       <View style={styles.infoContainer}>
         {infoData.map((item, index) => (
           <Fragment key={index.toString()}>

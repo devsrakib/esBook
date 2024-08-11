@@ -9,10 +9,10 @@ import { Link } from "expo-router";
 import { currency } from "@/global/currency";
 import { useNavigation } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCashSellsByCustomerId } from "@/databases/Database";
+import { getCashBuyBySupplierId, getCashSellsByCustomerId } from "@/databases/Database";
 import FormatDate from "@/utils/FormatDate";
 
-const Customers = ({ item, text }: any) => {
+const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selectedIndex: number}) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
@@ -28,13 +28,17 @@ const Customers = ({ item, text }: any) => {
 
   useEffect(() => {
     const getTotalDue = async () => {
-      const result = (await getCashSellsByCustomerId(db, item?.id)).filter(
-        (item: any) => item?.dueAmount > 0
-      );
-      setTotalDue(result);
-    };
+     if(text === 'Supplier'){
+      
+       const totalDue = await getCashBuyBySupplierId(db, item?.id);
+       setTotalDue(totalDue);
+      }else{
+       const totalDue = await getCashSellsByCustomerId(db, item?.id);
+       setTotalDue(totalDue);
+     }
+    }
     getTotalDue();
-  }, []);
+  }, [selectedIndex]);
 
   const due = totalDue?.reduce(
     (sum: number, record: any) => sum + record?.dueAmount,

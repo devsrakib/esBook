@@ -147,12 +147,12 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //   currentDbVersion = 15;
   // }
 
-  // if (currentDbVersion < 14) {
-  //   await db.execAsync(`
-  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
-  //    `);
-  //   currentDbVersion = 13;
-  // }
+  if (currentDbVersion < 14) {
+    await db.execAsync(`
+      ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
+     `);
+    currentDbVersion = 13;
+  }
 
   // if (currentDbVersion < 5) {
   //   await db.execAsync(`
@@ -296,15 +296,44 @@ export const collection_reminder = async (
 ) => {
   try {
     const timestamp = createdAt || new Date().toISOString();
+
+    // Check if a record with the same customerId and collectionDate already exists
+    const existingRecord = await db.getFirstAsync(
+      "SELECT * FROM collection_reminder WHERE customerId = ? AND collectionDate = ?",
+      [customerId, collectionDate]
+    );
+
+    if (existingRecord) {
+      console.log("Record already exists, skipping insertion.");
+      return { success: false, message: "Record already exists" };
+    }
+
+    // Insert the new record
     await db.runAsync(
       "INSERT INTO collection_reminder (amount, customerId, createdAt, collectionDate) VALUES (?, ?, ?, ?)",
       [amount, customerId, timestamp, collectionDate]
     );
-    console.log("collection reminder created successfully");
-  } catch (error) {
-    console.error("Error creating collection_reminder:", error);
+
+    console.log("Collection reminder created successfully");
+    return { success: true };
+  } catch (error:any) {
+    // Log the error with additional context
+    console.error("Error creating collection_reminder:", {
+      message: error.message,
+      stack: error.stack,
+    });
+
+    // Handle specific errors differently
+    if (error.message.includes("SQLITE_CONSTRAINT")) {
+      return { success: false, message: "Database constraint error" };
+    } else if (error.message.includes("network")) {
+      return { success: false, message: "Network issue" };
+    } else {
+      return { success: false, message: "Unexpected error occurred" };
+    }
   }
 };
+
 
 export const getCollectionReminderByCustomerId = async (
   db: SQLiteDatabase,

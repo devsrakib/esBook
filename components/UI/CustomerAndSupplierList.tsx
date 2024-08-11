@@ -116,7 +116,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
          { customer?.length === 0 ? <Empty text="No customer" icon={<FontAwesome5 name='user-alt-slash' size={40} color={Colors.text} />} /> :<FlatList
           data={customer}
           renderItem={({ item }) => {
-            return <Customers item={item} text={"Customer"} />;
+            return <Customers item={item} text={"Customer"} selectedIndex={selectedIndex} />;
           }}
         />}
        </View>
@@ -126,7 +126,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
        {supplier?.length === 0 ? <Empty text="No customer" icon={<FontAwesome5 name='user-alt-slash' size={40} color={Colors.text} />} /> : <FlatList
           data={supplier}
           renderItem={({ item }) => {
-            return <Customers item={item} text={"Supplier"} />;
+            return <Customers item={item} text={"Supplier"}  selectedIndex={selectedIndex}/>;
           }}
           />}
           </View>

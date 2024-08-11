@@ -25,7 +25,7 @@ const UserViewHome = () => {
       {/* <Image style={styles.userAvatar} /> */}
       <View style={styles.avatarContainer}>
         {data?.profilePhoto ? (
-          <Image />
+          <Image source={{ uri: data?.profilePhoto }} style={styles.userAvatar} />
         ) : (
           <Text style={styles.placeholder}>{data?.name?.slice(0, 1)}</Text>
         )}
@@ -58,8 +58,10 @@ const styles = StyleSheet.create({
     height: 44,
   },
   userAvatar: {
-    width: 36,
-    height: 36,
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
+    
   },
   textContainer: {
     flex: 1,

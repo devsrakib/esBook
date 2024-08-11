@@ -3,7 +3,7 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ToastAndroid } from "react-native";
 import Modal from "react-native-modal";
 import Button from "../Button";
 import { collection_reminder, getCustomerById } from "@/databases/Database";
@@ -20,7 +20,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date());
   const [customer, setCustomer] = useState<any>();
-  const [currentDate, setCurrentDate] = useState<string>("");
+  const [error, setError] = useState<string | undefined>("");
   const [show, setShow] = useState<boolean>(false);
   const db = useSQLiteContext();
 
@@ -42,38 +42,42 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     }
   }, [db, item?.customerId]);
 
-  // const handleSave = async () => {
-  //   const reminderData: any = {
-  //     customerId: String(item?.customerId),
-  //     collectionDate: date,
-  //     amount: item?.dueAmount,
-  //   };
-  //   await collection_reminder(db, reminderData);
-  //   setModalVisible(false);
-  //   console.log(reminderData, ":::::::::");
-  // };
-  // handleSave();
-
   const handleDateChange = async (
     event: DateTimePickerEvent,
     selectedDate?: Date
   ) => {
     const currentDate = selectedDate || date;
+    console.log(currentDate);
+    
     setShow(false);
     setDate(currentDate);
 
     const reminderData: any = {
       customerId: String(item?.customerId),
-      collectionDate: currentDate,
       amount: item?.dueAmount,
+      collectionDate: String(currentDate),
     };
-    await collection_reminder(db, reminderData);
+   const result = await collection_reminder(db, reminderData);
     setModalVisible(false);
-    
+    setError(result?.message)
     console.log(reminderData, "::::::::");
+    console.log(result, ":::: result ::::");
   };
 
   
+  const showToastWithGravity = () => {
+    ToastAndroid.showWithGravity(
+      `${error}`,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
+  };
+
+  useEffect(() => {
+    if (error) {
+      showToastWithGravity();
+    }
+  }, [error]);
 
   return (
     <Link
@@ -112,7 +116,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
             {text === "date" ? (
               <>
                 <AntDesign name="checkcircle" size={12} color={Colors.green} />
-                <Text style={styles.date}> Added {"14/07/2024"}</Text>
+                <Text style={styles.date}> Added {FormatDate(item?.collectionDate)}</Text>
               </>
             ) : (
               <TouchableOpacity
