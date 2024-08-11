@@ -14,7 +14,7 @@ const Feature = ({ data }: any) => {
     <Fragment>
       <Link
         href={{
-          pathname: `${"/pages/cashbox/details"}`,
+          pathname: `${data?.link ? data?.link: "/pages/cashbox/details"}`,
           params: { text: text },
         }}
         asChild

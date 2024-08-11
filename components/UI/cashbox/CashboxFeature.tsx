@@ -45,6 +45,7 @@ const CashboxFeature = () => {
       amount: totalDue,
       color: Colors.OrangeRed,
       textColor: Colors.red,
+      link: "/pages/cashbox/dueReport",
     },
     {
       icon: require("../../../assets/images/expense.png"),

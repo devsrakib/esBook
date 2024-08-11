@@ -19,7 +19,7 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
     <View style={[styles.container, { height }]}>
       <GoBack color={Colors.white} />
       <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
-      {title !== "Report" ? (
+      {title !== "Report" || title !== "Due" ? (
         <View style={styles.reportCon}>
           <MaterialCommunityIcons
             name="calendar-text-outline"

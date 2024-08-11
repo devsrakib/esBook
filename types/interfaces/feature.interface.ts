@@ -6,4 +6,5 @@ export interface IFeature {
   text: string;
   color: string;
   textColor: string;
+  link?: string;
 }

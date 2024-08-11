@@ -2,8 +2,9 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors";
 import { FontAwesome5 } from "@expo/vector-icons";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const EmptyUser = ({ text }: { text: string }) => {
+const Empty = ({ text, icon }: { text: string, icon: any }) => {
   return (
     <View
       style={{
@@ -14,10 +15,10 @@ const EmptyUser = ({ text }: { text: string }) => {
         gap: 18,
       }}
     >
-      <FontAwesome5 name="user-alt-slash" size={60} color={Colors.lavender} />
+{icon}
       <Text style={{ fontSize: 20, color: Colors.text }}>{text}</Text>
     </View>
   );
 };
 
-export default EmptyUser;
+export default Empty;

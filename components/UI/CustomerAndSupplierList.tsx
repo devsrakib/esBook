@@ -6,10 +6,10 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
-import { Fontisto } from "@expo/vector-icons";
+import { FontAwesome5, Fontisto } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import Divider from "./Divider";
@@ -19,6 +19,7 @@ import Filter from "./parties/filter";
 import Customers from "./shared/Customers";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
+import Empty from "./Empty";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
 interface propsTypes {
@@ -108,21 +109,30 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
             </Link>
           </View>
         </View>
+       {
+        <Fragment>
         {selectedIndex === 0 ? (
-          <FlatList
-            data={customer}
-            renderItem={({ item }) => {
-              return <Customers item={item} text={"Customer"} />;
-            }}
-          />
-        ) : (
-          <FlatList
-            data={supplier}
-            renderItem={({ item }) => {
-              return <Customers item={item} text={"Supplier"} />;
-            }}
-          />
-        )}
+       <View style={{height: 400}}>
+         { customer?.length === 0 ? <Empty text="No customer" icon={<FontAwesome5 name='user-alt-slash' size={40} color={Colors.text} />} /> :<FlatList
+          data={customer}
+          renderItem={({ item }) => {
+            return <Customers item={item} text={"Customer"} />;
+          }}
+        />}
+       </View>
+      ) : (
+        <View style={{height: 400}}>
+
+       {supplier?.length === 0 ? <Empty text="No customer" icon={<FontAwesome5 name='user-alt-slash' size={40} color={Colors.text} />} /> : <FlatList
+          data={supplier}
+          renderItem={({ item }) => {
+            return <Customers item={item} text={"Supplier"} />;
+          }}
+          />}
+          </View>
+      )}
+      </Fragment>
+       }
       </View>
     </View>
   );

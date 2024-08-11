@@ -121,11 +121,8 @@ const page = () => {
       handleDeposit();
     } else if (route?.text === "Cash buy") {
       handleCashBuy();
-      console.log(transactionData);
     } else if (route?.text === "Due") {
       handleDue();
-      console.log("hello due");
-      console.log(transactionData);
     } else {
       handleWithdraw();
     }

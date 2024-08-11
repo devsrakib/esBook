@@ -9,6 +9,8 @@ import ReportCart from "@/components/UI/cashbox/ReportCart";
 import { getCash_buy, getCash_sell, getDeposit, getExpense } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import NonRelationReportCart from "@/components/UI/cashbox/nonRelationalReportCart";
+import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import Empty from "@/components/UI/Empty";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -64,7 +66,8 @@ const Page = () => {
           />
         </View>
         <View style={{ flex: 1 }}>
-          <FlatList
+        {/* expenseReport?.length === 0 || depositedReport?.length === 0 || withdrawReport?.length === 0 || cashSellReport?.length === 0 || cashBuyReport?.length === 0 ? <Empty text={'No Reports Available'} icon={<MaterialIcons name="hourglass-empty" size={60} color={Colors.text} />}/> : */}
+          {<FlatList
             contentContainerStyle={{
               gap: 15,
               paddingTop: 20,
@@ -100,7 +103,7 @@ const Page = () => {
                 </Fragment>
               );
             }}
-          />
+          />}
         </View>
       </View>
     </View>

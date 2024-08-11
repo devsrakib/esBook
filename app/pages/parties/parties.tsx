@@ -15,11 +15,11 @@ import { radius } from "@/constants/sizes";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import Customers from "@/components/UI/shared/Customers";
 import AmountCon from "@/components/UI/AmountCon";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers, getSuppliers } from "@/databases/Database";
-import EmptyUser from "@/components/UI/emptyUser";
+import Empty from "@/components/UI/Empty";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -94,7 +94,7 @@ const Parties = () => {
         {activeTab === 0 ? (
           <>
             {customers?.length === 0 ? (
-              <EmptyUser text="No Customer" />
+              <Empty text="No Customer" icon={<FontAwesome5 name="user-alt-slash" size={40} color={Colors.text} />} />
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -117,7 +117,7 @@ const Parties = () => {
         ) : (
           <>
             {suppliers?.length === 0 ? (
-              <EmptyUser text="No Supplier" />
+              <Empty text="No Supplier" icon={<FontAwesome5 name="user-alt-slash" size={40} color={Colors.text} />} />
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
