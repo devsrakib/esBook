@@ -100,7 +100,7 @@ const ReportCart = ({ item, text }: any) => {
           </Link>
         ) : (
           <Text style={styles.amount}>
-            {currency}
+            {currency}{" "}
             {text === "Due" && item?.dueAmount > 0
               ? item?.dueAmount
               : text === "cash buy"
@@ -138,6 +138,7 @@ const ReportCart = ({ item, text }: any) => {
                 fontSize: Fonts.medium,
               }}
             >
+              {currency}{" "}
               {text === "Due" && item?.dueAmount > 0
                 ? item?.dueAmount
                 : text === "cash buy"

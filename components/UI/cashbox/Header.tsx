@@ -19,7 +19,14 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
     <View style={[styles.container, { height }]}>
       <GoBack color={Colors.white} />
       <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
-      {title !== "Report" || title !== "Due" ? (
+      {title === "Report" || title === "Due" ? (
+        <DatePicker
+          background={Colors.white}
+          iconSite="right"
+          iconColor={Colors.text}
+          iconSize={16}
+        />
+      ) : (
         <View style={styles.reportCon}>
           <MaterialCommunityIcons
             name="calendar-text-outline"
@@ -35,13 +42,6 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
             <Text style={styles.reportText}>Report</Text>
           </Link>
         </View>
-      ) : (
-        <DatePicker
-          background={Colors.white}
-          iconSite="right"
-          iconColor={Colors.text}
-          iconSize={16}
-        />
       )}
     </View>
   );

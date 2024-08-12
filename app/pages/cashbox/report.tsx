@@ -53,6 +53,23 @@ const Page = () => {
 
   console.log(dueReport?.length);
 
+  const currentData =
+    selectedChip === "Expenses"
+      ? expenseReport
+      : selectedChip === "Deposited"
+      ? depositedReport
+      : selectedChip === "Withdraw"
+      ? withdrawReport
+      : selectedChip === "Cash Sell"
+      ? cashSellReport
+      : selectedChip === "Due"
+      ? dueReport
+      : selectedChip === "Cash buy" && cashBuyReport;
+
+  // Check if current data is empty
+  const isEmpty = currentData?.length === 0;
+  console.log(isEmpty, ":::::::::   ;;;;;;");
+
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -73,26 +90,25 @@ const Page = () => {
         </View>
         <View style={{ flex: 1 }}>
           {/* expenseReport?.length === 0 || depositedReport?.length === 0 || withdrawReport?.length === 0 || cashSellReport?.length === 0 || cashBuyReport?.length === 0 ? <Empty text={'No Reports Available'} icon={<MaterialIcons name="hourglass-empty" size={60} color={Colors.text} />}/> : */}
-          {
+          {isEmpty ? (
+            <Empty
+              text={"No Reports Available"}
+              icon={
+                <MaterialIcons
+                  name="hourglass-empty"
+                  size={60}
+                  color={Colors.text}
+                />
+              }
+            />
+          ) : (
             <FlatList
               contentContainerStyle={{
                 gap: 15,
                 paddingTop: selectedChip === "Due" ? 10 : 20,
                 paddingBottom: 30,
               }}
-              data={
-                selectedChip === "Expenses"
-                  ? expenseReport
-                  : selectedChip === "Deposited"
-                  ? depositedReport
-                  : selectedChip === "Withdraw"
-                  ? withdrawReport
-                  : selectedChip === "Cash Sell"
-                  ? cashSellReport
-                  : selectedChip === "Due"
-                  ? dueReport
-                  : selectedChip === "Cash buy" && cashBuyReport
-              }
+              data={currentData}
               renderItem={({ item }) => {
                 return (
                   <Fragment>
@@ -116,7 +132,7 @@ const Page = () => {
                 );
               }}
             />
-          }
+          )}
         </View>
       </View>
     </View>

@@ -25,7 +25,7 @@ const Chip = ({
 }: {
   setSelectedChip: Function;
   title: any;
-  selectedChip: string;
+  selectedChip: any;
 }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
