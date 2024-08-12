@@ -228,7 +228,6 @@ export const cash_sell = async (
   }
 };
 
-
 //=================  ====================
 //=================  ====================
 
@@ -246,8 +245,8 @@ export const due_collection = async (
       [customerId, collectedAmount, timestamp, description]
     );
     console.log("due collection created successfully");
-    return { success: false, message: 'due collection created successfully' };
-  } catch (error:any) {
+    return { success: false, message: "due collection created successfully" };
+  } catch (error: any) {
     console.error("Error creating cash_sell:", error);
     return { success: false, message: error.message };
   }
@@ -285,8 +284,8 @@ export const customer_gave = async (
       [customerId, timestamp, amount, description]
     );
     console.log(" customer gave created successfully");
-    return { success: false, message: 'customer gave created successfully' };
-  } catch (error:any) {
+    return { success: false, message: "customer gave created successfully" };
+  } catch (error: any) {
     console.error("Error creating customer gave:", error);
     return { success: false, message: error.message };
   }
@@ -324,7 +323,7 @@ export const collection_reminder = async (
 
     console.log("Collection reminder created successfully");
     return { success: true };
-  } catch (error:any) {
+  } catch (error: any) {
     // Log the error with additional context
     console.error("Error creating collection_reminder:", {
       message: error.message,
@@ -341,7 +340,6 @@ export const collection_reminder = async (
     }
   }
 };
-
 
 export const getCollectionReminderByCustomerId = async (
   db: SQLiteDatabase,
@@ -406,12 +404,53 @@ export const updateDueAmount = async (
     return { success: true };
   } catch (error) {
     console.error("Error updating due amount and collected amount:", error);
-    return { success: false, message: "Error updating due amount and collected amount" };
+    return {
+      success: false,
+      message: "Error updating due amount and collected amount",
+    };
   }
 };
+export const updateSupplierDueAmount = async (
+  db: SQLiteDatabase,
+  {
+    id,
+    supplierId,
+    dueAmount,
+  }: { id: number; supplierId: number; dueAmount: number }
+) => {
+  try {
+    if (id === undefined || supplierId === undefined) {
+      throw new Error("ID or customerId is undefined");
+    }
 
+    // Retrieve the current collectedAmount and dueAmount
+    const result: any = await db.getAllAsync(
+      "SELECT dueAmount FROM cash_buy WHERE id = ? AND supplierId = ?",
+      [id, supplierId]
+    );
 
+    if (!result || result.length === 0) {
+      throw new Error("Record not found");
+    }
 
+    // Update the dueAmount and collectedAmount
+    await db.runAsync(
+      "UPDATE cash_sell SET dueAmount = ?, WHERE id = ? AND supplierId = ?",
+      [dueAmount, id, supplierId]
+    );
+
+    console.log(
+      `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${supplierId}`
+    );
+    return { success: true, message: "Due amount updated successfully" };
+  } catch (error) {
+    console.error("Error updating due amount and collected amount:", error);
+    return {
+      success: false,
+      message: "Error updating due amount and collected amount",
+    };
+  }
+};
 
 //=================  ====================
 //=================  ====================
@@ -445,7 +484,10 @@ export const getLendById = async (db: SQLiteDatabase, customerId: number) => {
     [customerId]
   );
 };
-export const getGaveLendById = async (db: SQLiteDatabase, customerId: number) => {
+export const getGaveLendById = async (
+  db: SQLiteDatabase,
+  customerId: number
+) => {
   return await db.getAllAsync(
     "SELECT * FROM customer_gave WHERE customerId = ?",
     [customerId]
@@ -533,7 +575,6 @@ export const deleteSupplierById = async (
     return { success: false, message: "Error deleting supplier" };
   }
 };
-
 
 //=================  ====================
 //=================  ====================

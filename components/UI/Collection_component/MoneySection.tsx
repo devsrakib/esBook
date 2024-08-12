@@ -32,7 +32,6 @@ const MoneySection = () => {
       0
     );
     setTotalAmount(total);
-    console.log(total);
   }, [amount]);
 
   return (

@@ -6,11 +6,17 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Chip from "@/components/UI/cashbox/Chip";
 import ReportCart from "@/components/UI/cashbox/ReportCart";
-import { getCash_buy, getCash_sell, getDeposit, getExpense } from "@/databases/Database";
+import {
+  getCash_buy,
+  getCash_sell,
+  getDeposit,
+  getExpense,
+} from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import NonRelationReportCart from "@/components/UI/cashbox/nonRelationalReportCart";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import Empty from "@/components/UI/Empty";
+import DueReport from "./dueReport";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -66,44 +72,51 @@ const Page = () => {
           />
         </View>
         <View style={{ flex: 1 }}>
-        {/* expenseReport?.length === 0 || depositedReport?.length === 0 || withdrawReport?.length === 0 || cashSellReport?.length === 0 || cashBuyReport?.length === 0 ? <Empty text={'No Reports Available'} icon={<MaterialIcons name="hourglass-empty" size={60} color={Colors.text} />}/> : */}
-          {<FlatList
-            contentContainerStyle={{
-              gap: 15,
-              paddingTop: 20,
-              paddingBottom: 30,
-            }}
-            data={
-              selectedChip === "Expenses"
-                ? expenseReport
-                : selectedChip === "Deposited"
-                ? depositedReport
-                : selectedChip === "Withdraw"
-                ? withdrawReport
-                : selectedChip === "Cash Sell"
-                ? cashSellReport
-                : selectedChip === "Due" ? dueReport : selectedChip === 'Cash buy' && cashBuyReport
-             }
-            renderItem={({ item }) => {
-              return (
-                <Fragment>
-                  {selectedChip === "Expenses" ? (
-                    <NonRelationReportCart item={item} text="Expense" />
-                  ) : selectedChip === "Deposited" ? (
-                    <NonRelationReportCart item={item} text="Deposited" />
-                  ) : selectedChip === "Withdraw" ? (
-                    <NonRelationReportCart item={item} text="Withdraw" />
-                  ) : selectedChip === "Cash Sell" ? (
-                    <ReportCart item={item} text="cash sell" />
-                  ) : selectedChip === 'Cash buy' ? <ReportCart item={item} text='cash buy'/> : (
-                    selectedChip === "Due" && (
-                      <ReportCart item={item} text="Due" />
-                    )
-                  )}
-                </Fragment>
-              );
-            }}
-          />}
+          {/* expenseReport?.length === 0 || depositedReport?.length === 0 || withdrawReport?.length === 0 || cashSellReport?.length === 0 || cashBuyReport?.length === 0 ? <Empty text={'No Reports Available'} icon={<MaterialIcons name="hourglass-empty" size={60} color={Colors.text} />}/> : */}
+          {
+            <FlatList
+              contentContainerStyle={{
+                gap: 15,
+                paddingTop: selectedChip === "Due" ? 10 : 20,
+                paddingBottom: 30,
+              }}
+              data={
+                selectedChip === "Expenses"
+                  ? expenseReport
+                  : selectedChip === "Deposited"
+                  ? depositedReport
+                  : selectedChip === "Withdraw"
+                  ? withdrawReport
+                  : selectedChip === "Cash Sell"
+                  ? cashSellReport
+                  : selectedChip === "Due"
+                  ? dueReport
+                  : selectedChip === "Cash buy" && cashBuyReport
+              }
+              renderItem={({ item }) => {
+                return (
+                  <Fragment>
+                    {selectedChip === "Expenses" ? (
+                      <NonRelationReportCart item={item} text="Expense" />
+                    ) : selectedChip === "Deposited" ? (
+                      <NonRelationReportCart item={item} text="Deposited" />
+                    ) : selectedChip === "Withdraw" ? (
+                      <NonRelationReportCart item={item} text="Withdraw" />
+                    ) : selectedChip === "Cash Sell" ? (
+                      <ReportCart item={item} text="cash sell" />
+                    ) : selectedChip === "Cash buy" ? (
+                      <ReportCart item={item} text="cash buy" />
+                    ) : (
+                      selectedChip === "Due" && (
+                        // <ReportCart item={item} text="Due" />
+                        <DueReport where="report" />
+                      )
+                    )}
+                  </Fragment>
+                );
+              }}
+            />
+          }
         </View>
       </View>
     </View>
