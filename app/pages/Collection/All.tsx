@@ -11,6 +11,7 @@ const All = () => {
   useEffect(() => {
     async function collectionReminder() {
       const result = await getCollectionReminder(db);
+
       setReminder(result);
     }
     collectionReminder();

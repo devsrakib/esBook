@@ -183,6 +183,7 @@ export const createCustomers = async (
     );
     return { success: true, message: "Customer Created Successfully" };
   } catch (error: any) {
+    console.error("Error creating customer:", error.message);
     return { success: false, message: error.message };
   }
 };
@@ -220,10 +221,13 @@ export const cash_sell = async (
       ]
     );
     console.log("cash_sell created successfully");
-  } catch (error) {
-    console.error("Error creating cash_sell:", error);
+    return { success: true, message: "cash_sell created successfully" };
+  } catch (error: any) {
+    console.error("Error creating cash_sell:", error.message);
+    return { success: false, message: error.message };
   }
 };
+
 
 //=================  ====================
 //=================  ====================
@@ -242,8 +246,10 @@ export const due_collection = async (
       [customerId, collectedAmount, timestamp, description]
     );
     console.log("due collection created successfully");
-  } catch (error) {
+    return { success: false, message: 'due collection created successfully' };
+  } catch (error:any) {
     console.error("Error creating cash_sell:", error);
+    return { success: false, message: error.message };
   }
 };
 
@@ -279,8 +285,10 @@ export const customer_gave = async (
       [customerId, timestamp, amount, description]
     );
     console.log(" customer gave created successfully");
-  } catch (error) {
+    return { success: false, message: 'customer gave created successfully' };
+  } catch (error:any) {
     console.error("Error creating customer gave:", error);
+    return { success: false, message: error.message };
   }
 };
 
@@ -395,8 +403,10 @@ export const updateDueAmount = async (
     console.log(
       `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${customerId}`
     );
+    return { success: true };
   } catch (error) {
     console.error("Error updating due amount and collected amount:", error);
+    return { success: false, message: "Error updating due amount and collected amount" };
   }
 };
 
@@ -503,8 +513,10 @@ export const createSuppliers = async (
       [profilePhoto, name, email, phoneNumber, address, timestamp]
     );
     console.log("Supplier created successfully");
+    return { success: true, message: "Supplier created successfully" };
   } catch (error) {
     console.error("Error creating supplier:", error);
+    return { success: false, message: "Error creating supplier" };
   }
 };
 
@@ -515,8 +527,10 @@ export const deleteSupplierById = async (
   try {
     await db.runAsync("DELETE FROM supplier WHERE id = ?", [userId]);
     console.log(`User with ID ${userId} deleted successfully`);
+    return { success: true, message: "Supplier deleted successfully" };
   } catch (error) {
     console.error("Error deleting user:", error);
+    return { success: false, message: "Error deleting supplier" };
   }
 };
 
@@ -554,8 +568,10 @@ export const cash_buy = async (
       ]
     );
     console.log("cash buy created successfully");
+    return { success: true, message: "cash buy created successfully" };
   } catch (error) {
     console.error("Error creating cash buy:", error);
+    return { success: false, message: "Error creating cash buy" };
   }
 };
 
@@ -602,8 +618,10 @@ export const supplier_lend = async (
       [timestamp, amount, description]
     );
     console.log(" supplier lend created successfully");
+    return { success: true, message: "supplier lend created successfully" };
   } catch (error) {
     console.error("Error creating cash_sell:", error);
+    return { success: false, message: "Error creating cash_sell" };
   }
 };
 
@@ -647,7 +665,7 @@ export const owner_profile = async (
     );
     return { success: true, message: "owner profile Created Successfully" };
   } catch (error) {
-    return { success: false, message: error };
+    return { success: false, message: "Error creating owner profile" };
   }
 };
 
@@ -672,8 +690,10 @@ export const update_owner_profile = async (
       [profilePhoto, name, email, address, phoneNumber, taxNumber, id]
     );
     console.log(`Owner profile updated successfully for ID ${id}`);
+    return { success: true, message: "owner profile updated successfully" };
   } catch (error) {
     console.error("Error updating owner profile:", error);
+    return { success: false, message: "Error updating owner profile" };
   }
 };
 
@@ -705,8 +725,10 @@ export const cash_report = async (
       [timestamp, totalCash]
     );
     console.log("cash report created successfully");
+    return { success: true, message: "cash report created successfully" };
   } catch (error) {
     console.error("Error creating cash report:", error);
+    return { success: false, message: "Error creating cash report" };
   }
 };
 
@@ -728,8 +750,10 @@ export const expense = async (
       [amount, timestamp, description]
     );
     console.log("expense created successfully");
+    return { success: true, message: "expense created successfully" };
   } catch (error) {
     console.error("Error creating expense:", error);
+    return { success: false, message: "Error creating expense" };
   }
 };
 
@@ -751,8 +775,10 @@ export const deposit = async (
       [amount, timestamp, description]
     );
     console.log("deposit created successfully");
+    return { success: true, message: "deposit created successfully" };
   } catch (error) {
     console.error("Error creating deposit:", error);
+    return { success: false, message: "Error creating deposit" };
   }
 };
 
@@ -774,8 +800,10 @@ export const withdraw = async (
       [amount, timestamp, description]
     );
     console.log("withdraw created successfully");
+    return { success: true, message: "withdraw created successfully" };
   } catch (error) {
     console.error("Error creating withdraw:", error);
+    return { success: false, message: "Error creating withdraw" };
   }
 };
 

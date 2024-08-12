@@ -14,5 +14,25 @@
         "Ionicons",
         "Mehedi",
         "Nazrul"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#188def",
+        "activityBar.background": "#188def",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#fbc3e2",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#188def",
+        "statusBar.background": "#0e72c6",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#188def",
+        "statusBarItem.remoteBackground": "#0e72c6",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#0e72c6",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#0e72c699",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "(rgb(14,114,198))"
 }

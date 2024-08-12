@@ -1,10 +1,12 @@
 // TabComponent.js
 import { Colors } from '@/constants/Colors';
-import React, { useState } from 'react';
+import { getCollectionReminder } from '@/databases/Database';
+import { useSQLiteContext } from 'expo-sqlite';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const TabComponent = ({ tabs, setActiveTab, activeTab }:{tabs: string[], setActiveTab: Function,activeTab: number}) => {
-  
+ 
 
   return (
     <View style={styles.container}>

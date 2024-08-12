@@ -1,14 +1,40 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import { radius } from "@/constants/sizes";
-import { Colors } from "@/constants/Colors";
-import { Fonts } from "@/constants/Fonts";
-import Divider from "../Divider";
-import { Feather } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import { getCollectionReminder } from "@/databases/Database";
 import { currency } from "@/global/currency";
+import { useSQLiteContext } from "expo-sqlite";
+import { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Divider from "../Divider";
 import { Link } from "expo-router";
+import { AntDesign, Feather } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
+import { radius } from "@/constants/sizes";
+import { Fonts } from "@/constants/Fonts";
+
 const MoneySection = () => {
+  const [amount, setAmount] = useState<any>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    async function getAmount() {
+      if (db) {
+        // Ensure db is available
+        const result = await getCollectionReminder(db);
+        setAmount(result);
+      }
+    }
+    getAmount();
+  }, []);
+
+  useEffect(() => {
+    const total = amount?.reduce(
+      (sum: number, record: any) => sum + record?.amount,
+      0
+    );
+    setTotalAmount(total);
+    console.log(total);
+  }, [amount]);
+
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
@@ -21,22 +47,26 @@ const MoneySection = () => {
         <View style={styles.textCon}>
           <Text style={styles.text1}>Collect Money 3x Faster</Text>
           <Text style={styles.textMoney}>
-            {currency}234,500
+            {currency}
+            {totalAmount}
             <Text style={styles.text2}> is with 20 Customer Set Date Now</Text>
           </Text>
         </View>
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
-     <Link href={{
-      pathname: '/pages/Collection/SetCollectionDate',
-      params: {}
-     }} asChild>
-     <TouchableOpacity style={styles.calender}>
-        <Feather name="calendar" size={24} color={Colors.mainColor} />
-        <Text style={styles.setText}>Set Collection Data</Text>
-        <AntDesign name="right" size={18} color={Colors.mainColor} />
-      </TouchableOpacity>
-     </Link>
+      <Link
+        href={{
+          pathname: "/pages/Collection/SetCollectionDate",
+          params: {},
+        }}
+        asChild
+      >
+        <TouchableOpacity style={styles.calender}>
+          <Feather name="calendar" size={24} color={Colors.mainColor} />
+          <Text style={styles.setText}>Set Collection Data</Text>
+          <AntDesign name="right" size={18} color={Colors.mainColor} />
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 };
