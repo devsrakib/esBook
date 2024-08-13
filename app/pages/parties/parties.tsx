@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Image,
   FlatList,
+  TextInput,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -21,10 +22,15 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import Empty from "@/components/UI/Empty";
 import Animated, {
+  Easing,
+  FadeInDown,
   FadeInLeft,
   FadeInRight,
   FadeInUp,
   FlipInXUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 const Parties = () => {
@@ -67,7 +73,7 @@ const Parties = () => {
         }}
       />
       <View style={[styles.topSection]}>
-        <View style={styles.header}>
+        <Animated.View style={[styles.header]}>
           {routerData?.text && (
             <TouchableOpacity
               style={styles.backButton}
@@ -96,7 +102,7 @@ const Parties = () => {
               <Fontisto name="search" size={18} color={Colors.white} />
             )}
           </TouchableOpacity>
-        </View>
+        </Animated.View>
         <View style={styles.navigationCon}>
           <TouchableOpacity
             style={[
@@ -132,10 +138,10 @@ const Parties = () => {
         />
 
         {isOpenSearch && (
-          <Animated.View
-            entering={FlipInXUp.delay(50)}
-            style={styles.searchSection}
-          ></Animated.View>
+          <Animated.View entering={FadeInUp} style={styles.searchSection}>
+            <Fontisto name="search" size={18} color={Colors.text} />
+            <TextInput placeholder="Search..." style={styles.input} />
+          </Animated.View>
         )}
       </View>
       <View style={styles.bodySection}>
@@ -311,6 +317,14 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
     marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    gap: 10,
+  },
+  input: {
+    fontSize: Fonts.medium,
+    flex: 1,
   },
 });
 
