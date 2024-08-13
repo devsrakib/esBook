@@ -4,20 +4,42 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
-const SearchCustomerAndAddCustomer = ({ text }: { text: string }) => {
+import { getCustomerById } from "@/databases/Database";
+import { useSQLiteContext } from "expo-sqlite";
+const SearchCustomerAndAddCustomer = ({
+  text,
+  id,
+}: {
+  text: string;
+  id: number;
+}) => {
+  const [customerData, setCustomerData] = useState<any>([]);
+  const db = useSQLiteContext();
   const path =
-    text === "Customer" || text === "Customer"
+    text === "Customer"
       ? "/pages/cashbox/allCustomers"
       : "/pages/cashbox/allSuppliers";
-  console.log(text, ";;;;;;;");
+
+  useEffect(() => {
+    async function getCustomerOrSupplier() {
+      try {
+        const customer = await getCustomerById(db, id);
+        setCustomerData(customer);
+      } catch {}
+    }
+    getCustomerOrSupplier();
+  }, []);
+
+  console.log(customerData, "customerData");
 
   return (
     <View style={styles.container}>
@@ -29,7 +51,11 @@ const SearchCustomerAndAddCustomer = ({ text }: { text: string }) => {
       >
         <TouchableOpacity style={styles.inputContainer}>
           <View style={styles.userIconCon}>
-            <Feather name="user" size={24} color={Colors.text} />
+            {id ? (
+              <Image source={{ uri: customerData?.profilePhoto }} />
+            ) : (
+              <Feather name="user" size={24} color={Colors.text} />
+            )}
           </View>
           <Text style={styles.text}>Select {text}</Text>
         </TouchableOpacity>
@@ -39,7 +65,7 @@ const SearchCustomerAndAddCustomer = ({ text }: { text: string }) => {
           pathname: "/pages/parties/parties",
           params: {
             text: "Add Customer",
-          }
+          },
         }}
         asChild
       >

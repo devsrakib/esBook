@@ -21,13 +21,19 @@ const DetailsPageInput = ({
     }));
   };
 
+  console.log(amount, "amount ::::: ");
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{text} amount</Text>
       <View style={styles.inputCon}>
         <TextInput
           style={styles.input}
-          placeholder={`${text === "Due" && amount ? amount : "0.00"}`}
+          placeholder={`${
+            text === "customer" || (text === "supplier" && amount)
+              ? amount
+              : "0.00"
+          }`}
           keyboardType="numeric"
           onChangeText={(e) => handleChange("sale", e)}
         />

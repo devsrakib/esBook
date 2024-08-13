@@ -135,7 +135,13 @@ const DueReport = ({ where }: { where: string }) => {
                 gap: 10,
                 paddingBottom: 10,
               }}
-              renderItem={({ item }) => <ReportCart item={item} text="Due" />}
+              renderItem={({ item }) => (
+                <ReportCart
+                  item={item}
+                  text="Due"
+                  selectedIndex={selectedIndex}
+                />
+              )}
               keyExtractor={(item) => item.id.toString()}
             />
           )}

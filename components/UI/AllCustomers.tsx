@@ -16,7 +16,7 @@ const AllCustomers = ({ item }: any) => {
   const db = useSQLiteContext();
   useEffect(() => {
     const getTotalDue = async () => {
-      const result = (await getCashSellsByCustomerId(db, item?.id)).filter(
+      const result = (await getCashSellsByCustomerId(db, item?.id))?.filter(
         (item: any) => item?.dueAmount > 0
       );
       setTotalDue(result);

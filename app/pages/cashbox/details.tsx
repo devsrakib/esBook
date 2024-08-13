@@ -4,8 +4,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/cashbox/Header";
@@ -24,7 +25,9 @@ import {
   deposit,
   due_collection,
   expense,
+  getCustomerById,
   updateDueAmount,
+  updateSupplierDueAmount,
   withdraw,
 } from "@/databases/Database";
 import { ensureNonNegative } from "@/utils/ensureNonNegative";
@@ -68,16 +71,23 @@ const page = () => {
       amount: transaction?.sale,
       description: transaction?.description,
     };
-  } else if (route?.text == "Due") {
+  } else if (route?.text == "customer") {
     transactionData = {
       customerId: route?.customerId,
       id: route?.id,
       dueAmount: transaction?.sale,
       description: transaction?.description,
     };
+  } else if (route?.text == "supplier") {
+    transactionData = {
+      supplierId: route?.supplierId,
+      id: route?.id,
+      dueAmount: transaction?.sale,
+      description: transaction?.description,
+    };
   }
 
-  console.log(transactionData, "transaction data");
+  // console.log(transactionData, "transaction data");
 
   const db = useSQLiteContext();
 
@@ -109,6 +119,9 @@ const page = () => {
   const handleDue = async () => {
     await updateDueAmount(db, transactionData);
   };
+  const handleCashBuyDue = async () => {
+    await updateSupplierDueAmount(db, transactionData);
+  };
 
   console.log(route);
 
@@ -121,8 +134,10 @@ const page = () => {
       handleDeposit();
     } else if (route?.text === "Cash buy") {
       handleCashBuy();
-    } else if (route?.text === "Due") {
+    } else if (route?.text === "customer") {
       handleDue();
+    } else if (route?.text === "supplier") {
+      handleCashBuyDue();
     } else {
       handleWithdraw();
     }
@@ -130,7 +145,7 @@ const page = () => {
 
   const customerTextMapping = {
     "Cash Sell": "Customer",
-    "Due": "Customer",
+    Due: "Customer",
     "Cash buy": "Supplier",
   };
 
@@ -149,10 +164,18 @@ const page = () => {
           }}
         />
         <View style={styles.headerSection}>
-          <Header height={70} title={route.text} titleColor={Colors.white} />
+          <Header
+            height={70}
+            title={
+              (route?.text === "customer" || route?.text === "customer") &&
+              `${route?.text === "customer" ? "Customer" : "Supplier"} Due`
+            }
+            titleColor={Colors.white}
+          />
           {shouldRenderComponent && (
             <SearchCustomerAndAddCustomer
               text={customerTextMapping[route?.text]}
+              id={route?.id}
             />
           )}
         </View>
@@ -167,8 +190,8 @@ const page = () => {
         </View>
         <DetailsPageInput
           setTransaction={setTransaction}
-          text={route.text}
-          amount={route.dueAmount}
+          text={route?.text}
+          amount={route?.dueAmount}
         />
       </ScrollView>
       <Button
@@ -202,6 +225,27 @@ const styles = StyleSheet.create({
   dummyText: {
     fontSize: Fonts.regular,
     color: Colors.text,
+  },
+  userDataContainer: {
+    height: 50,
+    borderRadius: radius.regular,
+    width: "90%",
+    flexDirection: "row",
+    backgroundColor: Colors.white,
+    padding: 4,
+  },
+  imageContainer: {
+    width: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.small,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: radius.small,
   },
 });
 

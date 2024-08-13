@@ -13,7 +13,15 @@ import {
 import { Link } from "expo-router";
 import FormatDate from "@/utils/FormatDate";
 
-const ReportCart = ({ item, text }: any) => {
+const ReportCart = ({
+  item,
+  text,
+  selectedIndex = 0,
+}: {
+  item: any;
+  text: string;
+  selectedIndex?: number;
+}) => {
   const [customer, setCustomer] = useState<any>({});
   const [supplier, setSupplier] = useState<any>({});
   const db = useSQLiteContext();
@@ -54,8 +62,6 @@ const ReportCart = ({ item, text }: any) => {
     }
   }, [db, item?.supplierId]);
 
-  console.log(item?.dueAmount, text);
-
   return (
     <View style={styles.container}>
       <View style={styles.textAndTimeCon}>
@@ -86,10 +92,10 @@ const ReportCart = ({ item, text }: any) => {
               pathname: "pages/cashbox/details",
               params: {
                 id: item?.id,
-                text: text,
-                customerId: item?.customerId,
+                text: selectedIndex === 0 ? "customer" : "supplier",
+                [selectedIndex === 0 ? "customerId" : "supplierId"]:
+                  selectedIndex === 0 ? item?.customerId : item?.supplierId,
                 dueAmount: `due ${item?.dueAmount}`,
-                data: "::::::",
               },
             }}
             asChild
