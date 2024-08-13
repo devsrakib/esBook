@@ -34,7 +34,7 @@ const OwnerProfile = () => {
     email: "",
     address: "",
     phoneNumber: "",
-    taxNumber: "",
+    taxNumber: 0,
   });
 
   const db = useSQLiteContext();
@@ -109,15 +109,9 @@ const OwnerProfile = () => {
       label: "Tax Number",
       key: "taxNumber",
     },
-    {
-      icon: <Ionicons name="call-outline" size={18} color="gray" />,
-      label: "Tax Number",
-      key: "taxNumber",
-    },
   ];
 
-console.log(getProfileData, "getProfileData");
-
+  console.log(getProfileData, "getProfileData");
 
   return (
     <ScrollView
@@ -126,36 +120,33 @@ console.log(getProfileData, "getProfileData");
         { paddingBottom: bottom, paddingTop: top },
       ]}
     >
-     <View style={styles.profileContainer}>
-     <TouchableOpacity
-        onPress={() => pickImage()}
-        
-      >
-        {profileData.profilePhoto ? (
-          <Image
-            source={{ uri: profileData.profilePhoto }}
-            style={styles.profileImage}
-          />
-        ) : (
-          <Image
-            source={require("../../../assets/images/placeholder.jpeg")}
-            style={styles.profileImage}
-          />
-        )}
-      </TouchableOpacity>
+      <View style={styles.profileContainer}>
+        <TouchableOpacity onPress={() => pickImage()}>
+          {profileData.profilePhoto ? (
+            <Image
+              source={{ uri: profileData.profilePhoto }}
+              style={styles.profileImage}
+            />
+          ) : (
+            <Image
+              source={require("../../../assets/images/placeholder.jpeg")}
+              style={styles.profileImage}
+            />
+          )}
+        </TouchableOpacity>
         <Text style={styles.profileName}>{profileData.name}</Text>
-     </View>
+      </View>
       <View style={styles.infoContainer}>
         {infoData.map((item, index) => (
           <Fragment key={index.toString()}>
             <View style={styles.infoRow}>
-              <View style={styles.iconCon}>{item?.icon}</View>
+              <View style={styles.iconCon}>{item.icon}</View>
               <View style={styles.infoColumn}>
-                <Text style={styles.label}>{item?.label}</Text>
+                <Text style={styles.label}>{item.label}</Text>
                 <TextInput
                   style={styles.input}
-                  value={profileData[item?.key ]}
-                  onChangeText={(e) => handleInputChange(e, item?.key)}
+                  value={`${profileData[item?.key]}`} // Ensure key matches profileData
+                  onChangeText={(e) => handleInputChange(e, item.key)}
                   onTouchStart={() => setFocusInput(true)}
                 />
               </View>

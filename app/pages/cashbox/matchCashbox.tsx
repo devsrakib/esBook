@@ -195,14 +195,14 @@ const Page = () => {
             >
               <View style={styles.textCon}>
                 <Text style={styles.text2}>Total Cashbox</Text>
-                <Text>
+                <Text adjustsFontSizeToFit>
                   {currency} {inputCash.toFixed(2)}
                 </Text>
               </View>
               <Divider height={1} width={"100%"} aligns={"center"} />
               <View style={styles.textCon}>
                 <Text style={styles.text2}>{label}</Text>
-                <Text>
+                <Text adjustsFontSizeToFit>
                   {currency} {Math.abs(difference).toFixed(2)}
                 </Text>
               </View>

@@ -40,7 +40,7 @@ const AllSuppliers = ({ item }: any) => {
               {item?.createdAt}
             </Text>
           </View>
-          <Text>{currency}23,000</Text>
+          <Text adjustsFontSizeToFit>{currency}23,000</Text>
         </TouchableOpacity>
       </Link>
     </Fragment>

@@ -29,10 +29,6 @@ const AllCustomers = ({ item }: any) => {
     0
   );
 
-  console.log(item);
-
-  console.log(totalCash_buy, "::::::");
-
   return (
     <Fragment>
       <Link
@@ -66,7 +62,7 @@ const AllCustomers = ({ item }: any) => {
               {item?.createdAt}
             </Text>
           </View>
-          <Text>
+          <Text adjustsFontSizeToFit>
             {currency}
             {totalCash_buy}
           </Text>

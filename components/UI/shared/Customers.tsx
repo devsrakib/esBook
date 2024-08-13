@@ -9,15 +9,26 @@ import { Link } from "expo-router";
 import { currency } from "@/global/currency";
 import { useNavigation } from "@react-navigation/native";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCashBuyBySupplierId, getCashSellsByCustomerId } from "@/databases/Database";
+import {
+  getCashBuyBySupplierId,
+  getCashSellsByCustomerId,
+} from "@/databases/Database";
 import FormatDate from "@/utils/FormatDate";
 
-const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selectedIndex?: number}) => {
+const Customers = ({
+  item,
+  text,
+  selectedIndex,
+}: {
+  item: any;
+  text: string;
+  selectedIndex?: number;
+}) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
 
-  const getInitials = (name:string) => {
+  const getInitials = (name: string) => {
     return name
       ?.split(" ")
       .map((word) => word[0])
@@ -25,18 +36,16 @@ const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selec
       .join("");
   };
 
-
   useEffect(() => {
     const getTotalDue = async () => {
-     if(text === 'Supplier'){
-      
-       const totalDue = await getCashBuyBySupplierId(db, item?.id);
-       setTotalDue(totalDue);
-      }else{
-       const totalDue = await getCashSellsByCustomerId(db, item?.id);
-       setTotalDue(totalDue);
-     }
-    }
+      if (text === "Supplier") {
+        const totalDue = await getCashBuyBySupplierId(db, item?.id);
+        setTotalDue(totalDue);
+      } else {
+        const totalDue = await getCashSellsByCustomerId(db, item?.id);
+        setTotalDue(totalDue);
+      }
+    };
     getTotalDue();
   }, [selectedIndex]);
 
@@ -45,26 +54,24 @@ const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selec
     0
   );
 
-  
-  const stringToColor = (str:string) => {
+  const stringToColor = (str: string) => {
     console.log(str);
-    
+
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     console.log(hash);
-    
+
     // Extract RGB components
     const r = (hash >> 16) & 0xff;
     const g = (hash >> 16) & 0xff;
     const b = hash & 0xff;
-    console.log(r,g,b);
-    
+    console.log(r, g, b);
+
     // Return the color with 50% transparency
     return `rgba(${r}, ${g}, ${b}, 0.5)`;
   };
-  
 
   const initials = getInitials(item?.name);
   const backgroundColor = stringToColor(initials);
@@ -84,14 +91,14 @@ const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selec
         asChild
       >
         <TouchableOpacity style={styles.customerDetails}>
-          <View style={[styles.avatar, {backgroundColor: backgroundColor}]}>
+          <View style={[styles.avatar, { backgroundColor: backgroundColor }]}>
             {item?.profilePhoto ? (
               <Image
                 style={styles.profile}
                 source={{ uri: item?.profilePhoto }}
               />
             ) : (
-<Text style={styles.initials}>{initials}</Text>
+              <Text style={styles.initials}>{initials}</Text>
             )}
           </View>
           <View style={styles.nameSection}>
@@ -101,7 +108,7 @@ const Customers = ({ item, text, selectedIndex }: {item:any, text: string, selec
               {FormatDate(item?.createdAt)}
             </Text>
           </View>
-          <Text>
+          <Text adjustsFontSizeToFit>
             {currency}
             {due}
           </Text>
@@ -148,11 +155,11 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: radius.medium,
   },
-  initials:{
-    textDecorationStyle: 'solid',
-    textTransform: 'uppercase',
+  initials: {
+    textDecorationStyle: "solid",
+    textTransform: "uppercase",
     fontSize: Fonts.medium,
-    fontWeight: '600'
-  }
+    fontWeight: "600",
+  },
 });
 export default Customers;

@@ -12,7 +12,7 @@ const Filter = () => {
         size={16}
         color={Colors.text}
       />
-      <Text>Filter</Text>
+      <Text adjustsFontSizeToFit>Filter</Text>
     </TouchableOpacity>
   );
 };

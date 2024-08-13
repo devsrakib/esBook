@@ -38,7 +38,7 @@ const DetailsPageInput = ({
           onChangeText={(e) => handleChange("sale", e)}
         />
         <View style={styles.currencyCon}>
-          <Text>{currency}</Text>
+          <Text adjustsFontSizeToFit>{currency}</Text>
         </View>
       </View>
       {(text === "Cash Sell" || text === "Cash buy") && (

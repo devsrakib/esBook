@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -115,10 +114,12 @@ const Chart = () => {
             {chartStatusTime.map((text: string, index: number) => (
               <TouchableOpacity
                 style={styles.statusPill}
-                onPress={() => {setIsModalVisible(false), setSelectedStatus(text)}}
+                onPress={() => {
+                  setIsModalVisible(false), setSelectedStatus(text);
+                }}
                 key={index.toString()}
               >
-                <Text>{text}</Text>
+                <Text adjustsFontSizeToFit>{text}</Text>
               </TouchableOpacity>
             ))}
           </Animated.View>
@@ -139,7 +140,7 @@ const Chart = () => {
         showYAxisIndices
         hideRules
         noOfSections={4}
-        maxValue={(Math.max(...chartData.map((item) => item?.value))) } // Adjust maxValue dynamically
+        maxValue={Math.max(...chartData.map((item) => item?.value))} // Adjust maxValue dynamically
         data={chartData}
         barWidth={20}
         sideWidth={10}

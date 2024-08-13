@@ -60,28 +60,28 @@ const Page = () => {
             style={styles.img}
             source={require("../../../assets/images/DUser.png")}
           />
-          <Text>Nazrul Islam</Text>
+          <Text adjustsFontSizeToFit>Nazrul Islam</Text>
         </View>
         <View style={styles.subCon}>
-          <Text>Date</Text>
-          <Text>05,jun 2024</Text>
+          <Text adjustsFontSizeToFit>Date</Text>
+          <Text adjustsFontSizeToFit>05,jun 2024</Text>
         </View>
         <View style={styles.subCon}>
-          <Text>Previews Cash</Text>
-          <Text>{currency}1,500</Text>
+          <Text adjustsFontSizeToFit>Previews Cash</Text>
+          <Text adjustsFontSizeToFit>{currency}1,500</Text>
         </View>
         <View style={styles.subCon}>
-          <Text>Cash Sell</Text>
-          <Text>{currency}500</Text>
+          <Text adjustsFontSizeToFit>Cash Sell</Text>
+          <Text adjustsFontSizeToFit>{currency}500</Text>
         </View>
         <View style={styles.subCon}>
-          <Text>Due</Text>
-          <Text>{currency}500</Text>
+          <Text adjustsFontSizeToFit>Due</Text>
+          <Text adjustsFontSizeToFit>{currency}500</Text>
         </View>
         <Divider height={1} width={"100%"} aligns={"center "} />
         <View style={styles.subCon}>
-          <Text>Current Cash</Text>
-          <Text>{currency}1,500</Text>
+          <Text adjustsFontSizeToFit>Current Cash</Text>
+          <Text adjustsFontSizeToFit>{currency}1,500</Text>
         </View>
       </View>
       <TouchableOpacity onPress={() => shareFile()} style={styles.shareCon}>

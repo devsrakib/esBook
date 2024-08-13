@@ -40,7 +40,7 @@ const Today = () => {
 
   return (
     <View>
-      <Text>Today</Text>
+      <Text adjustsFontSizeToFit>Today</Text>
       {todaysData.map((item: any, index: any) => (
         <Text key={index}>{item?.amount}</Text>
       ))}
