@@ -25,7 +25,10 @@ const UserViewHome = () => {
       {/* <Image style={styles.userAvatar} /> */}
       <View style={styles.avatarContainer}>
         {data?.profilePhoto ? (
-          <Image source={{ uri: data?.profilePhoto }} style={styles.userAvatar} />
+          <Image
+            source={{ uri: data?.profilePhoto }}
+            style={styles.userAvatar}
+          />
         ) : (
           <Text style={styles.placeholder}>{data?.name?.slice(0, 1)}</Text>
         )}
@@ -34,9 +37,6 @@ const UserViewHome = () => {
         <Text style={styles.text1}>Hello,</Text>
         <Text style={styles.userName}>{data?.name}</Text>
       </View>
-      <TouchableOpacity style={styles.magnify}>
-        <Ionicons name="search" size={18} color={Colors.darkCharcoal} />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -58,10 +58,9 @@ const styles = StyleSheet.create({
     height: 44,
   },
   userAvatar: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 50,
-    
   },
   textContainer: {
     flex: 1,

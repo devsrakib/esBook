@@ -32,7 +32,7 @@ const Suppliers = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={styles.container}>
         <ImageInput
           selectedImage={selectedImage}

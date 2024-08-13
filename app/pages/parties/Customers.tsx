@@ -12,7 +12,7 @@ import { createCustomers, CustomerData } from "@/databases/Database";
 const Customers = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [customerData, setCustomerData] = useState<CustomerData>({
-    profilePhoto: selectedImage ? selectedImage: '',
+    profilePhoto: selectedImage ? selectedImage : "",
     name: "",
     email: "",
     phoneNumber: "",
@@ -24,19 +24,22 @@ const Customers = () => {
   useEffect(() => {
     setCustomerData((prevData) => ({
       ...prevData,
-      profilePhoto: selectedImage ? selectedImage : '',
+      profilePhoto: selectedImage ? selectedImage : "",
     }));
   }, [selectedImage]);
 
   const handleSave = async () => {
     await createCustomers(db, customerData);
   };
-  console.log('image:::::::::::',selectedImage );
-  
+  console.log("image:::::::::::", selectedImage);
+
   return (
-    <ScrollView>
+    <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View style={styles.container}>
-        <ImageInput selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
+        <ImageInput
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+        />
         <AddPhoneBookButton />
         <Inputs setData={setCustomerData} />
         <Button

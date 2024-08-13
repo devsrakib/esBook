@@ -74,15 +74,15 @@ const Parties = () => {
       />
       <View style={[styles.topSection]}>
         <Animated.View style={[styles.header]}>
-          {routerData?.text && (
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => router.back()}
-            >
-              <Feather name="arrow-left" size={24} color={Colors.white} />
-            </TouchableOpacity>
-          )}
           <View style={{ flexDirection: "row" }}>
+            {routerData?.text && (
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => router.back()}
+              >
+                <Feather name="arrow-left" size={24} color={Colors.white} />
+              </TouchableOpacity>
+            )}
             <Text style={styles.headerText}>Parties</Text>
             <View style={styles.customerLengthCon}>
               <Text style={styles.customerLength}>
@@ -136,15 +136,14 @@ const Parties = () => {
           leftAmountTColor={Colors.mainColor}
           leftTextColor={Colors.mainColor}
         />
-
+      </View>
+      <View style={styles.bodySection}>
         {isOpenSearch && (
           <Animated.View entering={FadeInUp} style={styles.searchSection}>
             <Fontisto name="search" size={18} color={Colors.text} />
             <TextInput placeholder="Search..." style={styles.input} />
           </Animated.View>
         )}
-      </View>
-      <View style={styles.bodySection}>
         <FilterAndTextSection />
         {selectedIndex === 0 ? (
           <>
@@ -299,10 +298,9 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 30,
-    height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 10,
+    marginRight: 20,
   },
   searchButton: {
     width: 40,
@@ -321,6 +319,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     gap: 10,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    shadowColor: Colors.text,
+    elevation: 10,
   },
   input: {
     fontSize: Fonts.medium,
