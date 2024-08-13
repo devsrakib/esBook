@@ -6,15 +6,16 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
-import { getCustomerById } from "@/databases/Database";
+import { getCustomerById, getSupplierById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
+import FormatDate from "@/utils/FormatDate";
 const SearchCustomerAndAddCustomer = ({
   text,
   id,
@@ -32,12 +33,21 @@ const SearchCustomerAndAddCustomer = ({
   useEffect(() => {
     async function getCustomerOrSupplier() {
       try {
-        const customer = await getCustomerById(db, id);
-        setCustomerData(customer);
-      } catch {}
+        if (text === "Customer") {
+          const customer = await getCustomerById(db, id);
+          setCustomerData(customer);
+        } else {
+          const supplier = await getSupplierById(db, id);
+          setCustomerData(supplier);
+        }
+      } catch (error) {
+        console.error("Error fetching customer or supplier:", error);
+      }
     }
-    getCustomerOrSupplier();
-  }, []);
+    if (db && id) {
+      getCustomerOrSupplier();
+    }
+  }, [db, id]);
 
   console.log(customerData, "customerData");
 
@@ -51,13 +61,30 @@ const SearchCustomerAndAddCustomer = ({
       >
         <TouchableOpacity style={styles.inputContainer}>
           <View style={styles.userIconCon}>
-            {id ? (
-              <Image source={{ uri: customerData?.profilePhoto }} />
+            {id && customerData?.profilePhoto ? (
+              <Image
+                style={styles.image}
+                source={{ uri: customerData?.profilePhoto }}
+              />
             ) : (
               <Feather name="user" size={24} color={Colors.text} />
             )}
           </View>
-          <Text style={styles.text}>Select {text}</Text>
+          {id ? (
+            <Fragment>
+              <View style={styles.nameContainer}>
+                <Text style={styles.name}>{customerData?.name}</Text>
+                <Text style={styles.date}>
+                  {FormatDate(customerData?.createdAt)}
+                </Text>
+              </View>
+              <View style={[styles.userIconCon, { borderWidth: 0 }]}>
+                <AntDesign name="retweet" size={26} color={Colors.text} />
+              </View>
+            </Fragment>
+          ) : (
+            <Text style={styles.text}>Select {text}</Text>
+          )}
         </TouchableOpacity>
       </Link>
       <Link
@@ -119,6 +146,23 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: "center",
     justifyContent: "center",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: radius.small,
+  },
+  nameContainer: {
+    flex: 1,
+    gap: 4,
+  },
+  name: {
+    fontSize: Fonts.medium,
+    fontWeight: "600",
+  },
+  date: {
+    fontSize: Fonts.small,
+    color: Colors.text,
   },
 });
 export default SearchCustomerAndAddCustomer;

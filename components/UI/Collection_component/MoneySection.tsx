@@ -11,7 +11,7 @@ import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 
 const MoneySection = () => {
-  const [amount, setAmount] = useState<any>([]);
+  const [reminderData, setReminderData] = useState<any>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const db = useSQLiteContext();
 
@@ -20,19 +20,19 @@ const MoneySection = () => {
       if (db) {
         // Ensure db is available
         const result = await getCollectionReminder(db);
-        setAmount(result);
+        setReminderData(result);
       }
     }
     getAmount();
   }, []);
 
   useEffect(() => {
-    const total = amount?.reduce(
+    const total = reminderData?.reduce(
       (sum: number, record: any) => sum + record?.amount,
       0
     );
     setTotalAmount(total);
-  }, [amount]);
+  }, [reminderData]);
 
   return (
     <View style={styles.container}>
@@ -46,9 +46,11 @@ const MoneySection = () => {
         <View style={styles.textCon}>
           <Text style={styles.text1}>Collect Money 3x Faster</Text>
           <Text style={styles.textMoney}>
-            {currency}
-            {totalAmount}
-            <Text style={styles.text2}> is with 20 Customer Set Date Now</Text>
+            {currency} {totalAmount}
+            <Text style={styles.text2}>
+              {" "}
+              is with {reminderData?.length} Customer Set Date Now
+            </Text>
           </Text>
         </View>
       </View>

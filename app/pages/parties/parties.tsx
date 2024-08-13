@@ -15,18 +15,24 @@ import { radius } from "@/constants/sizes";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import Customers from "@/components/UI/shared/Customers";
 import AmountCon from "@/components/UI/AmountCon";
-import { AntDesign, Feather, FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, Feather, FontAwesome5, Fontisto } from "@expo/vector-icons";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import Empty from "@/components/UI/Empty";
-import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  FadeInUp,
+  FlipInXUp,
+} from "react-native-reanimated";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [customers, setCustomers] = useState<any>([]);
   const [suppliers, setSuppliers] = useState<any>([]);
+  const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const routerData = useLocalSearchParams();
 
   const db = useSQLiteContext();
@@ -40,29 +46,29 @@ const Parties = () => {
     setup();
   }, []);
 
-  const handleCustomerData = () => {
-    console.log("hello");
-  };
-
-  
-  
   useEffect(() => {
-    if (routerData?.text === 'Total Customers' || routerData?.text === 'Add Customer') {
-      setSelectedIndex(0);  // Set to Customer tab
-    } else if (routerData?.text === 'Total Supplier') {
-      setSelectedIndex(1);  // Set to Supplier tab
+    if (
+      routerData?.text === "Total Customers" ||
+      routerData?.text === "Add Customer"
+    ) {
+      setSelectedIndex(0); // Set to Customer tab
+    } else if (routerData?.text === "Total Supplier") {
+      setSelectedIndex(1); // Set to Supplier tab
     }
   }, [routerData?.text]);
 
-
   return (
-    <View style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}>
-      <Stack.Screen options={{
-        headerShown: false,
-      }}/>
-      <View style={styles.topSection}>
+    <View
+      style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
+    >
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
+      <View style={[styles.topSection]}>
         <View style={styles.header}>
-        {routerData?.text && (
+          {routerData?.text && (
             <TouchableOpacity
               style={styles.backButton}
               onPress={() => router.back()}
@@ -70,12 +76,26 @@ const Parties = () => {
               <Feather name="arrow-left" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-          <Text style={styles.headerText}>Parties</Text>
-          <View style={styles.customerLengthCon}>
-            <Text style={styles.customerLength}>
-              {selectedIndex === 0 ? customers?.length : suppliers?.length}
-            </Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.headerText}>Parties</Text>
+            <View style={styles.customerLengthCon}>
+              <Text style={styles.customerLength}>
+                {selectedIndex === 0 ? customers?.length : suppliers?.length}
+              </Text>
+            </View>
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              setIsOpenSearch(!isOpenSearch);
+            }}
+            style={styles.searchButton}
+          >
+            {isOpenSearch ? (
+              <AntDesign name="close" size={22} color={Colors.white} />
+            ) : (
+              <Fontisto name="search" size={18} color={Colors.white} />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={styles.navigationCon}>
           <TouchableOpacity
@@ -110,13 +130,29 @@ const Parties = () => {
           leftAmountTColor={Colors.mainColor}
           leftTextColor={Colors.mainColor}
         />
+
+        {isOpenSearch && (
+          <Animated.View
+            entering={FlipInXUp.delay(50)}
+            style={styles.searchSection}
+          ></Animated.View>
+        )}
       </View>
       <View style={styles.bodySection}>
         <FilterAndTextSection />
         {selectedIndex === 0 ? (
           <>
             {customers?.length === 0 ? (
-              <Empty text="No Customer" icon={<FontAwesome5 name="user-alt-slash" size={40} color={Colors.text} />} />
+              <Empty
+                text="No Customer"
+                icon={
+                  <FontAwesome5
+                    name="user-alt-slash"
+                    size={40}
+                    color={Colors.text}
+                  />
+                }
+              />
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -139,7 +175,16 @@ const Parties = () => {
         ) : (
           <>
             {suppliers?.length === 0 ? (
-              <Empty text="No Supplier" icon={<FontAwesome5 name="user-alt-slash" size={40} color={Colors.text} />} />
+              <Empty
+                text="No Supplier"
+                icon={
+                  <FontAwesome5
+                    name="user-alt-slash"
+                    size={40}
+                    color={Colors.text}
+                  />
+                }
+              />
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -191,11 +236,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     gap: 10,
+    justifyContent: "space-between",
   },
   headerText: {
     fontSize: Fonts.medium,
     color: Colors.white,
     fontWeight: "500",
+    marginRight: 20,
   },
   customerLengthCon: {
     width: 20,
@@ -244,13 +291,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderBottomWidth: 1,
   },
-  backButton:{
+  backButton: {
     width: 30,
-    height: '100%',
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 10
-  }
+    marginRight: 10,
+  },
+  searchButton: {
+    width: 40,
+    height: 40,
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  searchSection: {
+    height: 50,
+    backgroundColor: Colors.white,
+    borderRadius: radius.regular,
+    width: "100%",
+    alignSelf: "center",
+    marginTop: 20,
+  },
 });
 
 export default Parties;

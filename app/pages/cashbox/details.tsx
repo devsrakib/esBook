@@ -167,8 +167,9 @@ const page = () => {
           <Header
             height={70}
             title={
-              (route?.text === "customer" || route?.text === "customer") &&
-              `${route?.text === "customer" ? "Customer" : "Supplier"} Due`
+              route?.text === "customer" || route?.text === "customer"
+                ? `${route?.text === "customer" ? "Customer" : "Supplier"} Due`
+                : route?.text
             }
             titleColor={Colors.white}
           />
