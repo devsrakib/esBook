@@ -67,11 +67,11 @@ const Parties = () => {
 
   if (selectedIndex === 0) {
     filteredCustomersSuppliers = customers?.filter((customer: any) =>
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+      customer?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
     );
   } else if (selectedIndex === 1) {
     filteredCustomersSuppliers = suppliers?.filter((customer: any) =>
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+      customer?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
     );
   }
 

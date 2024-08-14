@@ -47,8 +47,6 @@ const OwnerProfile = () => {
           const profile = profileArray[0];
           setGetProfileData(profile);
           setProfileData(profile); // Initialize profileData after fetching
-        } else {
-          console.log("No profile found.");
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -77,7 +75,6 @@ const OwnerProfile = () => {
   const handleSaveProfileInfo = async () => {
     try {
       await update_owner_profile(db, profileData);
-      console.log("Profile updated successfully:", profileData);
     } catch (error) {
       console.error("Error updating profile:", error);
     }

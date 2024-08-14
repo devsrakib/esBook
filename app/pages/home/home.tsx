@@ -18,14 +18,11 @@ import Modal from "react-native-modal";
 import { getCash_sell, getSuppliers } from "@/databases/Database";
 
 const Home = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const db = useSQLiteContext();
   useEffect(() => {
     async function setup() {
       const result = await getSuppliers(db);
       console.log(result);
-
-      // setCustomer(result);
     }
     setup();
   }, []);
@@ -52,17 +49,6 @@ const Home = () => {
         <Dashboard />
         <Chart />
         <CustomerAndSupplierList bg={Colors.JazzBerry} />
-        {isModalVisible && (
-          // <Modal
-          //   isVisible={isModalVisible}
-          //   onBackdropPress={() => setIsModalVisible(false)}
-          // >
-          //   <View>
-          //     <TouchableOpacity></TouchableOpacity>
-          //   </View>
-          // </Modal>
-          <></>
-        )}
       </View>
     </ScrollView>
   );

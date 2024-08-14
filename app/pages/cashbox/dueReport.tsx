@@ -90,7 +90,7 @@ const DueReport = ({ where }: { where: string }) => {
       </View>
       {selectedIndex === 0 ? (
         <View style={{ flex: 1, backgroundColor: Colors.white }}>
-          {dueReport.length === 0 ? (
+          {dueReport?.length === 0 ? (
             <Empty
               text="No Due"
               icon={
@@ -116,7 +116,7 @@ const DueReport = ({ where }: { where: string }) => {
         </View>
       ) : (
         <View style={{ flex: 1, backgroundColor: Colors.white }}>
-          {dueReport.length === 0 ? (
+          {dueReport?.length === 0 ? (
             <Empty
               text="No Due"
               icon={
@@ -142,7 +142,7 @@ const DueReport = ({ where }: { where: string }) => {
                   selectedIndex={selectedIndex}
                 />
               )}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item) => item?.id?.toString()}
             />
           )}
         </View>

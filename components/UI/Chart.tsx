@@ -14,7 +14,6 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getCash_sell } from "@/databases/Database";
 import { radius } from "@/constants/sizes";
 import Animated, { FadeIn, ZoomIn, ZoomOut } from "react-native-reanimated";
-const customWidth = Dimensions.get("window").width;
 const chartStatusTime = ["Weekly", "Monthly", "Yearly"];
 
 let status: string;
@@ -61,7 +60,7 @@ const Chart = () => {
       "#91E3E3",
     ];
 
-    const chartData = Object.keys(groupedData).map((key, index) => ({
+    const chartData = Object?.keys(groupedData)?.map((key, index) => ({
       label: key,
       value: groupedData[key],
       frontColor: colors[index % colors.length],
@@ -111,7 +110,7 @@ const Chart = () => {
             style={styles.statusModal}
             exiting={ZoomOut.duration(100)}
           >
-            {chartStatusTime.map((text: string, index: number) => (
+            {chartStatusTime?.map((text: string, index: number) => (
               <TouchableOpacity
                 style={styles.statusPill}
                 onPress={() => {
@@ -125,7 +124,7 @@ const Chart = () => {
           </Animated.View>
         )}
         <View style={{ display: "none" }}>
-          {chartStatusTime.map((text: string, index: number) => (
+          {chartStatusTime?.map((text: string, index: number) => (
             <Text
               onPress={() => handleChartStatus(text)}
               key={index.toString()}
@@ -140,7 +139,7 @@ const Chart = () => {
         showYAxisIndices
         hideRules
         noOfSections={4}
-        maxValue={Math.max(...chartData.map((item) => item?.value))} // Adjust maxValue dynamically
+        maxValue={Math.max(...chartData?.map((item) => item?.value))} // Adjust maxValue dynamically
         data={chartData}
         barWidth={20}
         sideWidth={10}
