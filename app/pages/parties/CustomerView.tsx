@@ -37,10 +37,13 @@
  * - Custom UI components like `Button`, `GoBack`, and `FilterAndTextSection` are used for consistent design and interaction.
  */
 
-
-
-
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   View,
   StyleSheet,
@@ -79,6 +82,7 @@ import Modal from "react-native-modal";
 import { radius } from "@/constants/sizes";
 import { currency } from "@/global/currency";
 import FormatDate from "@/utils/FormatDate";
+import getInitials from "@/utils/namePlaceholder";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -118,10 +122,10 @@ const CustomerView = () => {
 
   useEffect(() => {
     async function getDataById() {
-     if(router?.text === "Supplier") {
+      if (router?.text === "Supplier") {
         const supplier = await getSupplierById(db, router?.id);
-        setSupplier(supplier)
-      }else{
+        setSupplier(supplier);
+      } else {
         const result = await getCashSellsByCustomerId(db, router?.id);
         const lendData = await getLendById(db, router?.id);
         const gaveLand = await getGaveLendById(db, router?.id);
@@ -134,29 +138,24 @@ const CustomerView = () => {
           (sum: number, record: any) => sum + record?.amount,
           0
         );
-        const customerExtraAmount:any = result?.reduce(
+        const customerExtraAmount: any = result?.reduce(
           (sum: number, record: any) => sum + record?.extraAmount,
           0
         );
-        setTotalGiveAmount( gaveLandAmount + customerExtraAmount);
+        setTotalGiveAmount(gaveLandAmount + customerExtraAmount);
         setLendDataById(lendData.concat(gaveLand));
         setCustomerTransaction(result);
         SetCollectionDate(collectionReminder[0]);
-
-       
       }
-      
     }
     getDataById();
   }, []);
-  
-
 
   const concatLendDataAndCustomerData = useMemo(
     () => customerTransaction.concat(lendDataById),
     [customerTransaction, lendDataById]
   );
-  
+
   const handlePress = useCallback(() => {
     const phoneNumber = `tel:+88${
       router?.phoneNumber || customer?.phoneNumber
@@ -166,21 +165,19 @@ const CustomerView = () => {
 
   useEffect(() => {
     const getCustomer = async () => {
-      if(router?.text === "Supplier") {
+      if (router?.text === "Supplier") {
         const supplier = await getSupplierById(db, router?.id);
         setSupplier(supplier);
-        
-      }else if(router?.text === "Customer") {
-        const result = await getCustomerById(db, router?.id || router?.customerId);
+      } else if (router?.text === "Customer") {
+        const result = await getCustomerById(
+          db,
+          router?.id || router?.customerId
+        );
         setCustomer(result);
       }
     };
     getCustomer();
   }, []);
-
-
-console.log(collectionDate);
-console.log(customer);
 
   return (
     <View
@@ -197,10 +194,18 @@ console.log(customer);
           asChild
         >
           <TouchableOpacity style={styles.headerImageAndTextCon}>
-            <Image
-              style={styles.userImage}
-              source={{ uri: router?.profile || customer?.profilePhoto }}
-            />
+            {router?.profile || customer?.profilePhoto ? (
+              <Image
+                style={styles.userImage}
+                source={{ uri: router?.profile || customer?.profilePhoto }}
+              />
+            ) : (
+              <View style={styles.placeholder}>
+                <Text style={styles.placeholderText}>
+                  {getInitials(router?.name || customer?.name)}
+                </Text>
+              </View>
+            )}
             <View>
               <Text style={styles.headerText}>
                 {router?.name || customer?.name}
@@ -226,7 +231,9 @@ console.log(customer);
               {router?.text === "Customer" ? "Customer" : "Supplier"}
             </Text>
           </View>
-          <Text style={styles.amount}>{currency} {totalGiveAmount?.toLocaleString('en-US')}</Text>
+          <Text style={styles.amount}>
+            {currency} {totalGiveAmount?.toLocaleString("en-US")}
+          </Text>
           {collectionDate &&
           collectionDate?.collectionDate &&
           router.text === "Customer" ? (
@@ -253,36 +260,65 @@ console.log(customer);
         >
           <FilterAndTextSection />
           {concatLendDataAndCustomerData?.map(
-  (transaction: any, index: number) => (
-    <View key={index} style={styles.transactionCard}>
-      <Text style={styles.transactionTitle}>
-        By Transfer for my Paypal Account
-      </Text>
-      <View style={[styles.badge, { backgroundColor: transaction?.dueAmount ? Colors.red : transaction?.extraAmount ? Colors.green : 'transparent' }]} >
-        <Text style={styles.badgeText}>{transaction?.dueAmount ? 'due' : transaction?.extraAmount ? 'extra' : null}</Text>
-      </View>
-      <Text style={styles.transactionType}>
-        {transaction?.saleAmount ? "Cash sell: " : "Bal : "}
-        {transaction?.saleAmount || transaction?.amount || "N/A"} {/* Provide a default value */}
-      </Text>
+            (transaction: any, index: number) => (
+              <View key={index} style={styles.transactionCard}>
+                <Text style={styles.transactionTitle}>
+                  By Transfer for my Paypal Account
+                </Text>
+                <View
+                  style={[
+                    styles.badge,
+                    {
+                      backgroundColor: transaction?.dueAmount
+                        ? Colors.red
+                        : transaction?.extraAmount
+                        ? Colors.green
+                        : "transparent",
+                    },
+                  ]}
+                >
+                  <Text style={styles.badgeText}>
+                    {transaction?.dueAmount
+                      ? "due"
+                      : transaction?.extraAmount
+                      ? "extra"
+                      : null}
+                  </Text>
+                </View>
+                <Text style={styles.transactionType}>
+                  {transaction?.saleAmount ? "Cash sell: " : "Bal : "}
+                  {transaction?.saleAmount || transaction?.amount || "N/A"}{" "}
+                  {/* Provide a default value */}
+                </Text>
 
-      <View style={styles.amountCon}>
-        <Text style={styles.transactionDate}>
-          {transaction?.createdAt || "Date not available"}
-        </Text>
-        <Text
-          style={[
-            styles.transactionAmount,
-            { color: transaction?.dueAmount ? Colors.red : transaction?.extraAmount ? Colors.red : Colors.green }, // Default color
-          ]}
-        >{currency}{' '}
-          {(transaction?.dueAmount || transaction?.amount || transaction?.extraAmount)?.toLocaleString('en-US') || '0'} {/* Provide a default value */}
-        </Text>
-      </View>
-    </View>
-  )
-)}
-
+                <View style={styles.amountCon}>
+                  <Text style={styles.transactionDate}>
+                    {transaction?.createdAt || "Date not available"}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.transactionAmount,
+                      {
+                        color: transaction?.dueAmount
+                          ? Colors.red
+                          : transaction?.extraAmount
+                          ? Colors.red
+                          : Colors.green,
+                      }, // Default color
+                    ]}
+                  >
+                    {currency}{" "}
+                    {(
+                      transaction?.dueAmount ||
+                      transaction?.amount ||
+                      transaction?.extraAmount
+                    )?.toLocaleString("en-US") || "0"}{" "}
+                    {/* Provide a default value */}
+                  </Text>
+                </View>
+              </View>
+            )
+          )}
         </ScrollView>
       </View>
       <View style={styles.footer}>
@@ -578,21 +614,35 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     paddingTop: 10,
   },
-  badge:{
+  badge: {
     width: 46,
     height: 22,
-    justifyContent: 'center',
+    justifyContent: "center",
     alignItems: "center",
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
     borderTopRightRadius: 10,
     borderBottomLeftRadius: 10,
   },
-  badgeText:{
+  badgeText: {
     fontSize: Fonts.regular,
-    color: Colors.white
-  }
+    color: Colors.white,
+  },
+  placeholder: {
+    width: 36,
+    height: 36,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  placeholderText: {
+    fontSize: Fonts.medium,
+    fontWeight: "500",
+    color: Colors.white,
+  },
 });
 
 export default CustomerView;

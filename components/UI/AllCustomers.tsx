@@ -9,19 +9,12 @@ import { currency } from "@/global/currency";
 import { useNavigation } from "@react-navigation/native";
 import { getCash_sell, getCashSellsByCustomerId } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
+import getInitials from "@/utils/namePlaceholder";
 
 const AllCustomers = ({ item }: any) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
-
-  const getInitials = (name: string) => {
-    return name
-      ?.split(" ")
-      .map((word) => word[0])
-      .slice(0, 2)
-      .join("");
-  };
 
   useEffect(() => {
     const getTotalDue = async () => {
