@@ -9,6 +9,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getSuppliers } from "@/databases/Database";
 import AllSuppliers from "@/components/UI/AllSuppliers";
 import Empty from "@/components/UI/Empty";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -36,12 +37,19 @@ const page = () => {
         textColor={Colors.white}
       />
 
-      {suppliers?.length === 0 ? <Empty text="No Supplier"/> :<FlatList
-        data={suppliers}
-        renderItem={({ item }) => {
-          return <AllSuppliers item={item} />;
-        }}
-      />}
+      {suppliers?.length === 0 ? (
+        <Empty
+          text="No Supplier"
+          icon={<FontAwesome5 name="user-alt-slash" size={24} color="black" />}
+        />
+      ) : (
+        <FlatList
+          data={suppliers}
+          renderItem={({ item }) => {
+            return <AllSuppliers item={item} />;
+          }}
+        />
+      )}
     </View>
   );
 };

@@ -30,7 +30,6 @@ const Home = () => {
   useEffect(() => {
     async function cash_sell_data() {
       const result = await getCash_sell(db);
-      console.log(result);
     }
     cash_sell_data();
   });

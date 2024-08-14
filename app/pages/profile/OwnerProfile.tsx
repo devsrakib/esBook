@@ -24,7 +24,6 @@ import useImagePicker from "@/utils/UseImagePicker";
 
 const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const [getProfileData, setGetProfileData] = useState<any | null>(null);
   const { selectedImage, pickImage } = useImagePicker();
   const [focusInput, setFocusInput] = useState<boolean>(false);
   const [profileData, setProfileData] = useState<any>({
@@ -43,9 +42,8 @@ const OwnerProfile = () => {
     const fetchProfileData = async () => {
       try {
         const profileArray = await getOwnerProfile(db);
-        if (profileArray && profileArray.length > 0) {
+        if (profileArray && profileArray?.length > 0) {
           const profile = profileArray[0];
-          setGetProfileData(profile);
           setProfileData(profile); // Initialize profileData after fetching
         }
       } catch (error) {
@@ -75,9 +73,7 @@ const OwnerProfile = () => {
   const handleSaveProfileInfo = async () => {
     try {
       await update_owner_profile(db, profileData);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
+    } catch (error) {}
   };
 
   const infoData = [
@@ -108,8 +104,6 @@ const OwnerProfile = () => {
     },
   ];
 
-  console.log(getProfileData, "getProfileData");
-
   return (
     <ScrollView
       contentContainerStyle={[
@@ -119,9 +113,9 @@ const OwnerProfile = () => {
     >
       <View style={styles.profileContainer}>
         <TouchableOpacity onPress={() => pickImage()}>
-          {profileData.profilePhoto ? (
+          {profileData?.profilePhoto ? (
             <Image
-              source={{ uri: profileData.profilePhoto }}
+              source={{ uri: profileData?.profilePhoto }}
               style={styles.profileImage}
             />
           ) : (
@@ -131,19 +125,19 @@ const OwnerProfile = () => {
             />
           )}
         </TouchableOpacity>
-        <Text style={styles.profileName}>{profileData.name}</Text>
+        <Text style={styles.profileName}>{profileData?.name}</Text>
       </View>
       <View style={styles.infoContainer}>
-        {infoData.map((item, index) => (
-          <Fragment key={index.toString()}>
+        {infoData?.map((item, index) => (
+          <Fragment key={index?.toString()}>
             <View style={styles.infoRow}>
-              <View style={styles.iconCon}>{item.icon}</View>
+              <View style={styles.iconCon}>{item?.icon}</View>
               <View style={styles.infoColumn}>
-                <Text style={styles.label}>{item.label}</Text>
+                <Text style={styles.label}>{item?.label}</Text>
                 <TextInput
                   style={styles.input}
                   value={`${profileData[item?.key]}`} // Ensure key matches profileData
-                  onChangeText={(e) => handleInputChange(e, item.key)}
+                  onChangeText={(e) => handleInputChange(e, item?.key)}
                   onTouchStart={() => setFocusInput(true)}
                 />
               </View>

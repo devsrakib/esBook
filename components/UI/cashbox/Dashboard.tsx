@@ -118,19 +118,21 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
     return () => clearInterval(intervalId); // Clean up on unmount
   }, []);
 
+  console.log(deposit);
+
   return (
     <View style={[sharedStyle.grid, { marginTop: 14 }]}>
       {data?.map((d, i) => {
         return (
           <View key={i} style={styles.subContainer}>
             <View style={styles.textCon}>
-              <Text style={styles.text1}>{d.text}</Text>
-              <Text style={[styles.textAmount, { color: d.textColor }]}>
-                ${d.amount?.toLocaleString('en-US') || '0'}
+              <Text style={styles.text1}>{d?.text}</Text>
+              <Text style={[styles.textAmount, { color: d?.textColor }]}>
+                ${d?.amount?.toLocaleString("en-US") || "0"}
               </Text>
             </View>
-            <View style={[styles.imgCon, { backgroundColor: d.color }]}>
-              <Image style={styles.img} source={d.icon} />
+            <View style={[styles.imgCon, { backgroundColor: d?.color }]}>
+              <Image style={styles.img} source={d?.icon} />
             </View>
           </View>
         );

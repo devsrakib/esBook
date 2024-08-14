@@ -20,10 +20,6 @@ const Page = () => {
     setup();
   }, []);
 
-  const handleCustomerData = () => {
-    console.log(customer);
-  };
-
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -42,9 +38,7 @@ const Page = () => {
         <FlatList
           data={customer}
           renderItem={({ item }) => {
-            return (
-              <AllCustomers item={item} onPress={() => handleCustomerData()} />
-            );
+            return <AllCustomers item={item} />;
           }}
         />
       </View>
@@ -54,6 +48,7 @@ const Page = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   bodySection: {
     paddingVertical: 10,

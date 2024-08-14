@@ -109,30 +109,67 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
             </Link>
           </View>
         </View>
-       {
-        <Fragment>
-        {selectedIndex === 0 ? (
-       <View style={{height: 400}}>
-         { customer?.length === 0 ? <Empty text="No customer" icon={<FontAwesome5 name='user-alt-slash' size={40} color={Colors.text} />} /> :<FlatList
-          data={customer}
-          renderItem={({ item }) => {
-            return <Customers item={item} text={"Customer"} selectedIndex={selectedIndex} />;
-          }}
-        />}
-       </View>
-      ) : (
-        <View style={{height: 400}}>
-
-       {supplier?.length === 0 ? <Empty text="No customer" icon={<FontAwesome5 name='user-alt-slash' size={40} color={Colors.text} />} /> : <FlatList
-          data={supplier}
-          renderItem={({ item }) => {
-            return <Customers item={item} text={"Supplier"}  selectedIndex={selectedIndex}/>;
-          }}
-          />}
-          </View>
-      )}
-      </Fragment>
-       }
+        {
+          <Fragment>
+            {selectedIndex === 0 ? (
+              <View style={{ height: 400 }}>
+                {customer?.length === 0 ? (
+                  <Empty
+                    text="No customer"
+                    icon={
+                      <FontAwesome5
+                        name="user-alt-slash"
+                        size={40}
+                        color={Colors.text}
+                      />
+                    }
+                  />
+                ) : (
+                  <FlatList
+                    data={customer}
+                    renderItem={({ item }) => {
+                      return (
+                        <Customers
+                          item={item}
+                          text={"Customer"}
+                          selectedIndex={selectedIndex}
+                        />
+                      );
+                    }}
+                  />
+                )}
+              </View>
+            ) : (
+              <View style={{ height: 400 }}>
+                {supplier?.length === 0 ? (
+                  <Empty
+                    text="No customer"
+                    icon={
+                      <FontAwesome5
+                        name="user-alt-slash"
+                        size={40}
+                        color={Colors.text}
+                      />
+                    }
+                  />
+                ) : (
+                  <FlatList
+                    data={supplier}
+                    renderItem={({ item }) => {
+                      return (
+                        <Customers
+                          item={item}
+                          text={"Supplier"}
+                          selectedIndex={selectedIndex}
+                        />
+                      );
+                    }}
+                  />
+                )}
+              </View>
+            )}
+          </Fragment>
+        }
       </View>
     </View>
   );

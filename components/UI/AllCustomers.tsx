@@ -14,6 +14,15 @@ const AllCustomers = ({ item }: any) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
+
+  const getInitials = (name: string) => {
+    return name
+      ?.split(" ")
+      .map((word) => word[0])
+      .slice(0, 2)
+      .join("");
+  };
+
   useEffect(() => {
     const getTotalDue = async () => {
       const result = (await getCashSellsByCustomerId(db, item?.id))?.filter(
@@ -52,7 +61,7 @@ const AllCustomers = ({ item }: any) => {
                 source={{ uri: item?.profilePhoto }}
               />
             ) : (
-              <FontAwesome6 name="user-secret" size={24} color="black" />
+              <Text style={styles.placeholder}>{getInitials(item?.name)}</Text>
             )}
           </View>
           <View style={styles.nameSection}>
@@ -63,8 +72,7 @@ const AllCustomers = ({ item }: any) => {
             </Text>
           </View>
           <Text adjustsFontSizeToFit>
-            {currency}
-            {totalCash_buy}
+            {currency} {totalCash_buy}
           </Text>
         </TouchableOpacity>
       </Link>
@@ -108,6 +116,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: radius.regular,
+  },
+  placeholder: {
+    fontSize: Fonts.large,
+    color: Colors.black,
+    fontWeight: "600",
   },
 });
 export default AllCustomers;

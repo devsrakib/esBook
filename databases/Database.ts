@@ -8,11 +8,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
   let currentDbVersion = result?.user_version ?? 0;
 
-  console.log(currentDbVersion);
-
   if (currentDbVersion >= DATABASE_VERSION) {
-    console.log("ALREADY ON LATEST DB VERSION");
-
     return;
   }
   if (currentDbVersion === 0) {
@@ -161,7 +157,6 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   // }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
-  console.log(currentDbVersion);
 }
 
 // ================================================================================================
@@ -183,8 +178,7 @@ export const createCustomers = async (
     );
     return { success: true, message: "Customer Created Successfully" };
   } catch (error: any) {
-    console.error("Error creating customer:", error.message);
-    return { success: false, message: error.message };
+    return { success: false, message: "Error creating customer" };
   }
 };
 
@@ -220,11 +214,9 @@ export const cash_sell = async (
         description,
       ]
     );
-    console.log("cash_sell created successfully");
     return { success: true, message: "cash_sell created successfully" };
   } catch (error: any) {
-    console.error("Error creating cash_sell:", error.message);
-    return { success: false, message: error.message };
+    return { success: false, message: "cash_sell created successfully" };
   }
 };
 
@@ -244,11 +236,9 @@ export const due_collection = async (
       "INSERT INTO due_collection (customerId, collectedAmount, createdAt, description) VALUES (?, ?, ?,?)",
       [customerId, collectedAmount, timestamp, description]
     );
-    console.log("due collection created successfully");
     return { success: false, message: "due collection created successfully" };
   } catch (error: any) {
-    console.error("Error creating cash_sell:", error);
-    return { success: false, message: error.message };
+    return { success: false, message: "Error creating due collection" };
   }
 };
 
@@ -268,9 +258,9 @@ export const customer_lend = async (
       "INSERT INTO customer_lend (customerId, createdAt, amount, description) VALUES (?, ?, ?, ?)",
       [customerId, timestamp, amount, description]
     );
-    console.log(" customer lend created successfully");
+    return { success: false, message: "customer lend created successfully" };
   } catch (error) {
-    console.error("Error creating customer lend:", error);
+    return { success: false, message: "Error creating customer lend" };
   }
 };
 export const customer_gave = async (
@@ -283,7 +273,6 @@ export const customer_gave = async (
       "INSERT INTO customer_gave (customerId, createdAt, amount, description) VALUES (?, ?, ?, ?)",
       [customerId, timestamp, amount, description]
     );
-    console.log(" customer gave created successfully");
     return { success: false, message: "customer gave created successfully" };
   } catch (error: any) {
     console.error("Error creating customer gave:", error);
@@ -311,7 +300,6 @@ export const collection_reminder = async (
     );
 
     if (existingRecord) {
-      console.log("Record already exists, skipping insertion.");
       return { success: false, message: "Record already exists" };
     }
 
@@ -321,7 +309,6 @@ export const collection_reminder = async (
       [amount, customerId, timestamp, collectionDate]
     );
 
-    console.log("Collection reminder created successfully");
     return { success: true };
   } catch (error: any) {
     // Log the error with additional context
@@ -392,10 +379,6 @@ export const updateDueAmount = async (
       "UPDATE cash_sell SET dueAmount = ?, collectedAmount = ? WHERE id = ? AND customerId = ?",
       [newDueAmount, newCollectedAmount, id, customerId]
     );
-
-    console.log(
-      `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${customerId}`
-    );
     return { success: true, message: "updated successfully" };
   } catch (error) {
     console.error("Error updating due amount and collected amount:", error);
@@ -431,20 +414,14 @@ export const updateSupplierDueAmount = async (
     const previousDueAmount = Number(result[0]?.dueAmount) || 0;
     const validDueAmount = Number(dueAmount);
     const newDueAmount = previousDueAmount - validDueAmount;
-    console.log(updateDueAmount, "due amount");
 
     // Update the dueAmount
     await db.runAsync(
       "UPDATE cash_buy SET dueAmount = ? WHERE id = ? AND supplierId = ?",
       [newDueAmount, id, supplierId]
     );
-
-    console.log(
-      `Due amount updated successfully for ID ${id} and Supplier ID ${supplierId}`
-    );
     return { success: true, message: "Due amount updated successfully" };
   } catch (error) {
-    console.error("Error updating due amount:", error);
     return {
       success: false,
       message: `Error updating due amount`,
@@ -516,10 +493,8 @@ export const deleteCustomerById = async (
 ) => {
   try {
     await db.runAsync("DELETE FROM customer WHERE id = ?", [userId]);
-    console.log(`User with ID ${userId} deleted successfully`);
     return { success: true, message: "User deleted successfully" };
   } catch (error) {
-    console.error("Error deleting user:", error);
     return {
       success: false,
       message: "Error deleting user",
@@ -531,7 +506,7 @@ export const getCollectionReminder = async (db: SQLiteDatabase) => {
   try {
     return await db.getAllAsync("SELECT * FROM collection_reminder");
   } catch {
-    console.log("error get collection_reminder");
+    return [];
   }
 };
 
@@ -559,10 +534,8 @@ export const createSuppliers = async (
       "INSERT INTO supplier (profilePhoto,name, email, phoneNumber, address, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
       [profilePhoto, name, email, phoneNumber, address, timestamp]
     );
-    console.log("Supplier created successfully");
     return { success: true, message: "Supplier created successfully" };
   } catch (error) {
-    console.error("Error creating supplier:", error);
     return { success: false, message: "Error creating supplier" };
   }
 };
@@ -573,10 +546,8 @@ export const deleteSupplierById = async (
 ) => {
   try {
     await db.runAsync("DELETE FROM supplier WHERE id = ?", [userId]);
-    console.log(`User with ID ${userId} deleted successfully`);
     return { success: true, message: "Supplier deleted successfully" };
   } catch (error) {
-    console.error("Error deleting user:", error);
     return { success: false, message: "Error deleting supplier" };
   }
 };
@@ -613,10 +584,8 @@ export const cash_buy = async (
         extraAmount,
       ]
     );
-    console.log("cash buy created successfully");
     return { success: true, message: "cash buy created successfully" };
   } catch (error) {
-    console.error("Error creating cash buy:", error);
     return { success: false, message: "Error creating cash buy" };
   }
 };
@@ -663,10 +632,8 @@ export const supplier_lend = async (
       "INSERT INTO due_collection (  createdAt, amount, description) VALUES (?, ?, ?)",
       [timestamp, amount, description]
     );
-    console.log(" supplier lend created successfully");
     return { success: true, message: "supplier lend created successfully" };
   } catch (error) {
-    console.error("Error creating cash_sell:", error);
     return { success: false, message: "Error creating cash_sell" };
   }
 };
@@ -735,10 +702,8 @@ export const update_owner_profile = async (
       "UPDATE owner_profile SET profilePhoto = ?, name = ?, email = ?, address = ?, phoneNumber = ?, taxNumber = ? WHERE id = ?",
       [profilePhoto, name, email, address, phoneNumber, taxNumber, id]
     );
-    console.log(`Owner profile updated successfully for ID ${id}`);
     return { success: true, message: "owner profile updated successfully" };
   } catch (error) {
-    console.error("Error updating owner profile:", error);
     return { success: false, message: "Error updating owner profile" };
   }
 };
@@ -770,10 +735,8 @@ export const cash_report = async (
       "INSERT INTO cash_report (date, totalCash) VALUES (?, ?)",
       [timestamp, totalCash]
     );
-    console.log("cash report created successfully");
     return { success: true, message: "cash report created successfully" };
   } catch (error) {
-    console.error("Error creating cash report:", error);
     return { success: false, message: "Error creating cash report" };
   }
 };
@@ -795,10 +758,8 @@ export const expense = async (
       "INSERT INTO expense (amount, createdAt, description) VALUES (?, ?, ?)",
       [amount, timestamp, description]
     );
-    console.log("expense created successfully");
     return { success: true, message: "expense created successfully" };
   } catch (error) {
-    console.error("Error creating expense:", error);
     return { success: false, message: "Error creating expense" };
   }
 };
@@ -820,10 +781,8 @@ export const deposit = async (
       "INSERT INTO deposit (amount, createdAt, description) VALUES (?, ?, ?)",
       [amount, timestamp, description]
     );
-    console.log("deposit created successfully");
     return { success: true, message: "deposit created successfully" };
   } catch (error) {
-    console.error("Error creating deposit:", error);
     return { success: false, message: "Error creating deposit" };
   }
 };
@@ -845,10 +804,8 @@ export const withdraw = async (
       "INSERT INTO withdraw (amount ,createdAt, description) VALUES (?, ?, ?)",
       [amount, timestamp, description]
     );
-    console.log("withdraw created successfully");
     return { success: true, message: "withdraw created successfully" };
   } catch (error) {
-    console.error("Error creating withdraw:", error);
     return { success: false, message: "Error creating withdraw" };
   }
 };

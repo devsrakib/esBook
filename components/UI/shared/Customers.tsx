@@ -24,7 +24,6 @@ const Customers = ({
   text: string;
   selectedIndex?: number;
 }) => {
-  const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
 
@@ -109,8 +108,7 @@ const Customers = ({
             </Text>
           </View>
           <Text adjustsFontSizeToFit>
-            {currency}
-            {due}
+            {currency} {due}
           </Text>
         </TouchableOpacity>
       </Link>
