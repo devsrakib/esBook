@@ -39,6 +39,7 @@ const Parties = () => {
   const [customers, setCustomers] = useState<any>([]);
   const [suppliers, setSuppliers] = useState<any>([]);
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const routerData = useLocalSearchParams();
 
   const db = useSQLiteContext();
@@ -52,6 +53,7 @@ const Parties = () => {
     setup();
   }, []);
 
+  let filteredCustomersSuppliers: any;
   useEffect(() => {
     if (
       routerData?.text === "Total Customers" ||
@@ -62,6 +64,16 @@ const Parties = () => {
       setSelectedIndex(1); // Set to Supplier tab
     }
   }, [routerData?.text]);
+
+  if (selectedIndex === 0) {
+    filteredCustomersSuppliers = customers?.filter((customer: any) =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  } else if (selectedIndex === 1) {
+    filteredCustomersSuppliers = suppliers?.filter((customer: any) =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
 
   return (
     <View
@@ -86,7 +98,9 @@ const Parties = () => {
             <Text style={styles.headerText}>Parties</Text>
             <View style={styles.customerLengthCon}>
               <Text style={styles.customerLength}>
-                {selectedIndex === 0 ? customers?.length : suppliers?.length}
+                {selectedIndex === 0
+                  ? filteredCustomersSuppliers?.length
+                  : suppliers?.length}
               </Text>
             </View>
           </View>
@@ -141,13 +155,18 @@ const Parties = () => {
         {isOpenSearch && (
           <Animated.View entering={FadeInUp} style={styles.searchSection}>
             <Fontisto name="search" size={18} color={Colors.text} />
-            <TextInput placeholder="Search..." style={styles.input} />
+            <TextInput
+              placeholder="Search..."
+              style={styles.input}
+              onChangeText={(text) => setSearchTerm(text)} // Update search term
+              value={searchTerm}
+            />
           </Animated.View>
         )}
         <FilterAndTextSection />
         {selectedIndex === 0 ? (
           <>
-            {customers?.length === 0 ? (
+            {filteredCustomersSuppliers?.length === 0 ? (
               <Empty
                 text="No Customer"
                 icon={
@@ -164,7 +183,7 @@ const Parties = () => {
                 contentContainerStyle={{
                   paddingBottom: 50,
                 }}
-                data={customers}
+                data={filteredCustomersSuppliers}
                 renderItem={({ item }) => {
                   return (
                     <Customers
@@ -179,7 +198,7 @@ const Parties = () => {
           </>
         ) : (
           <>
-            {suppliers?.length === 0 ? (
+            {filteredCustomersSuppliers.length === 0 ? (
               <Empty
                 text="No Supplier"
                 icon={
@@ -196,7 +215,7 @@ const Parties = () => {
                 contentContainerStyle={{
                   paddingBottom: 50,
                 }}
-                data={suppliers}
+                data={filteredCustomersSuppliers}
                 renderItem={({ item }) => {
                   return (
                     <Customers

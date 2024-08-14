@@ -356,6 +356,56 @@ export const getCollectionReminderByCustomerId = async (
   }
 };
 
+// export const updateDueAmount = async (
+//   db: SQLiteDatabase,
+//   {
+//     id,
+//     customerId,
+//     dueAmount,
+//   }: { id: number; customerId: number; dueAmount: number }
+// ) => {
+//   try {
+//     if (id === undefined || customerId === undefined) {
+//       throw new Error("ID or customerId is undefined");
+//     }
+
+//     // Retrieve the current collectedAmount and dueAmount
+//     const result: any = await db.getAllAsync(
+//       "SELECT collectedAmount, dueAmount FROM cash_sell WHERE id = ? AND customerId = ?",
+//       [id, customerId]
+//     );
+
+//     if (!result || result.length === 0) {
+//       throw new Error("Record not found");
+//     }
+
+//     const currentCollectedAmount = result[0]?.collectedAmount || 0;
+//     const previousDueAmount = result[0]?.dueAmount || 0;
+
+//     // Calculate the difference in dueAmount
+//     const validDueAmount = Number(previousDueAmount) - Number(dueAmount);
+//     // Calculate the new collectedAmount
+//     const newCollectedAmount = currentCollectedAmount + validDueAmount;
+
+//     // Update the dueAmount and collectedAmount
+//     await db.runAsync(
+//       "UPDATE cash_sell SET dueAmount = ?, collectedAmount = ? WHERE id = ? AND customerId = ?",
+//       [validDueAmount, newCollectedAmount, id, customerId]
+//     );
+
+//     console.log(
+//       `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${customerId}`
+//     );
+//     return { success: true };
+//   } catch (error) {
+//     console.error("Error updating due amount and collected amount:", error);
+//     return {
+//       success: false,
+//       message: "Error updating due amount and collected amount",
+//     };
+//   }
+// };
+
 export const updateDueAmount = async (
   db: SQLiteDatabase,
   {
@@ -379,29 +429,24 @@ export const updateDueAmount = async (
       throw new Error("Record not found");
     }
 
-    const currentCollectedAmount = result[0]?.collectedAmount || 0;
-    const previousDueAmount = result[0]?.dueAmount || 0;
+    const currentCollectedAmount = Number(result[0]?.collectedAmount) || 0;
+    const previousDueAmount = Number(result[0]?.dueAmount) || 0;
 
-    console.log("Current Collected Amount:", currentCollectedAmount);
-    console.log("Previous Due Amount:", previousDueAmount);
-
-    // Calculate the difference in dueAmount
-    const validDueAmount = Number(previousDueAmount) - Number(dueAmount);
-    console.log("Valid Due Amount (Difference):", validDueAmount);
-
-    // Calculate the new collectedAmount
+    // Calculate the new dueAmount and collectedAmount
+    const validDueAmount = Number(dueAmount);
+    const newDueAmount = previousDueAmount - validDueAmount;
     const newCollectedAmount = currentCollectedAmount + validDueAmount;
 
     // Update the dueAmount and collectedAmount
     await db.runAsync(
       "UPDATE cash_sell SET dueAmount = ?, collectedAmount = ? WHERE id = ? AND customerId = ?",
-      [validDueAmount, newCollectedAmount, id, customerId]
+      [newDueAmount, newCollectedAmount, id, customerId]
     );
 
     console.log(
       `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${customerId}`
     );
-    return { success: true };
+    return { success: true, message: "updated successfully" };
   } catch (error) {
     console.error("Error updating due amount and collected amount:", error);
     return {
@@ -410,6 +455,7 @@ export const updateDueAmount = async (
     };
   }
 };
+
 export const updateSupplierDueAmount = async (
   db: SQLiteDatabase,
   {
@@ -420,10 +466,10 @@ export const updateSupplierDueAmount = async (
 ) => {
   try {
     if (id === undefined || supplierId === undefined) {
-      throw new Error("ID or customerId is undefined");
+      throw new Error("ID or supplierId is undefined");
     }
 
-    // Retrieve the current collectedAmount and dueAmount
+    // Retrieve the current dueAmount
     const result: any = await db.getAllAsync(
       "SELECT dueAmount FROM cash_buy WHERE id = ? AND supplierId = ?",
       [id, supplierId]
@@ -433,21 +479,24 @@ export const updateSupplierDueAmount = async (
       throw new Error("Record not found");
     }
 
-    // Update the dueAmount and collectedAmount
+    const previousDue = Number(result[0]?.dueAmount || 0);
+    const restDue = Number(dueAmount - previousDue);
+
+    // Update the dueAmount
     await db.runAsync(
-      "UPDATE cash_sell SET dueAmount = ?, WHERE id = ? AND supplierId = ?",
-      [dueAmount, id, supplierId]
+      "UPDATE cash_buy SET dueAmount = ? WHERE id = ? AND supplierId = ?",
+      [restDue, id, supplierId]
     );
 
     console.log(
-      `Due amount and collected amount updated successfully for ID ${id} and Customer ID ${supplierId}`
+      `Due amount updated successfully for ID ${id} and Supplier ID ${supplierId}`
     );
     return { success: true, message: "Due amount updated successfully" };
   } catch (error) {
-    console.error("Error updating due amount and collected amount:", error);
+    console.error("Error updating due amount:", error);
     return {
       success: false,
-      message: "Error updating due amount and collected amount",
+      message: "Error updating due amount",
     };
   }
 };
