@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: Colors.background,
     paddingHorizontal: 10,
-    marginBottom: 10,
     borderRadius: radius.medium,
   },
   avatar: {

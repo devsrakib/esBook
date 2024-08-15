@@ -29,6 +29,7 @@ const CashboxFeature = () => {
   const [totalDue, setTotalDue] = useState<number>(0);
   const [totalCashBuy, setTotalCashBuy] = useState<number>(0);
   const [cashBuy, setCashBuy] = useState<any>([]);
+  const [date, setDate] = useState<Date>(new Date());
 
   const db = useSQLiteContext();
   const feature: IFeature[] = [
@@ -130,6 +131,8 @@ const CashboxFeature = () => {
     setTotalCashBuy(total_cash_buy);
   }, [getAllCashSell, deposit, withdraw, expense, due, cashBuy]);
 
+  console.log(date, "date");
+
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
@@ -139,6 +142,8 @@ const CashboxFeature = () => {
           iconSite="right"
           iconColor={Colors.mainColor}
           iconSize={18}
+          date={date}
+          setDate={setDate}
         />
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />

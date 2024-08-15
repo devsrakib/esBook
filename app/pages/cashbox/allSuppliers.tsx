@@ -45,6 +45,10 @@ const page = () => {
       ) : (
         <FlatList
           data={suppliers}
+          contentContainerStyle={{
+            gap: 10,
+            paddingTop: 10,
+          }}
           renderItem={({ item }) => {
             return <AllSuppliers item={item} />;
           }}
@@ -57,6 +61,7 @@ const page = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
 });
 

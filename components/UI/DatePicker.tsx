@@ -13,6 +13,8 @@ interface DatePickerProps {
   iconSite: "left" | "right";
   iconColor: string;
   iconSize: number;
+  date: Date;
+  setDate: Function;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -20,8 +22,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
   iconSite,
   iconColor,
   iconSize,
+  date,
+  setDate,
 }) => {
-  const [date, setDate] = useState<Date>(new Date()); // Initialize with the current date
+  // Initialize with the current date
   const [show, setShow] = useState<boolean>(false);
 
   const showDatePicker = () => {
