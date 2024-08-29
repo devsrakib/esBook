@@ -7,6 +7,7 @@ import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
 import { IFeature } from "@/types/interfaces/feature.interface";
 import DatePicker from "../DatePicker";
+import CalendarPicker from "react-native-calendar-picker";
 import {
   getCash_buy,
   getCash_sell,
@@ -30,6 +31,7 @@ const CashboxFeature = () => {
   const [totalCashBuy, setTotalCashBuy] = useState<number>(0);
   const [cashBuy, setCashBuy] = useState<any>([]);
   const [date, setDate] = useState<Date>(new Date());
+  const [selected, setSelected] = useState("");
 
   const db = useSQLiteContext();
   const feature: IFeature[] = [
@@ -136,14 +138,25 @@ const CashboxFeature = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text style={styles.text1}>Cashbox Featured</Text>
-        <DatePicker
+        {/* <Text style={styles.text1}>Cashbox Featured</Text> */}
+        {/* <DatePicker
           background={Colors.white}
           iconSite="right"
           iconColor={Colors.mainColor}
           iconSize={18}
           date={date}
           setDate={setDate}
+        /> */}
+
+        <CalendarPicker
+          startFromMonday={true}
+          todayBackgroundColor="#f2e6ff"
+          selectedDayColor="#00ffff"
+          selectedDayTextColor="#7300e6"
+          minDate={new Date()}
+          maxDate={new Date(2026, 6, 3)}
+          onDateChange={() => {}}
+          allowRangeSelection={true}
         />
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
@@ -162,11 +175,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   topSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    // flexDirection: "row",
+    // alignItems: "center",
+    // justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 20,
+    flex: 1,
+    overflow: "scroll",
   },
 
   bottomSection: {},
