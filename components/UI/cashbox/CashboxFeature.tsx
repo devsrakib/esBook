@@ -7,6 +7,7 @@ import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
 import { IFeature } from "@/types/interfaces/feature.interface";
 import DatePicker from "../DatePicker";
+//@ts-ignore
 import CalendarPicker from "react-native-calendar-picker";
 import {
   getCash_buy,
@@ -16,6 +17,7 @@ import {
   getWithdraw,
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
+import FormatDate from "@/utils/FormatDate";
 
 const CashboxFeature = () => {
   const [getAllCashSell, setGetAllCashSell] = useState<any>([]);
@@ -30,8 +32,10 @@ const CashboxFeature = () => {
   const [totalDue, setTotalDue] = useState<number>(0);
   const [totalCashBuy, setTotalCashBuy] = useState<number>(0);
   const [cashBuy, setCashBuy] = useState<any>([]);
-  const [date, setDate] = useState<Date>(new Date());
-  const [selected, setSelected] = useState("");
+  const [selectedStartDate, setSelectedStartDate] =
+    useState<string>("DD/MM/YYYY");
+  const [selectedEndDate, setSelectedEndDate] = useState<string>("DD/MM/YYYY");
+  const [selected, setSelected] = useState<boolean>(false);
 
   const db = useSQLiteContext();
   const feature: IFeature[] = [
@@ -82,7 +86,14 @@ const CashboxFeature = () => {
 
   useEffect(() => {
     async function getCash() {
-      const cash = await getCash_sell(db);
+      // const cash = await getCash_sell(db);
+      const startDate = new Date(selectedStartDate);
+      const endDate = new Date(selectedEndDate);
+
+      const cash = (await getCash_sell(db)).filter((item: any) => {
+        const createdAt = new Date(item.createdAt);
+        return createdAt >= startDate && createdAt <= endDate;
+      });
       const deposit = await getDeposit(db);
       const withdraw = await getWithdraw(db);
       const expense = await getExpense(db);
@@ -96,6 +107,7 @@ const CashboxFeature = () => {
       setExpense(expense);
       setDue(due);
       setCashBuy(cash_buy);
+      console.log(startDate, ":::::::");
     }
     getCash();
   }, []);
@@ -125,6 +137,7 @@ const CashboxFeature = () => {
       (sum: number, record: any) => sum + record?.amount,
       0
     );
+
     setTotalCash(totalCollectedAmount);
     setTotalDeposit(totalDeposit);
     setTotalWithdraw(totalWithdraw);
@@ -133,12 +146,36 @@ const CashboxFeature = () => {
     setTotalCashBuy(total_cash_buy);
   }, [getAllCashSell, deposit, withdraw, expense, due, cashBuy]);
 
-  console.log(date, "date");
+  const onDateChangeData = (date: any, type: any) => {
+    // console.log(date);
+    // if (date) {
+    //   setDate(date);
+    // }
+
+    const newDate = JSON.stringify(date);
+    const newDate1 = newDate.substring(1, newDate.length - 1);
+    const dates = newDate1.split("T");
+    const date1 = dates[0].split("-");
+    const day = date1[2];
+    const month = date1[1];
+    const year = date1[0];
+
+    if (type == "END_DATE") {
+      if (day == undefined) {
+        setSelectedEndDate("DD/MM/YYYY");
+      } else {
+        setSelectedEndDate(day + "/" + month + "/" + year);
+      }
+    } else {
+      setSelectedStartDate(day + "/" + month + "/" + year);
+      setSelectedEndDate("DD/MM/YYYY");
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        {/* <Text style={styles.text1}>Cashbox Featured</Text> */}
+        <Text style={styles.text1}>Cashbox Featured</Text>
         {/* <DatePicker
           background={Colors.white}
           iconSite="right"
@@ -148,16 +185,27 @@ const CashboxFeature = () => {
           setDate={setDate}
         /> */}
 
-        <CalendarPicker
-          startFromMonday={true}
-          todayBackgroundColor="#f2e6ff"
-          selectedDayColor="#00ffff"
-          selectedDayTextColor="#7300e6"
-          minDate={new Date()}
-          maxDate={new Date(2026, 6, 3)}
-          onDateChange={() => {}}
-          allowRangeSelection={true}
-        />
+        <TouchableOpacity
+          style={styles.dateContainer}
+          onPress={() => setSelected(!selected)}
+        >
+          <Text>{selectedStartDate}</Text>
+          <Text>{selectedEndDate}</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        {selected && (
+          <CalendarPicker
+            startFromMonday={true}
+            todayBackgroundColor="#f2e6ff"
+            selectedDayColor="#00ffff"
+            selectedDayTextColor="#7300e6"
+            minDate={new Date()}
+            maxDate={new Date(2026, 6, 3)}
+            onDateChange={onDateChangeData}
+            allowRangeSelection={true}
+          />
+        )}
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
       <View style={styles.bottomSection}>
@@ -175,9 +223,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   topSection: {
-    // flexDirection: "row",
-    // alignItems: "center",
-    // justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 20,
     flex: 1,
@@ -189,6 +237,15 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     fontWeight: "500",
     color: Colors.darkCharcoal,
+  },
+  dateContainer: {
+    height: 100,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: "red",
+    width: 100,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
