@@ -12,7 +12,7 @@ import Divider from "../Divider";
 import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
 import { IFeature } from "@/types/interfaces/feature.interface";
-import DatePicker from "../DatePicker";
+import Modal from "react-native-modal";
 //@ts-ignore
 import CalendarPicker from "react-native-calendar-picker";
 import {
@@ -42,84 +42,125 @@ const CashboxFeature = () => {
     useState<string>("DD/MM/YYYY");
   const [selectedEndDate, setSelectedEndDate] = useState<string>("DD/MM/YYYY");
   const [selected, setSelected] = useState<boolean>(false);
-  const [date, setDate] = useState(new Date());
 
   const db = useSQLiteContext();
-  const feature: IFeature[] = [
-    {
-      icon: require("../../../assets/images/cashGreen.png"),
-      text: "Cash Sell",
-      amount: totalCash,
-      color: Colors.VeroneseGreen,
-      textColor: Colors.green,
-    },
-    {
-      icon: require("../../../assets/images/expense.png"),
-      text: "Due",
-      amount: totalDue,
-      color: Colors.OrangeRed,
-      textColor: Colors.red,
-      link: "/pages/cashbox/dueReport",
-    },
-    {
-      icon: require("../../../assets/images/expense.png"),
-      text: "Cash buy",
-      amount: totalCashBuy,
-      color: Colors.OrangeRed,
-      textColor: Colors.red,
-    },
-    {
-      icon: require("../../../assets/images/expense.png"),
-      text: "Expenses",
-      amount: totalExpense,
-      color: Colors.OrangeRed,
-      textColor: Colors.red,
-    },
-    {
-      icon: require("../../../assets/images/cashGreen.png"),
-      text: "Deposited",
-      amount: totalDeposit,
-      color: Colors.VeroneseGreen,
-      textColor: Colors.green,
-    },
-    {
-      icon: require("../../../assets/images/expense.png"),
-      text: "Withdraw",
-      amount: totalWithdraw,
-      color: Colors.OrangeRed,
-      textColor: Colors.red,
-    },
-  ];
+
+  const feature: IFeature[] = useMemo(
+    () => [
+      {
+        icon: require("../../../assets/images/cashGreen.png"),
+        text: "Cash Sell",
+        amount: totalCash,
+        color: Colors.VeroneseGreen,
+        textColor: Colors.green,
+      },
+      {
+        icon: require("../../../assets/images/expense.png"),
+        text: "Due",
+        amount: totalDue,
+        color: Colors.OrangeRed,
+        textColor: Colors.red,
+        link: "/pages/cashbox/dueReport",
+      },
+      {
+        icon: require("../../../assets/images/expense.png"),
+        text: "Cash buy",
+        amount: totalCashBuy,
+        color: Colors.OrangeRed,
+        textColor: Colors.red,
+      },
+      {
+        icon: require("../../../assets/images/expense.png"),
+        text: "Expenses",
+        amount: totalExpense,
+        color: Colors.OrangeRed,
+        textColor: Colors.red,
+      },
+      {
+        icon: require("../../../assets/images/cashGreen.png"),
+        text: "Deposited",
+        amount: totalDeposit,
+        color: Colors.VeroneseGreen,
+        textColor: Colors.green,
+      },
+      {
+        icon: require("../../../assets/images/expense.png"),
+        text: "Withdraw",
+        amount: totalWithdraw,
+        color: Colors.OrangeRed,
+        textColor: Colors.red,
+      },
+    ],
+    [
+      totalCash,
+      totalDue,
+      totalCashBuy,
+      totalExpense,
+      totalDeposit,
+      totalWithdraw,
+    ]
+  );
 
   useEffect(() => {
-    async function getCash() {
+    async function asyncFunction() {
       // const cash = await getCash_sell(db);
       const startDate = selectedStartDate;
       const endDate = selectedEndDate;
-      const cashData = await getCash_sell(db);
       const filteredCashData =
-        !startDate && !endDate
-          ? cashData
-          : cashData?.filter((item: any) => {
+        startDate === "DD/MM/YYYY" && endDate === "DD/MM/YYYY"
+          ? await getCash_sell(db)
+          : (await getCash_sell(db))?.filter((item: any) => {
               const createdAt = FormatDate(item?.createdAt);
               return createdAt >= startDate && createdAt <= endDate;
             });
-      const deposit = await getDeposit(db);
-      const withdraw = await getWithdraw(db);
-      const expense = await getExpense(db);
-      const cash_buy = await getCash_buy(db);
-      const due = (await getCash_sell(db)).filter(
-        (item: any) => item?.dueAmount > 0
-      );
+      const filteredDepositData =
+        startDate === "DD/MM/YYYY" && endDate === "DD/MM/YYYY"
+          ? await getDeposit(db)
+          : (await getDeposit(db))?.filter((item: any) => {
+              const createdAt = FormatDate(item?.createdAt);
+              console.log(createdAt, ":::::: createdAT");
+
+              return createdAt >= startDate && createdAt <= endDate;
+            });
+      const filterWithdrawData =
+        startDate === "DD/MM/YYYY" && endDate === "DD/MM/YYYY"
+          ? await getWithdraw(db)
+          : (await getWithdraw(db))?.filter((item: any) => {
+              const createdAt = FormatDate(item?.createdAt);
+              return createdAt >= startDate && createdAt <= endDate;
+            });
+      const filteredExpenseData =
+        startDate === "DD/MM/YYYY" && endDate === "DD/MM/YYYY"
+          ? await getExpense(db)
+          : (await getExpense(db))?.filter((item: any) => {
+              const createdAt = FormatDate(item?.createdAt);
+              return createdAt >= startDate && createdAt <= endDate;
+            });
+      const filteredCashBuyData =
+        startDate === "DD/MM/YYYY" && endDate === "DD/MM/YYYY"
+          ? await getCash_buy(db)
+          : (await getCash_buy(db))?.filter((item: any) => {
+              const createdAt = FormatDate(item?.createdAt);
+              return createdAt >= startDate && createdAt <= endDate;
+            });
+      const filteredDueData =
+        startDate === "DD/MM/YYYY" && endDate === "DD/MM/YYYY"
+          ? (await getCash_sell(db)).filter((item: any) => item?.dueAmount > 0)
+          : (await getCash_sell(db))
+              .filter((item: any) => item?.dueAmount > 0)
+              ?.filter((item: any) => {
+                const createdAt = FormatDate(item?.createdAt);
+                return createdAt >= startDate && createdAt <= endDate;
+              });
       setGetAllCashSell(filteredCashData);
-      setDeposit(deposit);
-      setWithdraw(withdraw);
-      setExpense(expense);
-      setDue(due);
-      setCashBuy(cash_buy);
+      setDeposit(filteredDepositData);
+      setWithdraw(filterWithdrawData);
+      setExpense(filteredExpenseData);
+      setDue(filteredDueData);
+      setCashBuy(filteredCashBuyData);
       console.log(filteredCashData, ":::::::");
     }
-    getCash();
+    asyncFunction();
   }, [selectedStartDate, selectedEndDate]);
 
   useEffect(() => {
@@ -157,11 +198,6 @@ const CashboxFeature = () => {
   }, [getAllCashSell, deposit, withdraw, expense, due, cashBuy]);
 
   const onDateChangeData = (date: any, type: any) => {
-    // console.log(date);
-    // if (date) {
-    //   setDate(date);
-    // }
-
     const newDate = JSON.stringify(date);
     const newDate1 = newDate.substring(1, newDate.length - 1);
     const dates = newDate1.split("T");
@@ -174,60 +210,69 @@ const CashboxFeature = () => {
       if (day == undefined) {
         setSelectedEndDate("DD/MM/YYYY");
       } else {
-        setSelectedEndDate(day + "/" + month + "/" + year);
+        setSelectedEndDate(`${day}/${month}/${year}`);
       }
     } else {
-      setSelectedStartDate(day + "/" + month + "/" + year);
+      setSelectedStartDate(`${day}/${month}/${year}`);
       setSelectedEndDate("DD/MM/YYYY");
     }
   };
-
-  const selectedDates = !selectedStartDate || !selectedEndDate;
-  console.log(selectedDates);
+  const selectedDates =
+    selectedStartDate === "DD/MM/YYYY" && selectedEndDate === "DD/MM/YYYY";
 
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
         <Text style={styles.text1}>Cashbox Featured</Text>
-        {/* <DatePicker
-          background={Colors.white}
-          iconSite="right"
-          iconColor={Colors.mainColor}
-          iconSize={18}
-          date={date}
-          setDate={setDate}
-        /> */}
-
         <TouchableOpacity
           style={styles.dateSelectorButton}
           onPress={() => setSelected(!selected)}
         >
           <Text>
-            {selectedDates ? (
-              ""
-            ) : (
-              <Text>
-                {" "}
-                {selectedStartDate} -- {selectedEndDate}
-              </Text>
-            )}
+            {selectedDates
+              ? "Select Date Range"
+              : `${selectedStartDate} -- ${selectedEndDate}`}
           </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.dateContainer}>
-        {(selected || selectedEndDate !== "DD/MM/YYYY") && (
-          <CalendarPicker
-            startFromMonday={true}
-            todayBackgroundColor="#f2e6ff"
-            selectedDayColor="#00ffff"
-            selectedDayTextColor="#7300e6"
-            minDate={new Date(2024, 1, 1)}
-            maxDate={new Date(2026, 6, 3)}
-            onDateChange={onDateChangeData}
-            allowRangeSelection={true}
-            width={Dimensions.get("window").width - 30}
-          />
-        )}
+        {/* {selected && ( */}
+        <Modal
+          isVisible={selected}
+          onBackButtonPress={() => setSelected(false)}
+          onBackdropPress={() => setSelected(false)}
+          style={styles.dateModal}
+        >
+          <View style={styles.dateModalContent}>
+            <CalendarPicker
+              startFromMonday={true}
+              todayBackgroundColor="#f2e6ff"
+              selectedDayColor="#00ffff"
+              selectedDayTextColor="#7300e6"
+              minDate={new Date(2024, 1, 1)}
+              maxDate={new Date(2026, 6, 3)}
+              onDateChange={onDateChangeData}
+              allowRangeSelection={true}
+              width={Dimensions.get("window").width - 50}
+              weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+              months={[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ]}
+            />
+          </View>
+        </Modal>
+        {/* )} */}
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
       <View style={styles.bottomSection}>
@@ -272,6 +317,14 @@ const styles = StyleSheet.create({
   dateContainer: {
     paddingHorizontal: 8,
     paddingVertical: 4,
+  },
+  dateModal: {
+    height: 400,
+  },
+  dateModalContent: {
+    height: 400,
+    backgroundColor: Colors.white,
+    borderRadius: radius.small,
   },
 });
 
