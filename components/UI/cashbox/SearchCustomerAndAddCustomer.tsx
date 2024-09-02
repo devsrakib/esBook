@@ -75,7 +75,9 @@ const SearchCustomerAndAddCustomer = ({
               <View style={styles.nameContainer}>
                 <Text style={styles.name}>{customerData?.name}</Text>
                 <Text style={styles.date}>
-                  {FormatDate(customerData?.createdAt)}
+                  {customerData?.createdAt
+                    ? FormatDate(customerData?.createdAt)
+                    : null}
                 </Text>
               </View>
               <View style={[styles.userIconCon, { borderWidth: 0 }]}>

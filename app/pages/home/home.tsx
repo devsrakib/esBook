@@ -18,22 +18,6 @@ import Modal from "react-native-modal";
 import { getCash_sell, getSuppliers } from "@/databases/Database";
 
 const Home = () => {
-  const db = useSQLiteContext();
-  useEffect(() => {
-    async function setup() {
-      const result = await getSuppliers(db);
-      console.log(result);
-    }
-    setup();
-  }, []);
-
-  useEffect(() => {
-    async function cash_sell_data() {
-      const result = await getCash_sell(db);
-    }
-    cash_sell_data();
-  });
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={[Styles.container]}>

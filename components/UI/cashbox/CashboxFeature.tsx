@@ -242,6 +242,7 @@ const CashboxFeature = () => {
           onBackButtonPress={() => setSelected(false)}
           onBackdropPress={() => setSelected(false)}
           style={styles.dateModal}
+          backdropOpacity={0.7}
         >
           <View style={styles.dateModalContent}>
             <CalendarPicker

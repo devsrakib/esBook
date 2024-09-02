@@ -3,14 +3,18 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ToastAndroid } from "react-native";
-import Modal from "react-native-modal";
-import Button from "../Button";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ToastAndroid,
+} from "react-native";
 import { collection_reminder, getCustomerById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
 import { Link } from "expo-router";
-import DatePicker from "../DatePicker";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -48,7 +52,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
   ) => {
     const currentDate = selectedDate || date;
     console.log(currentDate);
-    
+
     setShow(false);
     setDate(currentDate);
 
@@ -57,19 +61,18 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
       amount: item?.dueAmount,
       collectionDate: String(currentDate),
     };
-   const result = await collection_reminder(db, reminderData);
+    const result = await collection_reminder(db, reminderData);
     setModalVisible(false);
-    setError(result?.message)
+    setError(result?.message);
     console.log(reminderData, "::::::::");
     console.log(result, ":::: result ::::");
   };
 
-  
   const showToastWithGravity = () => {
     ToastAndroid.showWithGravity(
       `${error}`,
       ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
+      ToastAndroid.CENTER
     );
   };
 
@@ -79,13 +82,15 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     }
   }, [error]);
 
+  console.log(text, ":::::::::::");
+
   return (
     <Link
       href={{
         pathname: "/pages/parties/CustomerView",
         params: {
           id: item?.customerId,
-          text: 'Customer',
+          text: "Customer",
         },
       }}
       asChild
@@ -117,7 +122,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
             {text === "date" ? (
               <>
                 <AntDesign name="checkcircle" size={12} color={Colors.green} />
-                <Text style={styles.date}> Added {FormatDate(item?.collectionDate)}</Text>
+                <Text style={styles.date}> Added {item?.collectionDate}</Text>
               </>
             ) : (
               <TouchableOpacity
@@ -125,7 +130,9 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
                 style={styles.calenderCon}
               >
                 <AntDesign name="calendar" size={14} color={Colors.text} />
-                <Text style={styles.date}>{date ? FormatDate(date) : "Set Date"}</Text>
+                <Text style={styles.date}>
+                  {date ? FormatDate(date) : "Set Date"}
+                </Text>
               </TouchableOpacity>
             )}
           </View>
@@ -137,14 +144,16 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
           iconColor={Colors.text}
           iconSize={24}
         /> */}
-{show &&        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          onChange={handleDateChange}
-        />}
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
       </TouchableOpacity>
     </Link>
   );
