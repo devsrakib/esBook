@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
@@ -36,6 +42,7 @@ const CashboxFeature = () => {
     useState<string>("DD/MM/YYYY");
   const [selectedEndDate, setSelectedEndDate] = useState<string>("DD/MM/YYYY");
   const [selected, setSelected] = useState<boolean>(false);
+  const [date, setDate] = useState(new Date());
 
   const db = useSQLiteContext();
   const feature: IFeature[] = [
@@ -87,13 +94,16 @@ const CashboxFeature = () => {
   useEffect(() => {
     async function getCash() {
       // const cash = await getCash_sell(db);
-      const startDate = new Date(selectedStartDate);
-      const endDate = new Date(selectedEndDate);
-
-      const cash = (await getCash_sell(db)).filter((item: any) => {
-        const createdAt = new Date(item.createdAt);
-        return createdAt >= startDate && createdAt <= endDate;
-      });
+      const startDate = selectedStartDate;
+      const endDate = selectedEndDate;
+      const cashData = await getCash_sell(db);
+      const filteredCashData =
+        !startDate && !endDate
+          ? cashData
+          : cashData?.filter((item: any) => {
+              const createdAt = FormatDate(item?.createdAt);
+              return createdAt >= startDate && createdAt <= endDate;
+            });
       const deposit = await getDeposit(db);
       const withdraw = await getWithdraw(db);
       const expense = await getExpense(db);
@@ -101,16 +111,16 @@ const CashboxFeature = () => {
       const due = (await getCash_sell(db)).filter(
         (item: any) => item?.dueAmount > 0
       );
-      setGetAllCashSell(cash);
+      setGetAllCashSell(filteredCashData);
       setDeposit(deposit);
       setWithdraw(withdraw);
       setExpense(expense);
       setDue(due);
       setCashBuy(cash_buy);
-      console.log(startDate, ":::::::");
+      console.log(filteredCashData, ":::::::");
     }
     getCash();
-  }, []);
+  }, [selectedStartDate, selectedEndDate]);
 
   useEffect(() => {
     const totalCollectedAmount = getAllCashSell?.reduce(
@@ -172,6 +182,9 @@ const CashboxFeature = () => {
     }
   };
 
+  const selectedDates = !selectedStartDate || !selectedEndDate;
+  console.log(selectedDates);
+
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
@@ -186,24 +199,33 @@ const CashboxFeature = () => {
         /> */}
 
         <TouchableOpacity
-          style={styles.dateContainer}
+          style={styles.dateSelectorButton}
           onPress={() => setSelected(!selected)}
         >
-          <Text>{selectedStartDate}</Text>
-          <Text>{selectedEndDate}</Text>
+          <Text>
+            {selectedDates ? (
+              ""
+            ) : (
+              <Text>
+                {" "}
+                {selectedStartDate} -- {selectedEndDate}
+              </Text>
+            )}
+          </Text>
         </TouchableOpacity>
       </View>
-      <View>
-        {selected && (
+      <View style={styles.dateContainer}>
+        {(selected || selectedEndDate !== "DD/MM/YYYY") && (
           <CalendarPicker
             startFromMonday={true}
             todayBackgroundColor="#f2e6ff"
             selectedDayColor="#00ffff"
             selectedDayTextColor="#7300e6"
-            minDate={new Date()}
+            minDate={new Date(2024, 1, 1)}
             maxDate={new Date(2026, 6, 3)}
             onDateChange={onDateChangeData}
             allowRangeSelection={true}
+            width={Dimensions.get("window").width - 30}
           />
         )}
       </View>
@@ -238,14 +260,18 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: Colors.darkCharcoal,
   },
+  dateSelectorButton: {
+    height: 30,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Colors.border,
+    paddingHorizontal: 5,
+    borderRadius: radius.small,
+  },
   dateContainer: {
-    height: 100,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: "red",
-    width: 100,
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
 
