@@ -253,22 +253,8 @@ const CashboxFeature = () => {
               maxDate={new Date(2026, 6, 3)}
               onDateChange={onDateChangeData}
               allowRangeSelection={true}
-              width={Dimensions.get("window").width - 50}
+              width={Dimensions.get("window").width - 60}
               weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-              months={[
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ]}
             />
           </View>
         </Modal>
