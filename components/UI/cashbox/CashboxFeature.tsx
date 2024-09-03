@@ -118,8 +118,6 @@ const CashboxFeature = () => {
           ? await getDeposit(db)
           : (await getDeposit(db))?.filter((item: any) => {
               const createdAt = FormatDate(item?.createdAt);
-              console.log(createdAt, ":::::: createdAT");
-
               return createdAt >= startDate && createdAt <= endDate;
             });
       const filterWithdrawData =

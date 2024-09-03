@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, ToastAndroid } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import ImageInput from "./ImageInput";
@@ -8,6 +8,7 @@ import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
 import { useSQLiteContext } from "expo-sqlite";
 import { createSuppliers, SupplierData } from "@/databases/Database";
+import { useRouter } from "expo-router";
 
 const Suppliers = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -19,7 +20,7 @@ const Suppliers = () => {
     address: "",
     createdAt: "",
   });
-
+  const navigate = useRouter();
   const db = useSQLiteContext();
   useEffect(() => {
     setSupplierData((prevData) => ({
@@ -28,7 +29,15 @@ const Suppliers = () => {
     }));
   }, [selectedImage]);
   const handleSave = async () => {
-    await createSuppliers(db, supplierData);
+    try {
+      const result = await createSuppliers(db, supplierData);
+      if (result.success) {
+        navigate.push("/(tabs)/parties");
+        ToastAndroid.show("Supplier created successfully!", ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);
+    }
   };
 
   return (

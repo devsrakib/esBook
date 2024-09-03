@@ -2,41 +2,28 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCollectionReminder } from "@/databases/Database";
+import FormatDate from "@/utils/FormatDate";
 
 const Today = () => {
   const [todaysData, setTodaysData] = useState<any>([]);
   const db = useSQLiteContext();
 
+  const today = FormatDate(new Date());
   // Function to filter data for today's records
-  const getTodaysData = (data) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set time to 00:00:00
-    console.log(data, "Data");
-
-    console.log(today, "Today");
-
-    return data?.filter((item) => {
-      const createdAtDate = new Date(item?.createdAt);
-      console.log(createdAtDate, "Date");
-
-      return createdAtDate >= today;
-    });
-  };
-
   useEffect(() => {
     async function collectionReminder() {
       const result = await getCollectionReminder(db);
-      console.log(result, "Database result");
+      const filteredResult = result?.filter((item: any) => {
+        const createdAtDate = new Date(item?.collectionDate);
+        const collectionFormateDate = FormatDate(createdAtDate);
+        return collectionFormateDate === today;
+      });
 
-      const filteredData = getTodaysData(result); // Filter the data for today's records
-      console.log(filteredData, "Filtered Data");
-
-      setTodaysData(filteredData);
+      console.log(filteredResult, "Filtered Data");
+      setTodaysData(filteredResult);
     }
     collectionReminder();
   }, []);
-
-  console.log(todaysData);
 
   return (
     <View>

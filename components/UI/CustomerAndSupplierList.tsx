@@ -133,6 +133,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
                           item={item}
                           text={"Customer"}
                           selectedIndex={selectedIndex}
+                          deleteFrom={"index"}
                         />
                       );
                     }}
@@ -161,6 +162,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
                           item={item}
                           text={"Supplier"}
                           selectedIndex={selectedIndex}
+                          deleteFrom={"index"}
                         />
                       );
                     }}

@@ -14,8 +14,13 @@ import Button from "@/components/UI/Button";
 import { Fonts } from "@/constants/Fonts";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GoBack from "@/components/UI/header/GoBack";
-import { Stack, useLocalSearchParams } from "expo-router";
-import { deleteCustomerById, deleteSupplierById, getCustomerById, getSupplierById } from "@/databases/Database";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  deleteCustomerById,
+  deleteSupplierById,
+  getCustomerById,
+  getSupplierById,
+} from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 
 const Profile = () => {
@@ -24,7 +29,8 @@ const Profile = () => {
   const router = useLocalSearchParams<any>();
   console.log(router, "id");
   const db = useSQLiteContext();
-  console.log(userData, "hello data");
+  console.log(router, "hello data");
+  const navigate: any = useRouter();
 
   const infoData = [
     {
@@ -54,10 +60,10 @@ const Profile = () => {
       try {
         const customer = await getCustomerById(db, router?.id);
         const supplier = await getSupplierById(db, router?.id);
-        if (customer && router?.text === "Customer"  ) {
+        if (customer && router?.text === "Customer") {
           setUserData(customer);
         } else if (supplier && router?.text === "Supplier") {
-          setUserData(supplier)
+          setUserData(supplier);
         }
       } catch (error) {
         console.error("Error fetching customer:", error);
@@ -69,14 +75,17 @@ const Profile = () => {
   }, [db, router?.id]);
 
   const handleDeleteCustomer = async () => {
-    try{
-if(router?.text === "Customer"){
-  await deleteCustomerById(db, userData?.id);
-}else if(router?.text === "Supplier"){
-  await deleteSupplierById(db, userData?.id);
-}
-    }catch(error){
-      console.log(error)
+    try {
+      if (router?.text === "Customer") {
+        const result = await deleteCustomerById(db, userData?.id);
+        if (result?.success) {
+          navigate.push(`/(tabs)/${router.deleteFrom}`);
+        }
+      } else if (router?.text === "Supplier") {
+        await deleteSupplierById(db, userData?.id);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -127,13 +136,16 @@ if(router?.text === "Customer"){
         })}
       </View>
       <Button
-        title={router?.text === "Customer" ? "Delete Customer" : "Delete Supplier"}
+        title={
+          router?.text === "Customer" ? "Delete Customer" : "Delete Supplier"
+        }
         titleColor={Colors.red}
         radius={50}
         width={"90%"}
         bg={Colors.OrangeRed}
-        onPress={() =>{
-           handleDeleteCustomer()}}
+        onPress={() => {
+          handleDeleteCustomer();
+        }}
       />
     </ScrollView>
   );

@@ -7,14 +7,14 @@ import { currency } from "@/global/currency";
 import Divider from "../Divider";
 import { Link } from "expo-router";
 
-const Feature = ({ data }: any) => {
+const Feature = ({ data }: { data: any }) => {
   const text = data?.text;
 
   return (
     <Fragment>
       <Link
         href={{
-          pathname: `${data?.link ? data?.link: "/pages/cashbox/details"}`,
+          pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}`,
           params: { text: text },
         }}
         asChild
@@ -27,7 +27,7 @@ const Feature = ({ data }: any) => {
           <View style={styles.amountCon}>
             <Text style={[styles.amount, { color: data?.textColor }]}>
               {currency}
-              {data?.amount?.toLocaleString('en-US') || '0'}
+              {data?.amount?.toLocaleString("en-US") || "0"}
             </Text>
             <AntDesign name="right" size={16} color={Colors.text} />
           </View>

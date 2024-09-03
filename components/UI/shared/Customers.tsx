@@ -19,10 +19,12 @@ const Customers = ({
   item,
   text,
   selectedIndex,
+  deleteFrom,
 }: {
   item: any;
   text: string;
   selectedIndex?: number;
+  deleteFrom: string;
 }) => {
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
@@ -84,6 +86,7 @@ const Customers = ({
             id: item?.id,
             name: item?.name,
             text: text,
+            deleteFrom: deleteFrom,
             profile: item?.profilePhoto,
           },
         }}

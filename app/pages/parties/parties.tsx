@@ -190,6 +190,7 @@ const Parties = () => {
                       item={item}
                       selectedIndex={selectedIndex}
                       text={"Customer"}
+                      deleteFrom={"parties"}
                     />
                   );
                 }}
@@ -222,6 +223,7 @@ const Parties = () => {
                       item={item}
                       selectedIndex={selectedIndex}
                       text={"Supplier"}
+                      deleteFrom={"parties"}
                     />
                   );
                 }}
