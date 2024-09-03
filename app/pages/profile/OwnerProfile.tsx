@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -38,19 +39,19 @@ const OwnerProfile = () => {
 
   const db = useSQLiteContext();
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const profileArray = await getOwnerProfile(db);
-        if (profileArray && profileArray?.length > 0) {
-          const profile = profileArray[0];
-          setProfileData(profile); // Initialize profileData after fetching
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
+  const fetchProfileData = async () => {
+    try {
+      const profileArray = await getOwnerProfile(db);
+      if (profileArray && profileArray?.length > 0) {
+        const profile = profileArray[0];
+        setProfileData(profile); // Initialize profileData after fetching
       }
-    };
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchProfileData();
   }, [db]);
 
@@ -72,7 +73,11 @@ const OwnerProfile = () => {
 
   const handleSaveProfileInfo = async () => {
     try {
-      await update_owner_profile(db, profileData);
+      const result = await update_owner_profile(db, profileData);
+      if (result.success) {
+        fetchProfileData();
+        ToastAndroid.show("Profile updated successfully!", ToastAndroid.SHORT);
+      }
     } catch (error) {}
   };
 

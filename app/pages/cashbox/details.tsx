@@ -6,8 +6,13 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Stack,
+  useLocalSearchParams,
+  useNavigation,
+  useRouter,
+} from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/cashbox/Header";
 import { Colors } from "@/constants/Colors";
@@ -36,6 +41,8 @@ const page = () => {
   const route = useLocalSearchParams<any>();
   const { bottom, top } = useSafeAreaInsets();
   const [transaction, setTransaction] = useState<any>();
+
+  const navigation = useRouter();
 
   let transactionData: any;
   if (route.text == "Cash Sell") {
@@ -92,35 +99,51 @@ const page = () => {
   const db = useSQLiteContext();
 
   const handleCashSell = async () => {
-    await cash_sell(db, transactionData);
-    console.log(transactionData);
+    const result = await cash_sell(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
 
   const handleExpense = async () => {
-    await expense(db, transactionData);
-    console.log(transactionData);
+    const result = await expense(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
   const handleDeposit = async () => {
-    await deposit(db, transactionData);
-    console.log(transactionData);
+    const result = await deposit(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
   const handleCashBuy = async () => {
-    await cash_buy(db, transactionData);
-    console.log(transactionData);
+    const result = await cash_buy(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
   const handleWithdraw = async () => {
-    await withdraw(db, transactionData);
-    console.log(transactionData);
+    const result = await withdraw(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
   // const handleCashReport = async () => {
   //   await cash_report(db, transactionData);
   //   console.log(transactionData);
   // };
   const handleDue = async () => {
-    await updateDueAmount(db, transactionData);
+    const result = await updateDueAmount(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
   const handleCashBuyDue = async () => {
-    await updateSupplierDueAmount(db, transactionData);
+    const result = await updateSupplierDueAmount(db, transactionData);
+    if (result.success) {
+      navigation.push("/(tabs)/cashbox");
+    }
   };
 
   console.log(route);
