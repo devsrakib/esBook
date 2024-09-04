@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import ListItem from "@/components/UI/Collection_component/ListItem";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCollectionReminder } from "@/databases/Database";
+import Empty from "@/components/UI/Empty";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const All = () => {
   const [reminder, setReminder] = useState<any>([]);
@@ -20,15 +22,24 @@ const All = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={reminder}
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-        }}
-        renderItem={({ item }) => {
-          return <ListItem item={item} text="date" />;
-        }}
-      />
+      {reminder?.length === 0 ? (
+        <Empty
+          icon={
+            <MaterialIcons name="hourglass-empty" size={24} color="black" />
+          }
+          text="No Data Found"
+        />
+      ) : (
+        <FlatList
+          data={reminder}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}
+          renderItem={({ item }) => {
+            return <ListItem item={item} text="date" />;
+          }}
+        />
+      )}
     </View>
   );
 };

@@ -43,7 +43,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
   const formatDate = (date: Date) => {
     // Format date to a readable string (e.g., 'Aug 1, 2024')
-    return date.toLocaleDateString();
+    return date?.toLocaleDateString();
   };
 
   return (

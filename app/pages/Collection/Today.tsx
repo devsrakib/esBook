@@ -1,8 +1,11 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCollectionReminder } from "@/databases/Database";
 import FormatDate from "@/utils/FormatDate";
+import ListItem from "@/components/UI/Collection_component/ListItem";
+import Empty from "@/components/UI/Empty";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Today = () => {
   const [todaysData, setTodaysData] = useState<any>([]);
@@ -26,11 +29,25 @@ const Today = () => {
   }, []);
 
   return (
-    <View>
-      <Text adjustsFontSizeToFit>Today</Text>
-      {todaysData.map((item: any, index: any) => (
-        <Text key={index}>{item?.amount}</Text>
-      ))}
+    <View style={{ flex: 1 }}>
+      {todaysData?.length === 0 ? (
+        <Empty
+          icon={
+            <MaterialIcons name="hourglass-empty" size={24} color="black" />
+          }
+          text="No Data Found"
+        />
+      ) : (
+        <FlatList
+          data={todaysData}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}
+          renderItem={({ item }) => {
+            return <ListItem item={item} text="date" />;
+          }}
+        />
+      )}
     </View>
   );
 };

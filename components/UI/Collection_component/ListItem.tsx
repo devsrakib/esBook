@@ -14,7 +14,7 @@ import {
 import { collection_reminder, getCustomerById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -27,7 +27,7 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
   const [error, setError] = useState<string | undefined>("");
   const [show, setShow] = useState<boolean>(false);
   const db = useSQLiteContext();
-
+  const navigation = useNavigation();
   useEffect(() => {
     async function getCustomer() {
       try {
@@ -62,10 +62,18 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
       collectionDate: String(currentDate),
     };
     const result = await collection_reminder(db, reminderData);
-    setModalVisible(false);
-    setError(result?.message);
-    console.log(reminderData, "::::::::");
-    console.log(result, ":::: result ::::");
+    if (result.success) {
+      navigation.goBack();
+      ToastAndroid.showWithGravity(
+        "Collection Reminder Added Successfully",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+      setModalVisible(false);
+      // setError(result?.message);
+    } else {
+      setError(result?.message);
+    }
   };
 
   const showToastWithGravity = () => {
@@ -82,7 +90,8 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     }
   }, [error]);
 
-  console.log(text, ":::::::::::");
+  const formateDate = new Date(item?.collectionDate);
+  console.log(formateDate);
 
   return (
     <Link
@@ -122,7 +131,10 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
             {text === "date" ? (
               <>
                 <AntDesign name="checkcircle" size={12} color={Colors.green} />
-                <Text style={styles.date}> Added {item?.collectionDate}</Text>
+                <Text style={styles.date}>
+                  {" "}
+                  Added {FormatDate(formateDate)}
+                </Text>
               </>
             ) : (
               <TouchableOpacity
