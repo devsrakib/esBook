@@ -51,7 +51,6 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
     selectedDate?: Date
   ) => {
     const currentDate = selectedDate || date;
-    console.log(currentDate);
 
     setShow(false);
     setDate(currentDate);

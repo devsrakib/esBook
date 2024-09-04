@@ -20,7 +20,7 @@ import { currency } from "@/global/currency";
 import Modal from "react-native-modal";
 import RadioGroup from "react-native-radio-buttons-group";
 import ListItem from "@/components/UI/Collection_component/ListItem";
-import { getCash_sell } from "@/databases/Database";
+import { getCash_sell, getCustomers } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 
 const SetCollectionDate = () => {
@@ -28,23 +28,25 @@ const SetCollectionDate = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState("1");
   const [dueCollection, setDueCollection] = useState<any>();
+  const [customers, setCustomers] = useState<any>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const db = useSQLiteContext();
   const radioButtons = useMemo(
     () => [
       {
         id: "1", // acts as primary key, should be unique and non-empty string
         label: "Highest Amount",
-        value: "option1",
+        value: "highestAmount",
       },
       {
         id: "2",
-        label: "Oldest Due",
-        value: "option2",
+        label: "Oldest Amount",
+        value: "oldestAmount",
       },
       {
         id: "3",
-        label: "Pick Date",
-        value: "option2",
+        label: "Lowest Amount",
+        value: "lowestAmount",
       },
     ],
     []
@@ -55,11 +57,43 @@ const SetCollectionDate = () => {
       const due = (await getCash_sell(db)).filter(
         (item: any) => item?.dueAmount > 0
       );
+      const customer = await getCustomers(db);
+      setCustomers(customer);
       setDueCollection(due);
     }
     dueCollection();
   }, []);
 
+  const filteredCustomers = customers?.filter((customer: any) =>
+    customer?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+  );
+  // console.log(filteredCustomers);
+
+  const filteredDueCollection = dueCollection?.filter((item: any) =>
+    filteredCustomers?.some(
+      (customer: any) => customer?.id === item?.customerId
+    )
+  );
+  console.log(filteredDueCollection, "::::::::");
+
+  const sortedDueCollection = useMemo(() => {
+    switch (selectedId) {
+      case "highestAmount":
+        return filteredDueCollection?.sort(
+          (a: any, b: any) => b.dueAmount - a.dueAmount
+        );
+      case "oldestAmount":
+        return filteredDueCollection; // Assuming 'oldest amount' means no sorting, just filtered
+      case "lowestAmount":
+        return filteredDueCollection?.sort(
+          (a: any, b: any) => a.dueAmount - b.dueAmount
+        );
+      default:
+        return filteredDueCollection;
+    }
+  }, [filteredDueCollection, selectedId]);
+
+  console.log(selectedId);
 
   return (
     <View
@@ -96,6 +130,7 @@ const SetCollectionDate = () => {
         <View style={styles.search}>
           <AntDesign name="search1" size={18} color={Colors.text} />
           <TextInput
+            onChangeText={(text) => setSearchTerm(text)}
             placeholder="Search from 10 Customer"
             style={styles.input}
           />
@@ -110,7 +145,7 @@ const SetCollectionDate = () => {
       </View>
 
       <FlatList
-        data={dueCollection}
+        data={sortedDueCollection}
         renderItem={({ item }) => {
           return <ListItem item={item} text="added" />;
         }}
