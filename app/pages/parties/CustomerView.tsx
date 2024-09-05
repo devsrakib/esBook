@@ -179,6 +179,8 @@ const CustomerView = () => {
     getCustomer();
   }, []);
 
+  const formatCollectionDate = new Date(collectionDate?.collectionDate);
+
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -188,7 +190,7 @@ const CustomerView = () => {
         <GoBack color={Colors.white} />
         <Link
           href={{
-            pathname: "pages/profile/profile",
+            pathname: "/pages/profile/profile",
             params: router,
           }}
           asChild
@@ -227,9 +229,9 @@ const CustomerView = () => {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>You Will Give</Text>
-            <Text style={styles.cardSubtitle}>
-              {router?.text === "Customer" ? "Customer" : "Supplier"}
-            </Text>
+            <View style={styles.cardSubtitleContainer}>
+              <Text style={styles.cardSubtitle}>{router?.text}</Text>
+            </View>
           </View>
           <Text style={styles.amount}>
             {currency} {totalGiveAmount?.toLocaleString("en-US")}
@@ -240,7 +242,7 @@ const CustomerView = () => {
             <View style={styles.reminderButton}>
               <Ionicons name="calendar-outline" size={16} color="black" />
               <Text style={styles.reminderText}>
-                {FormatDate(collectionDate?.collectionDate)}
+                {FormatDate(formatCollectionDate)}
               </Text>
             </View>
           ) : (
@@ -468,6 +470,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  cardSubtitleContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: radius.small,
+    backgroundColor: Colors.VeroneseGreen,
   },
   cardSubtitle: {
     fontSize: 14,

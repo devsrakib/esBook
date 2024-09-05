@@ -9,6 +9,8 @@ import { getCashReport } from "@/databases/Database";
 import { currency } from "@/global/currency";
 import { Fonts } from "@/constants/Fonts";
 import FormatDate from "@/utils/FormatDate";
+import Empty from "@/components/UI/Empty";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const cashReport = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -34,30 +36,43 @@ const cashReport = () => {
         backgroundColor={Colors.mainColor}
       />
       <View style={styles.content}>
-        <FlatList
-          data={cashReport}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.card}>
-                <View style={styles.imageAndTextContainer}>
-                  <View style={styles.imageContainer}>
-                    <Image
-                      style={styles.image}
-                      source={require("../../../assets/images/cashImage.png")}
-                    />
+        {cashReport?.length === 0 ? (
+          <Empty
+            icon={
+              <MaterialCommunityIcons
+                name="timer-sand-empty"
+                size={30}
+                color={Colors.text}
+              />
+            }
+            text="No Cash Report"
+          />
+        ) : (
+          <FlatList
+            data={cashReport}
+            renderItem={({ item }) => {
+              return (
+                <View style={styles.card}>
+                  <View style={styles.imageAndTextContainer}>
+                    <View style={styles.imageContainer}>
+                      <Image
+                        style={styles.image}
+                        source={require("../../../assets/images/cashImage.png")}
+                      />
+                    </View>
+                    <View style={styles.textContainer}>
+                      <Text style={styles.text}>Have Cashbox</Text>
+                      <Text style={styles.date}>{FormatDate(item?.date)}</Text>
+                    </View>
                   </View>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.text}>Have Cashbox</Text>
-                    <Text style={styles.date}>{FormatDate(item?.date)}</Text>
-                  </View>
+                  <Text style={styles.amount}>
+                    {currency} {item?.totalCash?.toLocaleString("en-US")}
+                  </Text>
                 </View>
-                <Text style={styles.amount}>
-                  {currency} {item?.totalCash?.toLocaleString("en-US")}
-                </Text>
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
+        )}
       </View>
     </View>
   );

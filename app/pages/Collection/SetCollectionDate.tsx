@@ -11,7 +11,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Header from "@/components/UI/header/Header";
 import GoBack from "@/components/UI/header/GoBack";
 import { AntDesign, EvilIcons, Feather } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
@@ -74,7 +73,6 @@ const SetCollectionDate = () => {
       (customer: any) => customer?.id === item?.customerId
     )
   );
-  console.log(filteredDueCollection, "::::::::");
 
   const sortedDueCollection = useMemo(() => {
     switch (selectedId) {
@@ -92,8 +90,6 @@ const SetCollectionDate = () => {
         return filteredDueCollection;
     }
   }, [filteredDueCollection, selectedId]);
-
-  console.log(selectedId);
 
   return (
     <View

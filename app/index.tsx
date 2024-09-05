@@ -33,12 +33,15 @@ export default function CreateOwnerProfile() {
   };
 
   const handleCreateProfile = async () => {
-    const result = await owner_profile(db, profile);
-    if (result.success) {
-      router.push("/(tabs)");
-    } else {
-      // Show error message in UI
-      console.error(result.message);
+    try {
+      const result = await owner_profile(db, profile);
+      if (result.success) {
+        router.push("/(tabs)");
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error during navigation:", error);
     }
   };
 
@@ -51,9 +54,7 @@ export default function CreateOwnerProfile() {
       </View>
       <ScrollView>
         <View style={styles.bodyContainer}>
-          <View
-            style={styles.profileImageContainer}
-          >
+          <View style={styles.profileImageContainer}>
             {selectedImage ? (
               <Image
                 style={styles.profileImage}
@@ -65,7 +66,10 @@ export default function CreateOwnerProfile() {
                 source={{ uri: "https://via.placeholder.com/100x100" }} // Placeholder image URL
               />
             )}
-            <TouchableOpacity onPress={() => pickImage()} style={styles.cameraIcon}>
+            <TouchableOpacity
+              onPress={() => pickImage()}
+              style={styles.cameraIcon}
+            >
               <Image
                 style={styles.icon}
                 source={{
