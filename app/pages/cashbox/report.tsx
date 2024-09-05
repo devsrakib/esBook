@@ -68,7 +68,6 @@ const Page = () => {
 
   // Check if current data is empty
   const isEmpty = currentData?.length === 0;
-  console.log(isEmpty, ":::::::::   ;;;;;;");
 
   return (
     <View

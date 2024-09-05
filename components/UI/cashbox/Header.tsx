@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import GoBack from "../header/GoBack";
 import { Fonts } from "@/constants/Fonts";
@@ -14,6 +14,7 @@ interface headerProps {
 }
 const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
   console.log(title);
+  const [date, setDate] = useState(new Date());
 
   return (
     <View style={[styles.container, { height }]}>
@@ -25,6 +26,8 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
           iconSite="right"
           iconColor={Colors.text}
           iconSize={16}
+          date={date}
+          setDate={setDate}
         />
       ) : (
         <View style={styles.reportCon}>
