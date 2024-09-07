@@ -6,7 +6,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { FontAwesome5, Fontisto } from "@expo/vector-icons";
@@ -20,6 +20,8 @@ import Customers from "./shared/Customers";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import Empty from "./Empty";
+//@ts-ignore
+import { debounce } from "lodash";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
 interface propsTypes {
@@ -42,9 +44,12 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
     getCustomer();
   }, []);
 
-  const handleIndexChange = (index: number) => {
-    setSelectedIndex(index);
-  };
+  const handleIndexChange = useCallback(
+    debounce((index: number) => {
+      setSelectedIndex(index);
+    }, 100), // adjust debounce timing as needed
+    []
+  );
 
   return (
     <View style={styles.container}>

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React, { Fragment } from "react";
+import React, { Fragment, memo } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
     borderRadius: radius.medium,
   },
 });
-export default AllSuppliers;
+export default memo(AllSuppliers);

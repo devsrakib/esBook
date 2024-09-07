@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, memo } from "react";
 import Divider from "../Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
@@ -163,4 +163,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-export default Customers;
+export default memo(Customers);
