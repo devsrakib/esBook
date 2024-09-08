@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     borderWidth: 1,
     height: 100,
-    textAlignVertical: "top",
+    verticalAlign: "top",
     paddingTop: 10,
   },
   badge: {

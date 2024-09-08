@@ -102,7 +102,7 @@ const CashboxFeature = () => {
   );
 
   useEffect(() => {
-    async function asyncFunction() {
+    const asyncFunction = async () => {
       // const cash = await getCash_sell(db);
       const startDate = selectedStartDate;
       const endDate = selectedEndDate;
@@ -157,7 +157,7 @@ const CashboxFeature = () => {
       setDue(filteredDueData);
       setCashBuy(filteredCashBuyData);
       console.log(filteredCashData, ":::::::");
-    }
+    };
     asyncFunction();
   }, [selectedStartDate, selectedEndDate]);
 

@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React, { Fragment } from "react";
+import React, { Fragment, memo } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -14,7 +14,9 @@ const Feature = ({ data }: { data: any }) => {
     <Fragment>
       <Link
         href={{
-          pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}`,
+          pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}` as
+            | string
+            | any,
           params: { text: text },
         }}
         asChild
@@ -37,7 +39,6 @@ const Feature = ({ data }: { data: any }) => {
     </Fragment>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -74,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Feature;
+export default memo(Feature);

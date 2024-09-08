@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -65,16 +65,14 @@ const Profile = () => {
         } else if (supplier && router?.text === "Supplier") {
           setUserData(supplier);
         }
-      } catch (error) {
-        console.error("Error fetching customer:", error);
-      }
+      } catch {}
     }
     if (router?.id) {
       getCustomer();
     }
   }, [db, router?.id]);
 
-  const handleDeleteCustomer = async () => {
+  const handleDeleteCustomer = useCallback(async () => {
     try {
       if (router?.text === "Customer") {
         const result = await deleteCustomerById(db, userData?.id);
@@ -87,7 +85,7 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
   return (
     <ScrollView

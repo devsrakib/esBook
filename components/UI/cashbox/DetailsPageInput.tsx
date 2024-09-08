@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     marginTop: 10,
     marginBottom: 20,
-    textAlignVertical: "top",
+    verticalAlign: "top",
     padding: 10,
     fontSize: Fonts.medium,
   },
