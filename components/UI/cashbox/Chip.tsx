@@ -29,8 +29,6 @@ const Chip = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  console.log(title, "====", selectedChip);
-
   return (
     <FlatList
       horizontal

@@ -49,8 +49,6 @@ const SearchCustomerAndAddCustomer = ({
     }
   }, [db, id]);
 
-  console.log(customerData, "customerData");
-
   return (
     <View style={styles.container}>
       <Link

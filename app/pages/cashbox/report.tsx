@@ -29,7 +29,6 @@ const Page = () => {
   const [dueReport, setDueReport] = useState<any>([]);
   const [selectedChip, setSelectedChip] = useState<any>(router?.title);
   const db = useSQLiteContext();
-  console.log(router);
 
   useEffect(() => {
     async function expense() {
@@ -50,8 +49,6 @@ const Page = () => {
     }
     expense();
   }, []);
-
-  console.log(dueReport?.length);
 
   const currentData =
     selectedChip === "Expenses"

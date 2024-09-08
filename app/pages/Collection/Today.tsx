@@ -22,7 +22,6 @@ const Today = () => {
         return collectionFormateDate === today;
       });
 
-      console.log(filteredResult, "Filtered Data");
       setTodaysData(filteredResult);
     }
     collectionReminder();

@@ -56,19 +56,15 @@ const Customers = ({
   );
 
   const stringToColor = (str: string) => {
-    console.log(str);
-
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
-    console.log(hash);
 
     // Extract RGB components
     const r = (hash >> 16) & 0xff;
     const g = (hash >> 16) & 0xff;
     const b = hash & 0xff;
-    console.log(r, g, b);
 
     // Return the color with 50% transparency
     return `rgba(${r}, ${g}, ${b}, 0.5)`;

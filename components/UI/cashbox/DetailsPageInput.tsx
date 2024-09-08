@@ -21,8 +21,6 @@ const DetailsPageInput = ({
     }));
   };
 
-  console.log(amount, "amount ::::: ");
-
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{text} amount</Text>

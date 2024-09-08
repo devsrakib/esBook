@@ -41,7 +41,6 @@ const Customers = () => {
       ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);
     }
   };
-  console.log("image:::::::::::", selectedImage);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>

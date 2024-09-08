@@ -32,11 +32,8 @@ const ReportCart = ({
         const customerData = await getCustomerById(db, item?.customerId);
         setCustomer(customerData || {});
         if (!customerData) {
-          console.log("No customer found with this ID.");
         }
-      } catch (error) {
-        console.error("Error fetching customer:", error);
-      }
+      } catch (error) {}
     };
 
     if (item?.customerId) {
@@ -50,11 +47,8 @@ const ReportCart = ({
         const supplierData = await getSupplierById(db, item?.supplierId);
         setSupplier(supplierData || {});
         if (!supplierData) {
-          console.log("No supplier found with this ID.");
         }
-      } catch (error) {
-        console.error("Error fetching supplier:", error);
-      }
+      } catch (error) {}
     };
 
     if (item?.supplierId) {

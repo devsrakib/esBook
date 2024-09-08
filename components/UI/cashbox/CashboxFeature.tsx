@@ -156,7 +156,6 @@ const CashboxFeature = () => {
       setExpense(filteredExpenseData);
       setDue(filteredDueData);
       setCashBuy(filteredCashBuyData);
-      console.log(filteredCashData, ":::::::");
     };
     asyncFunction();
   }, [selectedStartDate, selectedEndDate]);

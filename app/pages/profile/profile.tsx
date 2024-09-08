@@ -27,9 +27,7 @@ const Profile = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [userData, setUserData] = useState<any>({});
   const router = useLocalSearchParams<any>();
-  console.log(router, "id");
   const db = useSQLiteContext();
-  console.log(router, "hello data");
   const navigate: any = useRouter();
 
   const infoData = [
@@ -82,9 +80,7 @@ const Profile = () => {
       } else if (router?.text === "Supplier") {
         await deleteSupplierById(db, userData?.id);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, []);
 
   return (

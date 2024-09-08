@@ -118,8 +118,6 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
     return () => clearInterval(intervalId); // Clean up on unmount
   }, []);
 
-  console.log(deposit);
-
   return (
     <View style={[sharedStyle.grid, { marginTop: 14 }]}>
       {data?.map((d, i) => {

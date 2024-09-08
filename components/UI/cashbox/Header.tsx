@@ -13,7 +13,6 @@ interface headerProps {
   titleColor: string;
 }
 const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
-  console.log(title);
   const [date, setDate] = useState(new Date());
 
   return (

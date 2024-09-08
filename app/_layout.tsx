@@ -21,14 +21,11 @@ const InitialLayout = () => {
 
         const result = await getOwnerProfile(db);
         const user_data = result?.length > 0;
-        console.log(user_data, "++++++++++");
 
         const routeName = user_data ? "(tabs)" : "/index";
-        console.log(routeName);
 
         setInitialRouteName(routeName);
       } catch (error) {
-        console.error("Error during initialization:", error);
       } finally {
         setIsLoading(false);
       }

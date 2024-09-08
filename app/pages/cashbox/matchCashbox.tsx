@@ -97,14 +97,12 @@ const Page = () => {
   };
 
   const handleLessButton = () => {
-    console.log("okay");
     navigation.push("/(tabs)/cashbox");
   };
 
   const handleBalanced = async () => {
     await cash_report(db, { totalCash: amount });
     setBalanced(true);
-    console.log(amount);
   };
 
   const label =

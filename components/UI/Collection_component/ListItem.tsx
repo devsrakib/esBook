@@ -35,11 +35,8 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
         if (customer) {
           setCustomer(customer);
         } else {
-          console.log("No customer found with this ID.");
         }
-      } catch (error) {
-        console.error("Error fetching customer:", error);
-      }
+      } catch (error) {}
     }
     if (item?.customerId) {
       getCustomer();
@@ -90,7 +87,6 @@ const ListItem = ({ text, item }: { text: string; item: any }) => {
   }, [error]);
 
   const formateDate = new Date(item?.collectionDate);
-  console.log(formateDate);
 
   return (
     <Link

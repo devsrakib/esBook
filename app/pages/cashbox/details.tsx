@@ -94,8 +94,6 @@ const page = () => {
     };
   }
 
-  // console.log(transactionData, "transaction data");
-
   const db = useSQLiteContext();
 
   const handleCashSell = async () => {
@@ -145,8 +143,6 @@ const page = () => {
       navigation.push("/(tabs)/cashbox");
     }
   };
-
-  console.log(route);
 
   const handleInput = () => {
     if (route?.text === "Cash Sell") {

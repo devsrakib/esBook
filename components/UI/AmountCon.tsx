@@ -44,8 +44,6 @@ const AmountCon: React.FC<amountProps> = ({
     getReceive();
   }, []);
 
-  console.log(receive);
-
   return (
     <ImageBackground
       imageStyle={{ borderRadius: 15 }}
@@ -59,7 +57,7 @@ const AmountCon: React.FC<amountProps> = ({
             You will Receive
           </Text>
           <Text style={[styles.amount, { color: leftAmountTColor }]}>
-            {currency} {receive?.toLocaleString('en-US') || '0'}
+            {currency} {receive?.toLocaleString("en-US") || "0"}
           </Text>
         </View>
       </View>
@@ -68,7 +66,7 @@ const AmountCon: React.FC<amountProps> = ({
         <View>
           <Text style={styles.text}>You will Give</Text>
           <Text style={styles.amount}>
-            {currency} {cashBuyDue?.toLocaleString('en-US') || '0'}
+            {currency} {cashBuyDue?.toLocaleString("en-US") || "0"}
           </Text>
         </View>
       </View>

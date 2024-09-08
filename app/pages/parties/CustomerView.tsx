@@ -106,7 +106,6 @@ const CustomerView = () => {
   const handleLend = async () => {
     try {
       await customer_lend(db, lendData);
-      console.log(lendData);
     } catch (error) {
       console.error("Error lending amount:", error);
     }
@@ -114,7 +113,6 @@ const CustomerView = () => {
   const handleGave = async () => {
     try {
       await customer_gave(db, lendData);
-      console.log(lendData);
     } catch (error) {
       console.error("Error giving amount:", error);
     }
