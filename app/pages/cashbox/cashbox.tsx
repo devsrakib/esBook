@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { headerHeightWidth, radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
@@ -18,6 +18,9 @@ import { Link, Stack } from "expo-router";
 export const Cashbox = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [currentCash, setCurrentCash] = useState<number>(0);
+  const handleCurrentCash = useCallback((amount: number) => {
+    setCurrentCash(amount);
+  }, []);
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -49,7 +52,7 @@ export const Cashbox = () => {
           </Link>
         </View>
         <View style={styles.bodySection}>
-          <Dashboard setCurrentCash={setCurrentCash} />
+          <Dashboard setCurrentCash={handleCurrentCash} />
           <CashboxFeature />
         </View>
       </ScrollView>

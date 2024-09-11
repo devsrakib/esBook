@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { sharedStyle } from "@/constants/shared.style";
@@ -24,36 +24,39 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
   const [withdraw, setWithdraw] = useState<any>([]);
   const [expense, setExpense] = useState<any>([]);
 
-  const data = [
-    {
-      text: "Current Cash",
-      amount: currentAmount,
-      icon: require("../../../assets/images/cash.png"),
-      color: Colors.mainColor,
-      textColor: Colors.mainColor,
-    },
-    {
-      text: "Today Sales",
-      amount: todayISells,
-      icon: require("../../../assets/images/cart.png"),
-      color: Colors.orange,
-      textColor: Colors.orange,
-    },
-    {
-      text: "Today i Receive",
-      amount: todayIReceive,
-      icon: require("../../../assets/images/sales.png"),
-      color: Colors.green,
-      textColor: Colors.green,
-    },
-    {
-      text: "Today I Gave",
-      amount: todayIGave,
-      icon: require("../../../assets/images/coin.png"),
-      color: Colors.red,
-      textColor: Colors.red,
-    },
-  ];
+  const data = useMemo(
+    () => [
+      {
+        text: "Current Cash",
+        amount: currentAmount,
+        icon: require("../../../assets/images/cash.png"),
+        color: Colors.mainColor,
+        textColor: Colors.mainColor,
+      },
+      {
+        text: "Today Sales",
+        amount: todayISells,
+        icon: require("../../../assets/images/cart.png"),
+        color: Colors.orange,
+        textColor: Colors.orange,
+      },
+      {
+        text: "Today i Receive",
+        amount: todayIReceive,
+        icon: require("../../../assets/images/sales.png"),
+        color: Colors.green,
+        textColor: Colors.green,
+      },
+      {
+        text: "Today I Gave",
+        amount: todayIGave,
+        icon: require("../../../assets/images/coin.png"),
+        color: Colors.red,
+        textColor: Colors.red,
+      },
+    ],
+    [currentAmount, todayISells, todayIReceive, todayIGave]
+  );
 
   const db = useSQLiteContext();
   useEffect(() => {
@@ -138,7 +141,6 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   subContainer: {
     width: "48.5%",
