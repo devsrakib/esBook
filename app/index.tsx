@@ -5,6 +5,7 @@ import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import { owner_profile } from "@/databases/Database";
 import useImagePicker from "@/utils/UseImagePicker";
+import { Entypo, EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
@@ -61,21 +62,13 @@ export default function CreateOwnerProfile() {
                 source={{ uri: selectedImage }} // Placeholder image URL
               />
             ) : (
-              <Image
-                style={styles.profileImage}
-                source={{ uri: "https://via.placeholder.com/100x100" }} // Placeholder image URL
-              />
+              <FontAwesome name="user-circle" size={100} color={Colors.text} />
             )}
             <TouchableOpacity
               onPress={() => pickImage()}
               style={styles.cameraIcon}
             >
-              <Image
-                style={styles.icon}
-                source={{
-                  uri: "https://img.icons8.com/ios-filled/50/000000/camera.png",
-                }} // Placeholder icon URL
-              />
+              <Entypo name="camera" size={24} color="black" />
             </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
@@ -146,6 +139,8 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     alignItems: "center",
+    justifyContent: "center",
+    height: 150,
     marginBottom: 30,
   },
   profileImage: {
@@ -155,12 +150,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ddd",
   },
   cameraIcon: {
-    position: "absolute",
-    bottom: 0,
     right: 10,
     backgroundColor: "#fff",
     borderRadius: 15,
     padding: 5,
+    alignSelf: "flex-end",
   },
   icon: {
     width: 20,

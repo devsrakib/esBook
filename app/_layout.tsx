@@ -22,17 +22,22 @@ const InitialLayout = () => {
         const result = await getOwnerProfile(db);
         const user_data = result?.length > 0;
 
-        const routeName = user_data ? "(tabs)" : "/index";
-
+        // Determine the initial route based on profile data
+        const routeName = user_data ? "/(tabs)" : "/";
         setInitialRouteName(routeName);
+
+        // Hide splash screen after initialization
+        await SplashScreen.hideAsync();
       } catch (error) {
+        // Fallback route to "index" if there's an error
+        setInitialRouteName("/");
       } finally {
         setIsLoading(false);
       }
     };
 
     initialize();
-  }, []);
+  }, [initialRouteName]);
 
   useEffect(() => {
     if (!isLoading && initialRouteName) {
