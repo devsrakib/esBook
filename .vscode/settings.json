@@ -13,7 +13,8 @@
         "imgbg",
         "Ionicons",
         "Mehedi",
-        "Nazrul"
+        "Nazrul",
+        "uuidv"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#48a5f2",

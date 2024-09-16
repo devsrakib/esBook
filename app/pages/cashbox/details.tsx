@@ -42,11 +42,11 @@ import { TransactionData } from "@/types/interfaces/transaction.interface";
 const page = () => {
   const route = useLocalSearchParams<any>();
   const { bottom, top } = useSafeAreaInsets();
-  const [transaction, setTransaction] = useState<TransactionData>();
+  const [transaction, setTransaction] = useState<any>();
 
   const navigation = useRouter();
 
-  let transactionData: TransactionData;
+  let transactionData: any;
   if (route.text == "Cash Sell") {
     transactionData = {
       customerId: route?.id,

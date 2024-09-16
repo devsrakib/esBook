@@ -166,424 +166,424 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
-  if (currentDbVersion <= 23) {
-    // Update the customer table schema
-    await db.execAsync(`
-      PRAGMA journal_mode = 'wal';
-    `);
+  // if (currentDbVersion <= 23) {
+  //   // Update the customer table schema
+  //   await db.execAsync(`
+  //     PRAGMA journal_mode = 'wal';
+  //   `);
 
-    // Create the new table
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS withdraw_new (
-        id TEXT PRIMARY KEY NOT NULL,
-        amount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        description TEXT
-      );
-    `);
+  //   // Create the new table
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS withdraw_new (
+  //       id TEXT PRIMARY KEY NOT NULL,
+  //       amount REAL NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       description TEXT
+  //     );
+  //   `);
 
-    // Copy data to the new table
-    await db.execAsync(`
-      INSERT INTO withdraw_new (id, amount, createdAt, description)
-      SELECT CAST(id AS TEXT), amount, createdAt, description
-      FROM withdraw;
-    `);
+  //   // Copy data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO withdraw_new (id, amount, createdAt, description)
+  //     SELECT CAST(id AS TEXT), amount, createdAt, description
+  //     FROM withdraw;
+  //   `);
 
-    // Drop the old table
-    await db.execAsync(`
-      DROP TABLE withdraw;
-    `);
+  //   // Drop the old table
+  //   await db.execAsync(`
+  //     DROP TABLE withdraw;
+  //   `);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`
-      ALTER TABLE withdraw_new RENAME TO withdraw;
-    `);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`
+  //     ALTER TABLE withdraw_new RENAME TO withdraw;
+  //   `);
 
-    currentDbVersion = 22;
-  }
+  //   currentDbVersion = 22;
+  // }
 
-  if (currentDbVersion <= 23) {
-    // Update the customer table schema
-    await db.execAsync(`
-      PRAGMA journal_mode = 'wal';
-    `);
+  // if (currentDbVersion <= 23) {
+  //   // Update the customer table schema
+  //   await db.execAsync(`
+  //     PRAGMA journal_mode = 'wal';
+  //   `);
 
-    // Create the new table
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS deposit_new (
-        id TEXT PRIMARY KEY NOT NULL,
-        amount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        description TEXT
-      );
-    `);
+  //   // Create the new table
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS deposit_new (
+  //       id TEXT PRIMARY KEY NOT NULL,
+  //       amount REAL NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       description TEXT
+  //     );
+  //   `);
 
-    // Copy data to the new table
-    await db.execAsync(`
-      INSERT INTO deposit_new (id, amount, createdAt, description)
-      SELECT CAST(id AS TEXT), amount, createdAt, description
-      FROM deposit;
-    `);
+  //   // Copy data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO deposit_new (id, amount, createdAt, description)
+  //     SELECT CAST(id AS TEXT), amount, createdAt, description
+  //     FROM deposit;
+  //   `);
 
-    // Drop the old table
-    await db.execAsync(`
-      DROP TABLE deposit;
-    `);
+  //   // Drop the old table
+  //   await db.execAsync(`
+  //     DROP TABLE deposit;
+  //   `);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`
-      ALTER TABLE deposit_new RENAME TO deposit;
-    `);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`
+  //     ALTER TABLE deposit_new RENAME TO deposit;
+  //   `);
 
-    currentDbVersion = 22;
-  }
+  //   currentDbVersion = 22;
+  // }
 
-  if (currentDbVersion <= 23) {
-    // Update the customer table schema
-    await db.execAsync(`
-      PRAGMA journal_mode = 'wal';
-    `);
+  // if (currentDbVersion <= 23) {
+  //   // Update the customer table schema
+  //   await db.execAsync(`
+  //     PRAGMA journal_mode = 'wal';
+  //   `);
 
-    // Create the new table
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS cash_report_new (
-         id TEXT PRIMARY KEY NOT NULL,
-        date TEXT NOT NULL DEFAULT (datetime('now')),
-        totalCash REAL NOT NULL
-      );
-    `);
+  //   // Create the new table
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS cash_report_new (
+  //        id TEXT PRIMARY KEY NOT NULL,
+  //       date TEXT NOT NULL DEFAULT (datetime('now')),
+  //       totalCash REAL NOT NULL
+  //     );
+  //   `);
 
-    // Copy data to the new table
-    await db.execAsync(`
-      INSERT INTO cash_report_new (id, date, totalCash)
-      SELECT CAST(id AS TEXT), date, totalCash
-      FROM cash_report;
-    `);
+  //   // Copy data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO cash_report_new (id, date, totalCash)
+  //     SELECT CAST(id AS TEXT), date, totalCash
+  //     FROM cash_report;
+  //   `);
 
-    // Drop the old table
-    await db.execAsync(`
-      DROP TABLE cash_report;
-    `);
+  //   // Drop the old table
+  //   await db.execAsync(`
+  //     DROP TABLE cash_report;
+  //   `);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`
-      ALTER TABLE cash_report_new RENAME TO cash_report;
-    `);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`
+  //     ALTER TABLE cash_report_new RENAME TO cash_report;
+  //   `);
 
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Update the customer table schema
-    await db.execAsync(`
-      PRAGMA journal_mode = 'wal';
-    `);
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Update the customer table schema
+  //   await db.execAsync(`
+  //     PRAGMA journal_mode = 'wal';
+  //   `);
 
-    // Create the new table
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS expense_new (
-        id TEXT PRIMARY KEY NOT NULL,
-        amount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        description TEXT
-      );
-    `);
+  //   // Create the new table
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS expense_new (
+  //       id TEXT PRIMARY KEY NOT NULL,
+  //       amount REAL NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       description TEXT
+  //     );
+  //   `);
 
-    // Copy data to the new table
-    await db.execAsync(`
-      INSERT INTO expense_new (id, amount, createdAt, description)
-      SELECT CAST(id AS TEXT), amount, createdAt, description
-      FROM expense;
-    `);
+  //   // Copy data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO expense_new (id, amount, createdAt, description)
+  //     SELECT CAST(id AS TEXT), amount, createdAt, description
+  //     FROM expense;
+  //   `);
 
-    // Drop the old table
-    await db.execAsync(`
-      DROP TABLE expense;
-    `);
+  //   // Drop the old table
+  //   await db.execAsync(`
+  //     DROP TABLE expense;
+  //   `);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`
-      ALTER TABLE expense_new RENAME TO expense;
-    `);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`
+  //     ALTER TABLE expense_new RENAME TO expense;
+  //   `);
 
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Update the customer table schema
-    await db.execAsync(`
-      PRAGMA journal_mode = 'wal';
-    `);
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Update the customer table schema
+  //   await db.execAsync(`
+  //     PRAGMA journal_mode = 'wal';
+  //   `);
 
-    // Create the new table
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS owner_profile_new (
-        id TEXT PRIMARY KEY NOT NULL,
-        profilePhoto TEXT,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        address TEXT NOT NULL,
-        phoneNumber TEXT NOT NULL,
-        taxNumber INTEGER
-      );
-    `);
+  //   // Create the new table
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS owner_profile_new (
+  //       id TEXT PRIMARY KEY NOT NULL,
+  //       profilePhoto TEXT,
+  //       name TEXT NOT NULL,
+  //       email TEXT NOT NULL,
+  //       address TEXT NOT NULL,
+  //       phoneNumber TEXT NOT NULL,
+  //       taxNumber INTEGER
+  //     );
+  //   `);
 
-    // Copy data to the new table
-    await db.execAsync(`
-      INSERT INTO owner_profile_new (id, profilePhoto, name, email, address, phoneNumber, taxNumber)
-      SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, taxNumber
-      FROM owner_profile;
-    `);
+  //   // Copy data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO owner_profile_new (id, profilePhoto, name, email, address, phoneNumber, taxNumber)
+  //     SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, taxNumber
+  //     FROM owner_profile;
+  //   `);
 
-    // Drop the old table
-    await db.execAsync(`
-      DROP TABLE owner_profile;
-    `);
+  //   // Drop the old table
+  //   await db.execAsync(`
+  //     DROP TABLE owner_profile;
+  //   `);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`
-      ALTER TABLE owner_profile_new RENAME TO owner_profile;
-    `);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`
+  //     ALTER TABLE owner_profile_new RENAME TO owner_profile;
+  //   `);
 
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS collection_reminder_new (
-        id TEXT PRIMARY KEY NOT NULL,
-        amount REAL,
-        customerId INTEGER NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        collectionDate TEXT NOT NULL,
-        FOREIGN KEY (customerId) REFERENCES customer(id)
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS collection_reminder_new (
+  //       id TEXT PRIMARY KEY NOT NULL,
+  //       amount REAL,
+  //       customerId INTEGER NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       collectionDate TEXT NOT NULL,
+  //       FOREIGN KEY (customerId) REFERENCES customer(id)
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO collection_reminder_new (id, amount, customerId, createdAt, collectionDate)
-      SELECT CAST(id AS TEXT), amount, customerId, createdAt, collectionDate
-      FROM collection_reminder;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO collection_reminder_new (id, amount, customerId, createdAt, collectionDate)
+  //     SELECT CAST(id AS TEXT), amount, customerId, createdAt, collectionDate
+  //     FROM collection_reminder;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE collection_reminder;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE collection_reminder;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(
-      `ALTER TABLE collection_reminder_new RENAME TO collection_reminder;`
-    );
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(
+  //     `ALTER TABLE collection_reminder_new RENAME TO collection_reminder;`
+  //   );
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS due_collection_new (
-         id TEXT PRIMARY KEY NOT NULL,
-        customerId INTEGER NOT NULL,
-        collectedAmount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        description TEXT,
-        FOREIGN KEY (customerId) REFERENCES customer(id)
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS due_collection_new (
+  //        id TEXT PRIMARY KEY NOT NULL,
+  //       customerId INTEGER NOT NULL,
+  //       collectedAmount REAL NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       description TEXT,
+  //       FOREIGN KEY (customerId) REFERENCES customer(id)
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO due_collection_new (id, customerId, collectedAmount, createdAt, description)
-      SELECT CAST(id AS TEXT), customerId, collectedAmount, createdAt, description
-      FROM due_collection;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO due_collection_new (id, customerId, collectedAmount, createdAt, description)
+  //     SELECT CAST(id AS TEXT), customerId, collectedAmount, createdAt, description
+  //     FROM due_collection;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE due_collection;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE due_collection;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(
-      `ALTER TABLE due_collection_new RENAME TO due_collection;`
-    );
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(
+  //     `ALTER TABLE due_collection_new RENAME TO due_collection;`
+  //   );
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS customer_gave_new (
-        id TEXT PRIMARY KEY NOT NULL,
-        customerId INTEGER NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        amount REAL NOT NULL,
-        description TEXT,
-        FOREIGN KEY (customerId) REFERENCES customer(id)
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS customer_gave_new (
+  //       id TEXT PRIMARY KEY NOT NULL,
+  //       customerId INTEGER NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       amount REAL NOT NULL,
+  //       description TEXT,
+  //       FOREIGN KEY (customerId) REFERENCES customer(id)
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO customer_gave_new (id, customerId, createdAt, amount, description)
-      SELECT CAST(id AS TEXT), customerId, createdAt, amount, description
-      FROM customer_gave;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO customer_gave_new (id, customerId, createdAt, amount, description)
+  //     SELECT CAST(id AS TEXT), customerId, createdAt, amount, description
+  //     FROM customer_gave;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE customer_gave;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE customer_gave;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(
-      `ALTER TABLE customer_gave_new RENAME TO customer_gave;`
-    );
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(
+  //     `ALTER TABLE customer_gave_new RENAME TO customer_gave;`
+  //   );
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS customer_lend_new (
-       id TEXT PRIMARY KEY NOT NULL,
-        customerId INTEGER NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        amount REAL NOT NULL,
-        description TEXT,
-        FOREIGN KEY (customerId) REFERENCES customer(id)
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS customer_lend_new (
+  //      id TEXT PRIMARY KEY NOT NULL,
+  //       customerId INTEGER NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       amount REAL NOT NULL,
+  //       description TEXT,
+  //       FOREIGN KEY (customerId) REFERENCES customer(id)
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO customer_lend_new (id, customerId, createdAt, amount, description)
-      SELECT CAST(id AS TEXT), customerId, createdAt, amount, description
-      FROM customer_lend;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO customer_lend_new (id, customerId, createdAt, amount, description)
+  //     SELECT CAST(id AS TEXT), customerId, createdAt, amount, description
+  //     FROM customer_lend;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE customer_lend;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE customer_lend;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(
-      `ALTER TABLE customer_lend_new RENAME TO customer_lend;`
-    );
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(
+  //     `ALTER TABLE customer_lend_new RENAME TO customer_lend;`
+  //   );
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS cash_buy_new (
-       id TEXT PRIMARY KEY NOT NULL,
-        supplierId INTEGER NOT NULL,
-        amount REAL NOT NULL,
-        collectedAmount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        description TEXT,
-        dueAmount REAL,
-        extraAmount REAL,
-        FOREIGN KEY (supplierId) REFERENCES supplier(id)
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS cash_buy_new (
+  //      id TEXT PRIMARY KEY NOT NULL,
+  //       supplierId INTEGER NOT NULL,
+  //       amount REAL NOT NULL,
+  //       collectedAmount REAL NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       description TEXT,
+  //       dueAmount REAL,
+  //       extraAmount REAL,
+  //       FOREIGN KEY (supplierId) REFERENCES supplier(id)
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO cash_buy_new (id, supplierId, amount, collectedAmount, createdAt, description, dueAmount, extraAmount)
-      SELECT CAST(id AS TEXT), supplierId, amount, collectedAmount, createdAt, description, dueAmount, extraAmount
-      FROM cash_buy;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO cash_buy_new (id, supplierId, amount, collectedAmount, createdAt, description, dueAmount, extraAmount)
+  //     SELECT CAST(id AS TEXT), supplierId, amount, collectedAmount, createdAt, description, dueAmount, extraAmount
+  //     FROM cash_buy;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE cash_buy;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE cash_buy;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`ALTER TABLE cash_buy_new RENAME TO cash_buy;`);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`ALTER TABLE cash_buy_new RENAME TO cash_buy;`);
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS cash_sell_new (
-       id TEXT PRIMARY KEY NOT NULL,
-        customerId INTEGER NOT NULL,
-        saleAmount REAL NOT NULL,
-        collectedAmount REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        dueAmount REAL,
-        extraAmount REAL,
-        description TEXT,
-        FOREIGN KEY (customerId) REFERENCES customer(id)
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS cash_sell_new (
+  //      id TEXT PRIMARY KEY NOT NULL,
+  //       customerId INTEGER NOT NULL,
+  //       saleAmount REAL NOT NULL,
+  //       collectedAmount REAL NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  //       dueAmount REAL,
+  //       extraAmount REAL,
+  //       description TEXT,
+  //       FOREIGN KEY (customerId) REFERENCES customer(id)
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO cash_sell_new (id, customerId, saleAmount, collectedAmount, createdAt, description, dueAmount, extraAmount)
-      SELECT CAST(id AS TEXT), customerId, saleAmount, collectedAmount, createdAt, description, dueAmount, extraAmount
-      FROM cash_sell;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO cash_sell_new (id, customerId, saleAmount, collectedAmount, createdAt, description, dueAmount, extraAmount)
+  //     SELECT CAST(id AS TEXT), customerId, saleAmount, collectedAmount, createdAt, description, dueAmount, extraAmount
+  //     FROM cash_sell;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE cash_sell;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE cash_sell;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`ALTER TABLE cash_sell_new RENAME TO cash_sell;`);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`ALTER TABLE cash_sell_new RENAME TO cash_sell;`);
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
-  if (currentDbVersion <= 23) {
-    // Switch to Write-Ahead Logging mode
-    await db.execAsync(`PRAGMA journal_mode = 'wal';`);
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
+  // if (currentDbVersion <= 23) {
+  //   // Switch to Write-Ahead Logging mode
+  //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
-    // Create the new collection_reminder table with updated schema
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS supplier_new (
-       id TEXT PRIMARY KEY NOT NULL,
-        profilePhoto TEXT,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        address TEXT NOT NULL,
-        phoneNumber TEXT NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
-      );
-    `);
+  //   // Create the new collection_reminder table with updated schema
+  //   await db.execAsync(`
+  //     CREATE TABLE IF NOT EXISTS supplier_new (
+  //      id TEXT PRIMARY KEY NOT NULL,
+  //       profilePhoto TEXT,
+  //       name TEXT NOT NULL,
+  //       email TEXT NOT NULL,
+  //       address TEXT NOT NULL,
+  //       phoneNumber TEXT NOT NULL,
+  //       createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+  //     );
+  //   `);
 
-    // Copy the existing data to the new table
-    await db.execAsync(`
-      INSERT INTO supplier_new (id, profilePhoto, name, email, address, phoneNumber, createdAt)
-      SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, createdAt
-      FROM supplier;
-    `);
+  //   // Copy the existing data to the new table
+  //   await db.execAsync(`
+  //     INSERT INTO supplier_new (id, profilePhoto, name, email, address, phoneNumber, createdAt)
+  //     SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, createdAt
+  //     FROM supplier;
+  //   `);
 
-    // Drop the old collection_reminder table
-    await db.execAsync(`DROP TABLE supplier;`);
+  //   // Drop the old collection_reminder table
+  //   await db.execAsync(`DROP TABLE supplier;`);
 
-    // Rename the new table to the old table's name
-    await db.execAsync(`ALTER TABLE supplier_new RENAME TO supplier;`);
+  //   // Rename the new table to the old table's name
+  //   await db.execAsync(`ALTER TABLE supplier_new RENAME TO supplier;`);
 
-    // Update the current database version to 22
-    currentDbVersion = 22;
-  }
+  //   // Update the current database version to 22
+  //   currentDbVersion = 22;
+  // }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }

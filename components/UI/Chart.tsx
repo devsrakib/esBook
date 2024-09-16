@@ -88,18 +88,13 @@ const Chart = () => {
       console.log(item, "lllllllllllll");
 
       // Check if saleAmount is valid, otherwise set to 0
-      const saleAmount =
-        isNaN(item?.saleAmount) || item?.saleAmount === null
-          ? 0
-          : item?.saleAmount;
-      console.log(saleAmount, "lllllll");
 
       // If the key already exists, add to the existing value
       if (!groupedData[key]) {
-        groupedData[key] += saleAmount;
+        groupedData[key] += item?.saleAmount;
       } else {
         // Initialize the key with the first saleAmount, not 0
-        groupedData[key] = saleAmount;
+        groupedData[key] = item?.saleAmount;
       }
     });
 

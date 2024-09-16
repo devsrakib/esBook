@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     borderWidth: 1,
     height: 100,
-    verticalAlign: "top",
+    textAlignVertical: "top",
     paddingTop: 10,
   },
   badge: {
