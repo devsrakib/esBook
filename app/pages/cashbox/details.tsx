@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ToastAndroid,
 } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -36,15 +37,16 @@ import {
   withdraw,
 } from "@/databases/Database";
 import { ensureNonNegative } from "@/utils/ensureNonNegative";
+import { TransactionData } from "@/types/interfaces/transaction.interface";
 
 const page = () => {
   const route = useLocalSearchParams<any>();
   const { bottom, top } = useSafeAreaInsets();
-  const [transaction, setTransaction] = useState<any>();
+  const [transaction, setTransaction] = useState<TransactionData>();
 
   const navigation = useRouter();
 
-  let transactionData: any;
+  let transactionData: TransactionData;
   if (route.text == "Cash Sell") {
     transactionData = {
       customerId: route?.id,
@@ -107,6 +109,14 @@ const page = () => {
     const result = await expense(db, transactionData);
     if (result.success) {
       navigation.push("/(tabs)/cashbox");
+    } else {
+      if (!result.success) {
+        ToastAndroid.showWithGravity(
+          result.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+      }
     }
   };
   const handleDeposit = async () => {
@@ -125,6 +135,14 @@ const page = () => {
     const result = await withdraw(db, transactionData);
     if (result.success) {
       navigation.push("/(tabs)/cashbox");
+    } else {
+      if (!result.success) {
+        ToastAndroid.showWithGravity(
+          result.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+      }
     }
   };
   // const handleCashReport = async () => {
@@ -162,7 +180,7 @@ const page = () => {
     }
   };
 
-  const customerTextMapping = {
+  const customerTextMapping: any = {
     "Cash Sell": "Customer",
     Due: "Customer",
     "Cash buy": "Supplier",
