@@ -1,42 +1,251 @@
+import uuid from "react-native-uuid";
 import { SQLiteDatabase } from "expo-sqlite";
 
-export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 17;
-  let result = await db.getFirstAsync<{
-    user_version: number;
-  }>("PRAGMA user_version");
+// export async function migrateDbIfNeeded(db: SQLiteDatabase) {
+//   const DATABASE_VERSION = 20;
 
+//   let result = await db.getFirstAsync<{
+//     user_version: number;
+//   }>("PRAGMA user_version");
+
+//   let currentDbVersion = result?.user_version ?? 0;
+//   console.log(currentDbVersion);
+
+//   if (currentDbVersion >= DATABASE_VERSION) {
+//     return;
+//   }
+//   if (currentDbVersion === 0) {
+//     await db.execAsync(`
+//       PRAGMA journal_mode = 'wal';
+
+//       CREATE TABLE IF NOT EXISTS customer(
+//         id TEXT PRIMARY KEY NOT NULL,
+//         profilePhoto TEXT NOT NULL,
+//         name VARCHAR NOT NULL,
+//         email VARCHAR NOT NULL,
+//         address VARCHAR NOT NULL,
+//         phoneNumber TEXT NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+//       )
+
+//       CREATE TABLE IF NOT EXISTS supplier (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         profilePhoto TEXT,
+//         name VARCHAR NOT NULL,
+//         email VARCHAR NOT NULL,
+//         address VARCHAR NOT NULL,
+//         phoneNumber TEXT NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+//       );
+
+//       CREATE TABLE IF NOT EXISTS cash_sell (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         customerId INTEGER NOT NULL,
+//         saleAmount REAL NOT NULL,
+//         collectedAmount REAL NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         dueAmount REAL,
+//         extraAmount REAL,
+//         description TEXT,
+//         FOREIGN KEY (customerId) REFERENCES customer(id)
+//       );
+
+//       CREATE TABLE IF NOT EXISTS cash_buy (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         supplierId INTEGER NOT NULL,
+//         amount REAL NOT NULL,
+//         collectedAmount REAL NOT NULL, -- Added missing comma here
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         description TEXT,
+//         dueAmount REAL,
+//         extraAmount REAL,
+//         FOREIGN KEY (supplierId) REFERENCES supplier(id)
+//       );
+
+//       CREATE TABLE IF NOT EXISTS customer_lend (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         customerId INTEGER NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         amount REAL NOT NULL,
+//         description TEXT,
+//         FOREIGN KEY (customerId) REFERENCES customer(id)
+//       );
+
+//       CREATE TABLE IF NOT EXISTS customer_gave (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         customerId INTEGER NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         amount REAL NOT NULL,
+//         description TEXT,
+//         FOREIGN KEY (customerId) REFERENCES customer(id)
+//       );
+
+//       CREATE TABLE IF NOT EXISTS due_collection (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         customerId INTEGER NOT NULL,
+//         collectedAmount REAL NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         description TEXT,
+//         FOREIGN KEY (customerId) REFERENCES customer(id)
+//       );
+
+//       CREATE TABLE IF NOT EXISTS collection_reminder (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         amount REAL,
+//         customerId INTEGER NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         collectionDate TEXT NOT NULL,
+//         FOREIGN KEY (customerId) REFERENCES customer(id)
+//       );
+
+//       CREATE TABLE IF NOT EXISTS owner_profile (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         profilePhoto TEXT,
+//         name VARCHAR NOT NULL,
+//         email VARCHAR NOT NULL,
+//         address VARCHAR NOT NULL,
+//         phoneNumber TEXT NOT NULL,
+//         taxNumber INTEGER
+//       );
+
+//       CREATE TABLE IF NOT EXISTS cash_report (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         date TEXT NOT NULL DEFAULT (datetime('now')),
+//         totalCash REAL NOT NULL
+//       );
+
+//       CREATE TABLE IF NOT EXISTS withdraw (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         amount REAL NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         description TEXT
+//       );
+
+//       CREATE TABLE IF NOT EXISTS expense (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         amount REAL NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         description TEXT
+//       );
+
+//       CREATE TABLE IF NOT EXISTS deposit (
+//         id INTEGER PRIMARY KEY NOT NULL,
+//         amount REAL NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+//         description TEXT
+//       );
+//     `);
+
+//     currentDbVersion = 1;
+//   }
+
+//   // if (currentDbVersion < 16) {
+//   //   await db.execAsync(`
+//   //     ALTER TABLE date RENAME TO cash_report;
+//   //   `);
+//   //   currentDbVersion = 15;
+//   // }
+
+//   // if (currentDbVersion < 21) {
+//   //   await db.execAsync(`
+//   //     ALTER TABLE customer MODIFY COLUMN id TEXT PRIMARY KEY NOT NULL;
+//   //    `);
+//   //   currentDbVersion = 13;
+//   // }
+
+//   // console.log(currentDbVersion, "llllllll");
+
+//   if (currentDbVersion <= 21) {
+//     await db.execAsync(`
+//       PRAGMA journal_mode = 'wal';
+//     `);
+
+//     // Create the new table
+//     await db.execAsync(`
+//       CREATE TABLE IF NOT EXISTS customer_new (
+//         id TEXT PRIMARY KEY NOT NULL,
+//         profilePhoto TEXT NOT NULL,
+//         name TEXT NOT NULL,
+//         email TEXT NOT NULL,
+//         address TEXT NOT NULL,
+//         phoneNumber TEXT NOT NULL,
+//         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+//       );
+//     `);
+
+//     // Copy data to the new table
+//     await db.execAsync(`
+//       INSERT INTO customer_new (id, profilePhoto, name, email, address, phoneNumber, createdAt)
+//       SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, createdAt
+//       FROM customer;
+//     `);
+
+//     // Drop the old table
+//     await db.execAsync(`
+//       DROP TABLE customer;
+//     `);
+
+//     // Rename the new table to the old table's name
+//     await db.execAsync(`
+//       ALTER TABLE customer_new RENAME TO customer;
+//     `);
+//   }
+
+//   // if (currentDbVersion < 5) {
+//   //   await db.execAsync(`
+//   //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL;
+//   //   `);
+//   // }
+
+//   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
+// }
+
+export async function migrateDbIfNeeded(db: SQLiteDatabase) {
+  const DATABASE_VERSION = 21; // Ensure this is the correct final version
+
+  let result = await db.getFirstAsync<{ user_version: number }>(
+    "PRAGMA user_version"
+  );
   let currentDbVersion = result?.user_version ?? 0;
+  console.log(currentDbVersion);
 
   if (currentDbVersion >= DATABASE_VERSION) {
-    return;
+    return; // Database is already up-to-date
   }
+
   if (currentDbVersion === 0) {
+    // Initial schema creation
     await db.execAsync(`
       PRAGMA journal_mode = 'wal';
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS customer (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         profilePhoto TEXT NOT NULL,
-        name VARCHAR NOT NULL,
-        email VARCHAR NOT NULL,
-        address VARCHAR NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        address TEXT NOT NULL,
         phoneNumber TEXT NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS supplier (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         profilePhoto TEXT,
-        name VARCHAR NOT NULL,
-        email VARCHAR NOT NULL,
-        address VARCHAR NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        address TEXT NOT NULL,
         phoneNumber TEXT NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now'))
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS cash_sell (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         customerId INTEGER NOT NULL,
         saleAmount REAL NOT NULL,
         collectedAmount REAL NOT NULL,
@@ -46,87 +255,107 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         description TEXT,
         FOREIGN KEY (customerId) REFERENCES customer(id)
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS cash_buy (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         supplierId INTEGER NOT NULL,
         amount REAL NOT NULL,
-        collectedAmount REAL NOT NULL, -- Added missing comma here
+        collectedAmount REAL NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT,
         dueAmount REAL,
         extraAmount REAL,
         FOREIGN KEY (supplierId) REFERENCES supplier(id)
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS customer_lend (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         customerId INTEGER NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         amount REAL NOT NULL,
         description TEXT,
         FOREIGN KEY (customerId) REFERENCES customer(id)
       );
-      
-      CREATE TABLE IF NOT EXISTS customer_gave (
-        id INTEGER PRIMARY KEY NOT NULL,
-        customerId INTEGER NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-        amount REAL NOT NULL,
-        description TEXT,
-        FOREIGN KEY (customerId) REFERENCES customer(id)
-      );
+    `);
 
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS customer_gave (
+       id TEXT PRIMARY KEY NOT NULL,
+        customerId INTEGER NOT NULL,
+        createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+        amount REAL NOT NULL,
+        description TEXT,
+        FOREIGN KEY (customerId) REFERENCES customer(id)
+      );
+    `);
+
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS due_collection (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         customerId INTEGER NOT NULL,
         collectedAmount REAL NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT,
         FOREIGN KEY (customerId) REFERENCES customer(id)
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS collection_reminder (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         amount REAL,
         customerId INTEGER NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         collectionDate TEXT NOT NULL,
         FOREIGN KEY (customerId) REFERENCES customer(id)
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS owner_profile (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         profilePhoto TEXT,
-        name VARCHAR NOT NULL,
-        email VARCHAR NOT NULL,
-        address VARCHAR NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        address TEXT NOT NULL,
         phoneNumber TEXT NOT NULL,
         taxNumber INTEGER
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS cash_report (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         date TEXT NOT NULL DEFAULT (datetime('now')),
         totalCash REAL NOT NULL
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS withdraw (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         amount REAL NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS expense (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         amount REAL NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT
       );
+    `);
 
+    await db.execAsync(`
       CREATE TABLE IF NOT EXISTS deposit (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id TEXT PRIMARY KEY NOT NULL,
         amount REAL NOT NULL,
         createdAt TEXT NOT NULL DEFAULT (datetime('now')),
         description TEXT
@@ -136,25 +365,44 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
     currentDbVersion = 1;
   }
 
-  // if (currentDbVersion < 16) {
-  //   await db.execAsync(`
-  //     ALTER TABLE date RENAME TO cash_report;
-  //   `);
-  //   currentDbVersion = 15;
-  // }
+  if (currentDbVersion <= 21) {
+    // Update the customer table schema
+    await db.execAsync(`
+      PRAGMA journal_mode = 'wal';
+    `);
 
-  // if (currentDbVersion < 14) {
-  //   await db.execAsync(`
-  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL NOT NULL;
-  //    `);
-  //   currentDbVersion = 13;
-  // }
+    // Create the new table
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS customer_new (
+        id TEXT PRIMARY KEY NOT NULL,
+        profilePhoto TEXT NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        address TEXT NOT NULL,
+        phoneNumber TEXT NOT NULL,
+        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+    `);
 
-  // if (currentDbVersion < 5) {
-  //   await db.execAsync(`
-  //     ALTER TABLE cash_buy ADD COLUMN collectedAmount REAL;
-  //   `);
-  // }
+    // Copy data to the new table
+    await db.execAsync(`
+      INSERT INTO customer_new (id, profilePhoto, name, email, address, phoneNumber, createdAt)
+      SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, createdAt
+      FROM customer;
+    `);
+
+    // Drop the old table
+    await db.execAsync(`
+      DROP TABLE customer;
+    `);
+
+    // Rename the new table to the old table's name
+    await db.execAsync(`
+      ALTER TABLE customer_new RENAME TO customer;
+    `);
+
+    currentDbVersion = 21;
+  }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
@@ -166,19 +414,43 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 //=================  ====================
 //           customer table
 //=================  ====================
+// export const createCustomers = async (
+//   db: SQLiteDatabase,
+//   { profilePhoto, name, email, phoneNumber, address, createdAt }: CustomerData
+// ) => {
+//   try {
+//     const id = uuidv4();
+//     const timestamp = createdAt || new Date().toISOString();
+//     await db.runAsync(
+//       "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
+//       [profilePhoto, name, email, address, phoneNumber, timestamp]
+//     );
+//     return { success: true, message: "Customer Created Successfully" };
+//   } catch (error: any) {
+//     return { success: false, message: "Error creating customer" };
+//   }
+// };
 export const createCustomers = async (
   db: SQLiteDatabase,
   { profilePhoto, name, email, phoneNumber, address, createdAt }: CustomerData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
+    console.log(id, "uuid"); // Log the generated UUID
+
     const timestamp = createdAt || new Date().toISOString();
+
+    // Use the previously generated UUID 'id' here
     await db.runAsync(
-      "INSERT INTO customer (profilePhoto, name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
-      [profilePhoto, name, email, address, phoneNumber, timestamp]
+      "INSERT INTO customer (id, profilePhoto, name, email, address, phoneNumber, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [id, profilePhoto, name, email, address, phoneNumber, timestamp] // Use 'id' instead of generating a new one
     );
-    return { success: true, message: "Customer Created Successfully" };
+
+    console.log("Customer created successfully"); // Log success
+    return { success: true, message: "Customer Created Successfully", id }; // Return the UUID for reference
   } catch (error: any) {
-    return { success: false, message: "Error creating customer" };
+    console.error("Error creating customer: ", error); // Log the actual error
+    return { success: false, message: "Error creating customer", error }; // Include error in the return
   }
 };
 
@@ -201,10 +473,13 @@ export const cash_sell = async (
   }: CashSellData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
+    console.log(id, "uuid");
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_sell (customerId,saleAmount, collectedAmount, createdAt, dueAmount, extraAmount, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO cash_sell (id, customerId,saleAmount, collectedAmount, createdAt, dueAmount, extraAmount, description) VALUES (?,?, ?, ?, ?, ?, ?, ?)",
       [
+        id,
         customerId,
         saleAmount,
         collectedAmount,
@@ -231,10 +506,11 @@ export const due_collection = async (
   { customerId, collectedAmount, createdAt, description }: DueCollectionData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (customerId, collectedAmount, createdAt, description) VALUES (?, ?, ?,?)",
-      [customerId, collectedAmount, timestamp, description]
+      "INSERT INTO due_collection (id, customerId, collectedAmount, createdAt, description) VALUES (?,?, ?, ?,?)",
+      [id, customerId, collectedAmount, timestamp, description]
     );
     return { success: false, message: "due collection created successfully" };
   } catch (error: any) {
@@ -253,10 +529,11 @@ export const customer_lend = async (
   { customerId, createdAt, amount, description }: lend
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO customer_lend (customerId, createdAt, amount, description) VALUES (?, ?, ?, ?)",
-      [customerId, timestamp, amount, description]
+      "INSERT INTO customer_lend (id, customerId, createdAt, amount, description) VALUES (?, ?, ?, ?, ?)",
+      [id, customerId, timestamp, amount, description]
     );
     return { success: false, message: "customer lend created successfully" };
   } catch (error) {
@@ -268,10 +545,11 @@ export const customer_gave = async (
   { customerId, createdAt, amount, description }: lend
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO customer_gave (customerId, createdAt, amount, description) VALUES (?, ?, ?, ?)",
-      [customerId, timestamp, amount, description]
+      "INSERT INTO customer_gave (id, customerId, createdAt, amount, description) VALUES (?, ?, ?, ?, ?)",
+      [id, customerId, timestamp, amount, description]
     );
     return { success: false, message: "customer gave created successfully" };
   } catch (error: any) {
@@ -291,6 +569,7 @@ export const collection_reminder = async (
   { amount, customerId, createdAt, collectionDate }: CollectionReminderData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
 
     // Check if a record with the same customerId and collectionDate already exists
@@ -305,8 +584,8 @@ export const collection_reminder = async (
 
     // Insert the new record
     await db.runAsync(
-      "INSERT INTO collection_reminder (amount, customerId, createdAt, collectionDate) VALUES (?, ?, ?, ?)",
-      [amount, customerId, timestamp, collectionDate]
+      "INSERT INTO collection_reminder (id, amount, customerId, createdAt, collectionDate) VALUES (?,?, ?, ?, ?)",
+      [id, amount, customerId, timestamp, collectionDate]
     );
 
     return { success: true };
@@ -529,10 +808,11 @@ export const createSuppliers = async (
   { profilePhoto, name, email, phoneNumber, address, createdAt }: SupplierData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO supplier (profilePhoto,name, email, phoneNumber, address, createdAt) VALUES (?, ?, ?, ?, ?, ?)",
-      [profilePhoto, name, email, phoneNumber, address, timestamp]
+      "INSERT INTO supplier (id, profilePhoto,name, email, phoneNumber, address, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [id, profilePhoto, name, email, phoneNumber, address, timestamp]
     );
     return { success: true, message: "Supplier created successfully" };
   } catch (error) {
@@ -571,10 +851,12 @@ export const cash_buy = async (
   }: CashBuyData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_buy (supplierId, amount, createdAt, description, collectedAmount, dueAmount, extraAmount) VALUES (?, ?, ?, ?, ?,?, ?)",
+      "INSERT INTO cash_buy (id, supplierId, amount, createdAt, description, collectedAmount, dueAmount, extraAmount) VALUES (?, ?, ?, ?, ?, ?,?, ?)",
       [
+        id,
         supplierId,
         amount,
         timestamp,
@@ -627,10 +909,11 @@ export const supplier_lend = async (
   { createdAt, amount, description }: lend
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO due_collection (  createdAt, amount, description) VALUES (?, ?, ?)",
-      [timestamp, amount, description]
+      "INSERT INTO due_collection (id,  createdAt, amount, description) VALUES (?, ?, ?, ?)",
+      [id, timestamp, amount, description]
     );
     return { success: true, message: "supplier lend created successfully" };
   } catch (error) {
@@ -671,10 +954,11 @@ export const owner_profile = async (
   }: OwnerProfileData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     // const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO owner_profile ( profilePhoto, name, email, address, phoneNumber, taxNumber) VALUES (?, ?, ?, ?, ?, ?)",
-      [profilePhoto, name, email, address, phoneNumber, taxNumber]
+      "INSERT INTO owner_profile (id, profilePhoto, name, email, address, phoneNumber, taxNumber) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [id, profilePhoto, name, email, address, phoneNumber, taxNumber]
     );
     return { success: true, message: "owner profile Created Successfully" };
   } catch (error) {
@@ -730,10 +1014,11 @@ export const cash_report = async (
   { date, totalCash }: CashReportData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = date || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO cash_report (date, totalCash) VALUES (?, ?)",
-      [timestamp, totalCash]
+      "INSERT INTO cash_report (id, date, totalCash) VALUES (?, ?, ?)",
+      [id, timestamp, totalCash]
     );
     return { success: true, message: "cash report created successfully" };
   } catch (error) {
@@ -753,10 +1038,11 @@ export const expense = async (
   { amount, createdAt, description }: ExpenseData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO expense (amount, createdAt, description) VALUES (?, ?, ?)",
-      [amount, timestamp, description]
+      "INSERT INTO expense (id, amount, createdAt, description) VALUES (?, ?, ?, ?)",
+      [id, amount, timestamp, description]
     );
     return { success: true, message: "expense created successfully" };
   } catch (error) {
@@ -776,10 +1062,11 @@ export const deposit = async (
   { amount, createdAt, description }: DepositData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO deposit (amount, createdAt, description) VALUES (?, ?, ?)",
-      [amount, timestamp, description]
+      "INSERT INTO deposit (id, amount, createdAt, description) VALUES (?, ?, ?, ?)",
+      [id, amount, timestamp, description]
     );
     return { success: true, message: "deposit created successfully" };
   } catch (error) {
@@ -799,10 +1086,11 @@ export const withdraw = async (
   { amount, createdAt, description }: WithdrawData
 ) => {
   try {
+    const id = uuid.v4().toString(); // Convert to a string explicitly
     const timestamp = createdAt || new Date().toISOString();
     await db.runAsync(
-      "INSERT INTO withdraw (amount ,createdAt, description) VALUES (?, ?, ?)",
-      [amount, timestamp, description]
+      "INSERT INTO withdraw (id, amount ,createdAt, description) VALUES (?, ?, ?, ?)",
+      [id, amount, timestamp, description]
     );
     return { success: true, message: "withdraw created successfully" };
   } catch (error) {

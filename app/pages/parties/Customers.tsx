@@ -31,11 +31,17 @@ const Customers = () => {
   }, [selectedImage]);
 
   const handleSave = async () => {
+    console.log("clicked customer");
+
     try {
       const result = await createCustomers(db, customerData);
+      console.log(result?.id);
+
       if (result.success) {
         navigate.push("/(tabs)/parties");
         ToastAndroid.show("Customer created successfully!", ToastAndroid.SHORT);
+      } else if (!result.success) {
+        ToastAndroid.show(result.message, ToastAndroid.SHORT);
       }
     } catch (error) {
       ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);

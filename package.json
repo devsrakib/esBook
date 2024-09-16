@@ -56,7 +56,9 @@
     "react-native-segmented-control-tab": "^4.0.0",
     "react-native-svg": "15.2.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-web": "~0.19.10"
+    "react-native-uuid": "^2.0.2",
+    "react-native-web": "~0.19.10",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

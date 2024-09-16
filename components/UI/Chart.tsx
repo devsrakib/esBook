@@ -31,25 +31,81 @@ const Chart = () => {
   useEffect(() => {
     async function setup() {
       const result = await getCash_sell(db);
-      processChartData(result);
+      console.log("Raw Data from getCash_sell:", result); // Check the raw data
+      if (result?.length !== 0) {
+        processChartData(result);
+      } else {
+        processChartData;
+      }
     }
     setup();
   }, [db, selectedStatus]);
 
+  // const processChartData = (data: any[]) => {
+  //   let groupedData: { [key: string]: number } = {};
+  //   console.log(groupedData, ";;;;;;;;;;");
+
+  //   data?.forEach((item) => {
+  //     const key = formatDate(new Date(item?.createdAt));
+  //     const saleAmount =
+  //       isNaN(item?.saleAmount) || item?.saleAmount === null
+  //         ? 0
+  //         : item?.saleAmount;
+
+  //     if (groupedData[key]) {
+  //       groupedData[key] += saleAmount;
+  //     } else {
+  //       groupedData[key] = 0;
+  //     }
+  //   });
+
+  //   const colors = [
+  //     "#4ABFF4",
+  //     "#79C3DB",
+  //     "#28B2B3",
+  //     "#4ADDBA",
+  //     "#91E3E3",
+  //     "#4ADDBA",
+  //     "#91E3E3",
+  //   ];
+
+  //   const chartData = Object?.keys(groupedData)?.map((key, index) => ({
+  //     label: key,
+  //     value: !groupedData[key] || 0,
+  //     frontColor: colors[index % colors.length],
+  //     sideColor: colors[index % colors.length],
+  //     topColor: colors[index % colors.length],
+  //   }));
+
+  //   setChartData(chartData);
+  // };
+
   const processChartData = (data: any[]) => {
     let groupedData: { [key: string]: number } = {};
 
-    data.forEach((item) => {
-      const date = new Date(item?.createdAt);
-      const key = formatDate(date);
+    data?.forEach((item) => {
+      const key = formatDate(new Date(item?.createdAt));
+      console.log(item, "lllllllllllll");
 
-      if (groupedData[key]) {
-        groupedData[key] += item?.saleAmount;
+      // Check if saleAmount is valid, otherwise set to 0
+      const saleAmount =
+        isNaN(item?.saleAmount) || item?.saleAmount === null
+          ? 0
+          : item?.saleAmount;
+      console.log(saleAmount, "lllllll");
+
+      // If the key already exists, add to the existing value
+      if (!groupedData[key]) {
+        groupedData[key] += saleAmount;
       } else {
-        groupedData[key] = item?.saleAmount;
+        // Initialize the key with the first saleAmount, not 0
+        groupedData[key] = saleAmount;
       }
     });
 
+    console.log("Processed Data: ", groupedData);
+
+    // Continue processing and updating chart data as before...
     const colors = [
       "#4ABFF4",
       "#79C3DB",
@@ -60,9 +116,9 @@ const Chart = () => {
       "#91E3E3",
     ];
 
-    const chartData = Object?.keys(groupedData)?.map((key, index) => ({
+    const chartData = Object.keys(groupedData)?.map((key, index) => ({
       label: key,
-      value: groupedData[key],
+      value: groupedData[key], // Use the accumulated value for the label
       frontColor: colors[index % colors.length],
       sideColor: colors[index % colors.length],
       topColor: colors[index % colors.length],
@@ -70,8 +126,7 @@ const Chart = () => {
 
     setChartData(chartData);
   };
-
-  useEffect(() => {}, []);
+  console.log(chartData);
 
   const formatDate = (date: Date) => {
     if (selectedStatus === "Weekly") {
