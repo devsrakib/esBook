@@ -11,7 +11,7 @@ import { Colors } from "@/constants/Colors";
 import Divider from "../Divider";
 import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
-import { IFeature } from "@/types/interfaces/feature.interface";
+import { IFeature } from "@/types/interfaces/cashBox/feature.interface";
 import Modal from "react-native-modal";
 //@ts-ignore
 import CalendarPicker from "react-native-calendar-picker";

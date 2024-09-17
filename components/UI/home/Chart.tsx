@@ -14,7 +14,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getCash_sell } from "@/databases/Database";
 import { radius } from "@/constants/sizes";
 import Animated, { FadeIn, ZoomIn, ZoomOut } from "react-native-reanimated";
-import { ICashSell, IChart } from "@/types/interfaces/chart.interface";
+import { ICashSell, IChart } from "@/types/interfaces/home/chart.interface";
 const chartStatusTime = ["Weekly", "Monthly", "Yearly"];
 
 const Chart = () => {

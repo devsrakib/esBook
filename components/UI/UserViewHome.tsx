@@ -6,19 +6,36 @@ import { Fontisto } from "@expo/vector-icons";
 import { FontW, Fonts } from "@/constants/Fonts";
 import { useSQLiteContext } from "expo-sqlite";
 import { getOwnerProfile } from "@/databases/Database";
+import { IOwner } from "@/types/interfaces/home/owner.interface";
 
 const UserViewHome = () => {
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<IOwner>({
+    profilePhoto: null,
+    name: "",
+    email: "",
+    address: "",
+    phoneNumber: "",
+    taxNumber: 0,
+    createdAt: "",
+    id: "",
+  });
+
   const db = useSQLiteContext();
 
   useEffect(() => {
     const getProfile = async () => {
       const result = await getOwnerProfile(db);
       const user_data = result?.length > 0 ? result[0] : null;
-      setData(user_data);
+
+      setData(user_data as IOwner);
     };
     getProfile();
   }, []);
+
+  const capitalizeFirstLetter = (text: string) => {
+    if (!text) return "";
+    return text?.charAt(0)?.toUpperCase() + text?.slice(1);
+  };
 
   return (
     <View style={styles.container}>
@@ -30,12 +47,14 @@ const UserViewHome = () => {
             style={styles.userAvatar}
           />
         ) : (
-          <Text style={styles.placeholder}>{data?.name?.slice(0, 1)}</Text>
+          <Text style={styles.placeholder}>
+            {data?.name?.split("")[0]?.toUpperCase()}
+          </Text>
         )}
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.text1}>Hello,</Text>
-        <Text style={styles.userName}>{data?.name}</Text>
+        <Text style={styles.userName}>{capitalizeFirstLetter(data?.name)}</Text>
       </View>
     </View>
   );
