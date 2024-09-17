@@ -53,6 +53,7 @@ import {
   TouchableOpacity,
   Linking,
   TextInput,
+  ToastAndroid,
 } from "react-native";
 import {
   Ionicons,
@@ -97,6 +98,7 @@ const CustomerView = () => {
   const [customer, setCustomer] = useState<any>();
   const [totalGiveAmount, setTotalGiveAmount] = useState<number>(0);
   const [supplier, setSupplier] = useState<any>([]);
+  const formatCollectionDate = new Date(collectionDate?.collectionDate);
   const db = useSQLiteContext();
   const lendData: any = {
     customerId: router?.id,
@@ -107,14 +109,22 @@ const CustomerView = () => {
     try {
       await customer_lend(db, lendData);
     } catch (error) {
-      console.error("Error lending amount:", error);
+      ToastAndroid.showWithGravity(
+        "sorry!",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
     }
   };
   const handleGave = async () => {
     try {
       await customer_gave(db, lendData);
     } catch (error) {
-      console.error("Error giving amount:", error);
+      ToastAndroid.showWithGravity(
+        "sorry!",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
     }
   };
 
@@ -176,8 +186,6 @@ const CustomerView = () => {
     };
     getCustomer();
   }, []);
-
-  const formatCollectionDate = new Date(collectionDate?.collectionDate);
 
   return (
     <View

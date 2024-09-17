@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   ScrollView,
+  ToastAndroid,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -69,16 +70,29 @@ const Profile = () => {
       getCustomer();
     }
   }, [db, router?.id]);
+  console.log(router?.text, ";;;;;;;;;");
 
   const handleDeleteCustomer = useCallback(async () => {
     try {
       if (router?.text === "Customer") {
         const result = await deleteCustomerById(db, userData?.id);
         if (result?.success) {
-          navigate.push(`/(tabs)/${router.deleteFrom}`);
+          console.log(result?.success);
+          ToastAndroid.showWithGravity(
+            result?.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+          // navigate.push(`/(tabs)/${router.deleteFrom}`);
         }
       } else if (router?.text === "Supplier") {
-        await deleteSupplierById(db, userData?.id);
+        const result = await deleteSupplierById(db, userData?.id);
+        console.log(result?.success);
+        ToastAndroid.showWithGravity(
+          result?.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
       }
     } catch (error) {}
   }, []);

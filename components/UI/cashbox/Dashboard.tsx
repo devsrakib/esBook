@@ -6,29 +6,33 @@ import { sharedStyle } from "@/constants/shared.style";
 import { Fonts } from "@/constants/Fonts";
 import { useSQLiteContext } from "expo-sqlite";
 import {
+  CashBuyData,
+  DepositData,
+  ExpenseData,
   getCash_buy,
   getCash_sell,
   getDeposit,
   getExpense,
   getWithdraw,
+  WithdrawData,
 } from "@/databases/Database";
 
 const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
-  const [currentAmount, setCurrentAmount] = useState(0);
+  const [currentCashAmount, setCurrentCashAmount] = useState<number>(0);
   const [collectedAmount, setCollectedAmount] = useState<any>([]);
-  const [deposit, setDeposit] = useState<any>([]);
+  const [deposit, setDeposit] = useState<DepositData[]>([]);
   const [todayIReceive, setTodayIReceive] = useState(0);
   const [todayISells, setTodayISells] = useState(0);
   const [todayIGave, setTodayIGave] = useState(0);
-  const [cashBuy, setCashBuy] = useState<any>([]);
-  const [withdraw, setWithdraw] = useState<any>([]);
-  const [expense, setExpense] = useState<any>([]);
+  const [cashBuy, setCashBuy] = useState<CashBuyData[]>([]);
+  const [withdraw, setWithdraw] = useState<WithdrawData[]>([]);
+  const [expense, setExpense] = useState<ExpenseData[]>([]);
 
   const data = useMemo(
     () => [
       {
         text: "Current Cash",
-        amount: currentAmount,
+        amount: currentCashAmount,
         icon: require("../../../assets/images/cash.png"),
         color: Colors.mainColor,
         textColor: Colors.mainColor,
@@ -55,7 +59,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
         textColor: Colors.red,
       },
     ],
-    [currentAmount, todayISells, todayIReceive, todayIGave]
+    [currentCashAmount, todayISells, todayIReceive, todayIGave]
   );
 
   const db = useSQLiteContext();
@@ -66,10 +70,10 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
       const cashBuy = await getCash_buy(db);
       const withdraw = await getWithdraw(db);
       const expense = await getExpense(db);
-      setWithdraw(withdraw);
-      setExpense(expense);
-      setCashBuy(cashBuy);
-      setDeposit(deposit);
+      setWithdraw(withdraw as WithdrawData[]);
+      setExpense(expense as ExpenseData[]);
+      setCashBuy(cashBuy as CashBuyData[]);
+      setDeposit(deposit as DepositData[]);
       setCollectedAmount(cash);
     }
     cash();
@@ -77,6 +81,10 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
 
   useEffect(() => {
     const totalSaleAmount = collectedAmount?.reduce(
+      (sum: number, record: any) => sum + record?.saleAmount,
+      0
+    );
+    const totalCollectedAmount = collectedAmount?.reduce(
       (sum: number, record: any) => sum + record?.collectedAmount,
       0
     );
@@ -96,7 +104,9 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
       (sum: number, record: any) => sum + record?.amount,
       0
     );
-    setCurrentAmount(totalSaleAmount + totalDeposit);
+    setCurrentCashAmount(
+      totalCollectedAmount + totalDeposit - (totalExpense + totalWithdraw)
+    );
     setCurrentCash(totalSaleAmount + totalDeposit);
     setTodayIReceive(totalDeposit);
     setTodayISells(totalSaleAmount);
@@ -108,7 +118,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
     const resetAtMidnight = () => {
       const now = new Date();
       if (now.getHours() === 0 && now.getMinutes() === 0) {
-        setCurrentAmount(0);
+        setCurrentCashAmount(0);
         setCurrentCash(0);
         setTodayIReceive(0);
         setTodayISells(0);

@@ -2,7 +2,7 @@ import uuid from "react-native-uuid";
 import { SQLiteDatabase } from "expo-sqlite";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  const DATABASE_VERSION = 23; // Ensure this is the correct final version
+  const DATABASE_VERSION = 24; // Ensure this is the correct final version
 
   let result = await db.getFirstAsync<{ user_version: number }>(
     "PRAGMA user_version"
@@ -551,13 +551,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   //   // Update the current database version to 22
   //   currentDbVersion = 22;
   // }
-  // if (currentDbVersion <= 23) {
+  // if (currentDbVersion <= 24) {
   //   // Switch to Write-Ahead Logging mode
   //   await db.execAsync(`PRAGMA journal_mode = 'wal';`);
 
   //   // Create the new collection_reminder table with updated schema
   //   await db.execAsync(`
-  //     CREATE TABLE IF NOT EXISTS supplier_new (
+  //     CREATE TABLE IF NOT EXISTS customer_new (
   //      id TEXT PRIMARY KEY NOT NULL,
   //       profilePhoto TEXT,
   //       name TEXT NOT NULL,
@@ -570,19 +570,19 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
   //   // Copy the existing data to the new table
   //   await db.execAsync(`
-  //     INSERT INTO supplier_new (id, profilePhoto, name, email, address, phoneNumber, createdAt)
+  //     INSERT INTO customer_new (id, profilePhoto, name, email, address, phoneNumber, createdAt)
   //     SELECT CAST(id AS TEXT), profilePhoto, name, email, address, phoneNumber, createdAt
-  //     FROM supplier;
+  //     FROM customer;
   //   `);
 
   //   // Drop the old collection_reminder table
-  //   await db.execAsync(`DROP TABLE supplier;`);
+  //   await db.execAsync(`DROP TABLE customer;`);
 
   //   // Rename the new table to the old table's name
-  //   await db.execAsync(`ALTER TABLE supplier_new RENAME TO supplier;`);
+  //   await db.execAsync(`ALTER TABLE customer_new RENAME TO customer;`);
 
   //   // Update the current database version to 22
-  //   currentDbVersion = 22;
+  //   currentDbVersion = 23;
   // }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
