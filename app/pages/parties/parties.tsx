@@ -8,7 +8,7 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -19,7 +19,12 @@ import AmountCon from "@/components/UI/AmountCon";
 import { AntDesign, Feather, FontAwesome5, Fontisto } from "@expo/vector-icons";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { getCustomers, getSuppliers } from "@/databases/Database";
+import {
+  CustomerData,
+  getCustomers,
+  getSuppliers,
+  SupplierData,
+} from "@/databases/Database";
 import Empty from "@/components/UI/Empty";
 import Animated, {
   Easing,
@@ -32,28 +37,30 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import AddPartiesButton from "@/components/UI/parties/AddPartiesButton";
+import Search from "@/components/UI/parties/Search";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [customers, setCustomers] = useState<any>([]);
-  const [suppliers, setSuppliers] = useState<any>([]);
+  const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const routerData = useLocalSearchParams();
+  // let filteredCustomersSuppliers: any;
 
   const db = useSQLiteContext();
   useEffect(() => {
-    async function setup() {
+    const setup = async () => {
       const customers = await getCustomers(db);
       const suppliers = await getSuppliers(db);
-      setCustomers(customers);
-      setSuppliers(suppliers);
-    }
+      setCustomers(customers as CustomerData[]);
+      setSuppliers(suppliers as SupplierData[]);
+    };
     setup();
   }, []);
 
-  let filteredCustomersSuppliers: any;
   useEffect(() => {
     if (
       routerData?.text === "Total Customers" ||
@@ -65,15 +72,18 @@ const Parties = () => {
     }
   }, [routerData?.text]);
 
-  if (selectedIndex === 0) {
-    filteredCustomersSuppliers = customers?.filter((customer: any) =>
-      customer?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-    );
-  } else if (selectedIndex === 1) {
-    filteredCustomersSuppliers = suppliers?.filter((customer: any) =>
-      customer?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-    );
-  }
+  const filteredCustomersSuppliers = useMemo(() => {
+    if (selectedIndex === 0) {
+      return customers.filter((customer) =>
+        customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    } else if (selectedIndex === 1) {
+      return suppliers.filter((supplier) =>
+        supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    return [];
+  }, [selectedIndex, searchTerm, customers, suppliers]);
 
   return (
     <View
@@ -153,91 +163,41 @@ const Parties = () => {
       </View>
       <View style={styles.bodySection}>
         {isOpenSearch && (
-          <Animated.View entering={FadeInUp} style={styles.searchSection}>
-            <Fontisto name="search" size={18} color={Colors.text} />
-            <TextInput
-              placeholder="Search..."
-              style={styles.input}
-              onChangeText={(text) => setSearchTerm(text)} // Update search term
-              value={searchTerm}
-            />
-          </Animated.View>
+          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         )}
         <FilterAndTextSection />
-        {selectedIndex === 0 ? (
-          <>
-            {filteredCustomersSuppliers?.length === 0 ? (
-              <Empty
-                text="No Customer"
-                icon={
-                  <FontAwesome5
-                    name="user-alt-slash"
-                    size={40}
-                    color={Colors.text}
-                  />
-                }
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 50,
+            flex: 1,
+          }}
+          data={filteredCustomersSuppliers}
+          renderItem={({ item }) => {
+            return (
+              <Customers
+                item={item}
+                selectedIndex={selectedIndex}
+                text={selectedIndex === 0 ? "Customer" : "Supplier"}
+                deleteFrom={"parties"}
               />
-            ) : (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingBottom: 50,
-                }}
-                data={filteredCustomersSuppliers}
-                renderItem={({ item }) => {
-                  return (
-                    <Customers
-                      item={item}
-                      selectedIndex={selectedIndex}
-                      text={"Customer"}
-                      deleteFrom={"parties"}
-                    />
-                  );
-                }}
-              />
-            )}
-          </>
-        ) : (
-          <>
-            {filteredCustomersSuppliers.length === 0 ? (
-              <Empty
-                text="No Supplier"
-                icon={
-                  <FontAwesome5
-                    name="user-alt-slash"
-                    size={40}
-                    color={Colors.text}
-                  />
-                }
-              />
-            ) : (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingBottom: 50,
-                }}
-                data={filteredCustomersSuppliers}
-                renderItem={({ item }) => {
-                  return (
-                    <Customers
-                      item={item}
-                      selectedIndex={selectedIndex}
-                      text={"Supplier"}
-                      deleteFrom={"parties"}
-                    />
-                  );
-                }}
-              />
-            )}
-          </>
-        )}
-        <TouchableOpacity
-          onPress={() => router.navigate("/pages/parties/addNewParties")}
-          style={styles.addButton}
-        >
-          <AntDesign name="plus" size={18} color={Colors.white} />
-          <Text style={styles.buttonText}>Add Parties</Text>
-        </TouchableOpacity>
+            );
+          }}
+          ListEmptyComponent={
+            <Empty
+              text="No Supplier"
+              icon={
+                <FontAwesome5
+                  name="user-alt-slash"
+                  size={40}
+                  color={Colors.text}
+                />
+              }
+            />
+          }
+        />
+        <AddPartiesButton />
       </View>
     </View>
   );
@@ -296,22 +256,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flex: 1,
   },
-  addButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: Colors.mainColor,
-    position: "absolute",
-    right: 20,
-    bottom: 40,
-    paddingHorizontal: 20,
-    paddingVertical: 7,
-    borderRadius: 20,
-  },
-  buttonText: {
-    color: Colors.white,
-    fontSize: Fonts.medium,
-  },
+
   tabs: {
     height: 25,
     paddingHorizontal: 10,
@@ -328,26 +273,6 @@ const styles = StyleSheet.create({
     height: 40,
     alignContent: "center",
     justifyContent: "center",
-  },
-  searchSection: {
-    height: 50,
-    backgroundColor: Colors.white,
-    borderRadius: radius.regular,
-    width: "100%",
-    alignSelf: "center",
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    gap: 10,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    shadowColor: Colors.text,
-    elevation: 10,
-  },
-  input: {
-    fontSize: Fonts.medium,
-    flex: 1,
   },
 });
 

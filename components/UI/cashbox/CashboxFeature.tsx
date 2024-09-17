@@ -14,30 +14,36 @@ import Feature from "./Feature";
 import { IFeature } from "@/types/interfaces/cashBox/feature.interface";
 import Modal from "react-native-modal";
 //@ts-ignore
-import CalendarPicker from "react-native-calendar-picker";
+
 import {
+  CashBuyData,
+  DepositData,
+  DueCollectionData,
+  ExpenseData,
   getCash_buy,
   getCash_sell,
   getDeposit,
   getExpense,
   getWithdraw,
+  WithdrawData,
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import FormatDate from "@/utils/FormatDate";
+import CalenderModal from "./calenderModal";
 
 const CashboxFeature = () => {
-  const [getAllCashSell, setGetAllCashSell] = useState<any>([]);
-  const [deposit, setDeposit] = useState<any>([]);
-  const [withdraw, setWithdraw] = useState<any>([]);
+  const [getAllCashSell, setGetAllCashSell] = useState<any[]>([]);
+  const [deposit, setDeposit] = useState<DepositData[]>([]);
+  const [withdraw, setWithdraw] = useState<WithdrawData[]>([]);
   const [totalWithdraw, setTotalWithdraw] = useState<number>(0);
-  const [expense, setExpense] = useState<any>([]);
+  const [expense, setExpense] = useState<ExpenseData[]>([]);
   const [totalExpense, setTotalExpense] = useState<number>(0);
   const [totalCash, setTotalCash] = useState<number>(0);
   const [totalDeposit, setTotalDeposit] = useState<number>(0);
-  const [due, setDue] = useState<any>([]);
+  const [due, setDue] = useState<DueCollectionData[]>([]);
   const [totalDue, setTotalDue] = useState<number>(0);
   const [totalCashBuy, setTotalCashBuy] = useState<number>(0);
-  const [cashBuy, setCashBuy] = useState<any>([]);
+  const [cashBuy, setCashBuy] = useState<CashBuyData[]>([]);
   const [selectedStartDate, setSelectedStartDate] =
     useState<string>("DD/MM/YYYY");
   const [selectedEndDate, setSelectedEndDate] = useState<string>("DD/MM/YYYY");
@@ -151,11 +157,11 @@ const CashboxFeature = () => {
                 return createdAt >= startDate && createdAt <= endDate;
               });
       setGetAllCashSell(filteredCashData);
-      setDeposit(filteredDepositData);
-      setWithdraw(filterWithdrawData);
-      setExpense(filteredExpenseData);
-      setDue(filteredDueData);
-      setCashBuy(filteredCashBuyData);
+      setDeposit(filteredDepositData as DepositData[]);
+      setWithdraw(filterWithdrawData as WithdrawData[]);
+      setExpense(filteredExpenseData as ExpenseData[]);
+      setDue(filteredDueData as DueCollectionData[]);
+      setCashBuy(filteredCashBuyData as CashBuyData[]);
     };
     asyncFunction();
   }, [selectedStartDate, selectedEndDate]);
@@ -194,7 +200,7 @@ const CashboxFeature = () => {
     setTotalCashBuy(total_cash_buy);
   }, [getAllCashSell, deposit, withdraw, expense, due, cashBuy]);
 
-  const onDateChangeData = (date: any, type: any) => {
+  const onDateChangeData = useCallback((date: any, type: any) => {
     const newDate = JSON.stringify(date);
     const newDate1 = newDate.substring(1, newDate.length - 1);
     const dates = newDate1.split("T");
@@ -213,7 +219,7 @@ const CashboxFeature = () => {
       setSelectedStartDate(`${day}/${month}/${year}`);
       setSelectedEndDate("DD/MM/YYYY");
     }
-  };
+  }, []);
   const selectedDates =
     selectedStartDate === "DD/MM/YYYY" && selectedEndDate === "DD/MM/YYYY";
 
@@ -234,28 +240,11 @@ const CashboxFeature = () => {
       </View>
       <View style={styles.dateContainer}>
         {/* {selected && ( */}
-        <Modal
-          isVisible={selected}
-          onBackButtonPress={() => setSelected(false)}
-          onBackdropPress={() => setSelected(false)}
-          style={styles.dateModal}
-          backdropOpacity={0.7}
-        >
-          <View style={styles.dateModalContent}>
-            <CalendarPicker
-              startFromMonday={true}
-              todayBackgroundColor="#f2e6ff"
-              selectedDayColor="#00ffff"
-              selectedDayTextColor="#7300e6"
-              minDate={new Date(2024, 1, 1)}
-              maxDate={new Date(2026, 6, 3)}
-              onDateChange={onDateChangeData}
-              allowRangeSelection={true}
-              width={Dimensions.get("window").width - 60}
-              weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-            />
-          </View>
-        </Modal>
+        <CalenderModal
+          selected={selected}
+          setSelected={setSelected}
+          onDateChangeData={onDateChangeData}
+        />
         {/* )} */}
       </View>
       <Divider height={1} width={"100%"} aligns={"center"} />
@@ -301,14 +290,6 @@ const styles = StyleSheet.create({
   dateContainer: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-  },
-  dateModal: {
-    height: 400,
-  },
-  dateModalContent: {
-    height: 400,
-    backgroundColor: Colors.white,
-    borderRadius: radius.small,
   },
 });
 

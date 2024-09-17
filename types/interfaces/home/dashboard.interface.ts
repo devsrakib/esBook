@@ -1,4 +1,4 @@
-export interface dashboardData {
+export interface IDashboardData {
   text: string;
   icon: any;
   quantity?: number;

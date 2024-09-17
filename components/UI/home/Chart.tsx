@@ -43,14 +43,9 @@ const Chart = () => {
 
     data?.forEach((item) => {
       const key = formatDate(new Date(item?.createdAt));
-
-      // Check if saleAmount is valid, otherwise set to 0
-
-      // If the key already exists, add to the existing value
       if (groupedData[key]) {
         groupedData[key] += item?.saleAmount;
       } else {
-        // Initialize the key with the first saleAmount, not 0
         groupedData[key] = item?.saleAmount;
       }
     });

@@ -21,7 +21,7 @@ import {
 } from "@/databases/Database";
 import { currency } from "@/global/currency";
 import { Link } from "expo-router";
-import { dashboardData } from "@/types/interfaces/dashboard.interface";
+import { IDashboardData } from "@/types/interfaces/home/dashboard.interface";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState<number>(0);
@@ -29,7 +29,7 @@ const Dashboard = () => {
   const [cashSell, setCashSell] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const db = useSQLiteContext();
-  const dashboardData: dashboardData[] = [
+  const dashboardData: IDashboardData[] = [
     {
       text: "Total Customers",
       icon: require("../../assets/images/DUser.png"),
