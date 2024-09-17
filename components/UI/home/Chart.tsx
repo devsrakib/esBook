@@ -14,13 +14,13 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getCash_sell } from "@/databases/Database";
 import { radius } from "@/constants/sizes";
 import Animated, { FadeIn, ZoomIn, ZoomOut } from "react-native-reanimated";
+import { ICashSell, IChart } from "@/types/interfaces/chart.interface";
 const chartStatusTime = ["Weekly", "Monthly", "Yearly"];
 
-let status: string;
 const Chart = () => {
   const [selectedStatus, setSelectedStatus] = useState("Weekly");
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [chartData, setChartData] = useState<IChart[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const handleChartStatus = (text: string) => {
     setSelectedStatus(text);
@@ -31,74 +31,29 @@ const Chart = () => {
   useEffect(() => {
     async function setup() {
       const result = await getCash_sell(db);
-      console.log("Raw Data from getCash_sell:", result); // Check the raw data
-      if (result?.length !== 0) {
-        processChartData(result);
-      } else {
-        processChartData;
-      }
+      processChartData(result as ICashSell[]);
     }
     setup();
   }, [db, selectedStatus]);
 
-  // const processChartData = (data: any[]) => {
-  //   let groupedData: { [key: string]: number } = {};
-  //   console.log(groupedData, ";;;;;;;;;;");
+  const processChartData = (data: ICashSell[]) => {
+    console.log(data);
 
-  //   data?.forEach((item) => {
-  //     const key = formatDate(new Date(item?.createdAt));
-  //     const saleAmount =
-  //       isNaN(item?.saleAmount) || item?.saleAmount === null
-  //         ? 0
-  //         : item?.saleAmount;
-
-  //     if (groupedData[key]) {
-  //       groupedData[key] += saleAmount;
-  //     } else {
-  //       groupedData[key] = 0;
-  //     }
-  //   });
-
-  //   const colors = [
-  //     "#4ABFF4",
-  //     "#79C3DB",
-  //     "#28B2B3",
-  //     "#4ADDBA",
-  //     "#91E3E3",
-  //     "#4ADDBA",
-  //     "#91E3E3",
-  //   ];
-
-  //   const chartData = Object?.keys(groupedData)?.map((key, index) => ({
-  //     label: key,
-  //     value: !groupedData[key] || 0,
-  //     frontColor: colors[index % colors.length],
-  //     sideColor: colors[index % colors.length],
-  //     topColor: colors[index % colors.length],
-  //   }));
-
-  //   setChartData(chartData);
-  // };
-
-  const processChartData = (data: any[]) => {
     let groupedData: { [key: string]: number } = {};
 
     data?.forEach((item) => {
       const key = formatDate(new Date(item?.createdAt));
-      console.log(item, "lllllllllllll");
 
       // Check if saleAmount is valid, otherwise set to 0
 
       // If the key already exists, add to the existing value
-      if (!groupedData[key]) {
+      if (groupedData[key]) {
         groupedData[key] += item?.saleAmount;
       } else {
         // Initialize the key with the first saleAmount, not 0
         groupedData[key] = item?.saleAmount;
       }
     });
-
-    console.log("Processed Data: ", groupedData);
 
     // Continue processing and updating chart data as before...
     const colors = [
@@ -111,7 +66,7 @@ const Chart = () => {
       "#91E3E3",
     ];
 
-    const chartData = Object.keys(groupedData)?.map((key, index) => ({
+    const chartData = Object.keys(groupedData).map((key, index) => ({
       label: key,
       value: groupedData[key], // Use the accumulated value for the label
       frontColor: colors[index % colors.length],
@@ -121,7 +76,6 @@ const Chart = () => {
 
     setChartData(chartData);
   };
-  console.log(chartData);
 
   const formatDate = (date: Date) => {
     if (selectedStatus === "Weekly") {

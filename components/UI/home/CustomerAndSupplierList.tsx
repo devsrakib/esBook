@@ -10,18 +10,14 @@ import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { FontAwesome5, Fontisto } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
-import Divider from "./Divider";
-import { FontAwesome6 } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import Filter from "./parties/filter";
-import Customers from "./shared/Customers";
+import Customers from "../shared/Customers";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
-import Empty from "./Empty";
-//@ts-ignore
+import Empty from "../Empty";
 import { debounce } from "lodash";
+import CustomSegment from "./CustomSegment";
 const tab: [string, string] = ["Customers", "Suppliers"];
 
 interface propsTypes {
@@ -54,42 +50,12 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
   return (
     <View style={styles.container}>
       {/* segments tabs */}
-      <View style={styles.segments}>
-        <View style={styles.segmentCon}>
-          {tab?.map((t: any, index: number) => {
-            return (
-              <TouchableOpacity
-                style={[
-                  styles.tabsContainer,
-                  {
-                    backgroundColor:
-                      selectedIndex === index ? Colors.mainColor : Colors.white,
-                    borderColor:
-                      selectedIndex === index ? Colors.white : Colors.border,
-                  },
-                ]}
-                onPress={() => {
-                  handleIndexChange(index);
-                }}
-                key={index}
-              >
-                <Text
-                  style={[
-                    {
-                      color:
-                        selectedIndex === index ? Colors.white : Colors.text,
-                    },
-                  ]}
-                >
-                  {t}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        <Filter />
-      </View>
+      <CustomSegment
+        tab={tab}
+        handleIndexChange={handleIndexChange}
+        setSelectedIndex={setSelectedIndex}
+        selectedIndex={selectedIndex}
+      />
       {/* customer list */}
       <View style={styles.usersCon}>
         <View style={styles.topSection}>
@@ -102,7 +68,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
                 <Image
                   style={styles.messageIcon}
                   resizeMode="contain"
-                  source={require("../../assets/images/message.png")}
+                  source={require("../../../assets/images/message.png")}
                 />
               </TouchableOpacity>
             </Link>
@@ -115,67 +81,36 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
           </View>
         </View>
         {
-          <Fragment>
-            {selectedIndex === 0 ? (
-              <View style={{ height: 400 }}>
-                {customer?.length === 0 ? (
-                  <Empty
-                    text="No customer"
-                    icon={
-                      <FontAwesome5
-                        name="user-alt-slash"
-                        size={40}
-                        color={Colors.text}
-                      />
-                    }
+          <View style={{ height: 400 }}>
+            <FlatList
+              contentContainerStyle={{
+                flex: 1,
+              }}
+              data={selectedIndex === 0 ? customer : supplier}
+              renderItem={({ item }) => {
+                return (
+                  <Customers
+                    item={item}
+                    text={selectedIndex === 0 ? "Customer" : "Supplier"}
+                    selectedIndex={selectedIndex}
+                    deleteFrom={"index"}
                   />
-                ) : (
-                  <FlatList
-                    data={customer}
-                    renderItem={({ item }) => {
-                      return (
-                        <Customers
-                          item={item}
-                          text={"Customer"}
-                          selectedIndex={selectedIndex}
-                          deleteFrom={"index"}
-                        />
-                      );
-                    }}
-                  />
-                )}
-              </View>
-            ) : (
-              <View style={{ height: 400 }}>
-                {supplier?.length === 0 ? (
-                  <Empty
-                    text="No customer"
-                    icon={
-                      <FontAwesome5
-                        name="user-alt-slash"
-                        size={40}
-                        color={Colors.text}
-                      />
-                    }
-                  />
-                ) : (
-                  <FlatList
-                    data={supplier}
-                    renderItem={({ item }) => {
-                      return (
-                        <Customers
-                          item={item}
-                          text={"Supplier"}
-                          selectedIndex={selectedIndex}
-                          deleteFrom={"index"}
-                        />
-                      );
-                    }}
-                  />
-                )}
-              </View>
-            )}
-          </Fragment>
+                );
+              }}
+              ListEmptyComponent={
+                <Empty
+                  text={`No ${selectedIndex === 0 ? "customer" : "supplier"}`}
+                  icon={
+                    <FontAwesome5
+                      name="user-alt-slash"
+                      size={40}
+                      color={Colors.text}
+                    />
+                  }
+                />
+              }
+            />
+          </View>
         }
       </View>
     </View>
@@ -187,26 +122,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: radius.regular,
   },
-  segments: {
-    backgroundColor: Colors.white,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  segmentCon: {
-    width: "30%",
-    flexDirection: "row",
-    gap: 10,
-  },
-  tabsContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: radius.small,
-    borderWidth: 1,
-  },
 
-  activeTabStyle: {
-    backgroundColor: "#007AFF",
-  },
   content: {
     alignItems: "center",
     justifyContent: "center",

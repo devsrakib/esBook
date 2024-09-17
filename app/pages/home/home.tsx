@@ -1,10 +1,10 @@
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Colors } from "@/constants/Colors";
 import UserViewHome from "@/components/UI/UserViewHome";
-import Chart from "@/components/UI/Chart";
+import Chart from "@/components/UI/home/Chart";
 import AmountCon from "@/components/UI/AmountCon";
 import Dashboard from "@/components/UI/Dashboard";
-import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
+import CustomerAndSupplierList from "@/components/UI/home/CustomerAndSupplierList";
 
 const Home = () => {
   return (
