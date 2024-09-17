@@ -14,7 +14,7 @@ import {
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import NonRelationReportCart from "@/components/UI/cashbox/nonRelationalReportCart";
-import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import Empty from "@/components/UI/Empty";
 import DueReport from "./dueReport";
 
@@ -63,9 +63,6 @@ const Page = () => {
       ? dueReport
       : selectedChip === "Cash buy" && cashBuyReport;
 
-  // Check if current data is empty
-  const isEmpty = currentData?.length === 0;
-
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -85,24 +82,15 @@ const Page = () => {
           />
         </View>
         <View style={{ flex: 1 }}>
-          {/* expenseReport?.length === 0 || depositedReport?.length === 0 || withdrawReport?.length === 0 || cashSellReport?.length === 0 || cashBuyReport?.length === 0 ? <Empty text={'No Reports Available'} icon={<MaterialIcons name="hourglass-empty" size={60} color={Colors.text} />}/> : */}
-          {isEmpty ? (
-            <Empty
-              text={"No Reports Available"}
-              icon={
-                <MaterialIcons
-                  name="hourglass-empty"
-                  size={60}
-                  color={Colors.text}
-                />
-              }
-            />
+          {selectedChip === "Due" ? (
+            <DueReport where="report" />
           ) : (
             <FlatList
               contentContainerStyle={{
                 gap: 15,
                 paddingTop: selectedChip === "Due" ? 10 : 20,
                 paddingBottom: 30,
+                flex: 1,
               }}
               data={currentData}
               renderItem={({ item }) => {
@@ -116,17 +104,26 @@ const Page = () => {
                       <NonRelationReportCart item={item} text="Withdraw" />
                     ) : selectedChip === "Cash Sell" ? (
                       <ReportCart item={item} text="cash sell" />
-                    ) : selectedChip === "Cash buy" ? (
-                      <ReportCart item={item} text="cash buy" />
                     ) : (
-                      selectedChip === "Due" && (
-                        // <ReportCart item={item} text="Due" />
-                        <DueReport where="report" />
+                      selectedChip === "Cash buy" && (
+                        <ReportCart item={item} text="cash buy" />
                       )
                     )}
                   </Fragment>
                 );
               }}
+              ListEmptyComponent={
+                <Empty
+                  text={"No Reports Available"}
+                  icon={
+                    <MaterialIcons
+                      name="hourglass-empty"
+                      size={60}
+                      color={Colors.text}
+                    />
+                  }
+                />
+              }
             />
           )}
         </View>

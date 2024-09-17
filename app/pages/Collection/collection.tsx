@@ -16,7 +16,7 @@ import Upcoming from "./Upcoming";
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<number>(0);
-  const tabs:string[] = ['All', 'Today', 'Upcoming'];
+  const tabs: string[] = ["All", "Today", "Upcoming"];
   return (
     <View
       style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}
@@ -33,17 +33,24 @@ const Page = () => {
       />
       {/* main body section */}
       <View style={styles.bodySection}>
-      <View style={styles.topSection}>
-      <MoneySection />
-        <TabComponent tabs={tabs} setActiveTab={setActiveTab} activeTab={activeTab}/>
+        <View style={styles.topSection}>
+          <MoneySection />
+          <TabComponent
+            tabs={tabs}
+            setActiveTab={setActiveTab}
+            activeTab={activeTab}
+          />
+        </View>
+        <View style={styles.componentSection}>
+          {activeTab === 0 ? (
+            <All />
+          ) : activeTab === 1 ? (
+            <Today />
+          ) : (
+            activeTab === 2 && <Upcoming />
+          )}
+        </View>
       </View>
-      <View style={styles.componentSection}>
-{
-  activeTab === 0 ? <All/> : activeTab === 1 ? <Today/> : activeTab === 2 && <Upcoming/> 
-}
-      </View>
-      </View>
-
     </View>
   );
 };
@@ -54,19 +61,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   bodySection: {
-    flex: 1
+    flex: 1,
   },
-  topSection:{
+  topSection: {
     backgroundColor: Colors.mainColor,
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 20,
     paddingBottom: 20,
     borderBottomRightRadius: radius.regular,
     borderBottomLeftRadius: radius.regular,
   },
-  componentSection:{
-flex: 1,
-  }
+  componentSection: {
+    flex: 1,
+  },
 });
 
 export default Page;

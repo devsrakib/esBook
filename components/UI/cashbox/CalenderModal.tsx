@@ -1,5 +1,5 @@
 import { View, Text, Dimensions, StyleSheet } from "react-native";
-import React from "react";
+import React, { memo } from "react";
 import Modal from "react-native-modal";
 //@ts-ignore
 import CalendarPicker from "react-native-calendar-picker";
@@ -41,7 +41,7 @@ const CalenderModal = ({
   );
 };
 
-export default CalenderModal;
+export default memo(CalenderModal);
 const styles = StyleSheet.create({
   dateModal: {
     height: 400,

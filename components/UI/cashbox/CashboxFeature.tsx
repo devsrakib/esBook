@@ -12,7 +12,6 @@ import Divider from "../Divider";
 import { Fonts } from "@/constants/Fonts";
 import Feature from "./Feature";
 import { IFeature } from "@/types/interfaces/cashBox/feature.interface";
-import Modal from "react-native-modal";
 //@ts-ignore
 
 import {
@@ -29,7 +28,7 @@ import {
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import FormatDate from "@/utils/FormatDate";
-import CalenderModal from "./calenderModal";
+import CalenderModal from "./CalenderModal";
 
 const CashboxFeature = () => {
   const [getAllCashSell, setGetAllCashSell] = useState<any[]>([]);

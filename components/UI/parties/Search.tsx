@@ -21,6 +21,7 @@ const Search = ({
         style={styles.input}
         onChangeText={(text) => setSearchTerm(text)} // Update search term
         value={searchTerm}
+        autoFocus
       />
     </Animated.View>
   );

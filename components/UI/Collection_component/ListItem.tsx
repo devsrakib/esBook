@@ -2,7 +2,7 @@
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -255,4 +255,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListItem;
+export default memo(ListItem);

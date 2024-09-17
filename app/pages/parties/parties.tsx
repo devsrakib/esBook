@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   TextInput,
+  ScrollView,
 } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -86,6 +87,7 @@ const Parties = () => {
   }, [selectedIndex, searchTerm, customers, suppliers]);
 
   return (
+    // <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
     >
@@ -200,6 +202,7 @@ const Parties = () => {
         <AddPartiesButton />
       </View>
     </View>
+    // </ScrollView>
   );
 };
 

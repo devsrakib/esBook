@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -83,7 +83,7 @@ const ReportCart = ({
         {text === "Due" ? (
           <Link
             href={{
-              pathname: "pages/cashbox/details",
+              pathname: "/pages/cashbox/details",
               params: {
                 id: item?.id,
                 text: selectedIndex === 0 ? "customer" : "supplier",
@@ -231,4 +231,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReportCart;
+export default memo(ReportCart);

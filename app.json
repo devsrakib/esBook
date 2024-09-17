@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expertsquad.esBook"
+      "bundleIdentifier": "com.expertsquad.esBook",
+      "infoPlist": {
+        "NSContactsUsageDescription": "We need access to your contacts to select a phone number."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -34,6 +37,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fc241356-9349-4d6e-8d25-50ed59d0406f"
+      }
     }
   }
 }

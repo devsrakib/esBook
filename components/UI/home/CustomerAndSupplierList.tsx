@@ -72,7 +72,7 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
                 />
               </TouchableOpacity>
             </Link>
-            <Link href="/pages/parties/addNewParties" asChild>
+            <Link href="/(tabs)/parties" asChild>
               <TouchableOpacity style={styles.addCustomer}>
                 <Fontisto name="plus-a" size={14} color={Colors.text} />
                 <Text style={styles.customerText}>Customer</Text>

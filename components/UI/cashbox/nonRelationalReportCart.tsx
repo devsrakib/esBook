@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { memo } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -92,4 +92,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-export default NonRelationReportCart;
+export default memo(NonRelationReportCart);
