@@ -11,8 +11,14 @@ interface headerProps {
   height: number;
   title: any;
   titleColor: string;
+  index?: number;
 }
-const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
+const Header: React.FC<headerProps> = ({
+  height,
+  title,
+  titleColor,
+  index,
+}) => {
   const [date, setDate] = useState(new Date());
 
   return (
@@ -38,7 +44,7 @@ const Header: React.FC<headerProps> = ({ height, title, titleColor }) => {
           <Link
             href={{
               pathname: "/pages/cashbox/report",
-              params: { title },
+              params: { title, index },
             }}
           >
             <Text style={styles.reportText}>Report</Text>

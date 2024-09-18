@@ -7,7 +7,7 @@ import { currency } from "@/global/currency";
 import Divider from "../Divider";
 import { Link } from "expo-router";
 
-const Feature = ({ data }: { data: any }) => {
+const Feature = ({ data, index }: { data: any; index: number }) => {
   const text = data?.text;
 
   return (
@@ -17,7 +17,7 @@ const Feature = ({ data }: { data: any }) => {
           pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}` as
             | string
             | any,
-          params: { text: text },
+          params: { text: text, index: index },
         }}
         asChild
       >

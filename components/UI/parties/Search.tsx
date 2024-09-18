@@ -9,9 +9,11 @@ import { Fonts } from "@/constants/Fonts";
 const Search = ({
   searchTerm,
   setSearchTerm,
+  setFocusInput,
 }: {
   searchTerm: string;
   setSearchTerm: Function;
+  setFocusInput: Function;
 }) => {
   return (
     <Animated.View entering={FadeInUp} style={styles.searchSection}>

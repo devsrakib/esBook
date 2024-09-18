@@ -63,6 +63,8 @@ const Page = () => {
       ? dueReport
       : selectedChip === "Cash buy" && cashBuyReport;
 
+  console.log(router.index);
+
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -79,6 +81,7 @@ const Page = () => {
             setSelectedChip={setSelectedChip}
             title={router?.title}
             selectedChip={selectedChip}
+            routerIndex={router?.index}
           />
         </View>
         <View style={{ flex: 1 }}>

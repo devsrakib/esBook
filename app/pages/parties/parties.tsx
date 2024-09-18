@@ -27,17 +27,6 @@ import {
   SupplierData,
 } from "@/databases/Database";
 import Empty from "@/components/UI/Empty";
-import Animated, {
-  Easing,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-  FlipInXUp,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
 import AddPartiesButton from "@/components/UI/parties/AddPartiesButton";
 import Search from "@/components/UI/parties/Search";
 
@@ -48,6 +37,7 @@ const Parties = () => {
   const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [focusInput, setFocusInput] = useState<boolean | null>(null);
   const routerData = useLocalSearchParams();
   // let filteredCustomersSuppliers: any;
 
@@ -97,7 +87,7 @@ const Parties = () => {
         }}
       />
       <View style={[styles.topSection]}>
-        <Animated.View style={[styles.header]}>
+        <View style={[styles.header]}>
           <View style={{ flexDirection: "row" }}>
             {routerData?.text && (
               <TouchableOpacity
@@ -128,7 +118,7 @@ const Parties = () => {
               <Fontisto name="search" size={18} color={Colors.white} />
             )}
           </TouchableOpacity>
-        </Animated.View>
+        </View>
         <View style={styles.navigationCon}>
           <TouchableOpacity
             style={[
@@ -165,7 +155,11 @@ const Parties = () => {
       </View>
       <View style={styles.bodySection}>
         {isOpenSearch && (
-          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <Search
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            setFocusInput={setFocusInput}
+          />
         )}
         <FilterAndTextSection />
 
@@ -199,7 +193,7 @@ const Parties = () => {
             />
           }
         />
-        <AddPartiesButton />
+        {<AddPartiesButton />}
       </View>
     </View>
     // </ScrollView>

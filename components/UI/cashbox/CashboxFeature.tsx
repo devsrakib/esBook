@@ -249,7 +249,7 @@ const CashboxFeature = () => {
       <Divider height={1} width={"100%"} aligns={"center"} />
       <View style={styles.bottomSection}>
         {feature?.map((f, index) => {
-          return <Feature key={index.toString()} data={f} />;
+          return <Feature key={index.toString()} data={f} index={index} />;
         })}
       </View>
     </View>

@@ -7,13 +7,8 @@ import {
   Image,
   ToastAndroid,
 } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Stack,
-  useLocalSearchParams,
-  useNavigation,
-  useRouter,
-} from "expo-router";
+import React, { useState } from "react";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/cashbox/Header";
 import { Colors } from "@/constants/Colors";
@@ -26,18 +21,14 @@ import DetailsPageInput from "@/components/UI/cashbox/DetailsPageInput";
 import { useSQLiteContext } from "expo-sqlite";
 import {
   cash_buy,
-  cash_report,
   cash_sell,
   deposit,
-  due_collection,
   expense,
-  getCustomerById,
   updateDueAmount,
   updateSupplierDueAmount,
   withdraw,
 } from "@/databases/Database";
 import { ensureNonNegative } from "@/utils/ensureNonNegative";
-import { TransactionData } from "@/types/interfaces/transaction.interface";
 
 const page = () => {
   const route = useLocalSearchParams<any>();
@@ -153,12 +144,14 @@ const page = () => {
     const result = await updateDueAmount(db, transactionData);
     if (result.success) {
       navigation.push("/(tabs)/cashbox");
+      setTransaction("");
     }
   };
   const handleCashBuyDue = async () => {
     const result = await updateSupplierDueAmount(db, transactionData);
     if (result.success) {
       navigation.push("/(tabs)/cashbox");
+      setTransaction("");
     }
   };
 
@@ -209,6 +202,7 @@ const page = () => {
                 : route?.text
             }
             titleColor={Colors.white}
+            index={route?.index}
           />
           {shouldRenderComponent && (
             <SearchCustomerAndAddCustomer

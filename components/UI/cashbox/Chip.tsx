@@ -5,7 +5,7 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 
@@ -22,13 +22,20 @@ const Chip = ({
   setSelectedChip,
   title,
   selectedChip,
+  routerIndex,
 }: {
   setSelectedChip: Function;
-  title: any;
+  title: string | string[];
   selectedChip: any;
+  routerIndex: any;
 }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
+  useEffect(() => {
+    if (routerIndex !== undefined) {
+      setSelectedIndex(routerIndex);
+    }
+  }, [routerIndex]);
   return (
     <FlatList
       horizontal
@@ -40,6 +47,8 @@ const Chip = ({
       }}
       data={items}
       renderItem={({ item, index }) => {
+        console.log(typeof routerIndex, typeof index);
+        console.log(routerIndex === index);
         return (
           <TouchableOpacity
             onPress={() => {
@@ -50,7 +59,7 @@ const Chip = ({
               styles.container,
               {
                 backgroundColor:
-                  selectedIndex === index || title === selectedChip
+                  selectedIndex === index || Number(routerIndex) === index
                     ? Colors.black
                     : Colors.background2,
               },
@@ -59,7 +68,7 @@ const Chip = ({
             <Text
               style={{
                 color:
-                  selectedIndex === index || title === selectedChip
+                  selectedIndex === index || Number(routerIndex) === index
                     ? Colors.white
                     : Colors.black,
               }}
@@ -84,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Chip;
+export default memo(Chip);

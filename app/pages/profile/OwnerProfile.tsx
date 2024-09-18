@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import Divider from "@/components/UI/Divider";
 import { Fonts } from "@/constants/Fonts";
@@ -103,7 +103,7 @@ const OwnerProfile = () => {
       key: "phoneNumber",
     },
     {
-      icon: <Ionicons name="call-outline" size={18} color="gray" />,
+      icon: <FontAwesome6 name="money-bill-wheat" size={18} color="gray" />,
       label: "Tax Number",
       key: "taxNumber",
     },
