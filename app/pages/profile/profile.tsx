@@ -54,6 +54,8 @@ const Profile = () => {
     },
   ];
 
+  console.log(router);
+
   useEffect(() => {
     async function getCustomer() {
       try {
@@ -84,6 +86,7 @@ const Profile = () => {
             ToastAndroid.CENTER
           );
           // navigate.push(`/(tabs)/${router.deleteFrom}`);
+          navigate.push(`/(tabs)/parties`);
         }
       } else if (router?.text === "Supplier") {
         const result = await deleteSupplierById(db, userData?.id);
@@ -93,6 +96,8 @@ const Profile = () => {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER
         );
+        navigate.push(`/(tabs)/parties`);
+        console.log(router.deleteFrom);
       }
     } catch (error) {}
   }, []);

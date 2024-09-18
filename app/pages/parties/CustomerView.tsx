@@ -84,6 +84,8 @@ import { radius } from "@/constants/sizes";
 import { currency } from "@/global/currency";
 import FormatDate from "@/utils/FormatDate";
 import getInitials from "@/utils/namePlaceholder";
+import CustomerViewModal from "@/components/UI/parties/CustomerViewModal";
+import Cart from "./Cart";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -105,9 +107,36 @@ const CustomerView = () => {
     amount: amount,
     description: description,
   };
+
+  const getCustomer = async () => {
+    if (router?.text === "Supplier") {
+      const supplier = await getSupplierById(db, router?.id);
+      setSupplier(supplier);
+    } else if (router?.text === "Customer") {
+      const result = await getCustomerById(
+        db,
+        router?.id || router?.customerId
+      );
+      setCustomer(result);
+    }
+  };
+
+  useEffect(() => {
+    getCustomer();
+  }, []);
+
   const handleLend = async () => {
     try {
-      await customer_lend(db, lendData);
+      const result = await customer_lend(db, lendData);
+      if (result?.success) {
+        ToastAndroid.showWithGravity(
+          "success",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+        getCustomer();
+      }
+      setIsModalVisible(false);
     } catch (error) {
       ToastAndroid.showWithGravity(
         "sorry!",
@@ -116,9 +145,19 @@ const CustomerView = () => {
       );
     }
   };
+
   const handleGave = async () => {
     try {
-      await customer_gave(db, lendData);
+      const result = await customer_gave(db, lendData);
+      if (result?.success) {
+        ToastAndroid.showWithGravity(
+          "success",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+        getCustomer();
+      }
+      setIsModalVisible(false);
     } catch (error) {
       ToastAndroid.showWithGravity(
         "sorry!",
@@ -159,8 +198,20 @@ const CustomerView = () => {
     getDataById();
   }, []);
 
+  const interleaveArrays = (array1: any[], array2: any[]) => {
+    const result = [];
+    const maxLength = Math.max(array1?.length, array2?.length);
+
+    for (let i = 0; i < maxLength; i++) {
+      if (i < array1?.length) result.push(array1[i]);
+      if (i < array2?.length) result.push(array2[i]);
+    }
+
+    return result;
+  };
+
   const concatLendDataAndCustomerData = useMemo(
-    () => customerTransaction.concat(lendDataById),
+    () => interleaveArrays(customerTransaction, lendDataById),
     [customerTransaction, lendDataById]
   );
 
@@ -171,21 +222,7 @@ const CustomerView = () => {
     Linking.openURL(phoneNumber);
   }, [router?.phoneNumber, customer?.phoneNumber]);
 
-  useEffect(() => {
-    const getCustomer = async () => {
-      if (router?.text === "Supplier") {
-        const supplier = await getSupplierById(db, router?.id);
-        setSupplier(supplier);
-      } else if (router?.text === "Customer") {
-        const result = await getCustomerById(
-          db,
-          router?.id || router?.customerId
-        );
-        setCustomer(result);
-      }
-    };
-    getCustomer();
-  }, []);
+  console.log(isModalVisible);
 
   return (
     <View
@@ -269,62 +306,7 @@ const CustomerView = () => {
           <FilterAndTextSection />
           {concatLendDataAndCustomerData?.map(
             (transaction: any, index: number) => (
-              <View key={index} style={styles.transactionCard}>
-                <Text style={styles.transactionTitle}>
-                  By Transfer for my Paypal Account
-                </Text>
-                <View
-                  style={[
-                    styles.badge,
-                    {
-                      backgroundColor: transaction?.dueAmount
-                        ? Colors.red
-                        : transaction?.extraAmount
-                        ? Colors.green
-                        : "transparent",
-                    },
-                  ]}
-                >
-                  <Text style={styles.badgeText}>
-                    {transaction?.dueAmount
-                      ? "due"
-                      : transaction?.extraAmount
-                      ? "extra"
-                      : null}
-                  </Text>
-                </View>
-                <Text style={styles.transactionType}>
-                  {transaction?.saleAmount ? "Cash sell: " : "Bal : "}
-                  {transaction?.saleAmount || transaction?.amount || "N/A"}{" "}
-                  {/* Provide a default value */}
-                </Text>
-
-                <View style={styles.amountCon}>
-                  <Text style={styles.transactionDate}>
-                    {transaction?.createdAt || "Date not available"}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.transactionAmount,
-                      {
-                        color: transaction?.dueAmount
-                          ? Colors.red
-                          : transaction?.extraAmount
-                          ? Colors.red
-                          : Colors.green,
-                      }, // Default color
-                    ]}
-                  >
-                    {currency}{" "}
-                    {(
-                      transaction?.dueAmount ||
-                      transaction?.amount ||
-                      transaction?.extraAmount
-                    )?.toLocaleString("en-US") || "0"}{" "}
-                    {/* Provide a default value */}
-                  </Text>
-                </View>
-              </View>
+              <Cart transaction={transaction} key={index} />
             )
           )}
         </ScrollView>
@@ -353,48 +335,15 @@ const CustomerView = () => {
           }}
         />
       </View>
-      <Modal isVisible={isModalVisible} style={styles.modal}>
-        <View style={styles.modalCon}>
-          <View style={styles.textAndCloseCon}>
-            <Text style={styles.lendText}>You Gave</Text>
-            <AntDesign
-              name="close"
-              size={24}
-              color="black"
-              onPress={() => setIsModalVisible(false)}
-            />
-          </View>
-          <TextInput
-            onChangeText={(e: any) => setAmount(e)}
-            style={styles.amountInput}
-            placeholder="Type Amount"
-          />
-          <TextInput
-            onChangeText={(e) => setDescription(e)}
-            style={styles.textArea}
-            placeholder="Description"
-          />
-          {activeTab === "youGot" ? (
-            <Button
-              bg={Colors.green}
-              title="Save"
-              titleColor={Colors.white}
-              radius={radius.regular}
-              width={"100%"}
-              onPress={() => handleLend()}
-            />
-          ) : (
-            <Button
-              bg={Colors.red}
-              title="Save"
-              titleColor={Colors.white}
-              radius={radius.regular}
-              width={"100%"}
-              onPress={() => handleGave()}
-            />
-          )}
-        </View>
-      </Modal>
+      <CustomerViewModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        handleLend={handleLend}
+        handleGave={handleGave}
+        setAmount={setAmount}
+        activeTab={activeTab}
+        setDescription={setDescription}
+      />
     </View>
   );
 };
@@ -522,36 +471,7 @@ const styles = StyleSheet.create({
   // transactionsContainer: {
   //   paddingHorizontal: 16,
   // },
-  transactionCard: {
-    backgroundColor: Colors.lavender,
-    padding: 16,
-    borderRadius: 10,
-    marginVertical: 8,
-  },
-  transactionTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    marginBottom: 10,
-  },
-  transactionType: {
-    fontSize: 14,
-    color: Colors.green,
-    fontWeight: "500",
-  },
-  transactionDate: {
-    fontSize: 12,
-    color: Colors.text,
-  },
-  amountCon: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  transactionAmount: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 8,
-  },
+
   transactionBalance: {
     fontSize: 12,
     color: Colors.text,
@@ -586,63 +506,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  modal: {
-    justifyContent: "flex-end",
-    margin: 0,
-  },
-  modalCon: {
-    height: 350,
-    width: "100%",
-    backgroundColor: Colors.white,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    padding: 20,
-    gap: 20,
-  },
-  textAndCloseCon: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  lendText: {
-    fontSize: Fonts.large,
-    fontWeight: "500",
-  },
-  amountInput: {
-    height: 50,
-    width: "100%",
-    borderRadius: radius.regular,
-    borderColor: Colors.border,
-    paddingHorizontal: 10,
-    fontSize: Fonts.medium,
-    borderWidth: 1,
-  },
-  textArea: {
-    width: "100%",
-    borderRadius: radius.regular,
-    borderColor: Colors.border,
-    paddingHorizontal: 10,
-    fontSize: Fonts.medium,
-    borderWidth: 1,
-    height: 100,
-    textAlignVertical: "top",
-    paddingTop: 10,
-  },
-  badge: {
-    width: 46,
-    height: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    top: 0,
-    right: 0,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-  },
-  badgeText: {
-    fontSize: Fonts.regular,
-    color: Colors.white,
-  },
+
   placeholder: {
     width: 36,
     height: 36,

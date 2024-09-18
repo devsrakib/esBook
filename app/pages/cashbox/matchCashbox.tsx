@@ -34,8 +34,6 @@ const Page = () => {
   const [matchButton, setMatchButton] = useState<boolean>(false);
   const [lessButton, setLessButton] = useState<boolean>(false);
   const [balanced, setBalanced] = useState<boolean>(false);
-  const [currentAmount, setCurrentAmount] = useState(0);
-  const [collectedAmount, setCollectedAmount] = useState<any>([]);
 
   const [dummyText, setDummyText] = useState<string>("");
   const amount: number = parseFloat(route?.amount) || 0;
@@ -99,10 +97,11 @@ const Page = () => {
   const handleLessButton = () => {
     navigation.push("/(tabs)/cashbox");
   };
-
   const handleBalanced = async () => {
     await cash_report(db, { totalCash: amount });
     setBalanced(true);
+    setInputCash(0);
+    navigation.push("/pages/cashbox/cashReport");
   };
 
   const label =
