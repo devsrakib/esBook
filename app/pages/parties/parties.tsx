@@ -17,7 +17,13 @@ import { radius } from "@/constants/sizes";
 import FilterAndTextSection from "@/components/UI/parties/filterAndTextSection";
 import Customers from "@/components/UI/shared/Customers";
 import AmountCon from "@/components/UI/AmountCon";
-import { AntDesign, Feather, FontAwesome5, Fontisto } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  Fontisto,
+} from "@expo/vector-icons";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import {
@@ -147,10 +153,12 @@ const Parties = () => {
         </View>
         <AmountCon
           bg_image={require("../../../assets/images/amountBg-blue.png")}
-          logo1={require("../../../assets/images/receiveBlue.png")}
-          logo2={require("../../../assets/images/give.png")}
           leftAmountTColor={Colors.mainColor}
           leftTextColor={Colors.mainColor}
+          icon1={
+            <FontAwesome name="money" size={30} color={Colors.mainColor} />
+          }
+          icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
         />
       </View>
       <View style={styles.bodySection}>

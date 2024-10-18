@@ -14,6 +14,7 @@ import { Fonts } from "@/constants/Fonts";
 import Dashboard from "@/components/UI/cashbox/Dashboard";
 import CashboxFeature from "@/components/UI/cashbox/CashboxFeature";
 import { Link, Stack } from "expo-router";
+import { Entypo } from "@expo/vector-icons";
 
 export const Cashbox = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -43,10 +44,7 @@ export const Cashbox = () => {
             asChild
           >
             <TouchableOpacity style={styles.matchCashbox}>
-              <Image
-                style={styles.matchLogo}
-                source={require("../../../assets/images/calculator.png")}
-              />
+              <Entypo name="calculator" size={16} color={Colors.mainColor} />
               <Text style={styles.matchText}>Match Cashbox</Text>
             </TouchableOpacity>
           </Link>

@@ -10,15 +10,15 @@ import { FontAwesome } from "@expo/vector-icons";
 
 interface amountProps {
   bg_image: any;
-  logo1: any;
-  logo2?: any;
+  icon1: any;
+  icon2?: any;
   leftTextColor: string;
   leftAmountTColor: string;
 }
 const AmountCon: React.FC<amountProps> = ({
   bg_image,
-  logo1,
-  logo2,
+  icon1,
+  icon2,
   leftAmountTColor,
   leftTextColor,
 }) => {
@@ -53,7 +53,7 @@ const AmountCon: React.FC<amountProps> = ({
       source={bg_image}
     >
       <View style={[styles.amountCon, { flex: 1.3 }]}>
-        <FontAwesome name="money" size={30} color="black" />
+        {icon1}
         <View>
           <Text style={[styles.text, { color: leftTextColor }]}>
             You will Receive
@@ -64,7 +64,7 @@ const AmountCon: React.FC<amountProps> = ({
         </View>
       </View>
       <View style={styles.amountCon}>
-        <Image style={styles.logo} source={logo2} />
+        {icon2}
         <View>
           <Text style={styles.text}>You will Give</Text>
           <Text style={styles.amount}>
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 20,
+    gap: 15,
   },
   logo: {
     width: 35,

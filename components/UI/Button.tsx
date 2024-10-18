@@ -105,7 +105,7 @@ const Button: React.FC<buttonProps> = ({
       onPressOut={handlePressOut}
       style={[
         styles.saveButton,
-        { backgroundColor: bg, borderRadius: radius },
+        { backgroundColor: bg, borderRadius: radius, width: width },
         animatedStyle,
       ]}
     >
@@ -116,7 +116,6 @@ const Button: React.FC<buttonProps> = ({
 
 const styles = StyleSheet.create({
   saveButton: {
-    width: "90%",
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",

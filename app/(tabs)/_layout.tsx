@@ -1,13 +1,43 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
+import Animated, {
+  SharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
 export default function TabLayout() {
+  const AnimatedIcon = ({
+    focused,
+    iconComponent,
+  }: {
+    focused: boolean;
+    iconComponent: any;
+  }) => {
+    // Define animated style for scaling
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        transform: [
+          {
+            scale: withSpring(focused ? 1 : 1), // Animate scale based on focus
+          },
+        ],
+      };
+    });
+
+    return (
+      <Animated.View style={[styles.container, animatedStyle]}>
+        {iconComponent}
+      </Animated.View>
+    );
+  };
+
   return (
     <Tabs
       screenOptions={{
@@ -27,10 +57,15 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
-              <Entypo
-                name="home"
-                size={24}
-                color={focused ? Colors.mainColor : Colors.labelText}
+              <AnimatedIcon
+                focused={focused}
+                iconComponent={
+                  <Entypo
+                    name="home"
+                    size={24}
+                    color={focused ? Colors.mainColor : Colors.labelText}
+                  />
+                }
               />
               <Text
                 style={[

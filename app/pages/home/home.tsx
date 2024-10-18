@@ -5,6 +5,7 @@ import Chart from "@/components/UI/home/Chart";
 import AmountCon from "@/components/UI/AmountCon";
 import Dashboard from "@/components/UI/Dashboard";
 import CustomerAndSupplierList from "@/components/UI/home/CustomerAndSupplierList";
+import { FontAwesome } from "@expo/vector-icons";
 
 const Home = () => {
   return (
@@ -15,8 +16,8 @@ const Home = () => {
           bg_image={require("../../../assets/images/amountFrame.png")}
           leftTextColor={Colors.white}
           leftAmountTColor={Colors.white}
-          logo1={require("../../../assets/images/receive.png")}
-          logo2={require("../../../assets/images/give.png")}
+          icon1={<FontAwesome name="money" size={30} color={Colors.white} />}
+          icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
         />
         <Dashboard />
         <Chart />

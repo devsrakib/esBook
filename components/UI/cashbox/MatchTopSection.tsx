@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
@@ -11,19 +11,16 @@ const MatchTopSection = ({ amount }: { amount: number }) => {
   return (
     <View style={styles.container}>
       <View style={styles.bookImgCon}>
-        <Image
-          style={styles.bookImg}
-          source={require("../../../assets/images/bookBlue.png")}
-        />
+        <Entypo name="wallet" size={24} color={Colors.mainColor} />
       </View>
       <View style={styles.dataCon}>
         <Text style={styles.text}>Current Cash</Text>
         <Text style={styles.amount}>
           {currency}
-          {amount?.toLocaleString(("en-US"))}
+          {amount?.toLocaleString("en-US")}
         </Text>
       </View>
-      <Link href={{ pathname: "pages/cashbox/cashReport" }} asChild>
+      <Link href={{ pathname: "/pages/cashbox/cashReport" }} asChild>
         <TouchableOpacity style={styles.reportButtonCon}>
           <MaterialCommunityIcons
             name="calendar-text-outline"
