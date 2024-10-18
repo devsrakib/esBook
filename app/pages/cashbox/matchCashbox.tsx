@@ -211,7 +211,29 @@ const Page = () => {
       <Text numberOfLines={2} style={styles.dummyText}>
         {dummyText}
       </Text>
-      <TouchableOpacity
+      <Button
+        title={
+          matchButton
+            ? "Match"
+            : lessButton
+            ? "Okay"
+            : balanced
+            ? "Okay"
+            : "Next"
+        }
+        bg={Colors.mainColor}
+        titleColor={Colors.white}
+        radius={10}
+        onPress={() => {
+          if (matchButton || lessButton || balanced) {
+            handleButton();
+          } else {
+            handleNextButton();
+          }
+        }}
+        width={"90%"}
+      />
+      {/* <TouchableOpacity
         style={styles.button}
         onPress={() => {
           if (matchButton || lessButton || balanced) {
@@ -230,7 +252,7 @@ const Page = () => {
             ? "Okay"
             : "Next"}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

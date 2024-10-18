@@ -29,6 +29,7 @@ import {
   withdraw,
 } from "@/databases/Database";
 import { ensureNonNegative } from "@/utils/ensureNonNegative";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const page = () => {
   const route = useLocalSearchParams<any>();
@@ -212,13 +213,19 @@ const page = () => {
           )}
         </View>
         <View style={styles.bodySection}>
-          <View style={styles.dummyTextCon}>
+          <Animated.View
+            entering={FadeInDown.delay(200)
+              .duration(400)
+              .damping(8)
+              .springify()}
+            style={styles.dummyTextCon}
+          >
             <Feather name="info" size={18} color={Colors.text} />
-            <Text numberOfLines={1} style={styles.dummyText}>
+            <Animated.Text numberOfLines={1} style={styles.dummyText}>
               Lorem ipsum dolor sit amet, consectetur adipiscing ...adipiscing
               elit...
-            </Text>
-          </View>
+            </Animated.Text>
+          </Animated.View>
         </View>
         <DetailsPageInput
           setTransaction={setTransaction}

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
@@ -16,6 +16,7 @@ import { Link } from "expo-router";
 import { getCustomerById, getSupplierById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import FormatDate from "@/utils/FormatDate";
+import Animated, { FadeInDown } from "react-native-reanimated";
 const SearchCustomerAndAddCustomer = ({
   text,
   id,
@@ -49,15 +50,20 @@ const SearchCustomerAndAddCustomer = ({
     }
   }, [db, id]);
 
+  const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.container}>
       <Link
         href={{
           pathname: path,
         }}
         asChild
       >
-        <TouchableOpacity style={styles.inputContainer}>
+        <CustomTouchable
+          entering={FadeInDown.delay(50).duration(400).damping(8).springify()}
+          style={styles.inputContainer}
+        >
           <View style={styles.userIconCon}>
             {id && customerData?.profilePhoto ? (
               <Image
@@ -85,7 +91,7 @@ const SearchCustomerAndAddCustomer = ({
           ) : (
             <Text style={styles.text}>Select {text}</Text>
           )}
-        </TouchableOpacity>
+        </CustomTouchable>
       </Link>
       <Link
         href={{
@@ -96,11 +102,14 @@ const SearchCustomerAndAddCustomer = ({
         }}
         asChild
       >
-        <TouchableOpacity style={styles.plusCon}>
+        <CustomTouchable
+          entering={FadeInDown.delay(100).duration(400).damping(8).springify()}
+          style={styles.plusCon}
+        >
           <AntDesign name="plus" size={24} color="black" />
-        </TouchableOpacity>
+        </CustomTouchable>
       </Link>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -165,4 +174,4 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
 });
-export default SearchCustomerAndAddCustomer;
+export default memo(SearchCustomerAndAddCustomer);

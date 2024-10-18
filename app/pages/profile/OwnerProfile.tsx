@@ -22,6 +22,7 @@ import {
   OwnerProfileData,
 } from "@/databases/Database";
 import useImagePicker from "@/utils/UseImagePicker";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -130,12 +131,24 @@ const OwnerProfile = () => {
             />
           )}
         </TouchableOpacity>
-        <Text style={styles.profileName}>{profileData?.name}</Text>
+        <Animated.Text
+          entering={FadeInDown.delay(50).duration(400).damping(8).springify()}
+          style={styles.profileName}
+        >
+          {profileData?.name}
+        </Animated.Text>
       </View>
       <View style={styles.infoContainer}>
         {infoData?.map((item, index) => (
-          <Fragment key={index?.toString()}>
-            <View style={styles.infoRow}>
+          <Animated.View
+            entering={FadeInDown.delay(index * 50)
+              .duration(400)
+              .damping(8)
+              .springify()}
+            style={[styles.infoRow]}
+            key={index?.toString()}
+          >
+            <Animated.View style={[styles.infoRow, { flexDirection: "row" }]}>
               <View style={styles.iconCon}>{item?.icon}</View>
               <View style={styles.infoColumn}>
                 <Text style={styles.label}>{item?.label}</Text>
@@ -146,9 +159,9 @@ const OwnerProfile = () => {
                   onTouchStart={() => setFocusInput(true)}
                 />
               </View>
-            </View>
+            </Animated.View>
             <Divider height={1} width={"100%"} aligns={"center"} />
-          </Fragment>
+          </Animated.View>
         ))}
       </View>
       {focusInput && (
@@ -194,8 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   infoRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
     marginBottom: 10,
     marginTop: 12,
   },

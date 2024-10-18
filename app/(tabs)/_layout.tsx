@@ -5,6 +5,7 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   return (
@@ -26,17 +27,11 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
-              {focused ? (
-                <Image
-                  style={[styles.icon, { width: 30, height: 30 }]}
-                  source={require("../../assets/images/activeHome.png")}
-                />
-              ) : (
-                <Image
-                  style={[styles.icon, { width: 30, height: 30 }]}
-                  source={require("../../assets/images/home.png")}
-                />
-              )}
+              <Entypo
+                name="home"
+                size={24}
+                color={focused ? Colors.mainColor : Colors.labelText}
+              />
               <Text
                 style={[
                   styles.title,
@@ -56,23 +51,11 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
-              {focused ? (
-                <Image
-                  style={[
-                    styles.icon,
-                    { width: 26, height: 26, marginBottom: 3 },
-                  ]}
-                  source={require("../../assets/images/activeCashbox.png")}
-                />
-              ) : (
-                <Image
-                  style={[
-                    styles.icon,
-                    { width: 26, height: 26, marginBottom: 3 },
-                  ]}
-                  source={require("../../assets/images/cashbox.png")}
-                />
-              )}
+              <Ionicons
+                name="cash-outline"
+                size={24}
+                color={focused ? Colors.mainColor : Colors.labelText}
+              />
               <Text
                 style={[
                   styles.title,
@@ -91,17 +74,11 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
-              {focused ? (
-                <Image
-                  style={[styles.icon, { marginRight: 1 }]}
-                  source={require("../../assets/images/activeParties.png")}
-                />
-              ) : (
-                <Image
-                  style={[styles.icon]}
-                  source={require("../../assets/images/parties.png")}
-                />
-              )}
+              <FontAwesome
+                name="users"
+                size={20}
+                color={focused ? Colors.mainColor : Colors.labelText}
+              />
               <Text
                 style={[
                   styles.title,
@@ -120,17 +97,11 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
-              {focused ? (
-                <Image
-                  style={[styles.icon]}
-                  source={require("../../assets/images/activeUser.png")}
-                />
-              ) : (
-                <Image
-                  style={[styles.icon]}
-                  source={require("../../assets/images/user.png")}
-                />
-              )}
+              <FontAwesome
+                name="user"
+                size={24}
+                color={focused ? Colors.mainColor : Colors.labelText}
+              />
               <Text
                 style={[
                   styles.title,

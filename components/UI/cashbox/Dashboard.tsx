@@ -16,6 +16,7 @@ import {
   getWithdraw,
   WithdrawData,
 } from "@/databases/Database";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
   const [currentCashAmount, setCurrentCashAmount] = useState<number>(0);
@@ -135,7 +136,14 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
     <View style={[sharedStyle.grid, { marginTop: 14 }]}>
       {data?.map((d, i) => {
         return (
-          <View key={i} style={styles.subContainer}>
+          <Animated.View
+            entering={FadeInDown.delay(i * 50)
+              .duration(300)
+              .damping(8)
+              .springify()}
+            key={i}
+            style={styles.subContainer}
+          >
             <View style={styles.textCon}>
               <Text style={styles.text1}>{d?.text}</Text>
               <Text style={[styles.textAmount, { color: d?.textColor }]}>
@@ -145,7 +153,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
             <View style={[styles.imgCon, { backgroundColor: d?.color }]}>
               <Image style={styles.img} source={d?.icon} />
             </View>
-          </View>
+          </Animated.View>
         );
       })}
     </View>

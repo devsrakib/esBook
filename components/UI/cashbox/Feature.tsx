@@ -6,13 +6,18 @@ import { Fonts } from "@/constants/Fonts";
 import { currency } from "@/global/currency";
 import Divider from "../Divider";
 import { Link } from "expo-router";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Feature = ({ data, index }: { data: any; index: number }) => {
   const text = data?.text;
-
+  const CustomTouchable = Animated.createAnimatedComponent(Link);
   return (
-    <Fragment>
-      <Link
+    <>
+      <CustomTouchable
+        entering={FadeInDown.delay(index * 100)
+          .duration(400)
+          .damping(8)
+          .springify()}
         href={{
           pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}` as
             | string
@@ -34,9 +39,9 @@ const Feature = ({ data, index }: { data: any; index: number }) => {
             <AntDesign name="right" size={16} color={Colors.text} />
           </View>
         </TouchableOpacity>
-      </Link>
+      </CustomTouchable>
       <Divider height={1} width={"90%"} aligns="center" />
-    </Fragment>
+    </>
   );
 };
 const styles = StyleSheet.create({

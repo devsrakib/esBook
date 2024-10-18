@@ -7,6 +7,11 @@ import { FontW, Fonts } from "@/constants/Fonts";
 import { useSQLiteContext } from "expo-sqlite";
 import { getOwnerProfile } from "@/databases/Database";
 import { IOwner } from "@/types/interfaces/home/owner.interface";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+} from "react-native-reanimated";
 
 const UserViewHome = () => {
   const [data, setData] = useState<IOwner>({
@@ -40,21 +45,35 @@ const UserViewHome = () => {
   return (
     <View style={styles.container}>
       {/* <Image style={styles.userAvatar} /> */}
-      <View style={styles.avatarContainer}>
+      <Animated.View
+        entering={FadeInUp.delay(50).duration(50)}
+        style={styles.avatarContainer}
+      >
         {data?.profilePhoto ? (
-          <Image
+          <Animated.Image
+            entering={FadeInUp.delay(50).duration(50)}
             source={{ uri: data?.profilePhoto }}
             style={styles.userAvatar}
           />
         ) : (
-          <Text style={styles.placeholder}>
+          <Animated.Text style={styles.placeholder}>
             {data?.name?.split("")[0]?.toUpperCase()}
-          </Text>
+          </Animated.Text>
         )}
-      </View>
+      </Animated.View>
       <View style={styles.textContainer}>
-        <Text style={styles.text1}>Hello,</Text>
-        <Text style={styles.userName}>{capitalizeFirstLetter(data?.name)}</Text>
+        <Animated.Text
+          entering={FadeInDown.delay(50).duration(200)}
+          style={styles.text1}
+        >
+          Hello,
+        </Animated.Text>
+        <Animated.Text
+          entering={FadeInDown.delay(50).duration(200).damping(6).springify()}
+          style={styles.userName}
+        >
+          {capitalizeFirstLetter(data?.name)}
+        </Animated.Text>
       </View>
     </View>
   );

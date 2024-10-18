@@ -10,8 +10,10 @@ import { useNavigation } from "@react-navigation/native";
 import { getCash_sell, getCashSellsByCustomerId } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import getInitials from "@/utils/namePlaceholder";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import FormatDate from "@/utils/FormatDate";
 
-const AllCustomers = ({ item }: any) => {
+const AllCustomers = ({ item, index }: any) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
@@ -31,9 +33,15 @@ const AllCustomers = ({ item }: any) => {
     0
   );
 
+  const CustomLink = Animated.createAnimatedComponent(Link);
+
   return (
     <Fragment>
-      <Link
+      <CustomLink
+        entering={FadeInDown.delay(index * 50)
+          .duration(400)
+          .damping(8)
+          .springify()}
         href={{
           pathname: "/pages/cashbox/details",
           params: {
@@ -61,14 +69,14 @@ const AllCustomers = ({ item }: any) => {
             <Text style={styles.name}>{item?.name}</Text>
             <Text style={styles.date}>
               {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
-              {item?.createdAt}
+              {FormatDate(item?.createdAt)}
             </Text>
           </View>
           <Text adjustsFontSizeToFit>
             {currency} {totalCash_buy}
           </Text>
         </TouchableOpacity>
-      </Link>
+      </CustomLink>
     </Fragment>
   );
 };

@@ -1,12 +1,12 @@
 import { View, Text, ImageBackground, StyleSheet, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Fonts } from "@/constants/Fonts";
 import { Colors } from "@/constants/Colors";
 import { getCash_buy, getCash_sell } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
-
-const receiveAmount = 4000;
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { FontAwesome } from "@expo/vector-icons";
 
 interface amountProps {
   bg_image: any;
@@ -24,6 +24,7 @@ const AmountCon: React.FC<amountProps> = ({
 }) => {
   const [receive, setReceive] = useState<number>(0);
   const [cashBuyDue, setCashBuyDue] = useState<number>(0);
+  const BgImage = Animated.createAnimatedComponent(ImageBackground);
 
   const db = useSQLiteContext();
   useEffect(() => {
@@ -45,13 +46,14 @@ const AmountCon: React.FC<amountProps> = ({
   }, []);
 
   return (
-    <ImageBackground
+    <BgImage
+      entering={FadeInDown.delay(50).duration(300).damping(8).springify()}
       imageStyle={{ borderRadius: 15 }}
       style={styles.container}
       source={bg_image}
     >
       <View style={[styles.amountCon, { flex: 1.3 }]}>
-        <Image style={styles.logo} source={logo1} />
+        <FontAwesome name="money" size={30} color="black" />
         <View>
           <Text style={[styles.text, { color: leftTextColor }]}>
             You will Receive
@@ -70,7 +72,7 @@ const AmountCon: React.FC<amountProps> = ({
           </Text>
         </View>
       </View>
-    </ImageBackground>
+    </BgImage>
   );
 };
 
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 12,
+    gap: 20,
   },
   logo: {
     width: 35,
@@ -107,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AmountCon;
+export default memo(AmountCon);

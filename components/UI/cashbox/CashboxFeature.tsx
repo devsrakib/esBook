@@ -29,6 +29,7 @@ import {
 import { useSQLiteContext } from "expo-sqlite";
 import FormatDate from "@/utils/FormatDate";
 import CalenderModal from "./CalenderModal";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const CashboxFeature = () => {
   const [getAllCashSell, setGetAllCashSell] = useState<any[]>([]);
@@ -223,7 +224,10 @@ const CashboxFeature = () => {
     selectedStartDate === "DD/MM/YYYY" && selectedEndDate === "DD/MM/YYYY";
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      entering={FadeInDown.delay(50).duration(300)}
+      style={styles.container}
+    >
       <View style={styles.topSection}>
         <Text style={styles.text1}>Cashbox Featured</Text>
         <TouchableOpacity
@@ -252,7 +256,7 @@ const CashboxFeature = () => {
           return <Feature key={index.toString()} data={f} index={index} />;
         })}
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

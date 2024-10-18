@@ -22,6 +22,7 @@ import {
 import { currency } from "@/global/currency";
 import { Link } from "expo-router";
 import { IDashboardData } from "@/types/interfaces/home/dashboard.interface";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Dashboard = () => {
   const [customers, setCustomers] = useState<number>(0);
@@ -81,11 +82,17 @@ const Dashboard = () => {
     customers();
   }, [cashSell, expense]);
 
+  const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
   return (
     <View style={sharedStyle.grid}>
       {dashboardData.map((item, index) => {
         const StatusContent = (
-          <TouchableOpacity
+          <CustomTouchable
+            entering={FadeInDown.delay(index * 50)
+              .duration(400)
+              .damping(9)
+              .springify()}
             activeOpacity={item?.link ? 0.7 : 1}
             key={index}
             style={styles.container}
@@ -98,7 +105,7 @@ const Dashboard = () => {
               {item?.amount ? currency : null}
               {item?.amount || item?.quantity}
             </Text>
-          </TouchableOpacity>
+          </CustomTouchable>
         );
 
         return item?.link ? (
@@ -151,3 +158,173 @@ const styles = StyleSheet.create({
   },
 });
 export default Dashboard;
+
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   FlatList,
+//   Image,
+//   TouchableOpacity,
+// } from "react-native";
+// import React, { useEffect, useState } from "react";
+// import { Colors } from "@/constants/Colors";
+// import { radius } from "@/constants/sizes";
+// import { Fonts } from "@/constants/Fonts";
+// import { sharedStyle } from "@/constants/shared.style";
+// import { useSQLiteContext } from "expo-sqlite";
+// import {
+//   getCash_sell,
+//   getCustomers,
+//   getExpense,
+//   getSuppliers,
+// } from "@/databases/Database";
+// import { currency } from "@/global/currency";
+// import { Link } from "expo-router";
+// import { IDashboardData } from "@/types/interfaces/home/dashboard.interface";
+// import Animated, {
+//   useSharedValue,
+//   useAnimatedStyle,
+//   withTiming,
+//   FadeInDown,
+// } from "react-native-reanimated";
+
+// const Dashboard = () => {
+//   const [customers, setCustomers] = useState<number>(0);
+//   const [suppliers, setSuppliers] = useState<number>(0);
+//   const [cashSell, setCashSell] = useState<number>(0);
+//   const [expense, setExpense] = useState<number>(0);
+//   const db = useSQLiteContext();
+
+//   const dashboardData: IDashboardData[] = [
+//     {
+//       text: "Total Customers",
+//       icon: require("../../assets/images/DUser.png"),
+//       quantity: customers,
+//       bg_color: Colors.lavender,
+//       link: "/pages/parties/parties",
+//     },
+//     {
+//       text: "Total Supplier",
+//       icon: require("../../assets/images/DHouse.png"),
+//       quantity: suppliers,
+//       bg_color: Colors.purpleHalf,
+//       link: "/pages/parties/parties",
+//     },
+//     {
+//       text: "Total Cash",
+//       icon: require("../../assets/images/DMoney.png"),
+//       amount: `${cashSell?.toLocaleString("en-US") || "0"}`,
+//       bg_color: Colors.VeroneseGreen,
+//     },
+//     {
+//       text: "Total Expenses",
+//       icon: require("../../assets/images/DDollar.png"),
+//       amount: `${expense?.toLocaleString("en-US") || "0"}`,
+//       bg_color: Colors.OrangeRed,
+//       color: Colors.red,
+//     },
+//   ];
+
+//   useEffect(() => {
+//     async function fetchData() {
+//       const customers = await getCustomers(db);
+//       const suppliers = await getSuppliers(db);
+//       const cash_sell = await getCash_sell(db);
+//       const expense = await getExpense(db);
+//       setCustomers(customers?.length);
+//       setSuppliers(suppliers?.length);
+
+//       const totalSaleAmount = cash_sell?.reduce(
+//         (sum: number, record: any) => sum + record?.collectedAmount,
+//         0
+//       );
+//       const totalExpenseAmount = expense?.reduce(
+//         (sum: number, record: any) => sum + record?.amount,
+//         0
+//       );
+//       setCashSell(totalSaleAmount);
+//       setExpense(totalExpenseAmount);
+//     }
+//     fetchData();
+//   }, [cashSell, expense]);
+
+//   const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
+//   const DashboardItem = ({ item, index }) => {
+//     const animatedValue = useSharedValue(item?.amount || item?.quantity);
+
+//     useEffect(() => {
+//       animatedValue.value = withTiming(item?.amount || item?.quantity, {
+//         duration: 500,
+//       });
+//     }, [item?.amount, item?.quantity]);
+
+//     const animatedTextStyle = useAnimatedStyle(() => {
+//       return {
+//         transform: [{ scale: withTiming(1, { duration: 300 }) }],
+//       };
+//     });
+
+//     return (
+//       <CustomTouchable
+//         entering={FadeInDown.delay(index * 100)
+//           .duration(400)
+//           .damping(8)
+//           .springify()}
+//         activeOpacity={item?.link ? 0.7 : 1}
+//         style={styles.container}
+//       >
+//         <View style={[styles.logoCon, { backgroundColor: item?.bg_color }]}>
+//           <Image source={item?.icon} style={styles.logo} />
+//         </View>
+//         <Text style={styles.text}>{item?.text}</Text>
+//         <Animated.Text
+//           style={[styles.amount, animatedTextStyle, { color: item?.color }]}
+//         >
+//           {item?.amount ? currency : null}
+//           {Math.floor(animatedValue.value)} {/* Animate count */}
+//         </Animated.Text>
+//       </CustomTouchable>
+//     );
+//   };
+
+//   return (
+//     <View style={sharedStyle.grid}>
+//       {dashboardData.map((item, index) => (
+//         <DashboardItem key={index} item={item} index={index} />
+//       ))}
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     backgroundColor: Colors.background,
+//     borderRadius: radius.small,
+//     width: "48.5%",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     padding: 10,
+//     gap: 10,
+//   },
+//   logoCon: {
+//     width: 36,
+//     height: 36,
+//     borderRadius: 20,
+//     backgroundColor: Colors.lavender,
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   logo: {},
+//   text: {
+//     fontSize: Fonts.regular,
+//     color: Colors.text,
+//   },
+//   amount: {
+//     fontSize: Fonts.medium,
+//     fontWeight: "bold",
+//   },
+// });
+
+// export default Dashboard;

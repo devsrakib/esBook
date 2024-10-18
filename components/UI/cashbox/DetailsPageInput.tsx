@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
-import React, { Fragment } from "react";
+import React, { Fragment, memo } from "react";
 import { currency } from "@/global/currency";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Entypo } from "@expo/vector-icons";
+import Animated, { FadeInDown } from "react-native-reanimated";
 const DetailsPageInput = ({
   setTransaction,
   text,
@@ -20,11 +21,19 @@ const DetailsPageInput = ({
       [key]: value,
     }));
   };
-
+  const CustomTextInput = Animated.createAnimatedComponent(TextInput);
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{text} amount</Text>
-      <View style={styles.inputCon}>
+      <Animated.Text
+        entering={FadeInDown.delay(200).duration(400).damping(8).springify()}
+        style={styles.label}
+      >
+        {text} amount
+      </Animated.Text>
+      <Animated.View
+        entering={FadeInDown.delay(250).duration(400).damping(8).springify()}
+        style={styles.inputCon}
+      >
         <TextInput
           style={styles.input}
           placeholder={`${
@@ -38,11 +47,25 @@ const DetailsPageInput = ({
         <View style={styles.currencyCon}>
           <Text adjustsFontSizeToFit>{currency}</Text>
         </View>
-      </View>
+      </Animated.View>
       {(text === "Cash Sell" || text === "Cash buy") && (
         <Fragment>
-          <Text style={styles.label}>Collected amount</Text>
-          <View style={styles.inputCon}>
+          <Animated.Text
+            entering={FadeInDown.delay(300)
+              .duration(400)
+              .damping(8)
+              .springify()}
+            style={styles.label}
+          >
+            Collected amount
+          </Animated.Text>
+          <Animated.View
+            entering={FadeInDown.delay(350)
+              .duration(400)
+              .damping(8)
+              .springify()}
+            style={styles.inputCon}
+          >
             <TextInput
               style={styles.input}
               placeholder="0.00"
@@ -52,11 +75,17 @@ const DetailsPageInput = ({
             <View style={styles.currencyCon}>
               <Entypo name="calendar" size={16} color={Colors.text} />
             </View>
-          </View>
+          </Animated.View>
         </Fragment>
       )}
-      <Text style={styles.label}>Description</Text>
-      <TextInput
+      <Animated.Text
+        entering={FadeInDown.delay(400).duration(400).damping(8).springify()}
+        style={styles.label}
+      >
+        Description
+      </Animated.Text>
+      <CustomTextInput
+        entering={FadeInDown.delay(200).duration(400).damping(8).springify()}
         style={styles.textArea}
         multiline
         placeholder="Type here"
@@ -111,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailsPageInput;
+export default memo(DetailsPageInput);

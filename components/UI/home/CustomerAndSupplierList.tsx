@@ -9,7 +9,7 @@ import {
 import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
-import { FontAwesome5, Fontisto } from "@expo/vector-icons";
+import { FontAwesome5, Fontisto, MaterialIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
 import Customers from "../shared/Customers";
@@ -18,7 +18,11 @@ import { useSQLiteContext } from "expo-sqlite";
 import Empty from "../Empty";
 import { debounce } from "lodash";
 import CustomSegment from "./CustomSegment";
-const tab: [string, string] = ["Customers", "Suppliers"];
+
+export type tab_props = {
+  label: string;
+  icon: any;
+};
 
 interface propsTypes {
   bg: string;
@@ -29,6 +33,19 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
   const [supplier, setSupplier] = useState<any>([]);
 
   const db = useSQLiteContext();
+
+  const tab: tab_props[] = [
+    {
+      label: "Customers",
+      icon: <MaterialIcons name="sell" size={18} color={Colors.white} />,
+    },
+    {
+      label: "Suppliers",
+      icon: (
+        <MaterialIcons name="add-business" size={18} color={Colors.white} />
+      ),
+    },
+  ];
 
   useEffect(() => {
     async function getCustomer() {

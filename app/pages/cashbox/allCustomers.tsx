@@ -37,8 +37,8 @@ const Page = () => {
       <View style={styles.bodySection}>
         <FlatList
           data={customer}
-          renderItem={({ item }) => {
-            return <AllCustomers item={item} />;
+          renderItem={({ item, index }) => {
+            return <AllCustomers item={item} index={index} />;
           }}
         />
       </View>
