@@ -46,7 +46,7 @@ export default function TabLayout() {
   useEffect(() => {
     async function getData() {
       const result: any = await getOwnerProfile(db);
-      setProfile(result[0]?.profilePhoto);
+      setProfile(result[0]);
     }
     getData();
   }, []);
@@ -177,7 +177,7 @@ export default function TabLayout() {
                     borderColor: focused ? Colors.mainColor : Colors.labelText,
                     borderWidth: 2,
                   }}
-                  source={{ uri: profile }}
+                  source={{ uri: profile?.profilePhoto }}
                 />
               ) : (
                 <FontAwesome
@@ -192,7 +192,7 @@ export default function TabLayout() {
                   { color: focused ? Colors.mainColor : Colors.black },
                 ]}
               >
-                Profile
+                {focused ? profile?.name : "Profile"}
               </Text>
             </View>
           ),
