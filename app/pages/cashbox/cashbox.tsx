@@ -15,6 +15,7 @@ import Dashboard from "@/components/UI/cashbox/Dashboard";
 import CashboxFeature from "@/components/UI/cashbox/CashboxFeature";
 import { Link, Stack } from "expo-router";
 import { Entypo } from "@expo/vector-icons";
+import Header from "@/components/UI/cashbox/cashbox.header";
 
 export const Cashbox = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -23,27 +24,9 @@ export const Cashbox = () => {
     setCurrentCash(amount);
   }, []);
   return (
-    <View
-      style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
-    >
+    <View style={[styles.container]}>
       <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Cashbox</Text>
-          <Link
-            href={{
-              pathname: "/pages/cashbox/matchCashbox",
-              params: {
-                amount: currentCash,
-              },
-            }}
-            asChild
-          >
-            <TouchableOpacity style={styles.matchCashbox}>
-              <Entypo name="calculator" size={16} color={Colors.mainColor} />
-              <Text style={styles.matchText}>Match Cashbox</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
+        <Header currentCash={currentCash} />
         <View style={styles.bodySection}>
           <Dashboard setCurrentCash={handleCurrentCash} />
           <CashboxFeature />
@@ -73,9 +56,10 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   bodySection: {
-    paddingHorizontal: 20,
-    gap: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 16,
+    gap: 16,
+    paddingBottom: 16,
+    paddingTop: 15,
   },
   matchCashbox: {
     flexDirection: "row",

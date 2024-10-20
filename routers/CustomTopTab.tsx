@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import Tab from "./Tab";
 import { tabProps } from "@/app/(tabs)/Cash";
+import { Colors } from "@/constants/Colors";
 
 type props = {
   tab: tabProps[];
@@ -35,5 +36,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 20,
+    backgroundColor: Colors.mainColor,
   },
 });

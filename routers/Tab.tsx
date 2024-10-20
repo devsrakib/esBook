@@ -22,6 +22,8 @@ const Tab = ({ item, isSelected, setSelectedIndex, index }: props) => {
       animate={{
         backgroundColor: isSelected ? Colors.mainColor : Colors.white,
         borderRadius: radius.small,
+        borderColor: Colors.white,
+        borderWidth: 1,
       }}
       layout={LinearTransition.springify().damping(80).stiffness(200)}
     >
@@ -29,13 +31,13 @@ const Tab = ({ item, isSelected, setSelectedIndex, index }: props) => {
         onPress={() => setSelectedIndex(index)}
         style={[
           styles.container,
-          { backgroundColor: isSelected ? Colors.mainColor : Colors.white },
+          { backgroundColor: isSelected ? Colors.white : Colors.mainColor },
         ]}
       >
         <Text
           style={[
             styles.Text,
-            { color: isSelected ? Colors.white : Colors.mainColor },
+            { color: isSelected ? Colors.mainColor : Colors.white },
           ]}
         >
           {item?.label}

@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
@@ -11,8 +11,11 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import { useSQLiteContext } from "expo-sqlite";
+import { getOwnerProfile } from "@/databases/Database";
 
 export default function TabLayout() {
+  const [profile, setProfile] = useState<any>();
   const AnimatedIcon = ({
     focused,
     iconComponent,
@@ -37,6 +40,16 @@ export default function TabLayout() {
       </Animated.View>
     );
   };
+
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    async function getData() {
+      const result: any = await getOwnerProfile(db);
+      setProfile(result[0]?.profilePhoto);
+    }
+    getData();
+  }, []);
 
   return (
     <Tabs
@@ -79,15 +92,14 @@ export default function TabLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
-        name="cashbox"
+        name="product"
         options={{
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
-              <Ionicons
-                name="cash-outline"
+              <FontAwesome
+                name="user"
                 size={24}
                 color={focused ? Colors.mainColor : Colors.labelText}
               />
@@ -97,21 +109,22 @@ export default function TabLayout() {
                   { color: focused ? Colors.mainColor : Colors.black },
                 ]}
               >
-                Cash Box
+                Products
               </Text>
             </View>
           ),
         }}
       />
+
       <Tabs.Screen
-        name="parties"
+        name="slip"
         options={{
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
               <FontAwesome
-                name="users"
-                size={20}
+                name="user"
+                size={24}
                 color={focused ? Colors.mainColor : Colors.labelText}
               />
               <Text
@@ -120,7 +133,30 @@ export default function TabLayout() {
                   { color: focused ? Colors.mainColor : Colors.black },
                 ]}
               >
-                Parties
+                Slip
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Cash"
+        options={{
+          title: "",
+          tabBarIcon: ({ color, focused }) => (
+            <View style={styles.container}>
+              <FontAwesome
+                name="user"
+                size={24}
+                color={focused ? Colors.mainColor : Colors.labelText}
+              />
+              <Text
+                style={[
+                  styles.title,
+                  { color: focused ? Colors.mainColor : Colors.black },
+                ]}
+              >
+                Cash
               </Text>
             </View>
           ),
@@ -131,12 +167,25 @@ export default function TabLayout() {
         options={{
           title: "",
           tabBarIcon: ({ color, focused }) => (
-            <View style={styles.container}>
-              <FontAwesome
-                name="user"
-                size={24}
-                color={focused ? Colors.mainColor : Colors.labelText}
-              />
+            <View style={[styles.container]}>
+              {profile ? (
+                <Image
+                  style={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: 50,
+                    borderColor: focused ? Colors.mainColor : Colors.labelText,
+                    borderWidth: 2,
+                  }}
+                  source={{ uri: profile }}
+                />
+              ) : (
+                <FontAwesome
+                  name="user"
+                  size={24}
+                  color={focused ? Colors.mainColor : Colors.labelText}
+                />
+              )}
               <Text
                 style={[
                   styles.title,

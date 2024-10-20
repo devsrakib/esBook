@@ -4,8 +4,8 @@ import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomTopTab from "@/routers/CustomTopTab";
 import { Fontisto, Ionicons } from "@expo/vector-icons";
-import Cashbox from "./cashbox";
 import Parties from "../pages/parties/parties";
+import Cashbox from "../pages/cashbox/cashbox";
 
 export type tabProps = {
   label: string;
@@ -15,11 +15,11 @@ export type tabProps = {
 const tab: tabProps[] = [
   {
     label: "Cash box",
-    icon: <Ionicons name="cash-sharp" size={16} color={Colors.white} />,
+    icon: <Ionicons name="cash-sharp" size={16} color={Colors.mainColor} />,
   },
   {
     label: "Parties",
-    icon: <Fontisto name="person" size={16} color={Colors.white} />,
+    icon: <Fontisto name="person" size={16} color={Colors.mainColor} />,
   },
 ];
 const Cash = () => {

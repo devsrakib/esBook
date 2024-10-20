@@ -99,9 +99,7 @@ const Parties = () => {
   }, []);
 
   return (
-    <View
-      style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
-    >
+    <View style={[styles.container]}>
       <Stack.Screen
         options={{
           headerShown: false,
