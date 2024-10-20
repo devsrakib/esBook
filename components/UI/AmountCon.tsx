@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, StyleSheet, Image } from "react-native";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 import { Fonts } from "@/constants/Fonts";
 import { Colors } from "@/constants/Colors";
@@ -6,7 +6,6 @@ import { getCash_buy, getCash_sell } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { FontAwesome } from "@expo/vector-icons";
 
 interface amountProps {
   bg_image: any;
@@ -47,7 +46,7 @@ const AmountCon: React.FC<amountProps> = ({
 
   return (
     <BgImage
-      entering={FadeInDown.delay(50).duration(300).damping(8).springify()}
+      entering={FadeInDown.delay(50).duration(300).damping(80).springify()}
       imageStyle={{ borderRadius: 15 }}
       style={styles.container}
       source={bg_image}

@@ -45,30 +45,36 @@ const Parties = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [focusInput, setFocusInput] = useState<boolean | null>(null);
   const routerData = useLocalSearchParams();
-  // let filteredCustomersSuppliers: any;
 
   const db = useSQLiteContext();
+
+  // Fetch customers and suppliers only once (or when necessary)
   useEffect(() => {
     const setup = async () => {
-      const customers = await getCustomers(db);
-      const suppliers = await getSuppliers(db);
-      setCustomers(customers as CustomerData[]);
-      setSuppliers(suppliers as SupplierData[]);
+      if (customers.length === 0) {
+        const customersData = await getCustomers(db);
+        setCustomers(customersData as CustomerData[]);
+      }
+      if (suppliers.length === 0) {
+        const suppliersData = await getSuppliers(db);
+        setSuppliers(suppliersData as SupplierData[]);
+      }
     };
     setup();
-  }, []);
+  }, [db, customers.length, suppliers.length]); // Only fetch if lists are empty
 
   useEffect(() => {
     if (
       routerData?.text === "Total Customers" ||
       routerData?.text === "Add Customer"
     ) {
-      setSelectedIndex(0); // Set to Customer tab
+      // setSelectedIndex(0); // Set to Customer tab
     } else if (routerData?.text === "Total Supplier") {
-      setSelectedIndex(1); // Set to Supplier tab
+      // setSelectedIndex(1); // Set to Supplier tab
     }
   }, [routerData?.text]);
 
+  // Memoize filtered customers/suppliers based on the selected index
   const filteredCustomersSuppliers = useMemo(() => {
     if (selectedIndex === 0) {
       return customers.filter((customer) =>
@@ -82,18 +88,30 @@ const Parties = () => {
     return [];
   }, [selectedIndex, searchTerm, customers, suppliers]);
 
+  // Handle segment change (Customer/Supplier tab switch)
+  const handleSegment = useCallback((val: number) => {
+    setSelectedIndex(val);
+  }, []);
+
+  // Handle search toggle
+  const handleSearch = useCallback((val: boolean) => {
+    setIsOpenSearch(!val);
+  }, []);
+
   return (
-    // <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
     >
       <Stack.Screen
         options={{
           headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 200,
         }}
       />
-      <View style={[styles.topSection]}>
-        <View style={[styles.header]}>
+
+      <View style={styles.topSection}>
+        <View style={styles.header}>
           <View style={{ flexDirection: "row" }}>
             {routerData?.text && (
               <TouchableOpacity
@@ -113,9 +131,7 @@ const Parties = () => {
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => {
-              setIsOpenSearch(!isOpenSearch);
-            }}
+            onPress={() => handleSearch(isOpenSearch)}
             style={styles.searchButton}
           >
             {isOpenSearch ? (
@@ -125,6 +141,7 @@ const Parties = () => {
             )}
           </TouchableOpacity>
         </View>
+
         <View style={styles.navigationCon}>
           <TouchableOpacity
             style={[
@@ -134,10 +151,11 @@ const Parties = () => {
                   selectedIndex === 0 ? Colors.white : "transparent",
               },
             ]}
-            onPress={() => setSelectedIndex(0)}
+            onPress={() => handleSegment(0)}
           >
             <Text style={styles.navigationText}>Customers</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={[
               styles.tabs,
@@ -146,11 +164,12 @@ const Parties = () => {
                   selectedIndex === 1 ? Colors.white : "transparent",
               },
             ]}
-            onPress={() => setSelectedIndex(1)}
+            onPress={() => handleSegment(1)}
           >
             <Text style={styles.navigationText}>Suppliers</Text>
           </TouchableOpacity>
         </View>
+
         <AmountCon
           bg_image={require("../../../assets/images/amountBg-blue.png")}
           leftAmountTColor={Colors.mainColor}
@@ -161,6 +180,7 @@ const Parties = () => {
           icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
         />
       </View>
+
       <View style={styles.bodySection}>
         {isOpenSearch && (
           <Search
@@ -173,10 +193,7 @@ const Parties = () => {
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 50,
-            flex: 1,
-          }}
+          contentContainerStyle={{ paddingBottom: 50, flex: 1 }}
           data={filteredCustomersSuppliers}
           renderItem={({ item }) => {
             return (
@@ -201,13 +218,12 @@ const Parties = () => {
             />
           }
         />
-        {<AddPartiesButton />}
+
+        <AddPartiesButton />
       </View>
     </View>
-    // </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

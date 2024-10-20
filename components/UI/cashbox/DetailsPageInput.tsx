@@ -25,13 +25,13 @@ const DetailsPageInput = ({
   return (
     <View style={styles.container}>
       <Animated.Text
-        entering={FadeInDown.delay(200).duration(400).damping(8).springify()}
+        entering={FadeInDown.delay(200).duration(400).damping(80).springify()}
         style={styles.label}
       >
         {text} amount
       </Animated.Text>
       <Animated.View
-        entering={FadeInDown.delay(250).duration(400).damping(8).springify()}
+        entering={FadeInDown.delay(250).duration(400).damping(80).springify()}
         style={styles.inputCon}
       >
         <TextInput
@@ -53,7 +53,7 @@ const DetailsPageInput = ({
           <Animated.Text
             entering={FadeInDown.delay(300)
               .duration(400)
-              .damping(8)
+              .damping(80)
               .springify()}
             style={styles.label}
           >
@@ -62,7 +62,7 @@ const DetailsPageInput = ({
           <Animated.View
             entering={FadeInDown.delay(350)
               .duration(400)
-              .damping(8)
+              .damping(80)
               .springify()}
             style={styles.inputCon}
           >
@@ -79,13 +79,13 @@ const DetailsPageInput = ({
         </Fragment>
       )}
       <Animated.Text
-        entering={FadeInDown.delay(400).duration(400).damping(8).springify()}
+        entering={FadeInDown.delay(400).duration(400).damping(80).springify()}
         style={styles.label}
       >
         Description
       </Animated.Text>
       <CustomTextInput
-        entering={FadeInDown.delay(200).duration(400).damping(8).springify()}
+        entering={FadeInDown.delay(200).duration(400).damping(80).springify()}
         style={styles.textArea}
         multiline
         placeholder="Type here"

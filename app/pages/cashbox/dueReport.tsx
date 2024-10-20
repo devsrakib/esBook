@@ -54,7 +54,13 @@ const DueReport = ({ where }: { where: string }) => {
         },
       ]}
     >
-      <Stack.Screen options={{ headerShown: false }} />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 200,
+        }}
+      />
       {where !== "report" && (
         <Header title="Due" titleColor={Colors.white} height={70} />
       )}

@@ -192,6 +192,8 @@ const page = () => {
         <Stack.Screen
           options={{
             headerShown: false,
+            animation: "slide_from_right",
+            animationDuration: 200,
           }}
         />
         <View style={styles.headerSection}>
@@ -216,7 +218,7 @@ const page = () => {
           <Animated.View
             entering={FadeInDown.delay(200)
               .duration(400)
-              .damping(8)
+              .damping(80)
               .springify()}
             style={styles.dummyTextCon}
           >

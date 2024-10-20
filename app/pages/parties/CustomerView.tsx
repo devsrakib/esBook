@@ -228,7 +228,13 @@ const CustomerView = () => {
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
     >
-      <Stack.Screen options={{ headerShown: false }} />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 200,
+        }}
+      />
       <View style={styles.header}>
         <GoBack color={Colors.white} />
         <Link

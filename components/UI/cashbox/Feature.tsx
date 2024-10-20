@@ -16,7 +16,7 @@ const Feature = ({ data, index }: { data: any; index: number }) => {
       <CustomTouchable
         entering={FadeInDown.delay(index * 100)
           .duration(400)
-          .damping(8)
+          .damping(80)
           .springify()}
         href={{
           pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}` as

@@ -29,7 +29,13 @@ const cashReport = () => {
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
     >
-      <Stack.Screen options={{ headerShown: false }} />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 200,
+        }}
+      />
       <Header
         textColor={Colors.white}
         children="Cash Report"

@@ -139,7 +139,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
           <Animated.View
             entering={FadeInDown.delay(i * 50)
               .duration(300)
-              .damping(8)
+              .damping(80)
               .springify()}
             key={i}
             style={styles.subContainer}

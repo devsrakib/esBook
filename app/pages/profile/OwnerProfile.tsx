@@ -132,7 +132,7 @@ const OwnerProfile = () => {
           )}
         </TouchableOpacity>
         <Animated.Text
-          entering={FadeInDown.delay(50).duration(400).damping(8).springify()}
+          entering={FadeInDown.delay(50).duration(400).damping(80).springify()}
           style={styles.profileName}
         >
           {profileData?.name}
@@ -143,7 +143,7 @@ const OwnerProfile = () => {
           <Animated.View
             entering={FadeInDown.delay(index * 50)
               .duration(400)
-              .damping(8)
+              .damping(80)
               .springify()}
             style={[styles.infoRow]}
             key={index?.toString()}

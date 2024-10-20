@@ -40,7 +40,7 @@ const AllCustomers = ({ item, index }: any) => {
       <CustomLink
         entering={FadeInDown.delay(index * 50)
           .duration(400)
-          .damping(8)
+          .damping(80)
           .springify()}
         href={{
           pathname: "/pages/cashbox/details",

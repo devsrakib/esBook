@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import Header from "@/components/UI/header/Header";
 import { Colors } from "@/constants/Colors";
-import CustomerAndSupplierList from "@/components/UI/CustomerAndSupplierList";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSQLiteContext } from "expo-sqlite";
 import { getSuppliers } from "@/databases/Database";
@@ -29,6 +28,8 @@ const page = () => {
       <Stack.Screen
         options={{
           headerShown: false,
+          animation: "slide_from_right",
+          animationDuration: 200,
         }}
       />
       <Header

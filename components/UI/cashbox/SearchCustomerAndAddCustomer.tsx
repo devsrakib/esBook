@@ -61,7 +61,7 @@ const SearchCustomerAndAddCustomer = ({
         asChild
       >
         <CustomTouchable
-          entering={FadeInDown.delay(50).duration(400).damping(8).springify()}
+          entering={FadeInDown.delay(50).duration(400).damping(80).springify()}
           style={styles.inputContainer}
         >
           <View style={styles.userIconCon}>
@@ -103,7 +103,7 @@ const SearchCustomerAndAddCustomer = ({
         asChild
       >
         <CustomTouchable
-          entering={FadeInDown.delay(100).duration(400).damping(8).springify()}
+          entering={FadeInDown.delay(100).duration(400).damping(80).springify()}
           style={styles.plusCon}
         >
           <AntDesign name="plus" size={24} color="black" />

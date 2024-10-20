@@ -91,7 +91,7 @@ const Dashboard = () => {
           <CustomTouchable
             entering={FadeInDown.delay(index * 50)
               .duration(400)
-              .damping(9)
+              .damping(80)
               .springify()}
             activeOpacity={item?.link ? 0.7 : 1}
             key={index}
@@ -270,7 +270,7 @@ export default Dashboard;
 //       <CustomTouchable
 //         entering={FadeInDown.delay(index * 100)
 //           .duration(400)
-//           .damping(8)
+//           .damping(80)
 //           .springify()}
 //         activeOpacity={item?.link ? 0.7 : 1}
 //         style={styles.container}

@@ -13,7 +13,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCash_sell } from "@/databases/Database";
 import { radius } from "@/constants/sizes";
-import Animated, { FadeIn, ZoomIn, ZoomOut } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  ZoomIn,
+  ZoomOut,
+} from "react-native-reanimated";
 import { ICashSell, IChart } from "@/types/interfaces/home/chart.interface";
 const chartStatusTime = ["Weekly", "Monthly", "Yearly"];
 
@@ -87,7 +92,10 @@ const Chart = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      entering={FadeInDown.delay(50).duration(200).damping(80).springify()}
+      style={styles.container}
+    >
       <View style={styles.statusContainer}>
         <Text style={styles.overview}>Overview</Text>
 
@@ -144,7 +152,7 @@ const Chart = () => {
         sideWidth={10}
         side="right"
       />
-    </View>
+    </Animated.View>
   );
 };
 
