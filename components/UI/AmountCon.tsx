@@ -57,7 +57,6 @@ const AmountCon: React.FC<amountProps> = ({
           <Text style={[styles.text, { color: leftTextColor }]}>
             You will Receive
           </Text>
-          git push
           <Text style={[styles.amount, { color: leftAmountTColor }]}>
             {currency} {receive?.toLocaleString("en-US") || "0"}
           </Text>

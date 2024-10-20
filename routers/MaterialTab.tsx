@@ -14,12 +14,7 @@ const MaterialTab = ({ tab }: any) => {
     >
       {tab?.map((t: any, index: number) => {
         return (
-          <Tab.Screen
-            options={{}}
-            key={index}
-            name={t.tabName}
-            component={t.component}
-          />
+          <Tab.Screen key={index} name={t.tabName} component={t.component} />
         );
       })}
     </Tab.Navigator>

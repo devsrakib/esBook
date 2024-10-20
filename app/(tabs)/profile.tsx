@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import Profile from "../pages/profile/profile";
 import { Colors } from "@/constants/Colors";
 import OwnerProfile from "../pages/profile/OwnerProfile";
 

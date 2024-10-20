@@ -26,13 +26,6 @@ export const Cashbox = () => {
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
     >
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          animation: "slide_from_right",
-          animationDuration: 200,
-        }}
-      />
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.headerText}>Cashbox</Text>

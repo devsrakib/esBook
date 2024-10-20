@@ -1,4 +1,4 @@
-import { Stack, useRouter } from "expo-router";
+import { Href, Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { getOwnerProfile, migrateDbIfNeeded } from "@/databases/Database";
@@ -10,7 +10,7 @@ import { ActivityIndicator, View } from "react-native";
 
 const InitialLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [initialRouteName, setInitialRouteName] = useState<string>("");
+  const [initialRouteName, setInitialRouteName] = useState<any>();
   const router = useRouter();
 
   useEffect(() => {

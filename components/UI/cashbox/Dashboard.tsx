@@ -133,7 +133,7 @@ const Dashboard = ({ setCurrentCash }: { setCurrentCash: Function }) => {
   }, []);
 
   return (
-    <View style={[sharedStyle.grid, { marginTop: 14 }]}>
+    <View style={[sharedStyle.grid]}>
       {data?.map((d, i) => {
         return (
           <Animated.View
