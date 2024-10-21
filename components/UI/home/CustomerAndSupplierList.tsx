@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
 
   usersCon: {
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.VeroneseGreen,
     marginVertical: 16,
     padding: 16,
     borderRadius: radius.large,
