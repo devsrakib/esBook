@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
-import React from "react";
+import React, { memo } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -32,7 +32,7 @@ const ProductCard = ({ item }: any) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);
 
 const styles = StyleSheet.create({
   container: {
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   },
   imgCon: {
     width: 60,
+    height: 65,
     backgroundColor: Colors.VeroneseGreen,
     alignItems: "center",
     justifyContent: "center",
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.small,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: Colors.black,
+    shadowColor: Colors.text,
     elevation: 5,
     backgroundColor: Colors.white,
   },

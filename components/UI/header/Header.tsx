@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    height: 70,
+    height: 60,
   },
   text: {
     fontSize: Fonts.medium,

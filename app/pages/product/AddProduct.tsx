@@ -150,6 +150,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Modal from "react-native-modal";
 import { radius } from "@/constants/sizes";
+import Button from "@/components/UI/Button";
 
 const AddProduct = () => {
   const { top } = useSafeAreaInsets();
@@ -254,15 +255,30 @@ const AddProduct = () => {
           />
 
           {/* Custom Dropdown for Category */}
-          <Text style={styles.label}>Category</Text>
-          <TouchableOpacity
-            onPress={toggleDropdown}
-            style={styles.dropdownButton}
-          >
-            <Text style={styles.dropdownText}>
-              {category || "Select Category"}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.selectCustomer}>
+            <View style={styles.categoryAndCustomer}>
+              <Text style={styles.label}>Category</Text>
+              <TouchableOpacity
+                onPress={toggleDropdown}
+                style={styles.dropdownButton}
+              >
+                <Text style={styles.dropdownText}>
+                  {category || "Select Category"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.categoryAndCustomer}>
+              <Text style={styles.label}>Select Supplier</Text>
+              <TouchableOpacity
+                onPress={toggleDropdown}
+                style={styles.dropdownButton}
+              >
+                <Text style={styles.dropdownText}>
+                  {category || "Select Category"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           {/* Animated Dropdown List */}
           <Modal
@@ -285,7 +301,7 @@ const AddProduct = () => {
             <View style={styles.dropdownList}>
               <View style={styles.indicator} />
               <ScrollView showsVerticalScrollIndicator={false}>
-                {categories.map((item, index) => (
+                {categories?.map((item, index) => (
                   <TouchableOpacity
                     key={index}
                     style={styles.dropdownItem}
@@ -301,6 +317,16 @@ const AddProduct = () => {
             </View>
           </Modal>
         </View>
+
+        <View style={styles.buttonCon}>
+          <Button
+            title="ADD PRODUCT"
+            titleColor={Colors.white}
+            radius={radius.small}
+            bg={Colors.mainColor}
+            width={"90%"}
+          />
+        </View>
       </ScrollView>
     </View>
   );
@@ -312,15 +338,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.page_bg,
-    paddingHorizontal: 20,
   },
   inputContainer: {
     marginTop: 20,
+    paddingHorizontal: 20,
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
-    color: Colors.text,
+    marginBottom: 8,
+    marginLeft: 3,
+    color: Colors.darkCharcoal,
   },
   input: {
     borderWidth: 1,
@@ -365,10 +392,20 @@ const styles = StyleSheet.create({
   dropdownItem: {
     padding: 15,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: Colors.mainColor,
+    marginBottom: 10,
+    borderRadius: radius.small,
   },
   dropdownItemText: {
     fontSize: 16,
     color: Colors.text,
+  },
+  selectCustomer: { flexDirection: "row", gap: 10 },
+  categoryAndCustomer: {
+    flex: 1,
+    gap: 5,
+  },
+  buttonCon: {
+    marginTop: 60,
   },
 });

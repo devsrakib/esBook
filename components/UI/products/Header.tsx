@@ -9,7 +9,12 @@ import { Link } from "expo-router";
 const Header = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Products</Text>
+      <View style={styles.titleCon}>
+        <Text style={styles.text}>Products</Text>
+        <View style={styles.quantityCon}>
+          <Text style={styles.quantity}>11</Text>
+        </View>
+      </View>
       <Link href={"/pages/product/AddProduct"} asChild>
         <Pressable style={styles.addProduct}>
           <Entypo name="plus" size={24} color={Colors.mainColor} />
@@ -36,11 +41,29 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   addProduct: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: radius.small,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.white,
+  },
+  quantityCon: {
+    width: 22,
+    height: 22,
+    borderRadius: radius.large,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.white,
+  },
+  quantity: {
+    fontWeight: "500",
+    fontSize: Fonts.small,
+    color: Colors.mainColor,
+  },
+  titleCon: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
   },
 });
