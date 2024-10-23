@@ -104,7 +104,7 @@ const Parties = () => {
         options={{
           headerShown: false,
           animation: "slide_from_right",
-          animationDuration: 200,
+          animationDuration: 100,
         }}
       />
 

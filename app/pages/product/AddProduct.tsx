@@ -23,7 +23,7 @@
 //         options={{
 //           headerShown: false,
 //           animation: "slide_from_right",
-//           animationDuration: 200,
+//           animationDuration: 100,
 //         }}
 //       />
 //       <Header
@@ -204,7 +204,7 @@ const AddProduct = () => {
         options={{
           headerShown: false,
           animation: "slide_from_right",
-          animationDuration: 200,
+          animationDuration: 100,
         }}
       />
       <Header
