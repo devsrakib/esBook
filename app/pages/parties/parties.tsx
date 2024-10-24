@@ -35,6 +35,7 @@ import {
 import Empty from "@/components/UI/Empty";
 import AddPartiesButton from "@/components/UI/parties/AddPartiesButton";
 import Search from "@/components/UI/parties/Search";
+import useOwnerHooks from "@/hooks/all_api_hooks";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -44,11 +45,10 @@ const Parties = () => {
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [focusInput, setFocusInput] = useState<boolean | null>(null);
+  const { data, loading, error } = useOwnerHooks();
   const routerData = useLocalSearchParams();
 
   const db = useSQLiteContext();
-
-  // Fetch customers and suppliers only once (or when necessary)
   useEffect(() => {
     const setup = async () => {
       if (customers.length === 0) {
@@ -109,37 +109,6 @@ const Parties = () => {
       />
 
       <View style={styles.topSection}>
-        <View style={styles.header}>
-          <View style={{ flexDirection: "row" }}>
-            {routerData?.text && (
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => router.back()}
-              >
-                <Feather name="arrow-left" size={24} color={Colors.white} />
-              </TouchableOpacity>
-            )}
-            <Text style={styles.headerText}>Parties</Text>
-            <View style={styles.customerLengthCon}>
-              <Text style={styles.customerLength}>
-                {selectedIndex === 0
-                  ? filteredCustomersSuppliers?.length
-                  : suppliers?.length}
-              </Text>
-            </View>
-          </View>
-          <TouchableOpacity
-            onPress={() => handleSearch(isOpenSearch)}
-            style={styles.searchButton}
-          >
-            {isOpenSearch ? (
-              <AntDesign name="close" size={22} color={Colors.white} />
-            ) : (
-              <Fontisto name="search" size={18} color={Colors.white} />
-            )}
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.navigationCon}>
           <TouchableOpacity
             style={[
@@ -235,31 +204,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: radius.regular,
     paddingBottom: 20,
   },
-  header: {
-    height: 70,
-    // justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "space-between",
-  },
-  headerText: {
-    fontSize: Fonts.medium,
-    color: Colors.white,
-    fontWeight: "500",
-    marginRight: 20,
-  },
-  customerLengthCon: {
-    width: 20,
-    height: 20,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.lavender,
-  },
-  customerLength: {
-    fontSize: Fonts.small,
-  },
+
   navigationCon: {
     flexDirection: "row",
     alignItems: "center",
@@ -280,18 +225,6 @@ const styles = StyleSheet.create({
     height: 25,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-  },
-  backButton: {
-    width: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 20,
-  },
-  searchButton: {
-    width: 40,
-    height: 40,
-    alignContent: "center",
-    justifyContent: "center",
   },
 });
 

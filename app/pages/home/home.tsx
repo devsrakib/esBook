@@ -1,3 +1,5 @@
+"use strict";
+
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Colors } from "@/constants/Colors";
 import UserViewHome from "@/components/UI/UserViewHome";
