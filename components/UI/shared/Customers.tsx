@@ -103,7 +103,7 @@ const Customers = ({
             <Text style={styles.name}>{item?.name}</Text>
             <Text style={styles.date}>
               {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
-              {FormatDate(item?.createdAt)}
+              {/* {FormatDate(item?.createdAt)} */}
             </Text>
           </View>
           <Text adjustsFontSizeToFit>

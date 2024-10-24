@@ -35,7 +35,7 @@ import {
 import Empty from "@/components/UI/Empty";
 import AddPartiesButton from "@/components/UI/parties/AddPartiesButton";
 import Search from "@/components/UI/parties/Search";
-import useOwnerHooks from "@/hooks/all_api_hooks";
+import useApiHook from "@/hooks/all_api_hooks";
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -45,10 +45,16 @@ const Parties = () => {
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [focusInput, setFocusInput] = useState<boolean | null>(null);
-  const { data, loading, error } = useOwnerHooks();
   const routerData = useLocalSearchParams();
 
+  const { data: CustomerData, loading, error } = useApiHook("customers");
+  const {
+    data: supplierData,
+    loading: supplierLoading,
+    error: supplierError,
+  } = useApiHook("suppliers");
   const db = useSQLiteContext();
+
   useEffect(() => {
     const setup = async () => {
       if (customers.length === 0) {
@@ -77,12 +83,12 @@ const Parties = () => {
   // Memoize filtered customers/suppliers based on the selected index
   const filteredCustomersSuppliers = useMemo(() => {
     if (selectedIndex === 0) {
-      return customers.filter((customer) =>
-        customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+      return CustomerData?.results?.filter((customer) =>
+        customer?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     } else if (selectedIndex === 1) {
-      return suppliers.filter((supplier) =>
-        supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
+      return supplierData?.results?.filter((supplier) =>
+        supplier?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     return [];
@@ -156,11 +162,16 @@ const Parties = () => {
             setFocusInput={setFocusInput}
           />
         )}
-        <FilterAndTextSection />
+        {/* <FilterAndTextSection /> */}
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 50, flex: 1 }}
+          contentContainerStyle={{
+            paddingBottom: 100,
+            flex: 1,
+            marginTop: 20,
+            paddingHorizontal: 20,
+          }}
           data={filteredCustomersSuppliers}
           renderItem={({ item }) => {
             return (
@@ -217,7 +228,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   bodySection: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     flex: 1,
   },
 
