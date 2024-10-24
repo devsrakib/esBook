@@ -124,11 +124,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.VeroneseGreen,
     paddingHorizontal: 10,
     marginBottom: 10,
-    borderRadius: radius.medium,
+    borderRadius: radius.small,
   },
   avatar: {
     borderWidth: 1,
-    borderRadius: radius.large,
+    borderRadius: radius.small,
     alignItems: "center",
     justifyContent: "center",
     borderColor: Colors.border,

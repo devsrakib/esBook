@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
+import { radius } from "@/constants/sizes";
 
 const AddPartiesButton = () => {
   const router = useRouter();
@@ -29,8 +30,12 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     paddingHorizontal: 20,
     paddingVertical: 7,
-    borderRadius: 20,
-    marginBottom: 20,
+    borderRadius: radius.small,
+    bottom: 40,
+    position: "absolute",
+    right: 20,
+    shadowColor: Colors.mainColor,
+    elevation: 5,
   },
   buttonText: {
     color: Colors.white,

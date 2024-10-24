@@ -168,7 +168,7 @@ const Parties = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: 100,
-            flex: 1,
+            // flex: 1,
             marginTop: 20,
             paddingHorizontal: 20,
           }}
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   bodySection: {
     // paddingHorizontal: 20,
     flex: 1,
+    // backgroundColor: "red",
   },
 
   tabs: {
