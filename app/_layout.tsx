@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getOwnerProfile, migrateDbIfNeeded } from "@/databases/Database";
 import { openDatabaseAsync, SQLiteProvider } from "expo-sqlite";
 import { ActivityIndicator, View } from "react-native";
+import axios from "axios";
+import { apiUrl } from "@/hooks/all_api_hooks";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 // SplashScreen.preventAutoHideAsync();
@@ -16,12 +18,14 @@ const InitialLayout = () => {
   useEffect(() => {
     const initialize = async () => {
       try {
+        const response = await axios.get(apiUrl + "owners");
         const db = await openDatabaseAsync("database.db");
         await migrateDbIfNeeded(db);
 
-        const result = await getOwnerProfile(db);
-        const user_data = result?.length > 0;
+        // const result = await getOwnerProfile(db);
+        // const user_data = result?.length > 0;
 
+        const user_data = response?.data?.results?.length > 0;
         // Determine the initial route based on profile data
         const routeName = user_data ? "/(tabs)" : "/";
         setInitialRouteName(routeName);

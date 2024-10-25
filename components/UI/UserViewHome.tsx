@@ -12,6 +12,8 @@ import Animated, {
   FadeInDown,
   FadeInUp,
 } from "react-native-reanimated";
+import axios from "axios";
+import { apiUrl } from "@/hooks/all_api_hooks";
 
 const UserViewHome = () => {
   const [data, setData] = useState<IOwner>({
@@ -29,8 +31,12 @@ const UserViewHome = () => {
 
   useEffect(() => {
     const getProfile = async () => {
+      const response = await axios.get(apiUrl + "owners");
       const result = await getOwnerProfile(db);
-      const user_data = result?.length > 0 ? result[0] : null;
+      // const user_data = result?.length > 0 ? result[0] : null;
+      const user_data = response?.data?.results[0];
+
+      console.log(user_data);
 
       setData(user_data as IOwner);
     };

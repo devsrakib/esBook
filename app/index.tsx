@@ -208,8 +208,10 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import { owner_profile } from "@/databases/Database";
+import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
 import useImagePicker from "@/utils/UseImagePicker";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
+import axios from "axios";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
@@ -236,6 +238,8 @@ export default function CreateOwnerProfile() {
   const router = useRouter();
   const db = useSQLiteContext();
 
+  console.log(profile);
+
   const handleInputChange = (value: any, key: any) => {
     setProfileData((prevState: any) => ({
       ...prevState,
@@ -245,14 +249,31 @@ export default function CreateOwnerProfile() {
 
   const handleCreateProfile = async () => {
     try {
-      const result = await owner_profile(db, profile);
-      if (result.success) {
+      const response = await axios.post(apiUrl + "owners", {
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        address: profile.address,
+        profile_photo: selectedImage, // optional, can be null
+      });
+
+      if (response.status === 201) {
+        console.log(response, "owner created");
         router.push("/(tabs)");
-      } else {
-        console.error(result.message);
       }
-    } catch (error) {
-      console.error("Error during navigation:", error);
+
+      // const result = await owner_profile(db, profile);
+      // if (result.success) {
+      //   router.push("/(tabs)");
+      // } else {
+      //   console.error(result.message);
+      // }
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Error response data:", error);
+      } else {
+        console.error("Error during navigation:", error);
+      }
     }
   };
 
@@ -304,7 +325,7 @@ export default function CreateOwnerProfile() {
               style={styles.input}
               placeholder="Type Number"
               keyboardType="phone-pad"
-              onChangeText={(e) => handleInputChange(e, "phoneNumber")}
+              onChangeText={(e) => handleInputChange(e, "phone")}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -315,7 +336,7 @@ export default function CreateOwnerProfile() {
               onChangeText={(e) => handleInputChange(e, "address")}
             />
           </View>
-          <View style={styles.inputContainer}>
+          {/* <View style={styles.inputContainer}>
             <Text style={styles.label}>Tax Number</Text>
             <TextInput
               style={styles.input}
@@ -323,7 +344,7 @@ export default function CreateOwnerProfile() {
               keyboardType="numeric"
               onChangeText={(e) => handleInputChange(e, "taxNumber")}
             />
-          </View>
+          </View> */}
         </View>
         <KeyboardAvoidingView>
           <Button
