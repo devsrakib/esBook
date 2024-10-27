@@ -8,6 +8,9 @@ import { Link } from "expo-router";
 
 const ProductCard = ({ item }: any) => {
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
+
+  console.log(item);
+
   return (
     <Link href={"/pages/product/ProductView"} asChild>
       <CustomPressable
@@ -21,10 +24,10 @@ const ProductCard = ({ item }: any) => {
           />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>Book</Text>
-          <Text style={styles.desc}>description</Text>
+          <Text style={styles.title}>{item?.product_name}</Text>
+          <Text style={styles.desc}>Buying Price: {item?.buying_price}</Text>
           <View style={styles.quantityCon}>
-            <Text style={styles.quantity}>2</Text>
+            <Text style={styles.quantity}>{item?.quantity}</Text>
           </View>
         </View>
       </CustomPressable>
@@ -36,15 +39,15 @@ export default memo(ProductCard);
 
 const styles = StyleSheet.create({
   container: {
-    height: 90,
+    height: 160,
     width: "46%",
     // borderWidth: 1,
     // borderColor: Colors.mainColor,
     borderRadius: radius.small,
     shadowColor: Colors.mainColor,
     elevation: 5,
-    flexDirection: "row",
-    alignItems: "center",
+    // flexDirection: "row",
+    // alignItems: "center",
     gap: 8,
     backgroundColor: Colors.white,
     margin: 8,
@@ -52,8 +55,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   imgCon: {
-    width: 60,
-    height: 65,
+    width: "40%",
+    height: 60,
     backgroundColor: Colors.VeroneseGreen,
     alignItems: "center",
     justifyContent: "center",
@@ -74,8 +77,8 @@ const styles = StyleSheet.create({
     color: Colors.mainColor,
   },
   quantityCon: {
-    width: 24,
-    height: 24,
+    width: 40,
+    height: 30,
     borderRadius: radius.small,
     alignItems: "center",
     justifyContent: "center",
@@ -86,6 +89,7 @@ const styles = StyleSheet.create({
   quantity: {
     color: Colors.mainColor,
     fontSize: Fonts.small,
+    fontWeight: "500",
   },
   desc: {
     color: Colors.text,

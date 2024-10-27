@@ -54,13 +54,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/products/Header";
 import ProductCard from "@/components/UI/products/ProductCard";
 import CategorySegment from "@/components/UI/products/CategorySegment";
+import useApiHook from "@/hooks/all_api_hooks";
 
 // Memoize ProductCard component to prevent unnecessary re-renders
 
 const Product = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const { bottom, top } = useSafeAreaInsets();
-
+  const { data: product } = useApiHook("product/create/");
   const handleActiveIndex = useCallback((index: number) => {
     setActiveIndex(index);
   }, []);
@@ -73,7 +74,7 @@ const Product = () => {
         setActiveIndex={handleActiveIndex}
       />
       <FlatList
-        data={Array(1000)} // Example data
+        data={product?.results} // Example data
         contentContainerStyle={styles.contentCon}
         numColumns={2}
         renderItem={({ item }) => <ProductCard item={item} />}

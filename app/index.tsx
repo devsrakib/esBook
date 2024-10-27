@@ -249,7 +249,7 @@ export default function CreateOwnerProfile() {
 
   const handleCreateProfile = async () => {
     try {
-      const response = await axios.post(apiUrl + "owners", {
+      const response = await axios.post(apiUrl + "owners/", {
         name: profile.name,
         email: profile.email,
         phone: profile.phone,

@@ -1305,11 +1305,11 @@ export const getCashReport = async (db: SQLiteDatabase) => {
 // =======================================================
 
 export interface CustomerData {
-  profilePhoto: string;
+  profile_photo: string;
   name: string;
   email: string;
   address: string;
-  phoneNumber: string;
+  phone: string;
   createdAt?: string;
 }
 

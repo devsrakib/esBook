@@ -8,6 +8,7 @@ import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { ICustomerDataInput } from "@/types/interfaces/input.interface";
 import { CustomerData, SupplierData } from "@/databases/Database";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const inputs = [
   {
@@ -25,7 +26,7 @@ const inputs = [
   {
     label: "Phone",
     icon: <Feather name="phone" size={24} color="black" />,
-    key: "phoneNumber",
+    key: "phone",
   },
   {
     label: "Address",
@@ -46,8 +47,11 @@ const Inputs: React.FC<InputProps> = ({ setData }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {inputs.map((input) => (
+    <Animated.View
+      entering={FadeInDown.damping(80).duration(400).springify().stiffness(200)}
+      style={styles.container}
+    >
+      {inputs?.map((input) => (
         <React.Fragment key={input.key}>
           <Text style={styles.label}>{input.label}</Text>
           <View style={styles.inputContainer}>
@@ -60,7 +64,7 @@ const Inputs: React.FC<InputProps> = ({ setData }) => {
           </View>
         </React.Fragment>
       ))}
-    </View>
+    </Animated.View>
   );
 };
 
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderWidth: 1,
     borderColor: Colors.border,
-    borderRadius: radius.regular,
+    borderRadius: radius.small,
     width: "100%",
     flexDirection: "row",
     height: 50,

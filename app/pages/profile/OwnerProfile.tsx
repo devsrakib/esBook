@@ -23,6 +23,7 @@ import {
 } from "@/databases/Database";
 import useImagePicker from "@/utils/UseImagePicker";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import useApiHook from "@/hooks/all_api_hooks";
 
 const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -34,17 +35,18 @@ const OwnerProfile = () => {
     name: "",
     email: "",
     address: "",
-    phoneNumber: "",
-    taxNumber: 0,
+    phone: "",
   });
 
+  const { data: OwnerData } = useApiHook("owners/");
   const db = useSQLiteContext();
 
   const fetchProfileData = async () => {
     try {
-      const profileArray = await getOwnerProfile(db);
-      if (profileArray && profileArray?.length > 0) {
-        const profile = profileArray[0];
+      // const profileArray = await getOwnerProfile(db);
+      const OwnerProfileData = OwnerData;
+      if (OwnerProfileData && OwnerProfileData?.results?.length > 0) {
+        const profile = OwnerProfileData?.results[0];
         setProfileData(profile); // Initialize profileData after fetching
       }
     } catch (error) {
@@ -101,14 +103,11 @@ const OwnerProfile = () => {
     {
       icon: <Ionicons name="call-outline" size={18} color="gray" />,
       label: "Phone",
-      key: "phoneNumber",
-    },
-    {
-      icon: <FontAwesome6 name="money-bill-wheat" size={18} color="gray" />,
-      label: "Tax Number",
-      key: "taxNumber",
+      key: "phone",
     },
   ];
+
+  console.log(profileData, ":::::::");
 
   return (
     <ScrollView
