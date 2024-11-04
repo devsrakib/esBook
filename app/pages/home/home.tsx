@@ -1,6 +1,12 @@
 "use strict";
 
-import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Platform,
+  Dimensions,
+} from "react-native";
 import { Colors } from "@/constants/Colors";
 import UserViewHome from "@/components/UI/UserViewHome";
 import Chart from "@/components/UI/home/Chart";
@@ -10,9 +16,12 @@ import CustomerAndSupplierList from "@/components/UI/home/CustomerAndSupplierLis
 import { FontAwesome } from "@expo/vector-icons";
 
 const Home = () => {
+  const { width } = Dimensions.get("window");
+  const isTablet = width >= 600;
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={[Styles.container]}>
+      <View style={[styles.container]}>
         <UserViewHome />
         <AmountCon
           bg_image={require("../../../assets/images/amountFrame.png")}
@@ -21,21 +30,38 @@ const Home = () => {
           icon1={<FontAwesome name="money" size={30} color={Colors.white} />}
           icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
         />
-        <Dashboard />
-        <Chart />
+        <View
+          style={isTablet ? styles.tabletContainer : styles.defaultContainer}
+        >
+          <View style={{ flex: 1 }}>
+            <Dashboard />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Chart />
+          </View>
+        </View>
         <CustomerAndSupplierList bg={Colors.JazzBerry} />
       </View>
     </ScrollView>
   );
 };
 
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,
     backgroundColor: Colors.white,
     gap: 15,
+  },
+  defaultContainer: {
+    flexDirection: "column", // Stack components vertically on phones
+    padding: 10,
+  },
+  tabletContainer: {
+    flexDirection: "row",
+    flex: 1,
+    gap: 20,
   },
 });
 

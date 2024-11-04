@@ -1,4 +1,10 @@
-import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import React, { memo, useEffect, useState } from "react";
 import { Fonts } from "@/constants/Fonts";
 import { Colors } from "@/constants/Colors";
@@ -24,6 +30,8 @@ const AmountCon: React.FC<amountProps> = ({
   const [receive, setReceive] = useState<number>(0);
   const [cashBuyDue, setCashBuyDue] = useState<number>(0);
   const BgImage = Animated.createAnimatedComponent(ImageBackground);
+  const { width } = Dimensions.get("window");
+  const isTablet = width >= 600;
 
   const db = useSQLiteContext();
   useEffect(() => {
@@ -48,7 +56,7 @@ const AmountCon: React.FC<amountProps> = ({
     <BgImage
       entering={FadeInDown.delay(50).duration(300).damping(80).springify()}
       imageStyle={{ borderRadius: 15 }}
-      style={styles.container}
+      style={[styles.container, { height: isTablet ? 200 : 100 }]}
       source={bg_image}
     >
       <View style={[styles.amountCon, { flex: 1.3 }]}>
