@@ -18,6 +18,11 @@ import { Stack } from "expo-router";
 import Header from "@/components/UI/header/Header";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Modal from "react-native-modal";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const login = async (username: string, password: string) => {
   try {
@@ -46,6 +51,18 @@ const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const passwordOpacity = useSharedValue(0);
+
+  // Animated style for the password fields
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: passwordOpacity.value,
+    transform: [{ translateY: withTiming(showPasswordFields ? 0 : 20) }],
+  }));
 
   const handlePasswordReset = async () => {
     try {
@@ -55,6 +72,10 @@ const LoginScreen = () => {
       );
       if (response.status === 200) {
         Alert.alert("Check your email", "Password reset instructions sent.");
+
+        // Show password fields with animation
+        setShowPasswordFields(true);
+        passwordOpacity.value = withTiming(1, { duration: 500 });
       }
     } catch (error) {
       console.error("Password reset error:", error);
@@ -62,7 +83,6 @@ const LoginScreen = () => {
     }
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const { top } = useSafeAreaInsets();
   const handleLogin = () => {
     login(username, password);
@@ -113,7 +133,7 @@ const LoginScreen = () => {
           width={"90%"}
         />
       </View>
-      <Modal
+      {/* <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setIsModalVisible(false)}
         style={{
@@ -142,6 +162,69 @@ const LoginScreen = () => {
             radius={radius.small}
             width={"100%"}
           />
+        </View>
+      </Modal> */}
+
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setIsModalVisible(false)}
+        style={{ justifyContent: "flex-end", margin: 0 }}
+      >
+        <View style={styles.modalContent}>
+          <Text style={[styles.loginText, { alignSelf: "center" }]}>
+            Reset Password
+          </Text>
+
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+
+          <Button
+            title="Reset Password"
+            onPress={handlePasswordReset}
+            titleColor={Colors.white}
+            bg={Colors.mainColor}
+            radius={radius.small}
+            width={"100%"}
+          />
+
+          {/* Animated password fields */}
+          {showPasswordFields && (
+            <Animated.View style={[styles.passwordFields, animatedStyle]}>
+              <Text style={styles.label}>New Password</Text>
+              <TextInput
+                placeholder="Enter new password"
+                value={newPassword}
+                onChangeText={setNewPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+
+              <Text style={styles.label}>Confirm Password</Text>
+              <TextInput
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+                style={styles.input}
+              />
+
+              <Button
+                title="Submit"
+                onPress={() => Alert.alert("Password Updated!")}
+                titleColor={Colors.white}
+                bg={Colors.mainColor}
+                radius={radius.small}
+                width={"100%"}
+              />
+            </Animated.View>
+          )}
         </View>
       </Modal>
     </View>
@@ -206,6 +289,9 @@ const styles = StyleSheet.create({
     height: 300,
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  passwordFields: {
+    marginTop: 20,
   },
 });
 
