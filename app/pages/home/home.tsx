@@ -27,8 +27,20 @@ const Home = () => {
           bg_image={require("../../../assets/images/amountFrame.png")}
           leftTextColor={Colors.white}
           leftAmountTColor={Colors.white}
-          icon1={<FontAwesome name="money" size={30} color={Colors.white} />}
-          icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
+          icon1={
+            <FontAwesome
+              name="money"
+              size={isTablet ? 60 : 30}
+              color={Colors.white}
+            />
+          }
+          icon2={
+            <FontAwesome
+              name="money"
+              size={isTablet ? 60 : 30}
+              color={Colors.white}
+            />
+          }
         />
         <View
           style={isTablet ? styles.tabletContainer : styles.defaultContainer}
@@ -57,6 +69,7 @@ const styles = StyleSheet.create({
   defaultContainer: {
     flexDirection: "column", // Stack components vertically on phones
     padding: 10,
+    gap: 20,
   },
   tabletContainer: {
     flexDirection: "row",

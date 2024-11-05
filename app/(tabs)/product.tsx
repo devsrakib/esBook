@@ -74,7 +74,8 @@ const Product = () => {
         setActiveIndex={handleActiveIndex}
       />
       <FlatList
-        data={product?.results} // Example data
+        // data={product?.results} // Example data
+        data={[1, 2, 1, 1]}
         contentContainerStyle={styles.contentCon}
         numColumns={2}
         renderItem={({ item }) => <ProductCard item={item} />}

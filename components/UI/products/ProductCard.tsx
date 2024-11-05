@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Dimensions,
+} from "react-native";
 import React, { memo } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
@@ -6,10 +13,11 @@ import { Fonts } from "@/constants/Fonts";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Link } from "expo-router";
 
+const { width } = Dimensions.get("window");
+
+const isTablet = width >= 600;
 const ProductCard = ({ item }: any) => {
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
-
-  console.log(item);
 
   return (
     <Link href={"/pages/product/ProductView"} asChild>
@@ -24,11 +32,11 @@ const ProductCard = ({ item }: any) => {
           />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{item?.product_name}</Text>
+          <Text style={styles.title}>{item?.product_name + "Onion"}</Text>
           <Text style={styles.desc}>Buying Price: {item?.buying_price}</Text>
-          <View style={styles.quantityCon}>
-            <Text style={styles.quantity}>{item?.quantity}</Text>
-          </View>
+        </View>
+        <View style={styles.quantityCon}>
+          <Text style={styles.quantity}>{item?.quantity}</Text>
         </View>
       </CustomPressable>
     </Link>
@@ -40,11 +48,8 @@ export default memo(ProductCard);
 const styles = StyleSheet.create({
   container: {
     height: 160,
-    width: "46%",
-    // borderWidth: 1,
-    // borderColor: Colors.mainColor,
-    borderRadius: radius.small,
-    shadowColor: Colors.mainColor,
+    width: isTablet ? "48%" : "46%",
+    shadowColor: Colors.text,
     elevation: 5,
     // flexDirection: "row",
     // alignItems: "center",
@@ -53,18 +58,19 @@ const styles = StyleSheet.create({
     margin: 8,
     paddingHorizontal: 10,
     paddingVertical: 10,
+    // backgroundColor: "red",
   },
   imgCon: {
-    width: "40%",
-    height: 60,
+    width: 40,
+    height: 40,
     backgroundColor: Colors.VeroneseGreen,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.small,
   },
   productPhoto: {
-    width: 50,
-    height: 90,
+    width: 35,
+    height: 35,
     borderRadius: radius.small,
     resizeMode: "contain",
   },
@@ -77,8 +83,8 @@ const styles = StyleSheet.create({
     color: Colors.mainColor,
   },
   quantityCon: {
-    width: 40,
-    height: 30,
+    width: 25,
+    height: 25,
     borderRadius: radius.small,
     alignItems: "center",
     justifyContent: "center",

@@ -225,8 +225,10 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Product from "./(tabs)/product";
 
 // Get device dimensions
 const { width, height } = Dimensions.get("window");
@@ -247,19 +249,33 @@ export default function CreateOwnerProfile() {
     }));
   };
 
+  // apiUrl +
   const handleCreateProfile = async () => {
     try {
-      const response = await axios.post(apiUrl + "owners/", {
-        name: profile.name,
-        email: profile.email,
-        phone: profile.phone,
-        address: profile.address,
-        profile_photo: selectedImage, // optional, can be null
-      });
-
+      const response = await axios.post(
+        "http://10.0.2.2:8000/api/v1/users/register/",
+        {
+          first_name: profile.firstName,
+          last_name: profile.lastName,
+          username: profile.firstName,
+          password: profile.password,
+          email: profile.email,
+          phone: profile.phone,
+          address: profile.address,
+          profile_photo: selectedImage || null,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.status === 201) {
-        console.log(response, "owner created");
+        Alert.alert("Success", "User registered successfully!");
         router.push("/(tabs)");
+      } else {
+        const errorData = await response.data;
+        Alert.alert("Error", JSON.stringify(errorData));
       }
 
       // const result = await owner_profile(db, profile);
@@ -303,11 +319,19 @@ export default function CreateOwnerProfile() {
             </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Name</Text>
+            <Text style={styles.label}>Fist Name</Text>
             <TextInput
               style={styles.input}
-              placeholder="Type Name"
-              onChangeText={(e) => handleInputChange(e, "name")}
+              placeholder="Type Fist name"
+              onChangeText={(e) => handleInputChange(e, "firstName")}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Lat Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Type last name"
+              onChangeText={(e) => handleInputChange(e, "lastName")}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -334,6 +358,15 @@ export default function CreateOwnerProfile() {
               style={styles.input}
               placeholder="Type Address"
               onChangeText={(e) => handleInputChange(e, "address")}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              onChangeText={(e) => handleInputChange(e, "password")}
             />
           </View>
           {/* <View style={styles.inputContainer}>

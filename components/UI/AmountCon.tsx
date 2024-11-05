@@ -62,19 +62,47 @@ const AmountCon: React.FC<amountProps> = ({
       <View style={[styles.amountCon, { flex: 1.3 }]}>
         {icon1}
         <View>
-          <Text style={[styles.text, { color: leftTextColor }]}>
+          <Text
+            style={[
+              styles.text,
+              {
+                color: leftTextColor,
+                fontSize: isTablet ? Fonts.tab_regular : Fonts.small,
+              },
+            ]}
+          >
             You will Receive
           </Text>
-          <Text style={[styles.amount, { color: leftAmountTColor }]}>
+          <Text
+            style={[
+              styles.amount,
+              {
+                color: leftAmountTColor,
+                fontSize: isTablet ? Fonts.tab_large : Fonts.extraLarge,
+              },
+            ]}
+          >
             {currency} {receive?.toLocaleString("en-US") || "0"}
           </Text>
         </View>
       </View>
-      <View style={styles.amountCon}>
+      <View style={[styles.amountCon]}>
         {icon2}
         <View>
-          <Text style={styles.text}>You will Give</Text>
-          <Text style={styles.amount}>
+          <Text
+            style={[
+              styles.text,
+              { fontSize: isTablet ? Fonts.tab_regular : Fonts.small },
+            ]}
+          >
+            You will Give
+          </Text>
+          <Text
+            style={[
+              styles.amount,
+              { fontSize: isTablet ? Fonts.tab_large : Fonts.extraLarge },
+            ]}
+          >
             {currency} {cashBuyDue?.toLocaleString("en-US") || "0"}
           </Text>
         </View>

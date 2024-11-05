@@ -1,17 +1,34 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors";
 import GoBack from "../UI/header/GoBack";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
-const Header = () => {
+const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleCon}>
         <GoBack color={Colors.white} />
         <Text style={styles.title}>Create a New Slip</Text>
       </View>
+
+      <TouchableOpacity
+        onPress={() => setIsSelectCustomer(true)}
+        style={[
+          styles.amountCon,
+          {
+            flexDirection: "row",
+            gap: 5,
+          },
+        ]}
+      >
+        <Text style={styles.amount}>Select customer</Text>
+        <AntDesign name="down" size={18} color={Colors.mainColor} />
+      </TouchableOpacity>
+
       {/* amount */}
       <View style={styles.amountCon}>
         <Text style={styles.amount}>$9854348</Text>

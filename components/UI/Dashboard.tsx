@@ -5,6 +5,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -59,6 +60,9 @@ const Dashboard = () => {
       color: Colors.red,
     },
   ];
+
+  const { width } = Dimensions.get("window");
+  const isTablet = width >= 600;
 
   useEffect(() => {
     async function customers() {

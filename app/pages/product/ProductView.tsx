@@ -7,16 +7,18 @@ import Header from "@/components/UI/header/Header";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { Fontisto } from "@expo/vector-icons";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const ProductView = () => {
   const { top } = useSafeAreaInsets();
+  const CustomPressable = Animated.createAnimatedComponent(Pressable);
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen
         options={{
           headerShown: false,
           animation: "slide_from_right",
-          animationDuration: 100,
+          // animationDuration: 50,
         }}
       />
       <Header
@@ -26,36 +28,99 @@ const ProductView = () => {
       />
 
       <View style={styles.body}>
-        <Image
+        <Animated.Image
+          entering={FadeInDown.delay(90)
+            .duration(200)
+            .damping(80)
+            .springify()
+            .stiffness(200)}
           style={styles.productPhoto}
           source={require("../../../assets/images/onion.jpg")}
+          // defaultSource={require("")}
         />
         <View style={styles.detailsCon}>
           <View style={styles.nameCon}>
-            <Text style={styles.productName}>Onion</Text>
+            <Animated.Text
+              entering={FadeInDown.delay(180)
+                .duration(200)
+                .damping(80)
+                .springify()
+                .stiffness(200)}
+              style={styles.productName}
+            >
+              Onion
+            </Animated.Text>
             <Link href={"/pages/product/SellerInfo"} asChild>
-              <Pressable style={styles.sellerInfo}>
+              <CustomPressable
+                entering={FadeInDown.delay(260)
+                  .duration(200)
+                  .damping(80)
+                  .springify()
+                  .stiffness(200)}
+                style={styles.sellerInfo}
+              >
                 <Text style={styles.sellerText}>Seller Info</Text>
                 <Fontisto name="person" size={14} color={Colors.mainColor} />
-              </Pressable>
+              </CustomPressable>
             </Link>
           </View>
-          <Text style={styles.stock}>Stock available: 900kg </Text>
+          <Animated.Text
+            entering={FadeInDown.delay(320)
+              .duration(200)
+              .damping(80)
+              .springify()
+              .stiffness(200)}
+            style={styles.stock}
+          >
+            Stock available: 900kg{" "}
+          </Animated.Text>
           <View style={styles.priceCon}>
             <View>
-              <Text style={styles.buying}>Buying Price: 50Tk</Text>
-              <Text style={[styles.buying, { fontWeight: "normal" }]}>
+              <Animated.Text
+                entering={FadeInDown.delay(400)
+                  .duration(200)
+                  .damping(80)
+                  .springify()
+                  .stiffness(200)}
+                style={styles.buying}
+              >
+                Buying Price: 50Tk
+              </Animated.Text>
+              <Animated.Text
+                entering={FadeInDown.delay(440)
+                  .duration(200)
+                  .damping(80)
+                  .springify()
+                  .stiffness(200)}
+                style={[styles.buying, { fontWeight: "normal" }]}
+              >
                 buying date: 10/2/2024
-              </Text>
+              </Animated.Text>
             </View>
             <View>
-              <Text style={styles.selling}>Selling Price: 55Tk</Text>
+              <Animated.Text
+                entering={FadeInDown.delay(500)
+                  .duration(200)
+                  .damping(80)
+                  .springify()
+                  .stiffness(200)}
+                style={styles.selling}
+              >
+                Selling Price: 55Tk
+              </Animated.Text>
             </View>
           </View>
-          <Text style={styles.desc}>
+          <Animated.Text
+            entering={FadeInDown.delay(580)
+              .duration(200)
+              .damping(80)
+              .springify()
+              .stiffness(200)}
+            style={styles.desc}
+          >
             Description Lorem ipsum dolor sit amet, consectetur adipisicing
             elit. Non, necessitatibus!
-          </Text>
+          </Animated.Text>
         </View>
       </View>
     </View>

@@ -93,7 +93,11 @@ const Chart = () => {
 
   return (
     <Animated.View
-      entering={FadeInDown.delay(50).duration(200).damping(80).springify()}
+      entering={FadeInDown.delay(50)
+        .duration(200)
+        .damping(80)
+        .springify()
+        .stiffness(200)}
       style={styles.container}
     >
       <View style={styles.statusContainer}>
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
     backgroundColor: Colors.VeroneseGreen,
-    width: "100%",
+    // width: "100%",
     borderRadius: 10,
   },
   statusContainer: {

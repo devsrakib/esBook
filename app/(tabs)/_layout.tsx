@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
 import Animated, {
   SharedValue,
@@ -14,6 +14,9 @@ import Animated, {
 import { useSQLiteContext } from "expo-sqlite";
 import { getOwnerProfile } from "@/databases/Database";
 
+const { width } = Dimensions.get("window");
+
+const isTablet = width >= 600;
 export default function TabLayout() {
   const [profile, setProfile] = useState<any>();
   const AnimatedIcon = ({
@@ -206,6 +209,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
+    width: isTablet ? 120 : 40,
   },
   title: {
     fontSize: 12,

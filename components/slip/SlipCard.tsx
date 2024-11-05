@@ -1,13 +1,32 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import React, { useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
-const SlipCard = () => {
+const SlipCard = ({ index }: { index: number }) => {
+  const [addedSlip, setAddedSlip] = useState<boolean | null>(null);
+  const { width } = Dimensions.get("window");
+
+  const isTablet = width >= 600;
   return (
-    <View style={styles.container}>
+    <Animated.View
+      entering={FadeInDown.delay(index * 50)
+        .duration(200)
+        .damping(80)
+        .springify()
+        .stiffness(200)}
+      style={[styles.container, { width: isTablet ? "48%" : "95%" }]}
+    >
       <View style={styles.info}>
         <View style={styles.imageCon}>
           <Image
@@ -31,12 +50,22 @@ const SlipCard = () => {
             <AntDesign name="pluscircleo" size={24} color={Colors.mainColor} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.ButtonText}>Add</Text>
-          <Entypo name="plus" size={24} color={Colors.white} />
+        <TouchableOpacity
+          onPress={() => setAddedSlip(!addedSlip)}
+          style={[
+            styles.addButton,
+            { backgroundColor: addedSlip ? Colors.red : Colors.mainColor },
+          ]}
+        >
+          <Text style={styles.ButtonText}>{addedSlip ? "Added" : "Add"}</Text>
+          {addedSlip ? (
+            <Ionicons name="close" size={24} color={Colors.white} />
+          ) : (
+            <Entypo name="plus" size={24} color={Colors.white} />
+          )}
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -44,7 +73,6 @@ export default SlipCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: "95%",
     padding: 10,
     borderRadius: radius.small,
     backgroundColor: Colors.white,
@@ -55,6 +83,7 @@ const styles = StyleSheet.create({
     gap: 10,
     alignSelf: "center",
     justifyContent: "space-between",
+    margin: 8,
   },
   info: {
     flexDirection: "row",

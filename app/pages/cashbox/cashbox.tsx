@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import React, { useCallback, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,13 +24,26 @@ export const Cashbox = () => {
   const handleCurrentCash = useCallback((amount: number) => {
     setCurrentCash(amount);
   }, []);
+
+  const { width } = Dimensions.get("window");
+  const isTablet = width >= 600;
+
   return (
     <View style={[styles.container]}>
       <ScrollView>
         <Header currentCash={currentCash} />
-        <View style={styles.bodySection}>
-          <Dashboard setCurrentCash={handleCurrentCash} />
-          <CashboxFeature />
+        <View
+          style={[
+            styles.bodySection,
+            { flexDirection: isTablet ? "row" : "column" },
+          ]}
+        >
+          <View style={{ flex: 1 }}>
+            <Dashboard setCurrentCash={handleCurrentCash} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <CashboxFeature />
+          </View>
         </View>
       </ScrollView>
     </View>
