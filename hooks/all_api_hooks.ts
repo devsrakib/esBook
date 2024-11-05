@@ -35,9 +35,9 @@
 // hooks/useFetch.js
 import { useEffect, useState } from "react";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const apiUrl = "http://10.0.2.2:8000/api/v1/";
-
 const useApiHook = (endpoint: string, ownerId?: string) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,6 +45,7 @@ const useApiHook = (endpoint: string, ownerId?: string) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = await AsyncStorage.getItem("accessToken");
       setLoading(true);
       setError(null);
       try {

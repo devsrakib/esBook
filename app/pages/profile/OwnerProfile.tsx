@@ -163,6 +163,7 @@ const OwnerProfile = () => {
           </Animated.View>
         ))}
       </View>
+      <Text style={styles.logout}>Log out</Text>
       {focusInput && (
         <Button
           title="Update"
@@ -234,6 +235,9 @@ const styles = StyleSheet.create({
     fontSize: Fonts.large,
     paddingVertical: 4,
     flex: 1,
+  },
+  logout: {
+    color: Colors.red,
   },
 });
 
