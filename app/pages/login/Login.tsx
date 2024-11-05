@@ -1,14 +1,27 @@
 import React, { useState } from "react";
-import { Alert, TextInput, View, StyleSheet } from "react-native";
+import {
+  Alert,
+  TextInput,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Fonts } from "@/constants/Fonts";
+import { Stack } from "expo-router";
+import Header from "@/components/UI/header/Header";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Modal from "react-native-modal";
 
 const login = async (username: string, password: string) => {
   try {
-    const response = await axios.post("http://10.0.2.2:8000/api/v1/token/", {
+    const response = await axios.post("http://10.0.2.2:8000/api/token/", {
       username,
       password,
     });
@@ -19,6 +32,7 @@ const login = async (username: string, password: string) => {
       // Save tokens to secure storage (e.g., AsyncStorage)
       await AsyncStorage.setItem("accessToken", access);
       await AsyncStorage.setItem("refreshToken", refresh);
+      console.log(refresh);
 
       Alert.alert("Login Successful", "Welcome back!");
     }
@@ -31,35 +45,105 @@ const login = async (username: string, password: string) => {
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
+  const handlePasswordReset = async () => {
+    try {
+      const response = await axios.post(
+        "http://10.0.2.2:8000/api/v1/password-reset/",
+        { email }
+      );
+      if (response.status === 200) {
+        Alert.alert("Check your email", "Password reset instructions sent.");
+      }
+    } catch (error) {
+      console.error("Password reset error:", error);
+      Alert.alert("Error", "Something went wrong. Please try again.");
+    }
+  };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { top } = useSafeAreaInsets();
   const handleLogin = () => {
     login(username, password);
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
+    <View style={[styles.container, { paddingTop: top }]}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Header
+        children="Login"
+        backgroundColor={Colors.mainColor}
+        textColor={Colors.white}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button
-        title="Login"
-        onPress={handleLogin}
-        titleColor={Colors.white}
-        bg={Colors.mainColor}
-        radius={radius.small}
-        width={"90%"}
-      />
+      <View style={styles.inputFieldCon}>
+        <Text style={styles.loginText}>Login</Text>
+        <View style={styles.inputAndLabelCon}>
+          <Text style={styles.label}>username</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            autoCapitalize="none"
+          />
+        </View>
+        <View style={styles.inputAndLabelCon}>
+          <Text style={styles.label}>password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() => setIsModalVisible(true)}
+          style={styles.forgotPass}
+        >
+          <Text style={styles.passText}>Forgot Password</Text>
+        </TouchableOpacity>
+        <Button
+          title="Login"
+          onPress={handleLogin}
+          titleColor={Colors.white}
+          bg={Colors.mainColor}
+          radius={radius.small}
+          width={"90%"}
+        />
+      </View>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setIsModalVisible(false)}
+        style={{
+          justifyContent: "flex-end",
+          margin: 0,
+        }}
+      >
+        <View style={styles.modalContent}>
+          <Text style={[styles.loginText, { alignSelf: "center" }]}>
+            Reset Password
+          </Text>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+          <Button
+            title="Reset Password"
+            onPress={handlePasswordReset}
+            titleColor={Colors.white}
+            bg={Colors.mainColor}
+            radius={radius.small}
+            width={"100%"}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -67,19 +151,61 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
     backgroundColor: Colors.background,
   },
+  inputFieldCon: {
+    width: "85%",
+    alignSelf: "center",
+    borderRadius: radius.small,
+    shadowColor: Colors.text,
+    elevation: 10,
+    backgroundColor: Colors.white,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 20,
+    height: 400,
+    marginTop: 80,
+  },
   input: {
-    width: "90%",
+    width: "100%",
     padding: 10,
     marginVertical: 10,
     borderColor: Colors.mainColor,
     borderWidth: 1,
     borderRadius: radius.small,
     backgroundColor: Colors.white,
+    marginBottom: 20,
+  },
+  loginText: {
+    fontSize: Fonts.large,
+    fontWeight: "600",
+    color: Colors.mainColor,
+    marginVertical: 20,
+  },
+  inputAndLabelCon: {
+    width: "90%",
+    alignSelf: "center",
+  },
+  label: {
+    fontSize: Fonts.regular,
+    color: Colors.text,
+    marginBottom: 2,
+  },
+  forgotPass: {
+    alignSelf: "flex-end",
+    marginRight: 20,
+  },
+  passText: {
+    color: Colors.mainColor,
+    textDecorationLine: "underline",
+  },
+  modalContent: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: Colors.white,
+    height: 300,
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
 });
 

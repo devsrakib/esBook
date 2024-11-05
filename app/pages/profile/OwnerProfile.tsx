@@ -24,6 +24,8 @@ import {
 import useImagePicker from "@/utils/UseImagePicker";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import useApiHook from "@/hooks/all_api_hooks";
+import { Link } from "expo-router";
+import { radius } from "@/constants/sizes";
 
 const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -163,13 +165,17 @@ const OwnerProfile = () => {
           </Animated.View>
         ))}
       </View>
-      <Text style={styles.logout}>Log out</Text>
+      <Link href={"/pages/login/Login"} asChild>
+        <TouchableOpacity style={styles.logoutButton}>
+          <Text style={styles.logout}>Log out</Text>
+        </TouchableOpacity>
+      </Link>
       {focusInput && (
         <Button
           title="Update"
           bg={Colors.mainColor}
           titleColor={Colors.white}
-          radius={20}
+          radius={radius.small}
           width={"90%"}
           onPress={handleSaveProfileInfo}
         />
@@ -238,6 +244,12 @@ const styles = StyleSheet.create({
   },
   logout: {
     color: Colors.red,
+  },
+  logoutButton: {
+    width: 120,
+    marginLeft: 20,
+    paddingVertical: 5,
+    marginBottom: 20,
   },
 });
 
