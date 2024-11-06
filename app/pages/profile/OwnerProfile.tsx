@@ -279,7 +279,12 @@ import {
   OwnerProfileData,
 } from "@/databases/Database";
 import useImagePicker from "@/utils/UseImagePicker";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, {
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import useApiHook from "@/hooks/all_api_hooks";
 import { Link } from "expo-router";
 import { radius } from "@/constants/sizes";
@@ -299,6 +304,8 @@ const OwnerProfile = () => {
 
   const { data: OwnerData } = useApiHook("owners/");
   const db = useSQLiteContext();
+  const updateButtonWidth = useSharedValue(0); // Starts hidden
+  const logoutButtonWidth = useSharedValue(100); // Starts at 100%
 
   const fetchProfileData = async () => {
     try {
@@ -369,8 +376,29 @@ const OwnerProfile = () => {
     },
   ];
 
+  const handleFocus = () => {
+    setFocusInput(true);
+    updateButtonWidth.value = withTiming(50, { duration: 300 });
+    logoutButtonWidth.value = withTiming(50, { duration: 300 });
+  };
+
+  const handleBlur = () => {
+    setFocusInput(false);
+    updateButtonWidth.value = withTiming(0, { duration: 300 });
+    logoutButtonWidth.value = withTiming(100, { duration: 300 });
+  };
+
+  // Animated styles
+  const updateButtonStyle = useAnimatedStyle(() => ({
+    width: `${updateButtonWidth.value}%`,
+  }));
+
+  const logoutButtonStyle = useAnimatedStyle(() => ({
+    width: `${logoutButtonWidth.value}%`,
+  }));
+
   return (
-    <ScrollView contentContainerStyle={[styles.container, { paddingTop: top }]}>
+    <ScrollView contentContainerStyle={[styles.container]}>
       <View style={styles.profileContainer}>
         <TouchableOpacity onPress={() => pickImage()}>
           {profileData?.profilePhoto ? (
@@ -417,7 +445,7 @@ const OwnerProfile = () => {
           </Animated.View>
         ))}
       </View>
-      <Link href={"/pages/login/Login"} asChild>
+      {/* <Link href={"/pages/login/Login"} asChild>
         <TouchableOpacity style={styles.logoutButton}>
           <Text style={styles.logout}>Log out</Text>
         </TouchableOpacity>
@@ -431,7 +459,25 @@ const OwnerProfile = () => {
           width={"90%"}
           onPress={handleSaveProfileInfo}
         />
-      )}
+      )} */}
+
+      <View style={styles.buttonContainer}>
+        <Animated.View style={[styles.animatedButton, updateButtonStyle]}>
+          {focusInput && (
+            <TouchableOpacity>
+              <Text>Update</Text>
+            </TouchableOpacity>
+          )}
+        </Animated.View>
+
+        <Animated.View style={[styles.animatedButton, logoutButtonStyle]}>
+          <Link href={"/pages/login/Login"} asChild>
+            <TouchableOpacity style={styles.logoutButton}>
+              <Text style={styles.logout}>Log out</Text>
+            </TouchableOpacity>
+          </Link>
+        </Animated.View>
+      </View>
     </ScrollView>
   );
 };
@@ -446,7 +492,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.mainColor,
     paddingBottom: 32,
-    paddingTop: 48,
+    paddingTop: 50,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
@@ -499,6 +545,16 @@ const styles = StyleSheet.create({
     color: Colors.text,
     borderBottomColor: Colors.mainColor,
     borderBottomWidth: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    marginTop: 20,
+  },
+  animatedButton: {
+    overflow: "hidden",
   },
   logoutButton: {
     marginTop: 20,

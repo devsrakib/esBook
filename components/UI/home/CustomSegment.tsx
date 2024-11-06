@@ -85,9 +85,10 @@ export default CustomSegment;
 
 const styles = StyleSheet.create({
   segments: {
-    backgroundColor: Colors.white,
+    backgroundColor: "transparent",
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 20,
   },
   segmentCon: {
     width: "30%",

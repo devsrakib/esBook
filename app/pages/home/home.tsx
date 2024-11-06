@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.background,
     gap: 15,
   },
   defaultContainer: {

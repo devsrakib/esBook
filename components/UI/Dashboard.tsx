@@ -135,13 +135,15 @@ const Dashboard = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.VeroneseGreen,
+    backgroundColor: Colors.white,
     borderRadius: radius.small,
     width: "48.5%",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
     gap: 10,
+    shadowColor: Colors.shadow,
+    elevation: 10,
   },
   logoCon: {
     width: 36,

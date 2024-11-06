@@ -164,9 +164,11 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     padding: 16,
-    backgroundColor: Colors.VeroneseGreen,
+    backgroundColor: Colors.white,
     // width: "100%",
     borderRadius: 10,
+    shadowColor: Colors.shadow,
+    elevation: 10,
   },
   statusContainer: {
     flexDirection: "row",

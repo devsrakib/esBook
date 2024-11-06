@@ -67,14 +67,15 @@ const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
   return (
     <View style={styles.container}>
       {/* segments tabs */}
-      <CustomSegment
-        tab={tab}
-        handleIndexChange={handleIndexChange}
-        setSelectedIndex={setSelectedIndex}
-        selectedIndex={selectedIndex}
-      />
+
       {/* customer list */}
       <View style={styles.usersCon}>
+        <CustomSegment
+          tab={tab}
+          handleIndexChange={handleIndexChange}
+          setSelectedIndex={setSelectedIndex}
+          selectedIndex={selectedIndex}
+        />
         <View style={styles.topSection}>
           <Text style={styles.giveAndReceiveText}>
             Will Receive / <Text style={{ color: Colors.red }}>Will Give</Text>
