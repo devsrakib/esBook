@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
@@ -82,6 +83,7 @@ const SignupScreen = () => {
         "http://10.0.2.2:8000/api/v1/users/register/",
         formData
       );
+
       if (response.status === 201) {
         Alert.alert("Signup Successful", "Welcome!");
       }
@@ -107,85 +109,87 @@ const SignupScreen = () => {
         backgroundColor={Colors.mainColor}
         textColor={Colors.white}
       />
-      <View style={styles.inputFieldCon}>
-        <Animated.Text
-          entering={FadeInDown.delay(50)
-            .duration(200)
-            .damping(80)
-            .springify()
-            .stiffness(200)}
-          style={[styles.signupText]}
-        >
-          Sign Up
-        </Animated.Text>
+      <ScrollView>
+        <View style={styles.inputFieldCon}>
+          <Animated.Text
+            entering={FadeInDown.delay(50)
+              .duration(200)
+              .damping(80)
+              .springify()
+              .stiffness(200)}
+            style={[styles.signupText]}
+          >
+            Sign Up
+          </Animated.Text>
 
-        <Animated.View
-          style={[styles.inputAndLabelCon, getAnimatedStyle("name")]}
-        >
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            value={formData.name}
-            onChangeText={(text) => handleChange("name", text)}
-            autoCapitalize="words"
+          <Animated.View
+            style={[styles.inputAndLabelCon, getAnimatedStyle("name")]}
+          >
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Full Name"
+              value={formData.name}
+              onChangeText={(text) => handleChange("name", text)}
+              autoCapitalize="words"
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.inputAndLabelCon, getAnimatedStyle("email")]}
+          >
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Email Address"
+              value={formData.email}
+              onChangeText={(text) => handleChange("email", text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.inputAndLabelCon, getAnimatedStyle("username")]}
+          >
+            <Text style={styles.label}>Username</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={formData.username}
+              onChangeText={(text) => handleChange("username", text)}
+              autoCapitalize="none"
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.inputAndLabelCon, getAnimatedStyle("password")]}
+          >
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={formData.password}
+              onChangeText={(text) => handleChange("password", text)}
+              secureTextEntry
+            />
+          </Animated.View>
+          <Button
+            title="Sign Up"
+            onPress={signup}
+            titleColor={Colors.white}
+            bg={Colors.mainColor}
+            radius={radius.small}
+            width={"90%"}
           />
-        </Animated.View>
 
-        <Animated.View
-          style={[styles.inputAndLabelCon, getAnimatedStyle("email")]}
-        >
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email Address"
-            value={formData.email}
-            onChangeText={(text) => handleChange("email", text)}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </Animated.View>
-
-        <Animated.View
-          style={[styles.inputAndLabelCon, getAnimatedStyle("username")]}
-        >
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            value={formData.username}
-            onChangeText={(text) => handleChange("username", text)}
-            autoCapitalize="none"
-          />
-        </Animated.View>
-
-        <Animated.View
-          style={[styles.inputAndLabelCon, getAnimatedStyle("password")]}
-        >
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={formData.password}
-            onChangeText={(text) => handleChange("password", text)}
-            secureTextEntry
-          />
-        </Animated.View>
-
-        <Button
-          title="Sign Up"
-          onPress={signup}
-          titleColor={Colors.white}
-          bg={Colors.mainColor}
-          radius={radius.small}
-          width={"90%"}
-        />
-        <Link href={"/pages/login/Login"} asChild>
-          <TouchableOpacity>
-            <Text>I have an account</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
+          <Link href={"/pages/login/Login"} asChild>
+            <TouchableOpacity>
+              <Text>I have an account</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      </ScrollView>
     </View>
   );
 };

@@ -78,13 +78,12 @@ const Customers = () => {
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
         />
-        <AddPhoneBookButton />
         <Inputs setData={setCustomerData} />
         <Button
           title="Add New Customer"
           titleColor={Colors.white}
           bg={Colors.mainColor}
-          radius={radius.regular}
+          radius={radius.small}
           width={"100%"}
           onPress={handleSave}
         />

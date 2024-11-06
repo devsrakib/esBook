@@ -22,7 +22,7 @@ const AddNewParties = () => {
         options={{
           headerShown: false,
           animation: "slide_from_right",
-          animationDuration: 100,
+          animationDuration: 50,
         }}
       />
       <Header

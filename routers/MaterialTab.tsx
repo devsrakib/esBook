@@ -10,6 +10,9 @@ const MaterialTab = ({ tab }: any) => {
         tabBarActiveTintColor: Colors.mainColor,
         tabBarInactiveTintColor: Colors.text,
         tabBarLabelStyle: { fontSize: 16, textTransform: "capitalize" },
+        tabBarIndicatorStyle: {
+          backgroundColor: Colors.mainColor,
+        },
       }}
     >
       {tab?.map((t: any, index: number) => {

@@ -13,24 +13,30 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 const inputs = [
   {
     label: "Full Name",
-    icon: <Feather name="user" size={24} color="black" />,
+    icon: <Feather name="user" size={24} color={Colors.mainColor} />,
     key: "name",
   },
   {
     label: "Email",
     icon: (
-      <MaterialCommunityIcons name="email-outline" size={24} color="black" />
+      <MaterialCommunityIcons
+        name="email-outline"
+        size={24}
+        color={Colors.mainColor}
+      />
     ),
     key: "email",
   },
   {
     label: "Phone",
-    icon: <Feather name="phone" size={24} color="black" />,
+    icon: <Feather name="phone" size={24} color={Colors.mainColor} />,
     key: "phone",
   },
   {
     label: "Address",
-    icon: <SimpleLineIcons name="location-pin" size={24} color="black" />,
+    icon: (
+      <SimpleLineIcons name="location-pin" size={24} color={Colors.mainColor} />
+    ),
     key: "address",
   },
 ];
@@ -86,7 +92,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: Fonts.regular,
     fontWeight: "500",
-    color: Colors.labelText,
+    color: Colors.mainColor,
   },
   iconCon: {
     backgroundColor: Colors.background,
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 10,
-    fontSize: Fonts.medium,
+    fontSize: Fonts.regular,
     flex: 1,
   },
 });

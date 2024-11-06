@@ -276,6 +276,7 @@ import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import useImagePicker from "@/utils/UseImagePicker";
 import { Fonts } from "@/constants/Fonts";
+import SignupScreen from "./pages/signUp/signUp";
 
 const { width, height } = Dimensions.get("window");
 
@@ -323,86 +324,7 @@ export default function CreateOwnerProfile() {
 
   return (
     <View style={[styles.container]}>
-      <View style={styles.signUpTextCon}>
-        <Text style={styles.singUpText}>Create Your{"\n"}Account</Text>
-      </View>
-      <KeyboardAvoidingView behavior="padding" style={[styles.bodyContainer]}>
-        <ScrollView
-          contentContainerStyle={{
-            paddingHorizontal: 20,
-            paddingBottom: 20,
-          }}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* Profile Image Section */}
-
-          {/* Form Fields with Delayed Animation */}
-          {[
-            "First Name",
-            "Last Name",
-            "Email",
-            "Phone",
-            "Address",
-            "Password",
-          ].map((label, index) => {
-            const inputAnimatedStyle = useAnimatedStyle(() => ({
-              opacity: interpolate(
-                inputAnimations[index].value,
-                [0, 1],
-                [0, 1]
-              ),
-              transform: [
-                {
-                  translateY: interpolate(
-                    inputAnimations[index].value,
-                    [0, 1],
-                    [20, 0]
-                  ),
-                },
-              ],
-            }));
-            return (
-              <Fragment key={index}>
-                <Animated.Text
-                  entering={FadeInDown.delay(index * 50)
-                    .duration(200)
-                    .damping(80)
-                    .stiffness(200)
-                    .springify()}
-                  style={styles.label}
-                >
-                  {label}
-                </Animated.Text>
-                <Animated.View
-                  key={index}
-                  style={[styles.inputContainer, inputAnimatedStyle]}
-                >
-                  <TextInput
-                    style={styles.input}
-                    placeholder={`Enter ${label}`}
-                    keyboardType={label === "Phone" ? "numeric" : "default"}
-                    secureTextEntry={label === "Password"}
-                    onChangeText={(e) =>
-                      handleInputChange(e, label.toLowerCase().replace(" ", ""))
-                    }
-                  />
-                </Animated.View>
-              </Fragment>
-            );
-          })}
-          <Animated.View style={styles.buttonStyle}>
-            <Button
-              title="Sign Up"
-              titleColor={Colors.white}
-              bg={Colors.mainColor}
-              radius={radius.regular}
-              width={"100%"}
-              onPress={handleCreateProfile}
-            />
-          </Animated.View>
-          {/* Animated Button */}
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <SignupScreen />
     </View>
   );
 }
@@ -412,64 +334,152 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.mainColor,
   },
-  signUpTextCon: {
-    height: Dimensions.get("screen").height * 0.23,
-    paddingLeft: 30,
-    justifyContent: "center",
-  },
-  singUpText: {
-    fontSize: Fonts.extraLarge,
-    color: Colors.white,
-    fontWeight: "700",
-    marginTop: 20,
-    lineHeight: 27,
-  },
-  bodyContainer: {
-    paddingTop: 20,
-    backgroundColor: Colors.background,
-    height: Dimensions.get("screen").height * 0.77,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  profileImageContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: height * 0.2,
-    marginBottom: 30,
-  },
-  profileImage: {
-    width: width * 0.25,
-    height: width * 0.25,
-    borderRadius: (width * 0.25) / 2,
-    backgroundColor: "#ddd",
-  },
-  cameraIcon: {
-    position: "absolute",
-    bottom: -10,
-    right: 10,
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 5,
-    elevation: 3,
-  },
-  inputContainer: {
-    marginBottom: 16,
-    backgroundColor: Colors.background,
-    borderRadius: radius.small,
-  },
-  label: {
-    fontSize: Fonts.medium,
-    color: Colors.mainColor,
-    marginBottom: 5,
-  },
-  input: {
-    height: 38,
-    borderBottomColor: Colors.VeroneseGreen,
-    borderBottomWidth: 1,
-    paddingHorizontal: 10,
-    color: "#333",
-  },
-  buttonStyle: {
-    marginTop: 30,
-  },
+  // signUpTextCon: {
+  //   height: Dimensions.get("screen").height * 0.23,
+  //   paddingLeft: 30,
+  //   justifyContent: "center",
+  // },
+  // singUpText: {
+  //   fontSize: Fonts.extraLarge,
+  //   color: Colors.white,
+  //   fontWeight: "700",
+  //   marginTop: 20,
+  //   lineHeight: 27,
+  // },
+  // bodyContainer: {
+  //   paddingTop: 20,
+  //   backgroundColor: Colors.background,
+  //   height: Dimensions.get("screen").height * 0.77,
+  //   borderTopLeftRadius: 20,
+  //   borderTopRightRadius: 20,
+  // },
+  // profileImageContainer: {
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   height: height * 0.2,
+  //   marginBottom: 30,
+  // },
+  // profileImage: {
+  //   width: width * 0.25,
+  //   height: width * 0.25,
+  //   borderRadius: (width * 0.25) / 2,
+  //   backgroundColor: "#ddd",
+  // },
+  // cameraIcon: {
+  //   position: "absolute",
+  //   bottom: -10,
+  //   right: 10,
+  //   backgroundColor: "#fff",
+  //   borderRadius: 15,
+  //   padding: 5,
+  //   elevation: 3,
+  // },
+  // inputContainer: {
+  //   marginBottom: 16,
+  //   backgroundColor: Colors.background,
+  //   borderRadius: radius.small,
+  // },
+  // label: {
+  //   fontSize: Fonts.medium,
+  //   color: Colors.mainColor,
+  //   marginBottom: 5,
+  // },
+  // input: {
+  //   height: 35,
+  //   borderBottomColor: Colors.VeroneseGreen,
+  //   borderBottomWidth: 1,
+  //   // paddingHorizontal: 5,
+  //   color: Colors.text,
+  //   fontSize: Fonts.regular,
+  // },
+  // buttonStyle: {
+  //   marginTop: 30,
+  // },
 });
+
+{
+  /* <View style={styles.signUpTextCon}>
+<Text style={styles.singUpText}>Create Your{"\n"}Account</Text>
+</View>
+<KeyboardAvoidingView behavior="padding" style={[styles.bodyContainer]}>
+<ScrollView
+  contentContainerStyle={{
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  }}
+  keyboardShouldPersistTaps="handled"
+>
+  {/* Profile Image Section */
+}
+
+{
+  /* Form Fields with Delayed Animation */
+}
+// {[
+//   "First Name",
+//   "Last Name",
+//   "Email",
+//   "Phone",
+//   "Address",
+//   "Password",
+// ].map((label, index) => {
+//   const inputAnimatedStyle = useAnimatedStyle(() => ({
+//     opacity: interpolate(
+//       inputAnimations[index].value,
+//       [0, 1],
+//       [0, 1]
+//     ),
+//     transform: [
+//       {
+//         translateY: interpolate(
+//           inputAnimations[index].value,
+//           [0, 1],
+//           [20, 0]
+//         ),
+//       },
+//     ],
+//   }));
+//   return (
+//     <Fragment key={index}>
+//       <Animated.Text
+//         entering={FadeInDown.delay(index * 50)
+//           .duration(200)
+//           .damping(80)
+//           .stiffness(200)
+//           .springify()}
+//         style={styles.label}
+//       >
+//         {label}
+//       </Animated.Text>
+//       <Animated.View
+//         key={index}
+//         style={[styles.inputContainer, inputAnimatedStyle]}
+//       >
+//         <TextInput
+//           style={styles.input}
+//           placeholder={`Enter ${label}`}
+//           keyboardType={label === "Phone" ? "numeric" : "default"}
+//           secureTextEntry={label === "Password"}
+//           onChangeText={(e) =>
+//             handleInputChange(e, label.toLowerCase().replace(" ", ""))
+//           }
+//         />
+//       </Animated.View>
+//     </Fragment>
+//   );
+// })}
+// <Animated.View style={styles.buttonStyle}>
+//   <Button
+//     title="Sign Up"
+//     titleColor={Colors.white}
+//     bg={Colors.mainColor}
+//     radius={radius.regular}
+//     width={"100%"}
+//     onPress={handleCreateProfile}
+//   />
+// </Animated.View>
+{
+  /* Animated Button */
+}
+// </ScrollView>
+// </KeyboardAvoidingView> */}

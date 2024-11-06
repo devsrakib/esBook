@@ -5,6 +5,7 @@ import {
   FlatList,
   Dimensions,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -12,12 +13,13 @@ import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/slip/Header.createSlip";
 import SlipCard from "@/components/slip/SlipCard";
-import Modal from "react-native-modal";
 import Customers from "@/components/UI/shared/Customers";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers } from "@/databases/Database";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
+import { Fonts } from "@/constants/Fonts";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 const CreateSlip = () => {
   const [data, setData] = useState<any>([]);
@@ -61,39 +63,41 @@ const CreateSlip = () => {
       </View>
 
       <View style={styles.footer}>
-        <Button
-          title="Done"
-          bg={Colors.mainColor}
-          titleColor={Colors.white}
-          width={120}
-          radius={radius.small}
-        />
+        <TouchableOpacity
+          onPress={() => setIsSelectCustomer(true)}
+          style={[
+            styles.selectCustomer,
+            {
+              flexDirection: "row",
+              gap: 5,
+            },
+          ]}
+        >
+          <Text style={styles.text}>Select customer</Text>
+          <AntDesign name="up" size={18} color={Colors.mainColor} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.selectCustomer,
+            {
+              flexDirection: "row",
+              gap: 5,
+              backgroundColor: Colors.mainColor,
+            },
+          ]}
+        >
+          <Text style={[styles.text, { color: Colors.white }]}>Done</Text>
+          <AntDesign name="check" size={24} color={Colors.white} />
+        </TouchableOpacity>
       </View>
 
       <Modal
-        isVisible={isSelectCustomer}
-        onBackdropPress={() => setIsSelectCustomer(false)}
+        visible={isSelectCustomer}
         style={{ margin: 0, justifyContent: "flex-end" }}
-        backdropOpacity={0.3}
-        onBackButtonPress={() => setIsSelectCustomer(false)}
         onDismiss={() => setIsSelectCustomer(false)}
-        animationIn={"fadeInUp"}
-        animationInTiming={5}
-        backdropTransitionInTiming={100}
-        backdropTransitionOutTiming={100}
-        customBackdrop={
-          <TouchableOpacity
-            // activeOpacity={0.7}
-            onPress={() => setIsSelectCustomer(false)}
-            style={{
-              backgroundColor: "black",
-              opacity: 0.8,
-              width: "100%",
-              height: "100%",
-            }}
-          ></TouchableOpacity>
-        }
-        backdropColor={Colors.black}
+        onRequestClose={() => setIsSelectCustomer(false)}
+        animationType="slide"
       >
         <View
           style={[
@@ -103,6 +107,14 @@ const CreateSlip = () => {
             },
           ]}
         >
+          <View style={styles.modalHeader}>
+            <TouchableOpacity
+              onPress={() => setIsSelectCustomer(false)}
+              style={styles.modalClose}
+            >
+              <Ionicons name="close" size={28} color={Colors.mainColor} />
+            </TouchableOpacity>
+          </View>
           <FlatList
             data={data}
             renderItem={({ item }) => {
@@ -141,9 +153,40 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.white,
     height: 70,
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     padding: 16,
     shadowColor: Colors.black,
     elevation: 15,
+  },
+  selectCustomer: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radius.small,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.white,
+    borderColor: Colors.mainColor,
+    borderWidth: 1,
+    height: 40,
+  },
+  text: {
+    fontSize: Fonts.medium,
+    color: Colors.mainColor,
+    fontWeight: "500",
+  },
+  modalHeader: {
+    height: 60,
+    borderBottomColor: Colors.border,
+    borderBottomWidth: 1,
+    paddingHorizontal: 20,
+    // alignItems: "center",
+    justifyContent: "center",
+  },
+  modalClose: {
+    width: 30,
+    height: 30,
+    borderRadius: radius.small,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

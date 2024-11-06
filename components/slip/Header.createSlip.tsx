@@ -15,20 +15,6 @@ const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
         <Text style={styles.title}>Create a New Slip</Text>
       </View>
 
-      <TouchableOpacity
-        onPress={() => setIsSelectCustomer(true)}
-        style={[
-          styles.amountCon,
-          {
-            flexDirection: "row",
-            gap: 5,
-          },
-        ]}
-      >
-        <Text style={styles.amount}>Select customer</Text>
-        <AntDesign name="down" size={18} color={Colors.mainColor} />
-      </TouchableOpacity>
-
       {/* amount */}
       <View style={styles.amountCon}>
         <Text style={styles.amount}>$9854348</Text>

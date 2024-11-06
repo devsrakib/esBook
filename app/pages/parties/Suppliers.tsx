@@ -47,7 +47,6 @@ const Suppliers = () => {
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
         />
-        <AddPhoneBookButton />
         <Inputs setData={setSupplierData} />
         <Button
           title="Add New Supplier"
