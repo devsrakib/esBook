@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   TextInput,
@@ -14,11 +14,12 @@ import { radius } from "@/constants/sizes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Fonts } from "@/constants/Fonts";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import Header from "@/components/UI/header/Header";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Modal from "react-native-modal";
 import Animated, {
+  FadeInDown,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -37,7 +38,7 @@ const login = async (username: string, password: string) => {
       // Save tokens to secure storage (e.g., AsyncStorage)
       await AsyncStorage.setItem("accessToken", access);
       await AsyncStorage.setItem("refreshToken", refresh);
-      console.log(refresh);
+      console.log(access);
 
       Alert.alert("Login Successful", "Welcome back!");
     }
@@ -56,31 +57,37 @@ const LoginScreen = () => {
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const passwordOpacity = useSharedValue(0);
+  const modalHeight = useSharedValue(200);
 
-  // Animated style for the password fields
+  useEffect(() => {
+    modalHeight.value = withTiming(showPasswordFields ? 400 : 260, {
+      duration: 500,
+    });
+  }, [showPasswordFields]);
+
+  console.log(email);
+
   const animatedStyle = useAnimatedStyle(() => ({
-    opacity: passwordOpacity.value,
-    transform: [{ translateY: withTiming(showPasswordFields ? 0 : 20) }],
+    height: modalHeight.value,
   }));
 
   const handlePasswordReset = async () => {
-    try {
-      const response = await axios.post(
-        "http://10.0.2.2:8000/api/v1/password-reset/",
-        { email }
-      );
-      if (response.status === 200) {
-        Alert.alert("Check your email", "Password reset instructions sent.");
+    // try {
+    //   const response = await axios.post(
+    //     "http://10.0.2.2:8000/api/v1/password-reset/",
+    //     { email }
+    //   );
+    //   if (response.status === 200) {
+    //     Alert.alert("Check your email", "Password reset instructions sent.");
 
-        // Show password fields with animation
-        setShowPasswordFields(true);
-        passwordOpacity.value = withTiming(1, { duration: 500 });
-      }
-    } catch (error) {
-      console.error("Password reset error:", error);
-      Alert.alert("Error", "Something went wrong. Please try again.");
-    }
+    //     // Show password fields with animation
+    //     passwordOpacity.value = withTiming(1, { duration: 500 });
+    //   }
+    // } catch (error) {
+    //   console.error("Password reset error:", error);
+    //   Alert.alert("Error", "Something went wrong. Please try again.");
+    // }
+    setShowPasswordFields(true);
   };
 
   const { top } = useSafeAreaInsets();
@@ -88,6 +95,7 @@ const LoginScreen = () => {
     login(username, password);
   };
 
+  const CustomInput = Animated.createAnimatedComponent(TextInput);
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen options={{ headerShown: false }} />
@@ -97,10 +105,27 @@ const LoginScreen = () => {
         textColor={Colors.white}
       />
       <View style={styles.inputFieldCon}>
-        <Text style={styles.loginText}>Login</Text>
+        <Animated.Text
+          entering={FadeInDown.delay(50).springify().damping(80).stiffness(200)}
+          style={styles.loginText}
+        >
+          Login
+        </Animated.Text>
         <View style={styles.inputAndLabelCon}>
-          <Text style={styles.label}>username</Text>
-          <TextInput
+          <Animated.Text
+            entering={FadeInDown.delay(100)
+              .springify()
+              .damping(80)
+              .stiffness(200)}
+            style={styles.label}
+          >
+            username
+          </Animated.Text>
+          <CustomInput
+            entering={FadeInDown.delay(200)
+              .springify()
+              .damping(80)
+              .stiffness(200)}
             style={styles.input}
             placeholder="Username"
             value={username}
@@ -109,8 +134,20 @@ const LoginScreen = () => {
           />
         </View>
         <View style={styles.inputAndLabelCon}>
-          <Text style={styles.label}>password</Text>
-          <TextInput
+          <Animated.Text
+            entering={FadeInDown.delay(400)
+              .springify()
+              .damping(80)
+              .stiffness(200)}
+            style={styles.label}
+          >
+            password
+          </Animated.Text>
+          <CustomInput
+            entering={FadeInDown.delay(600)
+              .springify()
+              .damping(80)
+              .stiffness(200)}
             style={styles.input}
             placeholder="Password"
             value={password}
@@ -122,81 +159,57 @@ const LoginScreen = () => {
           onPress={() => setIsModalVisible(true)}
           style={styles.forgotPass}
         >
-          <Text style={styles.passText}>Forgot Password</Text>
+          <Animated.Text
+            entering={FadeInDown.delay(700)
+              .springify()
+              .damping(80)
+              .stiffness(200)}
+            style={styles.passText}
+          >
+            Forgot Password
+          </Animated.Text>
         </TouchableOpacity>
-        <Button
-          title="Login"
-          onPress={handleLogin}
-          titleColor={Colors.white}
-          bg={Colors.mainColor}
-          radius={radius.small}
-          width={"90%"}
-        />
-      </View>
-      {/* <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setIsModalVisible(false)}
-        style={{
-          justifyContent: "flex-end",
-          margin: 0,
-        }}
-      >
-        <View style={styles.modalContent}>
-          <Text style={[styles.loginText, { alignSelf: "center" }]}>
-            Reset Password
-          </Text>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={styles.input}
-          />
+        <Animated.View
+          entering={FadeInDown.delay(800)
+            .springify()
+            .damping(80)
+            .stiffness(200)}
+          style={{ width: "100%" }}
+        >
           <Button
-            title="Reset Password"
-            onPress={handlePasswordReset}
+            title="Login"
+            onPress={handleLogin}
             titleColor={Colors.white}
             bg={Colors.mainColor}
             radius={radius.small}
-            width={"100%"}
+            width={"90%"}
           />
-        </View>
-      </Modal> */}
-
+        </Animated.View>
+        <Link href={"/pages/signUp/signUp"} asChild>
+          <TouchableOpacity>
+            <Text style={styles.noAccount}>I don't have an account</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setIsModalVisible(false)}
         style={{ justifyContent: "flex-end", margin: 0 }}
       >
-        <View style={styles.modalContent}>
+        <Animated.View style={[styles.modalContent, animatedStyle]}>
+          {/* Animated password fields */}
           <Text style={[styles.loginText, { alignSelf: "center" }]}>
             Reset Password
           </Text>
-
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={styles.input}
-          />
-
-          <Button
-            title="Reset Password"
-            onPress={handlePasswordReset}
-            titleColor={Colors.white}
-            bg={Colors.mainColor}
-            radius={radius.small}
-            width={"100%"}
-          />
-
-          {/* Animated password fields */}
-          {showPasswordFields && (
-            <Animated.View style={[styles.passwordFields, animatedStyle]}>
+          {showPasswordFields ? (
+            <Animated.View
+              entering={FadeInDown.delay(50)
+                .duration(500)
+                .springify()
+                .damping(80)
+                .stiffness(200)}
+              style={[styles.passwordFields]}
+            >
               <Text style={styles.label}>New Password</Text>
               <TextInput
                 placeholder="Enter new password"
@@ -224,8 +237,29 @@ const LoginScreen = () => {
                 width={"100%"}
               />
             </Animated.View>
+          ) : (
+            <>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                placeholder="Enter your email"
+                value={email}
+                onChangeText={(e) => setEmail(e)}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={styles.input}
+              />
+
+              <Button
+                title="Reset Password"
+                onPress={handlePasswordReset}
+                titleColor={Colors.white}
+                bg={Colors.mainColor}
+                radius={radius.small}
+                width={"100%"}
+              />
+            </>
           )}
-        </View>
+        </Animated.View>
       </Modal>
     </View>
   );
@@ -246,7 +280,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingBottom: 20,
-    height: 400,
     marginTop: 80,
   },
   input: {
@@ -277,6 +310,7 @@ const styles = StyleSheet.create({
   forgotPass: {
     alignSelf: "flex-end",
     marginRight: 20,
+    marginBottom: 20,
   },
   passText: {
     color: Colors.mainColor,
@@ -286,12 +320,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: Colors.white,
-    height: 300,
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   passwordFields: {
     marginTop: 20,
+  },
+  noAccount: {
+    color: Colors.red,
+    textDecorationLine: "underline",
   },
 });
 

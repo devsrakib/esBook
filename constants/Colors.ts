@@ -28,4 +28,6 @@ export const Colors = {
   page_bg: "#f3f3f9",
   labelText: "#4C4C4C",
   background2: "#E9EAEC",
+  lightGray: "#E5EEFE",
+  shadow: "#7F7F7F",
 };
