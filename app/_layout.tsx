@@ -34,7 +34,7 @@ const InitialLayout = () => {
         await SplashScreen.hideAsync();
       } catch (error) {
         // Fallback route to "index" if there's an error
-        setInitialRouteName("/(tabs)");
+        setInitialRouteName("/");
       } finally {
         setIsLoading(false);
       }

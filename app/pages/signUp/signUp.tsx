@@ -26,11 +26,12 @@ import Animated, {
 } from "react-native-reanimated";
 
 // Define type for the fields
-type FieldKeys = "name" | "email" | "username" | "password";
+type FieldKeys = "first_name" | "last_name" | "email" | "username" | "password";
 
 const SignupScreen = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     username: "",
     password: "",
@@ -38,14 +39,16 @@ const SignupScreen = () => {
 
   // Initialize shared values for animations
   const fieldYPositions: Record<FieldKeys, Animated.SharedValue<number>> = {
-    name: useSharedValue(20),
-    email: useSharedValue(20),
-    username: useSharedValue(20),
-    password: useSharedValue(20),
+    first_name: useSharedValue(0),
+    last_name: useSharedValue(0),
+    email: useSharedValue(0),
+    username: useSharedValue(0),
+    password: useSharedValue(0),
   };
 
   const fieldOpacities: Record<FieldKeys, Animated.SharedValue<number>> = {
-    name: useSharedValue(0),
+    first_name: useSharedValue(0),
+    last_name: useSharedValue(0),
     email: useSharedValue(0),
     username: useSharedValue(0),
     password: useSharedValue(0),
@@ -53,7 +56,13 @@ const SignupScreen = () => {
 
   useEffect(() => {
     const animateFields = async () => {
-      const fields: FieldKeys[] = ["name", "email", "username", "password"];
+      const fields: FieldKeys[] = [
+        "first_name",
+        "last_name",
+        "email",
+        "username",
+        "password",
+      ];
 
       fields.forEach((field, index) => {
         fieldOpacities[field].value = withDelay(
@@ -71,12 +80,17 @@ const SignupScreen = () => {
   }, []);
 
   const handleChange = (key: FieldKeys, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+    setFormData((prev) => {
+      const newFormData = { ...prev, [key]: value };
 
+      if (key === "first_name") {
+        // Dynamically set username based on the first name
+        newFormData.username = value.toLowerCase().replace(/ /g, "");
+      }
+
+      return newFormData;
+    });
+  };
   const signup = async () => {
     try {
       const response = await axios.post(
@@ -123,14 +137,27 @@ const SignupScreen = () => {
           </Animated.Text>
 
           <Animated.View
-            style={[styles.inputAndLabelCon, getAnimatedStyle("name")]}
+            style={[styles.inputAndLabelCon, getAnimatedStyle("first_name")]}
           >
-            <Text style={styles.label}>Name</Text>
+            <Text style={styles.label}>First name</Text>
             <TextInput
               style={styles.input}
-              placeholder="Full Name"
-              value={formData.name}
-              onChangeText={(text) => handleChange("name", text)}
+              placeholder="first name"
+              value={formData.first_name}
+              onChangeText={(text) => handleChange("first_name", text)}
+              autoCapitalize="words"
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.inputAndLabelCon, getAnimatedStyle("last_name")]}
+          >
+            <Text style={styles.label}>Last name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="last name"
+              value={formData.last_name}
+              onChangeText={(text) => handleChange("last_name", text)}
               autoCapitalize="words"
             />
           </Animated.View>
@@ -149,7 +176,7 @@ const SignupScreen = () => {
             />
           </Animated.View>
 
-          <Animated.View
+          {/* <Animated.View
             style={[styles.inputAndLabelCon, getAnimatedStyle("username")]}
           >
             <Text style={styles.label}>Username</Text>
@@ -160,7 +187,7 @@ const SignupScreen = () => {
               onChangeText={(text) => handleChange("username", text)}
               autoCapitalize="none"
             />
-          </Animated.View>
+          </Animated.View> */}
 
           <Animated.View
             style={[styles.inputAndLabelCon, getAnimatedStyle("password")]}
