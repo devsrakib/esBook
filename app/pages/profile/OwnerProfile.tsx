@@ -286,8 +286,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import useApiHook from "@/hooks/all_api_hooks";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { radius } from "@/constants/sizes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OwnerProfile = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -302,6 +303,7 @@ const OwnerProfile = () => {
     phone: "",
   });
 
+  const router = useRouter();
   const { data: OwnerData } = useApiHook("owners/");
   const db = useSQLiteContext();
   const updateButtonWidth = useSharedValue(0); // Starts hidden
@@ -397,6 +399,18 @@ const OwnerProfile = () => {
     width: `${logoutButtonWidth.value}%`,
   }));
 
+  const logout = async () => {
+    try {
+      // Clear the access token from AsyncStorage
+      await AsyncStorage.removeItem("access_token");
+
+      // Navigate to the signup page
+      router.replace("/pages/signUp/signUp");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={[styles.container]}>
       <View style={styles.profileContainer}>
@@ -471,11 +485,12 @@ const OwnerProfile = () => {
         </Animated.View>
 
         <Animated.View style={[styles.animatedButton, logoutButtonStyle]}>
-          <Link href={"/pages/login/Login"} asChild>
-            <TouchableOpacity style={styles.logoutButton}>
-              <Text style={styles.logout}>Log out</Text>
-            </TouchableOpacity>
-          </Link>
+          <TouchableOpacity
+            onPress={() => logout()}
+            style={styles.logoutButton}
+          >
+            <Text style={styles.logout}>Log out</Text>
+          </TouchableOpacity>
         </Animated.View>
       </View>
     </ScrollView>
