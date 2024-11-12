@@ -1,3 +1,6 @@
+import { Colors } from "@/constants/Colors";
+import { radius } from "@/constants/sizes";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { View, Text, Animated, StyleSheet, Dimensions } from "react-native";
 
@@ -7,12 +10,16 @@ const BottomToast = ({
   message,
   visible,
   duration = 3000,
+  bg_color,
 }: {
   message: string;
-  visible: boolean;
+  visible?: boolean;
   duration?: number;
+  bg_color?: string;
 }) => {
   const [animation] = useState(new Animated.Value(0));
+
+  console.log(visible, ";;;;;;;");
 
   useEffect(() => {
     if (visible) {
@@ -43,8 +50,15 @@ const BottomToast = ({
 
   return (
     <Animated.View
-      style={[styles.toastContainer, { transform: [{ translateY }] }]}
+      style={[
+        styles.toastContainer,
+        {
+          transform: [{ translateY }],
+          backgroundColor: visible ? bg_color : Colors.VeroneseGreen,
+        },
+      ]}
     >
+      <AntDesign name="infocirlce" size={20} color={Colors.white} />
       <Text style={styles.toastText}>{message}</Text>
     </Animated.View>
   );
@@ -54,14 +68,17 @@ const styles = StyleSheet.create({
   toastContainer: {
     position: "absolute",
     bottom: 40,
-    left: width * 0.1,
-    width: width * 0.8,
+    // left: width * 0.1,
+    width: "80%",
+    alignSelf: "center",
     padding: 10,
-    backgroundColor: "#333",
-    borderRadius: 10,
+    // backgroundColor: "#333",
+    borderRadius: radius.small,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
+    gap: 20,
     elevation: 5,
+    flexDirection: "row",
   },
   toastText: {
     color: "#fff",

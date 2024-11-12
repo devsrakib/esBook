@@ -31,7 +31,8 @@ import BottomToast from "@/components/UI/shared/CustomModal";
 type FieldKeys = "name" | "email" | "password" | "password2";
 
 const SignupScreen = () => {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<any>({});
+  const [isError, setIsError] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -86,14 +87,28 @@ const SignupScreen = () => {
         "http://10.0.2.2:8000/api/v1/user/register/",
         formData
       );
-      console.log("Response:", response);
+
+      // console.log("Response:", response);
 
       if (response.status === 201) {
+        const { access, refresh } = response?.data?.token;
+
+        // // Save tokens in AsyncStorage
+        await AsyncStorage.setItem("access_token", access);
+        await AsyncStorage.setItem("refresh_token", refresh);
+
         Alert.alert("Signup Successful", "Welcome!");
       }
     } catch (error: any) {
-      console.error("Signup error:", error.response?.data || error.message);
-      setErrorMessage(error.response?.data || error.message);
+      const errorData = error?.response?.data;
+      if (errorData?.errors) {
+        // Extract the first error message dynamically
+        const firstKey = Object.keys(errorData?.errors)[0];
+        setErrorMessage(errorData?.errors[firstKey][0]);
+        setIsError(true);
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
     }
   };
 
@@ -104,6 +119,8 @@ const SignupScreen = () => {
       opacity: fieldOpacities[field].value,
       transform: [{ translateY: fieldYPositions[field].value }],
     }));
+
+  // console.log(errorMessage);
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
@@ -150,6 +167,7 @@ const SignupScreen = () => {
               onChangeText={(text) => handleChange("email", text)}
               keyboardType="email-address"
               autoCapitalize="none"
+              onKeyPress={() => setIsError(false)}
             />
           </Animated.View>
 
@@ -163,6 +181,7 @@ const SignupScreen = () => {
               value={formData.password}
               onChangeText={(text) => handleChange("password", text)}
               autoCapitalize="none"
+              secureTextEntry
             />
           </Animated.View>
 
@@ -194,7 +213,12 @@ const SignupScreen = () => {
           </Link>
         </View>
       </ScrollView>
-      <BottomToast message={errorMessage} visible={true} />
+      <BottomToast
+        message={errorMessage}
+        visible={isError}
+        bg_color={Colors.red}
+      />
+      {/* <BottomToast message={errorMessage} visible={!!errorMessage} /> */}
     </View>
   );
 };
@@ -215,6 +239,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingBottom: 20,
     marginTop: 80,
+    marginBottom: 20,
   },
   input: {
     width: "100%",

@@ -15,46 +15,46 @@ const InitialLayout = () => {
   const [initialRouteName, setInitialRouteName] = useState<any>();
   const router = useRouter();
 
-  useEffect(() => {
-    const initialize = async () => {
-      try {
-        const response = await axios.get(apiUrl + "owners");
-        const db = await openDatabaseAsync("database.db");
-        await migrateDbIfNeeded(db);
+  // useEffect(() => {
+  //   const initialize = async () => {
+  //     try {
+  //       // const response = await axios.get(apiUrl + "owners");
+  //       // const db = await openDatabaseAsync("database.db");
+  //       // await migrateDbIfNeeded(db);
 
-        // const result = await getOwnerProfile(db);
-        // const user_data = result?.length > 0;
+  //       // const result = await getOwnerProfile(db);
+  //       // const user_data = result?.length > 0;
 
-        const user_data = response?.data?.results?.length > 0;
-        // Determine the initial route based on profile data
-        const routeName = user_data ? "/(tabs)" : "/";
-        setInitialRouteName(routeName);
+  //       // const user_data = response?.data?.results?.length > 0;
+  //       // Determine the initial route based on profile data
+  //       // const routeName = user_data ? "/(tabs)" : "/";
+  //       const routeName = "/(tabs)";
+  //       setInitialRouteName(routeName);
+  //       setIsLoading(false);
 
-        // Hide splash screen after initialization
-        await SplashScreen.hideAsync();
-      } catch (error) {
-        // Fallback route to "index" if there's an error
-        setInitialRouteName("/(tabs)");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    initialize();
-  }, [initialRouteName]);
+  //       // Hide splash screen after initialization
+  //       await SplashScreen.hideAsync();
+  //     } catch (error) {
+  //       // Fallback route to "index" if there's an error
+  //       setInitialRouteName("/(tabs)");
+  //     }
+  //   };
+  //   initialize();
+  // }, [initialRouteName]);
 
-  useEffect(() => {
-    if (!isLoading && initialRouteName) {
-      router.replace(initialRouteName);
-    }
-  }, [isLoading, initialRouteName, router]);
+  // useEffect(() => {
+  //   if (!isLoading && initialRouteName) {
+  //     router.replace(initialRouteName);
+  //   }
+  // }, [isLoading, initialRouteName, router]);
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+  //       <ActivityIndicator size="large" />
+  //     </View>
+  //   );
+  // }
 
   // Render the navigation stack once the initial route is determined
   return (
