@@ -318,25 +318,33 @@ const useLogin = () => {
   );
 
   const login = async () => {
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    try {
-      const response = await axios
-        .post("http://10.0.2.2:8000/api/v1/user/login/", formData)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch();
-      console.log(JSON.stringify(formData));
+    // const formData = new FormData();
+    // formData.append("username", username);
+    // formData.append("password", password);
+    const formData = {
+      username: username,
+      password: password,
+    };
+    // console.log(
+    //   "FormData:",
+    //   formData.get("username"),
+    //   formData.get("password")
+    // );
 
-      // if (response.status === 200) {
-      //   // const { access, refresh } = response.data;
-      //   // await AsyncStorage.setItem("accessToken", access);
-      //   // await AsyncStorage.setItem("refreshToken", refresh);
-      //   // Alert.alert("Login Successful", "Welcome back!");
-      //   console.log(response.data, ";;;;;;;;");
-      // }
+    console.log(formData);
+
+    try {
+      const response = await axios.post(
+        "http://10.0.2.2:8000/api/v1/user/login/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log(response.data);
     } catch (error) {
       console.error("Login error:", error);
       Alert.alert("Login Failed", "Invalid username or password");
@@ -347,7 +355,7 @@ const useLogin = () => {
 };
 
 const LoginScreen = () => {
-  const { username, password, setPassword, handleInput, login } = useLogin();
+  const { setPassword, handleInput, login } = useLogin();
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -424,8 +432,6 @@ const LoginScreen = () => {
       }),
     []
   );
-
-  const CustomInput = Animated.createAnimatedComponent(TextInput);
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>

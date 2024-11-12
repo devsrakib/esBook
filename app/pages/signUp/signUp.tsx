@@ -24,45 +24,40 @@ import Animated, {
   withTiming,
   FadeInDown,
 } from "react-native-reanimated";
+import BottomInfoModal from "@/components/UI/shared/CustomModal";
+import BottomToast from "@/components/UI/shared/CustomModal";
 
 // Define type for the fields
-type FieldKeys = "first_name" | "last_name" | "email" | "username" | "password";
+type FieldKeys = "name" | "email" | "password" | "password2";
 
 const SignupScreen = () => {
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
     email: "",
-    username: "",
+    name: "",
     password: "",
+    password2: "",
+    tc: true,
   });
 
   // Initialize shared values for animations
   const fieldYPositions: Record<FieldKeys, Animated.SharedValue<number>> = {
-    first_name: useSharedValue(0),
-    last_name: useSharedValue(0),
     email: useSharedValue(0),
-    username: useSharedValue(0),
+    name: useSharedValue(0),
     password: useSharedValue(0),
+    password2: useSharedValue(0),
   };
 
   const fieldOpacities: Record<FieldKeys, Animated.SharedValue<number>> = {
-    first_name: useSharedValue(0),
-    last_name: useSharedValue(0),
     email: useSharedValue(0),
-    username: useSharedValue(0),
+    name: useSharedValue(0),
     password: useSharedValue(0),
+    password2: useSharedValue(0),
   };
 
   useEffect(() => {
     const animateFields = async () => {
-      const fields: FieldKeys[] = [
-        "first_name",
-        "last_name",
-        "email",
-        "username",
-        "password",
-      ];
+      const fields: FieldKeys[] = ["email", "name", "password", "password2"];
 
       fields.forEach((field, index) => {
         fieldOpacities[field].value = withDelay(
@@ -82,28 +77,23 @@ const SignupScreen = () => {
   const handleChange = (key: FieldKeys, value: string) => {
     setFormData((prev) => {
       const newFormData = { ...prev, [key]: value };
-
-      if (key === "first_name") {
-        // Dynamically set username based on the first name
-        newFormData.username = value.toLowerCase().replace(/ /g, "");
-      }
-
       return newFormData;
     });
   };
   const signup = async () => {
     try {
       const response = await axios.post(
-        "http://10.0.2.2:8000/api/v1/users/register/",
+        "http://10.0.2.2:8000/api/v1/user/register/",
         formData
       );
+      console.log("Response:", response);
 
       if (response.status === 201) {
         Alert.alert("Signup Successful", "Welcome!");
       }
-    } catch (error) {
-      console.error("Signup error:", error);
-      Alert.alert("Signup Failed", "Please check your inputs and try again.");
+    } catch (error: any) {
+      console.error("Signup error:", error.response?.data || error.message);
+      setErrorMessage(error.response?.data || error.message);
     }
   };
 
@@ -137,28 +127,15 @@ const SignupScreen = () => {
           </Animated.Text>
 
           <Animated.View
-            style={[styles.inputAndLabelCon, getAnimatedStyle("first_name")]}
+            style={[styles.inputAndLabelCon, getAnimatedStyle("name")]}
           >
-            <Text style={styles.label}>First name</Text>
+            <Text style={styles.label}>Full name</Text>
             <TextInput
               style={styles.input}
-              placeholder="first name"
-              value={formData.first_name}
-              onChangeText={(text) => handleChange("first_name", text)}
-              autoCapitalize="words"
-            />
-          </Animated.View>
-
-          <Animated.View
-            style={[styles.inputAndLabelCon, getAnimatedStyle("last_name")]}
-          >
-            <Text style={styles.label}>Last name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="last name"
-              value={formData.last_name}
-              onChangeText={(text) => handleChange("last_name", text)}
-              autoCapitalize="words"
+              placeholder="full name"
+              value={formData.name}
+              onChangeText={(text) => handleChange("name", text)}
+              // autoCapitalize="words"
             />
           </Animated.View>
 
@@ -176,28 +153,28 @@ const SignupScreen = () => {
             />
           </Animated.View>
 
-          {/* <Animated.View
-            style={[styles.inputAndLabelCon, getAnimatedStyle("username")]}
-          >
-            <Text style={styles.label}>Username</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              value={formData.username}
-              onChangeText={(text) => handleChange("username", text)}
-              autoCapitalize="none"
-            />
-          </Animated.View> */}
-
           <Animated.View
             style={[styles.inputAndLabelCon, getAnimatedStyle("password")]}
           >
-            <Text style={styles.label}>Password</Text>
+            <Text style={styles.label}>password</Text>
             <TextInput
               style={styles.input}
-              placeholder="Password"
+              placeholder="password"
               value={formData.password}
               onChangeText={(text) => handleChange("password", text)}
+              autoCapitalize="none"
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={[styles.inputAndLabelCon, getAnimatedStyle("password2")]}
+          >
+            <Text style={styles.label}>Confirm Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              value={formData.password2}
+              onChangeText={(text) => handleChange("password2", text)}
               secureTextEntry
             />
           </Animated.View>
@@ -217,6 +194,7 @@ const SignupScreen = () => {
           </Link>
         </View>
       </ScrollView>
+      <BottomToast message={errorMessage} visible={true} />
     </View>
   );
 };
