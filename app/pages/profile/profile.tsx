@@ -117,6 +117,7 @@ const Profile = () => {
       }
     } catch (error) {}
   }, []);
+  console.log(userData.profile_photo);
 
   return (
     <ScrollView
@@ -137,17 +138,13 @@ const Profile = () => {
         <Text style={styles.headerText}>Added Phone book</Text>
       </View>
       <View style={styles.profileContainer}>
-        {userData?.profilePhoto ? (
+        <View style={styles.imageCon}>
           <Image
-            source={{ uri: userData?.profilePhoto }}
+            source={{ uri: userData?.profile_photo }}
             style={styles.profileImage}
+            defaultSource={require("../../../assets/images/placeholder.jpeg")}
           />
-        ) : (
-          <Image
-            source={require("../../../assets/images/placeholder.jpeg")}
-            style={styles.profileImage}
-          />
-        )}
+        </View>
         <Text style={styles.profileName}>{userData?.name}</Text>
       </View>
       <View style={styles.infoContainer}>
@@ -203,6 +200,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.mainColor,
     paddingBottom: 24,
+  },
+  imageCon: {
+    borderWidth: 1,
+    borderColor: Colors.white,
+    borderRadius: 50,
   },
   profileImage: {
     width: 100,
