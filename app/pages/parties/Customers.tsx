@@ -18,6 +18,7 @@ import BottomToast from "@/components/UI/shared/CustomModal";
 const Customers = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState<boolean>(false);
   const [customerData, setCustomerData] = useState<CustomerData>({
     profile_photo: selectedImage ? selectedImage : "",
     name: "",
@@ -75,13 +76,24 @@ const Customers = () => {
       // Check if the response status is 201 (created)
       if (createCustomer.status === 201) {
         // Navigate or show a success message
-        setMessage("customer create successfully");
+        // router.push('/pages/')
+        setMessage("customer created successfully");
+        setIsError(true);
+
         // Optionally, navigate to another screen or update your UI
       }
     } catch (error: any) {
-      // Handle any errors that occur during the request
-      // ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);
-      console.log(error?.message, ";;;;;;;;");
+      const errorData = error?.response?.data;
+
+      if (errorData) {
+        const firstKey = Object.keys(errorData)[0];
+        const errorMessage = errorData[firstKey][0];
+        setMessage(`${firstKey}: ${errorMessage}`);
+        setIsError(true);
+      } else {
+        setMessage("An unexpected error occurred.");
+        setIsError(true);
+      }
     }
   };
 
@@ -102,7 +114,7 @@ const Customers = () => {
           onPress={handleSave}
         />
       </View>
-      <BottomToast message={message} visible={true} bg_color={Colors.gray} />
+      <BottomToast message={message} visible={isError} bg_color={Colors.red} />
     </ScrollView>
   );
 };

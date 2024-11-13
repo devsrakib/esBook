@@ -10,7 +10,7 @@ const BottomToast = ({
   message,
   visible,
   duration = 3000,
-  bg_color,
+  bg_color = Colors.gray,
 }: {
   message: string;
   visible?: boolean;
@@ -18,8 +18,6 @@ const BottomToast = ({
   bg_color?: string;
 }) => {
   const [animation] = useState(new Animated.Value(0));
-
-  console.log(visible, ";;;;;;;");
 
   useEffect(() => {
     if (visible) {
