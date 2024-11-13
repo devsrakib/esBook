@@ -86,6 +86,7 @@ import FormatDate from "@/utils/FormatDate";
 import getInitials from "@/utils/namePlaceholder";
 import CustomerViewModal from "@/components/UI/parties/CustomerViewModal";
 import Cart from "./Cart";
+import useApiHook from "@/hooks/all_api_hooks";
 
 const CustomerView = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -107,10 +108,13 @@ const CustomerView = () => {
     amount: amount,
     description: description,
   };
-
+  const { data } = useApiHook(`suppliers/${router?.id}`);
   const getCustomer = async () => {
     if (router?.text === "Supplier") {
-      const supplier = await getSupplierById(db, router?.id);
+      // const supplier = await getSupplierById(db, router?.id);
+      const supplier = data;
+      console.log(supplier);
+
       setSupplier(supplier);
     } else if (router?.text === "Customer") {
       const result = await getCustomerById(

@@ -23,6 +23,9 @@ import {
   getSupplierById,
 } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
+import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
+import axios from "axios";
+import { getToken } from "@/utils/getToken";
 
 const Profile = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -30,7 +33,7 @@ const Profile = () => {
   const router = useLocalSearchParams<any>();
   const db = useSQLiteContext();
   const navigate: any = useRouter();
-
+  const { data } = useApiHook(`suppliers/${router?.id}`);
   const infoData = [
     {
       icon: <Ionicons name="person-outline" size={18} color="gray" />,
@@ -50,54 +53,67 @@ const Profile = () => {
     {
       icon: <Ionicons name="call-outline" size={18} color="gray" />,
       label: "Phone",
-      value: userData?.phoneNumber,
+      value: userData?.phone,
     },
   ];
 
   console.log(router);
+  console.log(data, "from profile");
 
   useEffect(() => {
     async function getCustomer() {
       try {
-        const customer = await getCustomerById(db, router?.id);
-        const supplier = await getSupplierById(db, router?.id);
-        if (customer && router?.text === "Customer") {
-          setUserData(customer);
-        } else if (supplier && router?.text === "Supplier") {
-          setUserData(supplier);
+        // const customer = await getCustomerById(db, router?.id);
+        // const customer = await getCustomerById(db, router?.id);
+        // const supplier = await getSupplierById(db, router?.id);
+        if (router?.text === "Customer") {
+          setUserData(data);
+        } else if (router?.text === "Supplier") {
+          setUserData(data);
         }
       } catch {}
     }
     if (router?.id) {
       getCustomer();
     }
-  }, [db, router?.id]);
+  }, [router, router?.id]);
   console.log(router?.text, ";;;;;;;;;");
 
   const handleDeleteCustomer = useCallback(async () => {
+    const token = await getToken();
     try {
       if (router?.text === "Customer") {
-        const result = await deleteCustomerById(db, userData?.id);
-        if (result?.success) {
-          console.log(result?.success);
-          ToastAndroid.showWithGravity(
-            result?.message,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-          // navigate.push(`/(tabs)/${router.deleteFrom}`);
-          navigate.push(`/(tabs)/parties`);
-        }
-      } else if (router?.text === "Supplier") {
-        const result = await deleteSupplierById(db, userData?.id);
-        console.log(result?.success);
-        ToastAndroid.showWithGravity(
-          result?.message,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
+        // const result = await deleteCustomerById(db, userData?.id);
+        const deleteData = await axios.delete(
+          apiUrl + `suppliers/${router?.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        navigate.push(`/(tabs)/parties`);
-        console.log(router.deleteFrom);
+        console.log(deleteData);
+
+        // if (?.success) {
+        //   console.log(result?.success);
+        //   ToastAndroid.showWithGravity(
+        //     result?.message,
+        //     ToastAndroid.SHORT,
+        //     ToastAndroid.CENTER
+        //   );
+        //   // navigate.push(`/(tabs)/${router.deleteFrom}`);
+        //   navigate.push(`/(tabs)/parties`);
+        // }
+      } else if (router?.text === "Supplier") {
+        // const result = await deleteSupplierById(db, userData?.id);
+        const deleteData = await axios.delete(
+          apiUrl + `suppliers/${router?.id}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       }
     } catch (error) {}
   }, []);

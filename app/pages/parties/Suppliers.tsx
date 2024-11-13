@@ -9,14 +9,20 @@ import { radius } from "@/constants/sizes";
 import { useSQLiteContext } from "expo-sqlite";
 import { createSuppliers, SupplierData } from "@/databases/Database";
 import { useRouter } from "expo-router";
+import { getToken } from "@/utils/getToken";
+import axios from "axios";
+import { apiUrl } from "@/hooks/all_api_hooks";
+import BottomToast from "@/components/UI/shared/CustomModal";
 
 const Suppliers = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState<boolean>(false);
   const [supplierData, setSupplierData] = useState<SupplierData>({
-    profilePhoto: selectedImage ? selectedImage : "",
+    profile_photo: selectedImage ? selectedImage : "",
     name: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
     address: "",
     createdAt: "",
   });
@@ -28,15 +34,64 @@ const Suppliers = () => {
       profilePhoto: selectedImage ? selectedImage : "",
     }));
   }, [selectedImage]);
+  // console.log(selectedImage);
+
   const handleSave = async () => {
     try {
-      const result = await createSuppliers(db, supplierData);
-      if (result.success) {
-        navigate.push("/(tabs)/parties");
-        ToastAndroid.show("Supplier created successfully!", ToastAndroid.SHORT);
+      const token = await getToken();
+
+      if (!token) {
+        ToastAndroid.show(
+          "You must be logged in to create a customer!",
+          ToastAndroid.SHORT
+        );
+        return;
       }
-    } catch (error) {
-      ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);
+
+      // Create FormData for the request
+      const formData = new FormData();
+      formData.append("name", supplierData.name);
+      formData.append("email", supplierData.email);
+      formData.append("phone", supplierData.phone);
+      formData.append("address", supplierData.address);
+
+      // Ensure `selectedImage` is a valid file object
+      if (selectedImage) {
+        formData.append("profile_photo", {
+          uri: selectedImage,
+          type: "image/jpeg", // Adjust the MIME type as needed
+          name: "profile_photo.jpg", // Set a file name
+        });
+      }
+
+      // Send the POST request with FormData
+      const response = await axios.post(apiUrl + "suppliers/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // Set content type
+        },
+      });
+
+      if (response.status === 201) {
+        setMessage("Customer created successfully");
+        setIsError(false);
+        console.log(response?.data, "Response Data");
+      }
+    } catch (error: any) {
+      const errorData = error?.response?.data;
+      console.log("Error:", error?.message);
+
+      if (errorData) {
+        const firstKey = Object.keys(errorData)[0];
+        const errorMessage = errorData[firstKey][0];
+        console.log(`${firstKey}: ${errorMessage}`);
+
+        setMessage(`${firstKey}: ${errorMessage}`);
+        setIsError(true);
+      } else {
+        setMessage("An unexpected error occurred.");
+        setIsError(true);
+      }
     }
   };
 
@@ -59,6 +114,7 @@ const Suppliers = () => {
           }}
         />
       </View>
+      <BottomToast message={message} visible={isError} />
     </ScrollView>
   );
 };

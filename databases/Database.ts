@@ -1314,11 +1314,11 @@ export interface CustomerData {
 }
 
 export interface SupplierData {
-  profilePhoto: string;
+  profile_photo: string;
   name: string;
   email: string;
   address: string;
-  phoneNumber: string;
+  phone: string;
   createdAt?: string;
 }
 

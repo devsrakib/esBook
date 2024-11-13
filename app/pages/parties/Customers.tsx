@@ -38,17 +38,10 @@ const Customers = () => {
   }, [selectedImage]);
 
   const handleSave = async () => {
-    console.log(customerData); // Log the customer data
-    console.log(apiUrl + "customers/"); // Log the API URL
-
     try {
       // Get the token from AsyncStorage
       const token = await getToken();
-      console.log(await token, "token");
-
-      // Check if token exists
       if (!token) {
-        console.log("No token found, cannot create customer.");
         ToastAndroid.show(
           "You must be logged in to create a customer!",
           ToastAndroid.SHORT
@@ -72,15 +65,9 @@ const Customers = () => {
           },
         }
       );
-
-      // Check if the response status is 201 (created)
       if (createCustomer.status === 201) {
-        // Navigate or show a success message
-        // router.push('/pages/')
         setMessage("customer created successfully");
         setIsError(true);
-
-        // Optionally, navigate to another screen or update your UI
       }
     } catch (error: any) {
       const errorData = error?.response?.data;

@@ -53,7 +53,7 @@ const Parties = () => {
     data: supplierData,
     loading: supplierLoading,
     error: supplierError,
-  } = useApiHook("suppliers");
+  } = useApiHook("suppliers/");
   const db = useSQLiteContext();
 
   useEffect(() => {
