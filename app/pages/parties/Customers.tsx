@@ -12,9 +12,12 @@ import { useRouteNode } from "expo-router/build/Route";
 import { router, useRouter } from "expo-router";
 import axios from "axios";
 import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
+import { getToken } from "@/utils/getToken";
+import BottomToast from "@/components/UI/shared/CustomModal";
 
 const Customers = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
+  const [message, setMessage] = useState("");
   const [customerData, setCustomerData] = useState<CustomerData>({
     profile_photo: selectedImage ? selectedImage : "",
     name: "",
@@ -24,9 +27,6 @@ const Customers = () => {
   });
 
   const db = useSQLiteContext();
-  const { data: getOwner } = useApiHook("owners");
-  const ownerData = getOwner?.results[0];
-  console.log(ownerData?.id);
 
   const navigate = useRouter();
   useEffect(() => {
@@ -37,37 +37,51 @@ const Customers = () => {
   }, [selectedImage]);
 
   const handleSave = async () => {
-    // console.log("clicked customer");
-    console.log(customerData);
-    console.log(apiUrl + "customers/");
+    console.log(customerData); // Log the customer data
+    console.log(apiUrl + "customers/"); // Log the API URL
 
     try {
-      const createCustomer = await axios.post(apiUrl + "customers/", {
-        name: customerData.name,
-        email: customerData.email,
-        phone: customerData.phone,
-        address: customerData.address,
-        profile_photo: selectedImage, // optional, can be null
-        owner: ownerData?.id,
-      });
+      // Get the token from AsyncStorage
+      const token = await getToken();
+      console.log(await token, "token");
 
-      // const result = await createCustomers(db, customerData);
-      // console.log(result?.id);
-
-      if (createCustomer.status === 201) {
-        console.log(createCustomer, "customer created");
-        // router.push("/(tabs)");
+      // Check if token exists
+      if (!token) {
+        console.log("No token found, cannot create customer.");
+        ToastAndroid.show(
+          "You must be logged in to create a customer!",
+          ToastAndroid.SHORT
+        );
+        return; // If no token, exit early
       }
 
-      // if (result.success) {
-      //   // navigate.push("/(tabs)/parties");
-      //   ToastAndroid.show("Customer created successfully!", ToastAndroid.SHORT);
-      // } else if (!result.success) {
-      //   ToastAndroid.show(result.message, ToastAndroid.SHORT);
-      // }
-    } catch (error) {
-      ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);
-      console.log(error?.message);
+      // Sending the POST request to create the customer
+      const createCustomer = await axios.post(
+        apiUrl + "customers/",
+        {
+          name: customerData.name,
+          email: customerData.email,
+          phone: customerData.phone,
+          address: customerData.address,
+          profile_photo: selectedImage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Sending the token to authenticate the user
+          },
+        }
+      );
+
+      // Check if the response status is 201 (created)
+      if (createCustomer.status === 201) {
+        // Navigate or show a success message
+        setMessage("customer create successfully");
+        // Optionally, navigate to another screen or update your UI
+      }
+    } catch (error: any) {
+      // Handle any errors that occur during the request
+      // ToastAndroid.show("Something went wrong!😭", ToastAndroid.SHORT);
+      console.log(error?.message, ";;;;;;;;");
     }
   };
 
@@ -88,6 +102,7 @@ const Customers = () => {
           onPress={handleSave}
         />
       </View>
+      <BottomToast message={message} visible={true} bg_color={Colors.gray} />
     </ScrollView>
   );
 };

@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers } from "@/databases/Database";
 import AllCustomers from "@/components/UI/AllCustomers";
+import useApiHook from "@/hooks/all_api_hooks";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -14,11 +15,14 @@ const Page = () => {
   const db = useSQLiteContext();
   useEffect(() => {
     async function setup() {
-      const result = await getCustomers(db);
-      setCustomer(result);
+      // const result = await getCustomers(db);
+      const { data, loading } = useApiHook("customers/");
+      setCustomer(data);
     }
     setup();
   }, []);
+
+  console.log(customer, "customer data");
 
   return (
     <View

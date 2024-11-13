@@ -30,4 +30,5 @@ export const Colors = {
   background2: "#E9EAEC",
   lightGray: "#E5EEFE",
   shadow: "#7F7F7F",
+  gray: "#333333",
 };

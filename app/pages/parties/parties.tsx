@@ -8,6 +8,7 @@ import {
   FlatList,
   TextInput,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -47,7 +48,7 @@ const Parties = () => {
   const [focusInput, setFocusInput] = useState<boolean | null>(null);
   const routerData = useLocalSearchParams();
 
-  const { data: CustomerData, loading, error } = useApiHook("customers");
+  const { data: CustomerData, loading, error } = useApiHook("customers/");
   const {
     data: supplierData,
     loading: supplierLoading,
@@ -83,16 +84,17 @@ const Parties = () => {
   // Memoize filtered customers/suppliers based on the selected index
   const filteredCustomersSuppliers = useMemo(() => {
     if (selectedIndex === 0) {
-      return CustomerData?.results?.filter((customer) =>
+      return CustomerData?.data?.filter((customer) =>
         customer?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     } else if (selectedIndex === 1) {
-      return supplierData?.results?.filter((supplier) =>
+      return supplierData?.data?.filter((supplier) =>
         supplier?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     return [];
   }, [selectedIndex, searchTerm, customers, suppliers]);
+  console.log(selectedIndex);
 
   // Handle segment change (Customer/Supplier tab switch)
   const handleSegment = useCallback((val: number) => {
@@ -171,6 +173,9 @@ const Parties = () => {
             // flex: 1,
             marginTop: 20,
             paddingHorizontal: 20,
+            // backgroundColor: "red",
+            // height: Dimensions.get("screen").height,
+            flex: 1,
           }}
           data={filteredCustomersSuppliers}
           renderItem={({ item }) => {
