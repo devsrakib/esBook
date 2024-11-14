@@ -57,9 +57,6 @@ const Profile = () => {
     },
   ];
 
-  console.log(router);
-  console.log(data, "from profile");
-
   useEffect(() => {
     async function getCustomer() {
       try {
@@ -117,7 +114,6 @@ const Profile = () => {
       }
     } catch (error) {}
   }, []);
-  console.log(userData.profile_photo);
 
   return (
     <ScrollView

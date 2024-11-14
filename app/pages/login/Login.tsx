@@ -33,7 +33,6 @@ const useLogin = () => {
   const [errorMessage, setErrorMessage] = useState<any>({});
   const [isError, setIsError] = useState<boolean>(false);
   const router = useRouter();
-  // Debounced input handler to reduce re-renders
   const handleInput = useCallback(
     _.debounce((e) => setEmail(e), 300),
     []
@@ -44,9 +43,6 @@ const useLogin = () => {
       email: email,
       password: password,
     };
-
-    console.log(formData);
-
     try {
       const response = await axios.post(
         "http://10.0.2.2:8000/api/v1/user/login/",
@@ -57,11 +53,8 @@ const useLogin = () => {
           },
         }
       );
-
-      // console.log(response.status);
       if (response.status === 200) {
         const { access, refresh } = response?.data?.token;
-
         await AsyncStorage.setItem("access_token", access);
         await AsyncStorage.setItem("refresh_token", refresh);
         if (access) {
