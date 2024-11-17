@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   View,
   Text,
@@ -6,6 +7,9 @@ import {
   StyleSheet,
   Linking,
 } from "react-native";
+=======
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 import React from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Link } from "expo-router";
@@ -13,6 +17,7 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
+<<<<<<< HEAD
 import useApiHook from "@/hooks/all_api_hooks";
 
 const ProfileView = ({ id }: { id: string }) => {
@@ -28,6 +33,10 @@ const ProfileView = ({ id }: { id: string }) => {
       );
     }
   };
+=======
+
+const ProfileView = () => {
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   return (
     <Animated.View
       entering={FadeInDown.delay(50).duration(400).damping(80).springify()}
@@ -51,6 +60,7 @@ const ProfileView = ({ id }: { id: string }) => {
               .springify()}
             style={styles.shopName}
           >
+<<<<<<< HEAD
             {supplier?.store_name}
           </Animated.Text>
           <Link
@@ -62,6 +72,11 @@ const ProfileView = ({ id }: { id: string }) => {
             }}
             asChild
           >
+=======
+            Farvez and brothers
+          </Animated.Text>
+          <Link href={"/pages/product/SupplierEdit"} asChild>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
             <TouchableOpacity style={styles.editCon}>
               <FontAwesome5
                 name="user-edit"
@@ -77,6 +92,7 @@ const ProfileView = ({ id }: { id: string }) => {
           entering={FadeInDown.delay(100).duration(400).damping(80).springify()}
           style={styles.owner}
         >
+<<<<<<< HEAD
           pro: {supplier?.name}
         </Animated.Text>
 
@@ -93,13 +109,37 @@ const ProfileView = ({ id }: { id: string }) => {
             <Ionicons name="call" size={16} color={Colors.mainColor} />
           </TouchableOpacity>
         </Animated.View>
+=======
+          pro: sanaullah donu
+        </Animated.Text>
+
+        {/* Phone Number with Call Icon */}
+        <View style={styles.callIconCon}>
+          <Animated.Text
+            entering={FadeInDown.delay(150)
+              .duration(400)
+              .damping(80)
+              .springify()}
+            style={styles.phoneNumber}
+          >
+            Phone: 01601113299
+          </Animated.Text>
+          <TouchableOpacity style={styles.callIcon}>
+            <Ionicons name="call" size={16} color={Colors.mainColor} />
+          </TouchableOpacity>
+        </View>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
         {/* Location */}
         <Animated.Text
           entering={FadeInDown.delay(200).duration(400).damping(80).springify()}
           style={styles.location}
         >
+<<<<<<< HEAD
           Location: {supplier?.address}
+=======
+          Location: chaprashir hat, poschim bajar
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         </Animated.Text>
       </View>
     </Animated.View>
@@ -117,7 +157,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.small,
     shadowColor: Colors.darkCharcoal,
     elevation: 10,
+<<<<<<< HEAD
     marginHorizontal: 16,
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   profileCon: {
     borderRadius: radius.small,

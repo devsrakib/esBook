@@ -12,7 +12,10 @@ import TabComponent from "@/components/UI/CustomerTab";
 import All from "./All";
 import Today from "./Today";
 import Upcoming from "./Upcoming";
+<<<<<<< HEAD
 import Animated, { FadeInDown } from "react-native-reanimated";
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -36,14 +39,22 @@ const Page = () => {
       />
       {/* main body section */}
       <View style={styles.bodySection}>
+<<<<<<< HEAD
         <Animated.View style={styles.topSection}>
+=======
+        <View style={styles.topSection}>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           <MoneySection />
           <TabComponent
             tabs={tabs}
             setActiveTab={setActiveTab}
             activeTab={activeTab}
           />
+<<<<<<< HEAD
         </Animated.View>
+=======
+        </View>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         <View style={styles.componentSection}>
           {activeTab === 0 ? (
             <All />

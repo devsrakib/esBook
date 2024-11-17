@@ -93,7 +93,11 @@ const LoginScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const modalHeight = useSharedValue(200);
+<<<<<<< HEAD
   const router = useRouter();
+=======
+
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   useEffect(() => {
     modalHeight.value = withTiming(showPasswordFields ? 400 : 260, {
       duration: 500,
@@ -113,12 +117,16 @@ const LoginScreen = () => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
+<<<<<<< HEAD
         container: {
           flex: 1,
           backgroundColor: Colors.background,
           alignItems: "center",
           justifyContent: "center",
         },
+=======
+        container: { flex: 1, backgroundColor: Colors.background },
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         inputFieldCon: {
           width: "85%",
           alignSelf: "center",
@@ -129,6 +137,10 @@ const LoginScreen = () => {
           alignItems: "center",
           justifyContent: "center",
           paddingBottom: 20,
+<<<<<<< HEAD
+=======
+          marginTop: 80,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         },
         input: {
           width: "100%",
@@ -159,6 +171,7 @@ const LoginScreen = () => {
           borderTopRightRadius: 20,
           backgroundColor: Colors.white,
           paddingHorizontal: 20,
+<<<<<<< HEAD
           paddingTop: 10,
         },
         passwordFields: { marginTop: 20 },
@@ -170,12 +183,19 @@ const LoginScreen = () => {
           alignSelf: "center",
           backgroundColor: Colors.mainColor,
         },
+=======
+          paddingTop: 20,
+        },
+        passwordFields: { marginTop: 20 },
+        noAccount: { color: Colors.red, textDecorationLine: "underline" },
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       }),
     []
   );
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
+<<<<<<< HEAD
       <Stack.Screen
         options={{
           headerShown: false,
@@ -231,6 +251,21 @@ const LoginScreen = () => {
             n
           </Animated.Text>
         </View>
+=======
+      <Stack.Screen options={{ headerShown: false }} />
+      <Header
+        children="Login"
+        backgroundColor={Colors.mainColor}
+        textColor={Colors.white}
+      />
+      <View style={styles.inputFieldCon}>
+        <Animated.Text
+          entering={FadeInDown.delay(50).springify().damping(80).stiffness(200)}
+          style={styles.loginText}
+        >
+          Login
+        </Animated.Text>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         <View style={styles.inputAndLabelCon}>
           <Animated.Text
             entering={FadeInDown.delay(100)
@@ -320,12 +355,18 @@ const LoginScreen = () => {
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setIsModalVisible(false)}
+<<<<<<< HEAD
         backdropOpacity={0.2}
         backdropColor={Colors.shadow}
         style={{ justifyContent: "flex-end", margin: 0 }}
       >
         <Animated.View style={[styles.modalContent, animatedStyle]}>
           <View style={styles.indicator} />
+=======
+        style={{ justifyContent: "flex-end", margin: 0 }}
+      >
+        <Animated.View style={[styles.modalContent, animatedStyle]}>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           <Text style={[styles.loginText, { alignSelf: "center" }]}>
             Reset Password
           </Text>

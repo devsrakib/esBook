@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   View,
   Text,
@@ -8,6 +9,10 @@ import {
   FlatList,
 } from "react-native";
 import React, { useCallback, useState } from "react";
+=======
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 import ReactNativeModal from "react-native-modal";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
@@ -15,16 +20,20 @@ import { ScrollView } from "moti";
 import useApiHook from "@/hooks/all_api_hooks";
 import { IProduct } from "@/types/product/product";
 import { ISupplier } from "@/types/interfaces/supplier.interface";
+<<<<<<< HEAD
 import ActivityIndicator from "../ActivityIndicator";
 import { Fonts } from "@/constants/Fonts";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import _ from "lodash";
 import { Ionicons } from "@expo/vector-icons";
 import EmptyState from "../EmptyState";
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 type props = {
   setVisible: Function;
   visible: boolean;
+<<<<<<< HEAD
   setSupplier: (id: string, name: string) => void;
 };
 const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
@@ -40,6 +49,13 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
     _.debounce((e) => setSearchTerm(e), 300),
     []
   );
+=======
+  setSupplier: (id: string) => void;
+};
+const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
+  const { data: supplierData, loading } = useApiHook("suppliers/");
+  console.log(supplierData);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   return (
     <ReactNativeModal
@@ -61,6 +77,7 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
     >
       <View style={styles.dropdownList}>
         <View style={styles.indicator} />
+<<<<<<< HEAD
         {loading ? (
           <ActivityIndicator />
         ) : (
@@ -130,6 +147,21 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
             </View>
           </>
         )}
+=======
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {supplierData?.data?.map((item: ISupplier, index: number) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.dropdownItem}
+              onPress={() => {
+                toggleDropdown();
+              }}
+            >
+              <Text style={styles.dropdownItemText}>{item?.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       </View>
     </ReactNativeModal>
   );
@@ -138,6 +170,7 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
 export default SupplierListModal;
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   search: {
     flexDirection: "row",
     alignItems: "center",
@@ -156,6 +189,8 @@ const styles = StyleSheet.create({
     color: Colors.text,
     height: 46,
   },
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   dropdownList: {
     borderWidth: 1,
     borderColor: Colors.border,
@@ -168,11 +203,16 @@ const styles = StyleSheet.create({
     height: 400,
   },
   dropdownItem: {
+<<<<<<< HEAD
     padding: 5,
+=======
+    padding: 15,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     borderWidth: 1,
     borderColor: Colors.mainColor,
     marginBottom: 10,
     borderRadius: radius.small,
+<<<<<<< HEAD
     flexDirection: "row",
     gap: 10,
     backgroundColor: Colors.lavender,
@@ -181,6 +221,8 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     color: Colors.black,
     fontWeight: "600",
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   dropdownItemText: {
     fontSize: 16,
@@ -195,6 +237,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 5,
   },
+<<<<<<< HEAD
   profile: {
     height: 50,
     width: 50,
@@ -203,4 +246,6 @@ const styles = StyleSheet.create({
   dropdownItemTextContainer: {
     gap: 5,
   },
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 });

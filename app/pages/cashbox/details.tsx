@@ -237,7 +237,11 @@ const page = () => {
       </ScrollView>
       <Button
         title="save"
+<<<<<<< HEAD
         radius={radius.small}
+=======
+        radius={radius.large}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         titleColor={Colors.white}
         bg={Colors.mainColor}
         onPress={() => handleInput()}

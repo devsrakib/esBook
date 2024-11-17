@@ -1,7 +1,12 @@
 {
   "expo": {
+<<<<<<< HEAD
     "name": "eBusiness",
     "slug": "eBusiness",
+=======
+    "name": "esBook",
+    "slug": "esBook",
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
@@ -10,7 +15,11 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
+<<<<<<< HEAD
       "backgroundColor": "#0E947A1A"
+=======
+      "backgroundColor": "#ffffff"
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     },
     "ios": {
       "supportsTablet": true,

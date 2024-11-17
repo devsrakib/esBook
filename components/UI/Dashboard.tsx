@@ -37,14 +37,22 @@ const Dashboard = () => {
       icon: require("../../assets/images/DUser.png"),
       quantity: customers,
       bg_color: Colors.lavender,
+<<<<<<< HEAD
       link: "/pages/cashbox/allCustomers",
+=======
+      link: "/pages/parties/parties",
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     },
     {
       text: "Total Supplier",
       icon: require("../../assets/images/DHouse.png"),
       quantity: suppliers,
       bg_color: Colors.purpleHalf,
+<<<<<<< HEAD
       link: "/pages/cashbox/allSuppliers",
+=======
+      link: "/pages/parties/parties",
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     },
     {
       text: "Total Cash",

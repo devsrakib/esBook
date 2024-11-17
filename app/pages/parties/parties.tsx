@@ -37,14 +37,23 @@ import Empty from "@/components/UI/Empty";
 import AddPartiesButton from "@/components/UI/parties/AddPartiesButton";
 import Search from "@/components/UI/parties/Search";
 import useApiHook from "@/hooks/all_api_hooks";
+<<<<<<< HEAD
 import { LinearGradient } from "expo-linear-gradient";
 import ActivityIndicator from "@/components/UI/ActivityIndicator";
 import EmptyState from "@/components/UI/EmptyState";
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 const Parties = () => {
   const { bottom, top } = useSafeAreaInsets();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+<<<<<<< HEAD
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(true);
+=======
+  const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
+  const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [focusInput, setFocusInput] = useState<boolean | null>(null);
   const routerData = useLocalSearchParams();
@@ -57,6 +66,7 @@ const Parties = () => {
   } = useApiHook("suppliers/");
   const db = useSQLiteContext();
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   const setup = async () => {
   //     if (customers.length === 0) {
@@ -70,6 +80,21 @@ const Parties = () => {
   //   };
   //   setup();
   // }, [db, customers.length, suppliers.length]); // Only fetch if lists are empty
+=======
+  useEffect(() => {
+    const setup = async () => {
+      if (customers.length === 0) {
+        const customersData = await getCustomers(db);
+        setCustomers(customersData as CustomerData[]);
+      }
+      if (suppliers.length === 0) {
+        const suppliersData = await getSuppliers(db);
+        setSuppliers(suppliersData as SupplierData[]);
+      }
+    };
+    setup();
+  }, [db, customers.length, suppliers.length]); // Only fetch if lists are empty
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   useEffect(() => {
     if (
@@ -94,7 +119,11 @@ const Parties = () => {
       );
     }
     return [];
+<<<<<<< HEAD
   }, [selectedIndex, searchTerm, CustomerData, supplierData]);
+=======
+  }, [selectedIndex, searchTerm, customers, suppliers]);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   console.log(selectedIndex);
 
   // Handle segment change (Customer/Supplier tab switch)
@@ -117,6 +146,7 @@ const Parties = () => {
         }}
       />
 
+<<<<<<< HEAD
       <LinearGradient
         colors={["#168F88", "#006B60", "#4D89A1"]}
         start={{ x: 0, y: 0 }}
@@ -132,6 +162,9 @@ const Parties = () => {
           }
           icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
         />
+=======
+      <View style={styles.topSection}>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         <View style={styles.navigationCon}>
           <TouchableOpacity
             style={[
@@ -159,7 +192,21 @@ const Parties = () => {
             <Text style={styles.navigationText}>Suppliers</Text>
           </TouchableOpacity>
         </View>
+<<<<<<< HEAD
       </LinearGradient>
+=======
+
+        <AmountCon
+          bg_image={require("../../../assets/images/amountBg-blue.png")}
+          leftAmountTColor={Colors.mainColor}
+          leftTextColor={Colors.mainColor}
+          icon1={
+            <FontAwesome name="money" size={30} color={Colors.mainColor} />
+          }
+          icon2={<FontAwesome name="money" size={30} color={Colors.white} />}
+        />
+      </View>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
       <View style={styles.bodySection}>
         {isOpenSearch && (
@@ -171,6 +218,7 @@ const Parties = () => {
         )}
         {/* <FilterAndTextSection /> */}
 
+<<<<<<< HEAD
         {loading ? (
           <ActivityIndicator />
         ) : (
@@ -205,6 +253,43 @@ const Parties = () => {
             }
           />
         )}
+=======
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 100,
+            // flex: 1,
+            marginTop: 20,
+            paddingHorizontal: 20,
+            // backgroundColor: "red",
+            // height: Dimensions.get("screen").height,
+            flex: 1,
+          }}
+          data={filteredCustomersSuppliers}
+          renderItem={({ item }) => {
+            return (
+              <Customers
+                item={item}
+                selectedIndex={selectedIndex}
+                text={selectedIndex === 0 ? "Customer" : "Supplier"}
+                deleteFrom={"parties"}
+              />
+            );
+          }}
+          ListEmptyComponent={
+            <Empty
+              text="No Supplier"
+              icon={
+                <FontAwesome5
+                  name="user-alt-slash"
+                  size={40}
+                  color={Colors.text}
+                />
+              }
+            />
+          }
+        />
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
         <AddPartiesButton />
       </View>
@@ -229,7 +314,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
+<<<<<<< HEAD
     marginTop: 20,
+=======
+    paddingBottom: 20,
+    marginBottom: 10,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   navigationText: {
     fontSize: Fonts.medium,

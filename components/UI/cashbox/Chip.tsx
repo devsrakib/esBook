@@ -60,7 +60,11 @@ const Chip = ({
               {
                 backgroundColor:
                   selectedIndex === index || Number(routerIndex) === index
+<<<<<<< HEAD
                     ? Colors.mainColor
+=======
+                    ? Colors.black
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
                     : Colors.background2,
               },
             ]}
@@ -70,7 +74,11 @@ const Chip = ({
                 color:
                   selectedIndex === index || Number(routerIndex) === index
                     ? Colors.white
+<<<<<<< HEAD
                     : Colors.mainColor,
+=======
+                    : Colors.black,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
               }}
             >
               {item}

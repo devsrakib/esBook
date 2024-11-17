@@ -24,7 +24,11 @@ const Home = () => {
       <View style={[styles.container]}>
         <UserViewHome />
         <AmountCon
+<<<<<<< HEAD
           leftBgColor={Colors.mainColor}
+=======
+          bg_image={require("../../../assets/images/amountFrame.png")}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           leftTextColor={Colors.white}
           leftAmountTColor={Colors.white}
           icon1={
@@ -52,7 +56,11 @@ const Home = () => {
             <Chart />
           </View>
         </View>
+<<<<<<< HEAD
         <CustomerAndSupplierList />
+=======
+        <CustomerAndSupplierList bg={Colors.JazzBerry} />
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       </View>
     </ScrollView>
   );
@@ -67,7 +75,12 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   defaultContainer: {
+<<<<<<< HEAD
     flexDirection: "column",
+=======
+    flexDirection: "column", // Stack components vertically on phones
+    padding: 10,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     gap: 20,
   },
   tabletContainer: {

@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 import { View, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
+=======
+import { View, StyleSheet, ScrollView, TextInput } from "react-native";
+import React from "react";
+import { Stack } from "expo-router";
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 import { Colors } from "@/constants/Colors";
 import Header from "@/components/UI/header/Header";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
+<<<<<<< HEAD
 import axios from "axios";
 import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
 import { getToken } from "@/utils/getToken";
@@ -61,6 +68,11 @@ const SupplierEdit = () => {
       setLoading(false);
     }
   };
+=======
+const SupplierEdit = () => {
+  const { top } = useSafeAreaInsets();
+  const CustomTextInput = Animated.createAnimatedComponent(TextInput);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
@@ -74,13 +86,18 @@ const SupplierEdit = () => {
       />
 
       <Header
+<<<<<<< HEAD
         children="Edit Seller Info"
+=======
+        children="Seller information"
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         backgroundColor={Colors.mainColor}
         textColor={Colors.white}
       />
 
       <ScrollView contentContainerStyle={styles.form}>
         {/* Shop Name */}
+<<<<<<< HEAD
         <Animated.Text style={styles.label}>Shop Name</Animated.Text>
         <TextInput
           style={styles.input}
@@ -124,12 +141,78 @@ const SupplierEdit = () => {
         <Animated.View style={styles.buttonCon}>
           <Button
             title={loading ? "Updating..." : "Update"}
+=======
+        <Animated.Text
+          entering={FadeInDown.delay(100).duration(400).damping(80).springify()}
+          style={styles.label}
+        >
+          Shop Name
+        </Animated.Text>
+        <CustomTextInput
+          entering={FadeInDown.delay(100).duration(400).damping(80).springify()}
+          style={styles.input}
+          placeholder="Enter shop name"
+          placeholderTextColor={Colors.text}
+        />
+
+        {/* Owner Name */}
+        <Animated.Text
+          entering={FadeInDown.delay(150).duration(400).damping(80).springify()}
+          style={styles.label}
+        >
+          Owner Name
+        </Animated.Text>
+        <CustomTextInput
+          entering={FadeInDown.delay(150).duration(400).damping(80).springify()}
+          style={styles.input}
+          placeholder="Enter owner name"
+          placeholderTextColor={Colors.text}
+        />
+
+        {/* Phone Number */}
+        <Animated.Text
+          entering={FadeInDown.delay(200).duration(400).damping(80).springify()}
+          style={styles.label}
+        >
+          Phone Number
+        </Animated.Text>
+        <CustomTextInput
+          entering={FadeInDown.delay(200).duration(400).damping(80).springify()}
+          style={styles.input}
+          placeholder="Enter phone number"
+          placeholderTextColor={Colors.text}
+          keyboardType="phone-pad"
+        />
+
+        {/* Location */}
+        <Animated.Text
+          entering={FadeInDown.delay(250).duration(400).damping(80).springify()}
+          style={styles.label}
+        >
+          Location
+        </Animated.Text>
+        <CustomTextInput
+          entering={FadeInDown.delay(250).duration(400).damping(80).springify()}
+          style={styles.input}
+          placeholder="Enter location"
+          placeholderTextColor={Colors.text}
+        />
+        <Animated.View
+          entering={FadeInDown.delay(300).duration(400).damping(80).springify()}
+          style={styles.buttonCon}
+        >
+          <Button
+            title="Update"
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
             titleColor={Colors.white}
             bg={Colors.mainColor}
             radius={radius.small}
             width={"100%"}
+<<<<<<< HEAD
             onPress={updateSupplier}
             // disabled={loading}
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           />
         </Animated.View>
       </ScrollView>

@@ -124,6 +124,7 @@ const SignupScreen = () => {
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
+<<<<<<< HEAD
       <Stack.Screen
         options={{
           headerShown: false,
@@ -189,6 +190,26 @@ const SignupScreen = () => {
               p
             </Animated.Text>
           </View>
+=======
+      <Stack.Screen options={{ headerShown: false }} />
+      <Header
+        children="Sign Up"
+        backgroundColor={Colors.mainColor}
+        textColor={Colors.white}
+      />
+      <ScrollView>
+        <View style={styles.inputFieldCon}>
+          <Animated.Text
+            entering={FadeInDown.delay(50)
+              .duration(200)
+              .damping(80)
+              .springify()
+              .stiffness(200)}
+            style={[styles.signupText]}
+          >
+            Sign Up
+          </Animated.Text>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
           <Animated.View
             style={[styles.inputAndLabelCon, getAnimatedStyle("name")]}

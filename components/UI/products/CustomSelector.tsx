@@ -3,16 +3,24 @@ import React from "react";
 import { Colors } from "@/constants/Colors";
 
 type props = {
+<<<<<<< HEAD
   toggleDropdown: (text: string) => void;
   category: { id: string; title: string };
   supplier: { id: string; name: string };
 };
 const CustomSelector = ({ toggleDropdown, category, supplier }: props) => {
+=======
+  toggleDropdown: () => void;
+  category: string;
+};
+const CustomSelector = ({ toggleDropdown, category }: props) => {
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   return (
     <View style={styles.selectCustomer}>
       <View style={styles.categoryAndCustomer}>
         <Text style={styles.label}>Category</Text>
         <TouchableOpacity
+<<<<<<< HEAD
           onPress={() => toggleDropdown("category")}
           style={styles.dropdownButton}
         >
@@ -26,12 +34,20 @@ const CustomSelector = ({ toggleDropdown, category, supplier }: props) => {
             ]}
           >
             {category?.title || "Select Category"}
+=======
+          onPress={toggleDropdown}
+          style={styles.dropdownButton}
+        >
+          <Text style={styles.dropdownText}>
+            {category || "Select Category"}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.categoryAndCustomer}>
         <Text style={styles.label}>Select Supplier</Text>
         <TouchableOpacity
+<<<<<<< HEAD
           onPress={() => toggleDropdown("supplier")}
           style={styles.dropdownButton}
         >
@@ -45,6 +61,13 @@ const CustomSelector = ({ toggleDropdown, category, supplier }: props) => {
             ]}
           >
             {supplier?.name || "Select supplier"}
+=======
+          onPress={toggleDropdown}
+          style={styles.dropdownButton}
+        >
+          <Text style={styles.dropdownText}>
+            {category || "Select supplier"}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           </Text>
         </TouchableOpacity>
       </View>

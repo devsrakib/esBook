@@ -5,6 +5,7 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+<<<<<<< HEAD
 import {
   Entypo,
   FontAwesome,
@@ -13,6 +14,9 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+=======
+import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons";
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -20,15 +24,22 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSQLiteContext } from "expo-sqlite";
 import { getOwnerProfile } from "@/databases/Database";
+<<<<<<< HEAD
 import useApiHook from "@/hooks/all_api_hooks";
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 const { width } = Dimensions.get("window");
 
 const isTablet = width >= 600;
 export default function TabLayout() {
+<<<<<<< HEAD
   // const [profile, setProfile] = useState<any>();
 
   const { data } = useApiHook("owners/");
+=======
+  const [profile, setProfile] = useState<any>();
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   const AnimatedIcon = ({
     focused,
     iconComponent,
@@ -56,6 +67,7 @@ export default function TabLayout() {
 
   const db = useSQLiteContext();
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   async function getData() {
   //     const result: any = await getOwnerProfile(db);
@@ -64,6 +76,15 @@ export default function TabLayout() {
   //   getData();
   // }, []);
   console.log(data);
+=======
+  useEffect(() => {
+    async function getData() {
+      const result: any = await getOwnerProfile(db);
+      setProfile(result[0]);
+    }
+    getData();
+  }, []);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   return (
     <Tabs
@@ -113,8 +134,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
               <FontAwesome
+<<<<<<< HEAD
                 name="cubes"
                 size={20}
+=======
+                name="user"
+                size={24}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
                 color={focused ? Colors.mainColor : Colors.labelText}
               />
               <Text
@@ -136,9 +162,15 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
+<<<<<<< HEAD
               <SimpleLineIcons
                 name="notebook"
                 size={22}
+=======
+              <FontAwesome
+                name="user"
+                size={24}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
                 color={focused ? Colors.mainColor : Colors.labelText}
               />
               <Text
@@ -159,8 +191,13 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={styles.container}>
+<<<<<<< HEAD
               <MaterialCommunityIcons
                 name="account-cash"
+=======
+              <FontAwesome
+                name="user"
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
                 size={24}
                 color={focused ? Colors.mainColor : Colors.labelText}
               />
@@ -182,7 +219,11 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={[styles.container]}>
+<<<<<<< HEAD
               {data?.data[0]?.profile_photo ? (
+=======
+              {profile ? (
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
                 <Image
                   style={{
                     width: 26,
@@ -191,10 +232,21 @@ export default function TabLayout() {
                     borderColor: focused ? Colors.mainColor : Colors.labelText,
                     borderWidth: 2,
                   }}
+<<<<<<< HEAD
                   source={{ uri: data?.data[0]?.profile_photo }}
                 />
               ) : (
                 <FontAwesome5 name="store" size={20} color={Colors.labelText} />
+=======
+                  source={{ uri: profile?.profilePhoto }}
+                />
+              ) : (
+                <FontAwesome
+                  name="user"
+                  size={24}
+                  color={focused ? Colors.mainColor : Colors.labelText}
+                />
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
               )}
               <Text
                 style={[
@@ -202,7 +254,11 @@ export default function TabLayout() {
                   { color: focused ? Colors.mainColor : Colors.black },
                 ]}
               >
+<<<<<<< HEAD
                 {focused ? data?.data[0]?.name : "Store"}
+=======
+                {focused ? profile?.name : "Profile"}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
               </Text>
             </View>
           ),
@@ -216,7 +272,11 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
+<<<<<<< HEAD
     width: isTablet ? 120 : "100%",
+=======
+    width: isTablet ? 120 : 40,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   title: {
     fontSize: 12,

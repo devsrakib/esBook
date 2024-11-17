@@ -13,6 +13,7 @@ import Animated, {
   FadeInUp,
 } from "react-native-reanimated";
 import axios from "axios";
+<<<<<<< HEAD
 import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
 
 const UserViewHome = () => {
@@ -43,6 +44,37 @@ const UserViewHome = () => {
   //   };
   //   getProfile();
   // }, []);
+=======
+import { apiUrl } from "@/hooks/all_api_hooks";
+
+const UserViewHome = () => {
+  const [data, setData] = useState<IOwner>({
+    profilePhoto: null,
+    name: "",
+    email: "",
+    address: "",
+    phoneNumber: "",
+    taxNumber: 0,
+    createdAt: "",
+    id: "",
+  });
+
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const response = await axios.get(apiUrl + "owners");
+      const result = await getOwnerProfile(db);
+      // const user_data = result?.length > 0 ? result[0] : null;
+      const user_data = response?.data?.results[0];
+
+      console.log(user_data);
+
+      setData(user_data as IOwner);
+    };
+    getProfile();
+  }, []);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   const capitalizeFirstLetter = (text: string) => {
     if (!text) return "";
@@ -56,15 +88,26 @@ const UserViewHome = () => {
         entering={FadeInUp.delay(50).duration(50)}
         style={styles.avatarContainer}
       >
+<<<<<<< HEAD
         {data?.data[0]?.profilePhoto ? (
           <Animated.Image
             entering={FadeInUp.delay(50).duration(50)}
             source={{ uri: data?.data[0]?.profilePhoto }}
+=======
+        {data?.profilePhoto ? (
+          <Animated.Image
+            entering={FadeInUp.delay(50).duration(50)}
+            source={{ uri: data?.profilePhoto }}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
             style={styles.userAvatar}
           />
         ) : (
           <Animated.Text style={styles.placeholder}>
+<<<<<<< HEAD
             {data?.data[0]?.name?.split("")[0]?.toUpperCase()}
+=======
+            {data?.name?.split("")[0]?.toUpperCase()}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           </Animated.Text>
         )}
       </Animated.View>
@@ -73,13 +116,21 @@ const UserViewHome = () => {
           entering={FadeInDown.delay(50).duration(200)}
           style={styles.text1}
         >
+<<<<<<< HEAD
           Store Owner,
+=======
+          Hello,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         </Animated.Text>
         <Animated.Text
           entering={FadeInDown.delay(50).duration(200).damping(6).springify()}
           style={styles.userName}
         >
+<<<<<<< HEAD
           {capitalizeFirstLetter(data?.data[0]?.name)}
+=======
+          {capitalizeFirstLetter(data?.name)}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         </Animated.Text>
       </View>
     </View>

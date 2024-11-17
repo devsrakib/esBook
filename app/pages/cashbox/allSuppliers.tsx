@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import { View, Text, StyleSheet, FlatList } from "react-native";
 // import React, { useEffect, useState } from "react";
 // import { Stack } from "expo-router";
@@ -87,6 +88,31 @@ const Page = () => {
 
   console.log(customer, "customer data");
 
+=======
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Stack } from "expo-router";
+import Header from "@/components/UI/header/Header";
+import { Colors } from "@/constants/Colors";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSQLiteContext } from "expo-sqlite";
+import { getSuppliers } from "@/databases/Database";
+import AllSuppliers from "@/components/UI/AllSuppliers";
+import Empty from "@/components/UI/Empty";
+import { FontAwesome5 } from "@expo/vector-icons";
+
+const page = () => {
+  const { bottom, top } = useSafeAreaInsets();
+  const [suppliers, setSuppliers] = useState<any>();
+  const db = useSQLiteContext();
+  useEffect(() => {
+    async function setup() {
+      const result = await getSuppliers(db);
+      setSuppliers(result);
+    }
+    setup();
+  }, []);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   return (
     <View
       style={[styles.container, { paddingBottom: bottom, paddingTop: top }]}
@@ -100,6 +126,7 @@ const Page = () => {
       />
       <Header
         children="All Supplier"
+<<<<<<< HEAD
         textColor={Colors.white}
         backgroundColor={Colors.mainColor}
       />
@@ -127,6 +154,29 @@ const Page = () => {
           }
         />
       </View>
+=======
+        backgroundColor={Colors.mainColor}
+        textColor={Colors.white}
+      />
+
+      {suppliers?.length === 0 ? (
+        <Empty
+          text="No Supplier"
+          icon={<FontAwesome5 name="user-alt-slash" size={24} color="black" />}
+        />
+      ) : (
+        <FlatList
+          data={suppliers}
+          contentContainerStyle={{
+            gap: 10,
+            paddingTop: 10,
+          }}
+          renderItem={({ item }) => {
+            return <AllSuppliers item={item} />;
+          }}
+        />
+      )}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     </View>
   );
 };
@@ -136,6 +186,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
   },
+<<<<<<< HEAD
   bodySection: {
     flex: 1, // Take full available space
     paddingVertical: 10,
@@ -156,3 +207,8 @@ const styles = StyleSheet.create({
 });
 
 export default Page;
+=======
+});
+
+export default page;
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b

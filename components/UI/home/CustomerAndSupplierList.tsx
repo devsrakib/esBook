@@ -18,14 +18,18 @@ import { useSQLiteContext } from "expo-sqlite";
 import Empty from "../Empty";
 import { debounce } from "lodash";
 import CustomSegment from "./CustomSegment";
+<<<<<<< HEAD
 import Divider from "../Divider";
 import useApiHook from "@/hooks/all_api_hooks";
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 export type tab_props = {
   label: string;
   icon: any;
 };
 
+<<<<<<< HEAD
 const CustomerAndSupplierList = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   // const [customer, setCustomer] = useState<any>([]);
@@ -33,6 +37,15 @@ const CustomerAndSupplierList = () => {
 
   const { data: customer } = useApiHook("customers/");
   const { data: supplier } = useApiHook("suppliers/");
+=======
+interface propsTypes {
+  bg: string;
+}
+const CustomerAndSupplierList: React.FC<propsTypes> = ({ bg }) => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [customer, setCustomer] = useState<any>([]);
+  const [supplier, setSupplier] = useState<any>([]);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   const db = useSQLiteContext();
 
@@ -49,6 +62,7 @@ const CustomerAndSupplierList = () => {
     },
   ];
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   async function getCustomer() {
   //     const result = await getCustomers(db);
@@ -58,6 +72,17 @@ const CustomerAndSupplierList = () => {
   //   }
   //   getCustomer();
   // }, []);
+=======
+  useEffect(() => {
+    async function getCustomer() {
+      const result = await getCustomers(db);
+      const supplier = await getSuppliers(db);
+      setCustomer(result);
+      setSupplier(supplier);
+    }
+    getCustomer();
+  }, []);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   const handleIndexChange = useCallback(
     debounce((index: number) => {
@@ -100,6 +125,7 @@ const CustomerAndSupplierList = () => {
             </Link>
           </View>
         </View>
+<<<<<<< HEAD
         <Divider height={1} width={"100%"} aligns={"center"} />
 
         {
@@ -115,6 +141,19 @@ const CustomerAndSupplierList = () => {
                   <Customers
                     item={item}
                     index={index}
+=======
+        {
+          <View style={{ height: 400 }}>
+            <FlatList
+              contentContainerStyle={{
+                flex: 1,
+              }}
+              data={selectedIndex === 0 ? customer : supplier}
+              renderItem={({ item }) => {
+                return (
+                  <Customers
+                    item={item}
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
                     text={selectedIndex === 0 ? "Customer" : "Supplier"}
                     selectedIndex={selectedIndex}
                     deleteFrom={"index"}
@@ -133,10 +172,13 @@ const CustomerAndSupplierList = () => {
                   }
                 />
               }
+<<<<<<< HEAD
               // style={{ flex: 1 }}
               nestedScrollEnabled
               showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item?.id?.toString()}
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
             />
           </View>
         }
@@ -149,7 +191,10 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     borderRadius: radius.regular,
+<<<<<<< HEAD
     // backgroundColor: Colors.white,
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
 
   content: {
@@ -158,10 +203,14 @@ const styles = StyleSheet.create({
   },
 
   usersCon: {
+<<<<<<< HEAD
     // backgroundColor: Colors.VeroneseGreen,
     backgroundColor: Colors.white,
     shadowColor: Colors.shadow,
     elevation: 10,
+=======
+    backgroundColor: Colors.VeroneseGreen,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     marginVertical: 16,
     padding: 16,
     borderRadius: radius.large,
@@ -206,9 +255,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+<<<<<<< HEAD
   customerList: {
     height: 300,
   },
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   customerText: {
     color: Colors.text,
     fontSize: Fonts.regular,

@@ -22,7 +22,10 @@
     "@react-native-picker/picker": "2.7.5",
     "@react-navigation/material-top-tabs": "^6.6.14",
     "@react-navigation/native": "^6.0.2",
+<<<<<<< HEAD
     "@shopify/react-native-skia": "^1.2.3",
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     "@types/lodash": "^4.17.7",
     "axios": "^1.7.7",
     "eas-cli": "^12.5.3",
@@ -70,8 +73,12 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-uuid": "^2.0.2",
     "react-native-web": "~0.19.10",
+<<<<<<< HEAD
     "uuid": "^10.0.0",
     "expo-blur": "~13.0.2"
+=======
+    "uuid": "^10.0.0"
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

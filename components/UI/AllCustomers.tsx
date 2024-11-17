@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 // import React, { Fragment, useEffect, useState, memo } from "react";
 // import { FontAwesome6 } from "@expo/vector-icons";
@@ -123,6 +124,8 @@
 // });
 // export default memo(AllCustomers);
 
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React, { Fragment, useEffect, useState, memo } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -180,10 +183,14 @@ const AllCustomers = ({ item, index }: any) => {
         asChild
       >
         <TouchableOpacity style={styles.customerDetails}>
+<<<<<<< HEAD
           {/* Set a fixed color for the avatar */}
           <View
             style={[styles.avatar, { backgroundColor: Colors.VeroneseGreen }]}
           >
+=======
+          <View style={styles.avatar}>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
             {item?.profilePhoto ? (
               <Image
                 style={styles.profilePhoto}
@@ -195,9 +202,17 @@ const AllCustomers = ({ item, index }: any) => {
           </View>
           <View style={styles.nameSection}>
             <Text style={styles.name}>{item?.name}</Text>
+<<<<<<< HEAD
             <Text style={styles.date}>{FormatDate(item?.createdAt)}</Text>
           </View>
           {/* Display the total due */}
+=======
+            <Text style={styles.date}>
+              {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
+              {FormatDate(item?.createdAt)}
+            </Text>
+          </View>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           <Text adjustsFontSizeToFit>
             {currency} {totalCash_buy}
           </Text>
@@ -213,6 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
     height: 50,
+<<<<<<< HEAD
     backgroundColor: Colors.background, // Fixed background color for the customer row
     paddingHorizontal: 10,
     marginBottom: 10,
@@ -226,6 +242,21 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     width: 38,
     height: 38,
+=======
+    backgroundColor: Colors.background,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    borderRadius: radius.medium,
+  },
+  avatar: {
+    borderWidth: 1,
+    borderRadius: radius.large,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: Colors.border,
+    width: 36,
+    height: 36,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   nameSection: {
     flex: 1,
@@ -233,11 +264,19 @@ const styles = StyleSheet.create({
   name: {
     fontSize: Fonts.medium,
     fontWeight: "600",
+<<<<<<< HEAD
     color: Colors.darkCharcoal, // Fixed color for the name text
   },
   date: {
     fontSize: Fonts.regular,
     color: Colors.text, // Fixed color for the date text
+=======
+    color: Colors.darkCharcoal,
+  },
+  date: {
+    fontSize: Fonts.regular,
+    color: Colors.text,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   profilePhoto: {
     width: "100%",
@@ -246,9 +285,16 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     fontSize: Fonts.large,
+<<<<<<< HEAD
     color: Colors.black, // Fixed color for the initials
     fontWeight: "600",
   },
 });
 
+=======
+    color: Colors.black,
+    fontWeight: "600",
+  },
+});
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 export default memo(AllCustomers);

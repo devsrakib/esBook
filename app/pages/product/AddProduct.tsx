@@ -22,17 +22,21 @@ import { radius } from "@/constants/sizes";
 import Button from "@/components/UI/Button";
 import CustomSelector from "@/components/UI/products/CustomSelector";
 import SupplierListModal from "@/components/UI/products/SupplierListModal";
+<<<<<<< HEAD
 import axios from "axios";
 import { apiUrl } from "@/hooks/all_api_hooks";
 import CategoryListModal from "@/components/UI/products/CategoryListModel";
 import { set } from "lodash";
 import { getToken } from "@/utils/getToken";
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 const AddProduct = () => {
   const { top } = useSafeAreaInsets();
 
   const [productName, setProductName] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
+<<<<<<< HEAD
   const [buyingPrice, setBuyingPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [category, setCategory] = useState({
@@ -70,6 +74,27 @@ const AddProduct = () => {
 
   const handleSelectedCategory = useCallback((id: string, title: string) => {
     setCategory({ id, title });
+=======
+  const [discountPrice, setDiscountPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [category, setCategory] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [supplier, setSupplier] = useState("");
+
+  // Shared value for dropdown height
+  const dropdownHeight = useSharedValue(0);
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
+    setVisible(!visible);
+    dropdownHeight.value = withTiming(visible ? 0 : 150, {
+      duration: 300,
+    }); // Animate height change
+  };
+
+  const handleSelectedSupplier = useCallback((id: string) => {
+    setSupplier(id);
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   }, []);
 
   const dropdownStyle = useAnimatedStyle(() => {
@@ -79,6 +104,7 @@ const AddProduct = () => {
     };
   });
 
+<<<<<<< HEAD
   const createProduct = async () => {
     // Implement product creation logic here
     try {
@@ -106,6 +132,8 @@ const AddProduct = () => {
     }
   };
 
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen
@@ -132,6 +160,7 @@ const AddProduct = () => {
             placeholder="Enter product name"
           />
 
+<<<<<<< HEAD
           {/* Discount Price Input */}
           <Text style={styles.label}>Buying Price</Text>
           <TextInput
@@ -142,6 +171,8 @@ const AddProduct = () => {
             keyboardType="numeric"
           />
 
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           {/* Selling Price Input */}
           <Text style={styles.label}>Selling Price</Text>
           <TextInput
@@ -152,6 +183,19 @@ const AddProduct = () => {
             keyboardType="numeric"
           />
 
+<<<<<<< HEAD
+=======
+          {/* Discount Price Input */}
+          <Text style={styles.label}>Discount Price</Text>
+          <TextInput
+            style={styles.input}
+            value={discountPrice}
+            onChangeText={setDiscountPrice}
+            placeholder="Enter discount price"
+            keyboardType="numeric"
+          />
+
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           {/* Quantity Input */}
           <Text style={styles.label}>Quantity</Text>
           <TextInput
@@ -164,6 +208,7 @@ const AddProduct = () => {
 
           {/* Custom Dropdown for Category */}
 
+<<<<<<< HEAD
           <CustomSelector
             toggleDropdown={toggleDropdown}
             category={category}
@@ -192,6 +237,27 @@ const AddProduct = () => {
           onPress={() => createProduct()}
         />
       </View>
+=======
+          <CustomSelector toggleDropdown={toggleDropdown} category={category} />
+          {/* Animated Dropdown List */}
+          <SupplierListModal
+            setVisible={setVisible}
+            visible={visible}
+            setSupplier={handleSelectedSupplier}
+          />
+        </View>
+
+        <View style={styles.buttonCon}>
+          <Button
+            title="ADD PRODUCT"
+            titleColor={Colors.white}
+            radius={radius.small}
+            bg={Colors.mainColor}
+            width={"90%"}
+          />
+        </View>
+      </ScrollView>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     </View>
   );
 };
@@ -223,7 +289,11 @@ const styles = StyleSheet.create({
   },
 
   buttonCon: {
+<<<<<<< HEAD
     // marginTop: 60,
     marginTop: "auto",
+=======
+    marginTop: 60,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
 });

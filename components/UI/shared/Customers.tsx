@@ -14,20 +14,32 @@ import {
   getCashSellsByCustomerId,
 } from "@/databases/Database";
 import FormatDate from "@/utils/FormatDate";
+<<<<<<< HEAD
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Customers = ({
   item,
   index,
+=======
+
+const Customers = ({
+  item,
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   text,
   selectedIndex,
   deleteFrom,
 }: {
   item: any;
+<<<<<<< HEAD
   index: number;
   text?: string;
   selectedIndex?: number;
   deleteFrom?: string;
+=======
+  text: string;
+  selectedIndex?: number;
+  deleteFrom: string;
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 }) => {
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
@@ -77,6 +89,7 @@ const Customers = ({
   const backgroundColor = stringToColor(initials);
 
   return (
+<<<<<<< HEAD
     <Animated.View
       entering={FadeInDown.delay(index * 50)
         .duration(200)
@@ -84,6 +97,9 @@ const Customers = ({
         .damping(80)
         .stiffness(200)}
     >
+=======
+    <Fragment>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       <Link
         href={{
           pathname: "/pages/parties/CustomerView",
@@ -120,14 +136,21 @@ const Customers = ({
           </Text>
         </TouchableOpacity>
       </Link>
+<<<<<<< HEAD
     </Animated.View>
+=======
+    </Fragment>
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   );
 };
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: {
     marginBottom: 10,
   },
+=======
+>>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   customerDetails: {
     flexDirection: "row",
     alignItems: "center",
