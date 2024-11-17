@@ -1,0 +1,39 @@
+{
+    "cSpell.words": [
+        "adipiscing",
+        "amet",
+        "amountbox",
+        "arrowleft",
+        "datetime",
+        "elit",
+        "Entypo",
+        "Fontisto",
+        "handlelog",
+        "hasan",
+        "imgbg",
+        "Ionicons",
+        "Mehedi",
+        "Nazrul",
+        "uuidv"
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#48a5f2",
+        "activityBar.background": "#48a5f2",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#fde1f0",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#48a5f2",
+        "statusBar.background": "#188def",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#48a5f2",
+        "statusBarItem.remoteBackground": "#188def",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#188def",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#188def99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#188def"
+}
