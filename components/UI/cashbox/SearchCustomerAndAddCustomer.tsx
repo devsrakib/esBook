@@ -17,10 +17,8 @@ import { getCustomerById, getSupplierById } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import FormatDate from "@/utils/FormatDate";
 import Animated, { FadeInDown } from "react-native-reanimated";
-<<<<<<< HEAD
+
 import { LinearGradient } from "expo-linear-gradient";
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 const SearchCustomerAndAddCustomer = ({
   text,
   id,
@@ -57,16 +55,12 @@ const SearchCustomerAndAddCustomer = ({
   const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
   return (
-<<<<<<< HEAD
     <LinearGradient
       colors={["#168F88", "#006B60", "#4D89A1"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
-=======
-    <Animated.View style={styles.container}>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       <Link
         href={{
           pathname: path,
@@ -108,11 +102,7 @@ const SearchCustomerAndAddCustomer = ({
       </Link>
       <Link
         href={{
-<<<<<<< HEAD
           pathname: "/pages/parties/addNewParties",
-=======
-          pathname: "/pages/parties/parties",
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           params: {
             text: "Add Customer",
           },
@@ -126,11 +116,7 @@ const SearchCustomerAndAddCustomer = ({
           <AntDesign name="plus" size={24} color="black" />
         </CustomTouchable>
       </Link>
-<<<<<<< HEAD
     </LinearGradient>
-=======
-    </Animated.View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   );
 };
 
@@ -142,20 +128,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     gap: 15,
-<<<<<<< HEAD
-=======
-    marginBottom: 10,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   inputContainer: {
     backgroundColor: Colors.white,
     flex: 1,
     height: 50,
-<<<<<<< HEAD
+
     borderRadius: radius.small,
-=======
-    borderRadius: radius.medium,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+
     flexDirection: "row",
     gap: 10,
     alignItems: "center",
@@ -178,11 +158,7 @@ const styles = StyleSheet.create({
   },
   plusCon: {
     backgroundColor: Colors.white,
-<<<<<<< HEAD
     borderRadius: radius.small,
-=======
-    borderRadius: radius.medium,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     height: 50,
     width: 50,
     alignItems: "center",

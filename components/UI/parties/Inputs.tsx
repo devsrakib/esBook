@@ -12,7 +12,6 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 const inputs = [
   {
-<<<<<<< HEAD
     label: "Store Name",
     icon: (
       <SimpleLineIcons name="location-pin" size={24} color={Colors.mainColor} />
@@ -20,8 +19,6 @@ const inputs = [
     key: "store_name",
   },
   {
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     label: "Full Name",
     icon: <Feather name="user" size={24} color={Colors.mainColor} />,
     key: "name",
@@ -54,11 +51,7 @@ const inputs = [
 interface InputProps {
   setData: React.Dispatch<React.SetStateAction<CustomerData | SupplierData>>;
 }
-<<<<<<< HEAD
 const Inputs = ({ setData }: InputProps) => {
-=======
-const Inputs: React.FC<InputProps> = ({ setData }) => {
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   const handleChange = (key: any, value: any) => {
     setData((prevData) => ({
       ...prevData,
@@ -66,11 +59,7 @@ const Inputs: React.FC<InputProps> = ({ setData }) => {
     }));
   };
 
-<<<<<<< HEAD
   console.log(inputs);
-
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   return (
     <Animated.View
       entering={FadeInDown.damping(80).duration(400).springify().stiffness(200)}

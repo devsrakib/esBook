@@ -1,10 +1,8 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import React from "react";
-<<<<<<< HEAD
+
 import { Link, Stack, useLocalSearchParams } from "expo-router";
-=======
-import { Link, Stack } from "expo-router";
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/header/Header";
@@ -12,7 +10,7 @@ import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { Fontisto } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
-<<<<<<< HEAD
+
 import useApiHook from "@/hooks/all_api_hooks";
 
 const ProductView = () => {
@@ -22,13 +20,6 @@ const ProductView = () => {
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
   const { data: productDetail } = useApiHook(`product/${params?.id}/`);
   console.log(productDetail);
-
-=======
-
-const ProductView = () => {
-  const { top } = useSafeAreaInsets();
-  const CustomPressable = Animated.createAnimatedComponent(Pressable);
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen
@@ -46,26 +37,15 @@ const ProductView = () => {
 
       <View style={styles.body}>
         <Animated.Image
-<<<<<<< HEAD
-          // entering={FadeInDown.delay(90)
-          //   .duration(200)
-          //   .damping(80)
-          //   .springify()
-          //   .stiffness(200)}
           style={styles.productPhoto}
           source={require("../../../assets/images/onion.jpg")}
           defaultSource={require("../../../assets/images/defoulProduct.png")}
-          // sharedTransitionTag="productImage"
-=======
           entering={FadeInDown.delay(90)
             .duration(200)
             .damping(80)
             .springify()
             .stiffness(200)}
-          style={styles.productPhoto}
-          source={require("../../../assets/images/onion.jpg")}
           // defaultSource={require("")}
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         />
         <View style={styles.detailsCon}>
           <View style={styles.nameCon}>
@@ -77,7 +57,6 @@ const ProductView = () => {
                 .stiffness(200)}
               style={styles.productName}
             >
-<<<<<<< HEAD
               <Text style={{ fontWeight: "500", color: "black" }}>
                 Product:
               </Text>{" "}
@@ -92,11 +71,6 @@ const ProductView = () => {
               }}
               asChild
             >
-=======
-              Onion
-            </Animated.Text>
-            <Link href={"/pages/product/SellerInfo"} asChild>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
               <CustomPressable
                 entering={FadeInDown.delay(260)
                   .duration(200)
@@ -120,7 +94,6 @@ const ProductView = () => {
           >
             Stock available: 900kg{" "}
           </Animated.Text>
-<<<<<<< HEAD
           <Animated.Text
             entering={FadeInDown.delay(500)
               .duration(200)
@@ -152,7 +125,6 @@ const ProductView = () => {
             buying date: {new Date(productDetail?.createdAt).toDateString()}
           </Animated.Text>
 
-=======
           <View style={styles.priceCon}>
             <View>
               <Animated.Text
@@ -189,7 +161,6 @@ const ProductView = () => {
               </Animated.Text>
             </View>
           </View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           <Animated.Text
             entering={FadeInDown.delay(580)
               .duration(200)
@@ -198,12 +169,9 @@ const ProductView = () => {
               .stiffness(200)}
             style={styles.desc}
           >
-<<<<<<< HEAD
             {productDetail?.description}
-=======
             Description Lorem ipsum dolor sit amet, consectetur adipisicing
             elit. Non, necessitatibus!
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           </Animated.Text>
         </View>
       </View>
@@ -260,13 +228,11 @@ const styles = StyleSheet.create({
     fontSize: Fonts.regular,
     color: Colors.text,
   },
-<<<<<<< HEAD
-=======
+
   priceCon: {
     gap: 20,
     flexDirection: "row",
   },
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   stock: {
     fontSize: Fonts.medium,
     fontWeight: "500",

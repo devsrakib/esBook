@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 // import {
 //   View,
 //   Text,
@@ -21,12 +19,36 @@
 // const ProductCard = ({ item }: any) => {
 //   const CustomPressable = Animated.createAnimatedComponent(Pressable);
 
+//   console.log(item);
+
+//   return (
+//     <Link
+//       href={{
+//         pathname: "/pages/product/ProductView",
+//         params: {
+//           id: item?.id,
+//         },
+//       }}
+//       asChild
+//     >
+
+//   const available = 10;
 //   return (
 //     <Link href={"/pages/product/ProductView"} asChild>
+
 //       <CustomPressable
 //         entering={FadeInDown.delay(50).damping(80).springify().stiffness(200)}
 //         style={styles.container}
 //       >
+
+//         <Animated.Image
+//           style={styles.productPhoto}
+//           source={require("../../../assets/images/onion.jpg")}
+//           defaultSource={require("../../../assets/images/defoulProduct.png")}
+//           // sharedTransitionTag="productImage"
+//         />
+//         <View style={{ paddingHorizontal: 5, paddingBottom: 5 }}>
+//           <Text style={styles.title}>{item?.product_name}</Text>
 //         <View style={styles.imgCon}>
 //           <Image
 //             style={styles.productPhoto}
@@ -34,11 +56,30 @@
 //           />
 //         </View>
 //         <View style={styles.textContainer}>
-//           <Text style={styles.title}>{item?.product_name + "Onion"}</Text>
-//           <Text style={styles.desc}>Buying Price: {item?.buying_price}</Text>
-//         </View>
-//         <View style={styles.quantityCon}>
-//           <Text style={styles.quantity}>{item?.quantity}</Text>
+//           <Text style={styles.title}>{item?.product_name}Onion</Text>
+
+//           <Text style={styles.price}>Price: ${item?.buying_price}</Text>
+//           <Text
+//             style={[
+//               styles.desc,
+
+//               { color: item?.quantity <= 10 ? Colors.red : Colors.text },
+//             ]}
+//           >
+//             Available:{" "}
+//             <Text
+//               style={{
+//                 color: item?.quantity <= 10 ? Colors.red : Colors.mainColor,
+//               }}
+//             >
+//               {item?.quantity}
+//             </Text>{" "}
+//             pcs
+//               { color: available <= 10 ? Colors.red : Colors.text },
+//             ]}
+//           >
+//             Available: {item?.quantity} pcs
+//           </Text>
 //         </View>
 //       </CustomPressable>
 //     </Link>
@@ -49,63 +90,75 @@
 
 // const styles = StyleSheet.create({
 //   container: {
-//     height: 160,
 //     width: isTablet ? "48%" : "46%",
-//     shadowColor: Colors.text,
-//     elevation: 5,
-//     // flexDirection: "row",
-//     // alignItems: "center",
-//     gap: 8,
 //     backgroundColor: Colors.white,
-//     margin: 8,
-//     paddingHorizontal: 10,
-//     paddingVertical: 10,
-//     // backgroundColor: "red",
-//   },
-//   imgCon: {
-//     width: 40,
-//     height: 40,
-//     backgroundColor: Colors.VeroneseGreen,
-//     alignItems: "center",
-//     justifyContent: "center",
 //     borderRadius: radius.small,
+//     margin: 8,
+
+//     // padding: 12,
+
+//     padding: 12,
+//     shadowColor: Colors.text,
+//     elevation: 8,
+//     shadowOffset: { width: 1, height: 3 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 6,
+//     overflow: "hidden",
+
+//     padding: 4,
 //   },
 //   productPhoto: {
-//     width: 35,
-//     height: 35,
+//     width: "100%",
+//     height: 80,
+//     borderTopLeftRadius: radius.small,
+//     borderTopRightRadius: radius.small,
+//     resizeMode: "cover",
+//     marginBottom: 8,
+//   },
+//   // textContainer: {
+//   //   flex: 1,
+//   //   // alignItems: "center",
+//   //   backgroundColor: "red",
+//   // },
+
+//   },
+//   imgCon: {
+//     width: "100%",
+//     height: 50,
+//     alignItems: "center",
+//     justifyContent: "center",
+//     backgroundColor: Colors.VeroneseGreen,
+//     borderRadius: radius.small,
+//     marginBottom: 8,
+//   },
+//   productPhoto: {
+//     width: "80%",
+//     height: "80%",
 //     borderRadius: radius.small,
 //     resizeMode: "contain",
 //   },
 //   textContainer: {
 //     flex: 1,
-//     gap: 4,
+//     // alignItems: "center",
 //   },
 //   title: {
+//     fontSize: Fonts.medium,
+//     color: Colors.mainColor,
+//     fontWeight: "bold",
+//     marginBottom: 4,
+//   },
+//   price: {
 //     fontSize: Fonts.regular,
-//     color: Colors.mainColor,
-//   },
-//   quantityCon: {
-//     width: 25,
-//     height: 25,
-//     borderRadius: radius.small,
-//     alignItems: "center",
-//     justifyContent: "center",
-//     shadowColor: Colors.text,
-//     elevation: 5,
-//     backgroundColor: Colors.white,
-//   },
-//   quantity: {
-//     color: Colors.mainColor,
-//     fontSize: Fonts.small,
-//     fontWeight: "500",
+//     color: Colors.text,
+//     fontWeight: "600",
 //   },
 //   desc: {
-//     color: Colors.text,
 //     fontSize: Fonts.small,
+//     color: Colors.text,
+//     marginTop: 4,
 //   },
 // });
 
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 import {
   View,
   Text,
@@ -122,56 +175,42 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { Link } from "expo-router";
 
 const { width } = Dimensions.get("window");
-
 const isTablet = width >= 600;
+
 const ProductCard = ({ item }: any) => {
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
-<<<<<<< HEAD
-  console.log(item);
 
   return (
     <Link
       href={{
         pathname: "/pages/product/ProductView",
-        params: {
-          id: item?.id,
-        },
+        params: { id: item?.id },
       }}
       asChild
     >
-=======
-  const available = 10;
-  return (
-    <Link href={"/pages/product/ProductView"} asChild>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       <CustomPressable
         entering={FadeInDown.delay(50).damping(80).springify().stiffness(200)}
         style={styles.container}
       >
-<<<<<<< HEAD
-        <Animated.Image
-          style={styles.productPhoto}
-          source={require("../../../assets/images/onion.jpg")}
-          defaultSource={require("../../../assets/images/defoulProduct.png")}
-          // sharedTransitionTag="productImage"
-        />
-        <View style={{ paddingHorizontal: 5, paddingBottom: 5 }}>
-          <Text style={styles.title}>{item?.product_name}</Text>
-=======
+        {/* Product Image */}
         <View style={styles.imgCon}>
           <Image
             style={styles.productPhoto}
-            source={require("../../../assets/images/bookBlue.png")}
+            source={
+              item?.productPhoto
+                ? { uri: item?.productPhoto }
+                : require("../../../assets/images/defoulProduct.png")
+            }
           />
         </View>
+
+        {/* Product Details */}
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{item?.product_name}Onion</Text>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+          <Text style={styles.title}>{item?.product_name}</Text>
           <Text style={styles.price}>Price: ${item?.buying_price}</Text>
           <Text
             style={[
               styles.desc,
-<<<<<<< HEAD
               { color: item?.quantity <= 10 ? Colors.red : Colors.text },
             ]}
           >
@@ -184,12 +223,6 @@ const ProductCard = ({ item }: any) => {
               {item?.quantity}
             </Text>{" "}
             pcs
-=======
-              { color: available <= 10 ? Colors.red : Colors.text },
-            ]}
-          >
-            Available: {item?.quantity} pcs
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           </Text>
         </View>
       </CustomPressable>
@@ -205,38 +238,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: radius.small,
     margin: 8,
-<<<<<<< HEAD
-    // padding: 12,
-=======
     padding: 12,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     shadowColor: Colors.text,
     elevation: 8,
     shadowOffset: { width: 1, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
     overflow: "hidden",
-<<<<<<< HEAD
-    padding: 4,
-  },
-  productPhoto: {
-    width: "100%",
-    height: 80,
-    borderTopLeftRadius: radius.small,
-    borderTopRightRadius: radius.small,
-    resizeMode: "cover",
-    marginBottom: 8,
-  },
-  // textContainer: {
-  //   flex: 1,
-  //   // alignItems: "center",
-  //   backgroundColor: "red",
-  // },
-=======
   },
   imgCon: {
     width: "100%",
-    height: 50,
+    height: 80,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.VeroneseGreen,
@@ -251,9 +263,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    // alignItems: "center",
   },
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   title: {
     fontSize: Fonts.medium,
     color: Colors.mainColor,

@@ -102,11 +102,8 @@ const styles = StyleSheet.create({
   inputCon: {
     height: 44,
     width: "100%",
-<<<<<<< HEAD
+
     borderRadius: radius.small,
-=======
-    borderRadius: radius.medium,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     borderWidth: 1,
     borderColor: Colors.border,
     flexDirection: "row",
@@ -124,13 +121,9 @@ const styles = StyleSheet.create({
   currencyCon: {
     width: 50,
     height: "100%",
-<<<<<<< HEAD
     borderTopRightRadius: radius.small,
     borderBottomRightRadius: radius.small,
-=======
-    borderTopRightRadius: radius.medium,
-    borderBottomRightRadius: radius.medium,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.background2,
@@ -138,11 +131,9 @@ const styles = StyleSheet.create({
   textArea: {
     height: 120,
     width: "100%",
-<<<<<<< HEAD
+
     borderRadius: radius.small,
-=======
-    borderRadius: radius.medium,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+
     borderWidth: 1,
     borderColor: Colors.border,
     marginTop: 10,

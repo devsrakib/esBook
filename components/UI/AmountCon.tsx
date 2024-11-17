@@ -12,28 +12,19 @@ import { getCash_buy, getCash_sell } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import { currency } from "@/global/currency";
 import Animated, { FadeInDown } from "react-native-reanimated";
-<<<<<<< HEAD
+
 import { radius } from "@/constants/sizes";
 import { LinearGradient } from "expo-linear-gradient";
 
 interface amountProps {
   leftBgColor: any;
-=======
-
-interface amountProps {
-  bg_image: any;
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   icon1: any;
   icon2?: any;
   leftTextColor: string;
   leftAmountTColor: string;
 }
 const AmountCon: React.FC<amountProps> = ({
-<<<<<<< HEAD
   leftBgColor,
-=======
-  bg_image,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   icon1,
   icon2,
   leftAmountTColor,
@@ -41,10 +32,6 @@ const AmountCon: React.FC<amountProps> = ({
 }) => {
   const [receive, setReceive] = useState<number>(0);
   const [cashBuyDue, setCashBuyDue] = useState<number>(0);
-<<<<<<< HEAD
-=======
-  const BgImage = Animated.createAnimatedComponent(ImageBackground);
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   const { width } = Dimensions.get("window");
   const isTablet = width >= 600;
 
@@ -68,7 +55,6 @@ const AmountCon: React.FC<amountProps> = ({
   }, []);
 
   return (
-<<<<<<< HEAD
     <Animated.View
       entering={FadeInDown.delay(50).duration(300).damping(80).springify()}
       style={[styles.container, { height: isTablet ? 200 : 100 }]}
@@ -76,17 +62,6 @@ const AmountCon: React.FC<amountProps> = ({
       <View style={[styles.amountCon, { backgroundColor: leftBgColor }]}>
         {icon1}
         <View style={{ flex: 1 }}>
-=======
-    <BgImage
-      entering={FadeInDown.delay(50).duration(300).damping(80).springify()}
-      imageStyle={{ borderRadius: 15 }}
-      style={[styles.container, { height: isTablet ? 200 : 100 }]}
-      source={bg_image}
-    >
-      <View style={[styles.amountCon, { flex: 1.3 }]}>
-        {icon1}
-        <View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           <Text
             style={[
               styles.text,
@@ -113,11 +88,7 @@ const AmountCon: React.FC<amountProps> = ({
       </View>
       <View style={[styles.amountCon]}>
         {icon2}
-<<<<<<< HEAD
         <View style={{ flex: 1 }}>
-=======
-        <View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           <Text
             style={[
               styles.text,
@@ -136,11 +107,7 @@ const AmountCon: React.FC<amountProps> = ({
           </Text>
         </View>
       </View>
-<<<<<<< HEAD
     </Animated.View>
-=======
-    </BgImage>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   );
 };
 
@@ -150,7 +117,6 @@ const styles = StyleSheet.create({
     height: 110,
     flexDirection: "row",
     alignSelf: "center",
-<<<<<<< HEAD
     resizeMode: "stretch",
     backgroundColor: Colors.white,
     borderRadius: radius.small,
@@ -162,22 +128,12 @@ const styles = StyleSheet.create({
   },
   amountCon: {
     backgroundColor: Colors.red,
-=======
-    gap: 10,
-    resizeMode: "stretch",
-  },
-  amountCon: {
-    backgroundColor: "transparent",
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
     gap: 15,
-<<<<<<< HEAD
     paddingLeft: 20,
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   logo: {
     width: 35,

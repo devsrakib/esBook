@@ -5,7 +5,7 @@ import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
 import { Entypo } from "@expo/vector-icons";
 import { Link } from "expo-router";
-<<<<<<< HEAD
+
 import useApiHook from "@/hooks/all_api_hooks";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -20,30 +20,14 @@ const Header = () => {
     >
       <View style={styles.titleCon}>
         <Text style={styles.text}>Products</Text>
-        <View style={styles.quantityCon}>
-          <Text style={styles.quantity}>{data?.data?.length}</Text>
-=======
-
-const Header = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.titleCon}>
-        <Text style={styles.text}>Products</Text>
-        <View style={styles.quantityCon}>
-          <Text style={styles.quantity}>11</Text>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
-        </View>
+        <View style={styles.quantityCon}></View>
       </View>
       <Link href={"/pages/product/AddProduct"} asChild>
         <Pressable style={styles.addProduct}>
           <Entypo name="plus" size={24} color={Colors.mainColor} />
         </Pressable>
       </Link>
-<<<<<<< HEAD
     </LinearGradient>
-=======
-    </View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   );
 };
 

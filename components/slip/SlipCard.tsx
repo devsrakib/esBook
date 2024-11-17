@@ -11,16 +11,13 @@ import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
-<<<<<<< HEAD
+
 import Animated, {
   FadeInDown,
   FadeInRight,
   FadeInUp,
   FlipInEasyX,
 } from "react-native-reanimated";
-=======
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 const SlipCard = ({ index }: { index: number }) => {
   const [addedSlip, setAddedSlip] = useState<boolean | null>(null);
@@ -68,7 +65,6 @@ const SlipCard = ({ index }: { index: number }) => {
         >
           <Text style={styles.ButtonText}>{addedSlip ? "Added" : "Add"}</Text>
           {addedSlip ? (
-<<<<<<< HEAD
             <Animated.View entering={FadeInRight.delay(100).duration(200)}>
               <Ionicons name="close" size={24} color={Colors.white} />
             </Animated.View>
@@ -82,11 +78,6 @@ const SlipCard = ({ index }: { index: number }) => {
             >
               <Entypo name="plus" size={24} color={Colors.white} />
             </Animated.View>
-=======
-            <Ionicons name="close" size={24} color={Colors.white} />
-          ) : (
-            <Entypo name="plus" size={24} color={Colors.white} />
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           )}
         </TouchableOpacity>
       </View>
@@ -101,13 +92,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: radius.small,
     backgroundColor: Colors.white,
-<<<<<<< HEAD
+
     shadowColor: Colors.shadow,
     elevation: 10,
-=======
-    shadowColor: Colors.black,
-    elevation: 15,
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     flexDirection: "row",
     alignItems: "center",
     gap: 10,

@@ -9,10 +9,7 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
-<<<<<<< HEAD
 import Animated, { FadeInDown } from "react-native-reanimated";
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
 const MoneySection = () => {
   const [reminderData, setReminderData] = useState<any>([]);
@@ -39,7 +36,6 @@ const MoneySection = () => {
   }, [reminderData]);
 
   return (
-<<<<<<< HEAD
     <Animated.View
       entering={FadeInDown.delay(100)
         .duration(200)
@@ -48,9 +44,6 @@ const MoneySection = () => {
         .stiffness(200)}
       style={styles.container}
     >
-=======
-    <View style={styles.container}>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       <View style={styles.subContainer}>
         <View style={styles.imgCon}>
           <Image
@@ -83,11 +76,7 @@ const MoneySection = () => {
           <AntDesign name="right" size={18} color={Colors.mainColor} />
         </TouchableOpacity>
       </Link>
-<<<<<<< HEAD
     </Animated.View>
-=======
-    </View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   );
 };
 

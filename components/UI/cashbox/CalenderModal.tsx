@@ -1,8 +1,8 @@
 import { View, Text, Dimensions, StyleSheet } from "react-native";
 import React, { memo } from "react";
 import Modal from "react-native-modal";
-//@ts-ignore
-import CalendarPicker from "react-native-calendar-picker";
+
+// import CalendarPicker from "react-native-calendar-picker";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 
@@ -24,7 +24,7 @@ const CalenderModal = ({
       backdropOpacity={0.7}
     >
       <View style={styles.dateModalContent}>
-        <CalendarPicker
+        {/* <CalendarPicker
           startFromMonday={true}
           todayBackgroundColor="#f2e6ff"
           selectedDayColor="#00ffff"
@@ -35,7 +35,7 @@ const CalenderModal = ({
           allowRangeSelection={true}
           width={Dimensions.get("window").width - 60}
           weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-        />
+        /> */}
       </View>
     </Modal>
   );

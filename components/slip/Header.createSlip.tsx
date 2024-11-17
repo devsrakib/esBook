@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 import GoBack from "../UI/header/GoBack";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
-<<<<<<< HEAD
+
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -16,33 +16,18 @@ const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
-=======
-import { AntDesign, Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-
-const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
-  return (
-    <View style={styles.container}>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       <View style={styles.titleCon}>
         <GoBack color={Colors.white} />
         <Text style={styles.title}>Create a New Slip</Text>
       </View>
 
       {/* amount */}
-<<<<<<< HEAD
       {/* <View style={styles.amountCon}> */}
       <BlurView intensity={80} tint="light" style={styles.amountCon}>
         <Text style={styles.amount}>$9854348</Text>
       </BlurView>
       {/* </View> */}
     </LinearGradient>
-=======
-      <View style={styles.amountCon}>
-        <Text style={styles.amount}>$9854348</Text>
-      </View>
-    </View>
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   );
 };
 

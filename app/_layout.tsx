@@ -65,7 +65,7 @@ const InitialLayout = () => {
 
   // Render the navigation stack once the initial route is determined
   return (
-    <Stack initialRouteName={initialRouteName}>
+    <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>

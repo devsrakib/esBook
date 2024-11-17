@@ -1316,10 +1316,9 @@ export interface CustomerData {
 export interface SupplierData {
   profile_photo: string;
   name: string;
-<<<<<<< HEAD
+
   store_name: string;
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+
   email: string;
   address: string;
   phone: string;

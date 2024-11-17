@@ -21,10 +21,7 @@ const Suppliers = () => {
   const [supplierData, setSupplierData] = useState<SupplierData>({
     profile_photo: selectedImage ? selectedImage : "",
     name: "",
-<<<<<<< HEAD
     store_name: "",
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
     email: "",
     phone: "",
     address: "",
@@ -55,10 +52,8 @@ const Suppliers = () => {
       // Create FormData for the request
       const formData = new FormData();
       formData.append("name", supplierData.name);
-<<<<<<< HEAD
+
       formData.append("store_name", supplierData.store_name);
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
       formData.append("email", supplierData.email);
       formData.append("phone", supplierData.phone);
       formData.append("address", supplierData.address);

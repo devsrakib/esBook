@@ -8,28 +8,25 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getCustomers } from "@/databases/Database";
 import AllCustomers from "@/components/UI/AllCustomers";
 import useApiHook from "@/hooks/all_api_hooks";
-<<<<<<< HEAD
 import EmptyState from "@/components/UI/EmptyState";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
   const db = useSQLiteContext();
   const { data: customer, loading } = useApiHook("customers/");
-=======
 
-const Page = () => {
-  const { bottom, top } = useSafeAreaInsets();
-  const [customer, setCustomer] = useState<any>();
-  const db = useSQLiteContext();
-  useEffect(() => {
-    async function setup() {
-      // const result = await getCustomers(db);
-      const { data, loading } = useApiHook("customers/");
-      setCustomer(data);
-    }
-    setup();
-  }, []);
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+  // const Page = () => {
+  //   const { bottom, top } = useSafeAreaInsets();
+  //   const [customer, setCustomer] = useState<any>();
+  //   const db = useSQLiteContext();
+  //   useEffect(() => {
+  //     async function setup() {
+  //       // const result = await getCustomers(db);
+  //       const { data, loading } = useApiHook("customers/");
+  //       setCustomer(data);
+  //     }
+  //     setup();
+  //   }, []);
 
   console.log(customer, "customer data");
 
@@ -51,7 +48,6 @@ const Page = () => {
       />
       <View style={styles.bodySection}>
         <FlatList
-<<<<<<< HEAD
           data={customer?.data}
           contentContainerStyle={[
             styles.flatListContainer,
@@ -72,28 +68,18 @@ const Page = () => {
               />
             </View>
           }
-=======
-          data={customer}
-          renderItem={({ item, index }) => {
-            return <AllCustomers item={item} index={index} />;
-          }}
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         />
       </View>
     </View>
   );
 };
-<<<<<<< HEAD
 
-=======
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
   },
   bodySection: {
-<<<<<<< HEAD
     flex: 1, // Take full available space
     paddingVertical: 10,
   },
@@ -111,10 +97,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-=======
-    paddingVertical: 10,
-  },
-});
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 export default Page;

@@ -13,7 +13,7 @@ const Search = ({
 }: {
   searchTerm: string;
   setSearchTerm: Function;
-  setFocusInput: Function;
+  setFocusInput?: Function;
 }) => {
   return (
     <Animated.View entering={FadeInUp} style={styles.searchSection}>

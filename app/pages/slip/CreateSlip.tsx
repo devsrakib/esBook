@@ -20,23 +20,16 @@ import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-<<<<<<< HEAD
 import useApiHook from "@/hooks/all_api_hooks";
 import AllCustomers from "@/components/UI/AllCustomers";
 
 const CreateSlip = () => {
-  // const [data, setData] = useState<any>([]);
-=======
-
-const CreateSlip = () => {
-  const [data, setData] = useState<any>([]);
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
+  // const [data, setData] = useState<any>([])
   const [isSelectCustomer, setIsSelectCustomer] = useState<boolean>(false);
   const { top } = useSafeAreaInsets();
   const db = useSQLiteContext();
   const { width } = Dimensions.get("window");
   const isTablet = width >= 600;
-<<<<<<< HEAD
   const { data } = useApiHook("customers/");
   // useEffect(() => {
   //   async function customer() {
@@ -47,20 +40,6 @@ const CreateSlip = () => {
   //   }
   //   customer();
   // }, []);
-=======
-
-  useEffect(() => {
-    async function customer() {
-      const result = await getCustomers(db);
-      console.log(result, "::::::::::");
-
-      setData(result);
-    }
-    customer();
-  }, []);
-
-  console.log(data);
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
 
   return (
     <View style={[styles.container, { paddingTop: top }]}>
@@ -74,11 +53,6 @@ const CreateSlip = () => {
 
       <View style={styles.body}>
         <FlatList
-<<<<<<< HEAD
-          // numColumns={2}
-=======
-          numColumns={2}
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
           data={Array(101)}
           contentContainerStyle={styles.content}
           renderItem={({ item, index }) => {
@@ -119,16 +93,12 @@ const CreateSlip = () => {
 
       <Modal
         visible={isSelectCustomer}
-<<<<<<< HEAD
         style={{
           margin: 0,
           justifyContent: "flex-end",
           backgroundColor: "red",
         }}
         transparent
-=======
-        style={{ margin: 0, justifyContent: "flex-end" }}
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
         onDismiss={() => setIsSelectCustomer(false)}
         onRequestClose={() => setIsSelectCustomer(false)}
         animationType="slide"
@@ -148,7 +118,7 @@ const CreateSlip = () => {
             >
               <Ionicons name="close" size={28} color={Colors.mainColor} />
             </TouchableOpacity>
-<<<<<<< HEAD
+
             <Text style={styles.modalTitle}>Select a customer</Text>
           </View>
           <FlatList
@@ -156,13 +126,6 @@ const CreateSlip = () => {
             contentContainerStyle={[styles.content, { paddingTop: 20 }]}
             renderItem={({ item, index }) => {
               return <AllCustomers item={item} index={index} />;
-=======
-          </View>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => {
-              return <Customers item={item} />;
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
             }}
           />
         </View>
@@ -187,16 +150,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: Colors.white,
-<<<<<<< HEAD
     flex: 1,
     alignSelf: "center",
     paddingBottom: 20,
-=======
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    height: Dimensions.get("screen").height / 2,
-    alignSelf: "center",
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   footer: {
     flexDirection: "row",
@@ -229,7 +185,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.border,
     borderBottomWidth: 1,
     paddingHorizontal: 20,
-<<<<<<< HEAD
+
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
@@ -237,10 +193,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: Fonts.medium,
     fontWeight: "500",
-=======
-    // alignItems: "center",
-    justifyContent: "center",
->>>>>>> 33edb8771ade265b3a093c070c22c8ef3821d12b
   },
   modalClose: {
     width: 30,
