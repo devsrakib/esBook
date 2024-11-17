@@ -7,6 +7,7 @@ import { ActivityIndicator, View } from "react-native";
 import axios from "axios";
 import { apiUrl } from "@/hooks/all_api_hooks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 // SplashScreen.preventAutoHideAsync();
@@ -22,13 +23,13 @@ const InitialLayout = () => {
         // Check for access token in AsyncStorage
         const accessToken = await AsyncStorage.getItem("access_token");
 
-        const db = await openDatabaseAsync("database.db");
-        await migrateDbIfNeeded(db);
+        // const db = await openDatabaseAsync("database.db");
+        // await migrateDbIfNeeded(db);
 
         // Determine the initial route based on access token availability
         if (accessToken) {
           // Token exists, navigate to tabs
-          setInitialRouteName("/(tabs)");
+          setInitialRouteName("(tabs)");
         } else {
           // No token, navigate to login (index)
           setInitialRouteName("/pages/login/Login");
@@ -65,7 +66,7 @@ const InitialLayout = () => {
 
   // Render the navigation stack once the initial route is determined
   return (
-    <Stack>
+    <Stack initialRouteName={initialRouteName}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
@@ -75,7 +76,9 @@ const InitialLayout = () => {
 export default function RootLayout() {
   return (
     <SQLiteProvider databaseName="database.db" onInit={migrateDbIfNeeded}>
+      {/* // <NavigationContainer> */}
       <InitialLayout />
+      {/* // </NavigationContainer> */}
     </SQLiteProvider>
   );
 }

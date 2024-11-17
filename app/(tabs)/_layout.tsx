@@ -82,9 +82,9 @@ export default function TabLayout() {
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
           height: 70,
-          paddingVertical: 10,
-          alignItems: "center",
-          justifyContent: "center",
+          // paddingVertical: 10,
+          // alignItems: "center",
+          // justifyContent: "center",
         },
       }}
     >
@@ -219,7 +219,7 @@ export default function TabLayout() {
                   { color: focused ? Colors.mainColor : Colors.black },
                 ]}
               >
-                {focused ? data?.data[0]?.name || profile?.name : "Profile"}
+                {/* {focused ? data?.data[0]?.name || profile?.name : "Profile"} */}
               </Text>
             </View>
           ),
@@ -233,8 +233,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-
-    width: isTablet ? 120 : "100%",
+    backgroundColor: "red",
+    width: "100%",
   },
   title: {
     fontSize: 12,

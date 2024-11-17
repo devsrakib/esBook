@@ -91,7 +91,7 @@ const Dashboard = () => {
 
   return (
     <View style={sharedStyle.grid}>
-      {dashboardData.map((item, index) => {
+      {dashboardData?.map((item, index) => {
         const StatusContent = (
           <CustomTouchable
             entering={FadeInDown.delay(index * 50)

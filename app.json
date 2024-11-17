@@ -1,6 +1,6 @@
 {
   "expo": {
-
+"jsEngine": "hermes",
     "name": "eBusiness",
     "slug": "eBusiness",
     "version": "1.0.0",

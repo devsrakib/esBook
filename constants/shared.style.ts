@@ -6,5 +6,6 @@ export const sharedStyle = StyleSheet.create({
     // gap: 10,
     justifyContent: "space-between",
     gap: 10,
+    // backgroundColor: "red",
   },
 });

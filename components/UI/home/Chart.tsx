@@ -8,8 +8,6 @@ import {
 import React, { useEffect, useState } from "react";
 
 import { LineChart } from "react-native-gifted-charts";
-import { ruleTypes } from "gifted-charts-core";
-
 import { BarChart } from "react-native-gifted-charts";
 
 import { Colors } from "@/constants/Colors";
@@ -18,7 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useSQLiteContext } from "expo-sqlite";
 import { getCash_sell } from "@/databases/Database";
 
-import Animated, { FadeInDown, ZoomIn, ZoomOut } from "react-native-reanimated";
+import Animated, { FadeInDown, ZoomIn } from "react-native-reanimated";
 import { ICashSell, IChart } from "@/types/interfaces/home/chart.interface";
 import useApiHook from "@/hooks/all_api_hooks";
 import { radius } from "@/constants/sizes";
@@ -30,24 +28,28 @@ const Chart = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const db = useSQLiteContext();
-  console.log(chartData);
+  const { data } = useApiHook("cash-sells/");
 
   const handleChartStatus = (text: string) => {
     setSelectedStatus(text);
   };
 
-  const { data } = useApiHook("cash-sells/");
+  // Move useEffect here to observe `data` and `selectedStatus` changes
+  useEffect(() => {
+    if (data?.data) {
+      processChartData(data?.data);
+    }
+  }, [data, selectedStatus]);
 
+  // Moved data processing to a separate function
   const processChartData = (apiData: ICashSell[]) => {
     if (!apiData || apiData?.length === 0) return;
-    console.log(apiData);
 
     let groupedData: { [key: string]: number } = {};
 
     // Iterate over the API data
     apiData?.forEach((item) => {
       const key = formatDate(new Date(item?.createdAt));
-      // Accumulate saleAmount or use a default value
       groupedData[key] = (groupedData[key] || 0) + (item?.sell_amount || 50);
     });
 
@@ -67,41 +69,6 @@ const Chart = () => {
     }));
 
     setChartData(lineChartData);
-
-    // const db = useSQLiteContext();
-
-    useEffect(() => {
-      async function setup() {
-        const result = await getCash_sell(db);
-        processChartData(result as ICashSell[]);
-      }
-      setup();
-    }, [db, selectedStatus]);
-
-    // const processChartData = (data: ICashSell[]) => {
-    //   console.log(data);
-
-    //   let groupedData: { [key: string]: number } = {};
-
-    //   data?.forEach((item) => {
-    //     const key = formatDate(new Date(item?.createdAt));
-    //     if (groupedData[key]) {
-    //       groupedData[key] += item?.saleAmount;
-    //     } else {
-    //       groupedData[key] = item?.saleAmount;
-    //     }
-    //   });
-
-    // Continue processing and updating chart data as before...
-    const chartData = Object.keys(groupedData).map((key, index) => ({
-      label: key,
-      value: groupedData[key], // Use the accumulated value for the label
-      frontColor: colors[index % colors.length],
-      sideColor: colors[index % colors.length],
-      topColor: colors[index % colors.length],
-    }));
-
-    setChartData(chartData);
   };
 
   const formatDate = (date: Date) => {
@@ -117,12 +84,6 @@ const Chart = () => {
     }
     return "";
   };
-
-  useEffect(() => {
-    if (data?.data) {
-      processChartData(data?.data);
-    }
-  }, [data, selectedStatus]);
 
   return (
     <Animated.View
@@ -147,8 +108,6 @@ const Chart = () => {
             color={Colors.text}
           />
         </TouchableOpacity>
-
-        {/* don't change this view */}
 
         {isModalVisible && (
           <Animated.View
@@ -175,7 +134,6 @@ const Chart = () => {
         width={Dimensions.get("window").width * 0.73}
         height={200}
         isAnimated
-        // thickness={2}
         dataPointsRadius={4}
         color="#4ABFF4"
         hideDataPoints={false}
@@ -190,18 +148,18 @@ const Chart = () => {
           </Text>
         ))}
       </View>
-      {/* </View> */}
-      <BarChart
+
+      {/* <BarChart
         showFractionalValues
         showYAxisIndices
         hideRules
         noOfSections={4}
-        maxValue={Math.max(...chartData?.map((item) => item?.value))} // Adjust maxValue dynamically
+        maxValue={Math.max(...chartData?.map((item) => item?.value))}
         data={chartData}
         barWidth={20}
         sideWidth={10}
         side="right"
-      />
+      /> */}
     </Animated.View>
   );
 };
@@ -211,7 +169,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
     backgroundColor: Colors.white,
-
     borderRadius: 10,
     shadowColor: Colors.shadow,
     elevation: 10,
@@ -230,7 +187,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
-
     position: "relative",
   },
   overview: {
@@ -250,7 +206,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderRadius: radius.small,
     zIndex: 1,
-
     shadowColor: Colors.shadow,
     elevation: 10,
     paddingHorizontal: 5,
