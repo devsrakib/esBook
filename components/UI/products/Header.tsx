@@ -8,6 +8,7 @@ import { Link } from "expo-router";
 
 import useApiHook from "@/hooks/all_api_hooks";
 import { LinearGradient } from "expo-linear-gradient";
+import BarcodeScannerScreen from "../BarcodeScanner";
 
 const Header = () => {
   const { data } = useApiHook("product/");
@@ -27,6 +28,7 @@ const Header = () => {
           <Entypo name="plus" size={24} color={Colors.mainColor} />
         </Pressable>
       </Link>
+      <BarcodeScannerScreen />
     </LinearGradient>
   );
 };

@@ -2,6 +2,7 @@ import { View, Text, Dimensions, StyleSheet } from "react-native";
 import React, { memo } from "react";
 import Modal from "react-native-modal";
 
+// import { CalendarPicker } from "react-native-calendar-picker";
 // import CalendarPicker from "react-native-calendar-picker";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
