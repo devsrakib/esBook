@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   contentCon: {
     paddingHorizontal: 8,
-    flex: 1,
+    flexGrow: 1,
 
     backgroundColor: Colors.page_bg,
   },

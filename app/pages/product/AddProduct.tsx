@@ -53,7 +53,7 @@ const AddProduct = () => {
   const toggleDropdown = (text: string) => {
     if (text === "supplier") {
       setSupplierVisible(!supplierVisible);
-      openModal();
+      // openModal();
     } else {
       setCategoryVisible(!categoryVisible);
     }
@@ -162,11 +162,11 @@ const AddProduct = () => {
             category={category}
             supplier={supplier}
           />
-          {/* <SupplierListModal
+          <SupplierListModal
             setVisible={setSupplierVisible}
             visible={supplierVisible}
             setSupplier={handleSelectedSupplier}
-          /> */}
+          />
           <BottomSheet ref={bottomSheetRef} />
           <CategoryListModal
             setVisible={setCategoryVisible}

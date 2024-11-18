@@ -10,11 +10,6 @@ import {
 import React, { useCallback, useMemo, useRef, useState } from "react";
 
 import Modal from "react-native-modal";
-import {
-  BottomSheetBackdrop,
-  BottomSheetHandleProps,
-  BottomSheetModal,
-} from "@gorhom/bottom-sheet";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { ScrollView } from "moti";
@@ -27,7 +22,6 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import _ from "lodash";
 import { Ionicons } from "@expo/vector-icons";
 import EmptyState from "../EmptyState";
-import BottomSheet from "../BottomSheet";
 
 type props = {
   setVisible: Function;
@@ -37,20 +31,7 @@ type props = {
 };
 const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [enablePanDownToClose, setEnablePanDownToClose] = useState(true);
-  const [enableDismissOnClose, setEnableDismissOnClose] = useState(true);
   const { data: supplierData, loading } = useApiHook("suppliers/");
-  // console.log(supplierData);
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-      />
-    ),
-    []
-  );
 
   const filteredCategories = supplierData?.data?.filter((item: ISupplier) =>
     item?.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,125 +42,110 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
     []
   );
 
-  // renders
-  // const renderHeaderHandle = useCallback(
-  //   (props: BottomSheetHandleProps) => (
-  //     <HeaderHandle {...props} children="Modal Example" />
-  //   ),
-  //   []
-  // );
   return (
-    // <BottomSheetModal
-    //   // presentationStyle="formSheet"
-    //   // onBackdropPress={() => setVisible(false)}
-    //   // onDismiss={() => setVisible(false)}
-    //   // isVisible={visible}
-    //   // // style={[styles.dropdownList]}
-    //   // backdropOpacity={0.3}
-    //   // animationIn={"slideInUp"}
-    //   // animationOutTiming={500}
-    //   // backdropTransitionInTiming={200}
-    //   // backdropTransitionOutTiming={500}
-    //   // style={{
-    //   //   justifyContent: "flex-end",
-    //   //   margin: 0,
-    //   //   height: 400,
-    //   // }}
-    //   overDragResistanceFactor={0}
-    //   ref={ref}
-    //   snapPoints={snapPoints}
-    //   backdropComponent={renderBackdrop}
-    //   // onChange={handleChange}
-    //   // handleComponent={renderHeaderHandle}
-    // >
-    //   <View style={styles.dropdownList}>
-    //     <View style={styles.indicator} />
-    //     {loading ? (
-    //       <ActivityIndicator />
-    //     ) : (
-    //       <>
-    //         <Animated.View
-    //           entering={FadeInDown.delay(50)
-    //             .duration(400)
-    //             .stiffness(200)
-    //             .damping(80)
-    //             .springify()}
-    //           style={styles.search}
-    //         >
-    //           <Ionicons name="search" size={20} color={Colors.gray} />
-    //           <TextInput
-    //             style={styles.searchInput}
-    //             placeholder="Search"
-    //             onChangeText={(e) => handleInput(e)}
-    //           />
-    //         </Animated.View>
-    //         <View style={{ flex: 1 }}>
-    //           <FlatList
-    //             data={filteredCategories}
-    //             contentContainerStyle={{
-    //               flexGrow: 1,
-    //             }}
-    //             renderItem={({ item, index }) => {
-    //               return (
-    //                 <Animated.View
-    //                   key={item.id} // Ensure that the key is unique
-    //                   entering={FadeInDown.delay(index * 50)
-    //                     .duration(400)
-    //                     .stiffness(200)
-    //                     .damping(80)
-    //                     .springify()}
-    //                 >
-    //                   <TouchableOpacity
-    //                     style={styles.dropdownItem}
-    //                     onPress={() => {
-    //                       setSupplier(item?.id, item?.name);
-    //                       setVisible(false);
-    //                     }}
-    //                   >
-    //                     <Image
-    //                       style={styles.profile}
-    //                       source={{ uri: item?.profile_photo }}
-    //                       defaultSource={require("../../../assets/images/default_profile.jpg")}
-    //                     />
-    //                     <View style={styles.dropdownItemTextContainer}>
-    //                       <Text style={styles.name}>{item?.name}</Text>
-    //                       <Text style={styles.dropdownItemText}>
-    //                         {item?.address}
-    //                       </Text>
-    //                     </View>
-    //                   </TouchableOpacity>
-    //                 </Animated.View>
-    //               );
-    //             }}
-    //             ListEmptyComponent={() => (
-    //               <EmptyState
-    //                 icon="search"
-    //                 message="No supplier found"
-    //                 iconSize={50}
-    //                 color={Colors.text}
-    //               />
-    //             )}
-    //           />
-    //         </View>
-    //       </>
-    //     )}
-    //     <ScrollView showsVerticalScrollIndicator={false}>
-    //       {supplierData?.data?.map((item: ISupplier, index: number) => (
-    //         <TouchableOpacity
-    //           key={index}
-    //           style={styles.dropdownItem}
-    //           onPress={() => {
-    //             // toggleDropdown();
-    //           }}
-    //         >
-    //           <Text style={styles.dropdownItemText}>{item?.name}</Text>
-    //         </TouchableOpacity>
-    //       ))}
-    //     </ScrollView>
-    //   </View>
-    // </BottomSheetModal>
-    <></>
-    // <BottomSheet ref={bottomSheetRef} />
+    <Modal
+      presentationStyle="formSheet"
+      onBackdropPress={() => setVisible(false)}
+      onDismiss={() => setVisible(false)}
+      isVisible={visible}
+      // style={[styles.dropdownList]}
+      backdropOpacity={0.3}
+      animationIn={"slideInUp"}
+      animationOutTiming={500}
+      backdropTransitionInTiming={200}
+      backdropTransitionOutTiming={500}
+      style={{
+        justifyContent: "flex-end",
+        margin: 0,
+        height: 400,
+      }}
+    >
+      <View style={styles.dropdownList}>
+        <View style={styles.indicator} />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <Animated.View
+              entering={FadeInDown.delay(50)
+                .duration(400)
+                .stiffness(200)
+                .damping(80)
+                .springify()}
+              style={styles.search}
+            >
+              <Ionicons name="search" size={20} color={Colors.gray} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search"
+                onChangeText={(e) => handleInput(e)}
+              />
+            </Animated.View>
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={filteredCategories}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                }}
+                renderItem={({ item, index }) => {
+                  return (
+                    <Animated.View
+                      key={item.id} // Ensure that the key is unique
+                      entering={FadeInDown.delay(index * 50)
+                        .duration(400)
+                        .stiffness(200)
+                        .damping(80)
+                        .springify()}
+                    >
+                      <TouchableOpacity
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setSupplier(item?.id, item?.name);
+                          setVisible(false);
+                        }}
+                      >
+                        <Image
+                          style={styles.profile}
+                          source={{ uri: item?.profile_photo }}
+                          defaultSource={require("../../../assets/images/default_profile.jpg")}
+                        />
+                        <View style={styles.dropdownItemTextContainer}>
+                          <Text style={styles.name}>{item?.name}</Text>
+                          <Text style={styles.dropdownItemText}>
+                            {item?.address}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </Animated.View>
+                  );
+                }}
+                ListEmptyComponent={() => (
+                  <EmptyState
+                    icon="search"
+                    message="No supplier found"
+                    iconSize={50}
+                    color={Colors.text}
+                  />
+                )}
+              />
+            </View>
+          </>
+        )}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {supplierData?.data?.map((item: ISupplier, index: number) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.dropdownItem}
+              onPress={() => {
+                // toggleDropdown();
+              }}
+            >
+              <Text style={styles.dropdownItemText}>{item?.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    </Modal>
   );
 };
 
