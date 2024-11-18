@@ -8,6 +8,8 @@ import axios from "axios";
 import { apiUrl } from "@/hooks/all_api_hooks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 // SplashScreen.preventAutoHideAsync();
@@ -75,10 +77,12 @@ const InitialLayout = () => {
 
 export default function RootLayout() {
   return (
-    <SQLiteProvider databaseName="database.db" onInit={migrateDbIfNeeded}>
-      {/* // <NavigationContainer> */}
-      <InitialLayout />
-      {/* // </NavigationContainer> */}
-    </SQLiteProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SQLiteProvider databaseName="database.db" onInit={migrateDbIfNeeded}>
+        <BottomSheetModalProvider>
+          <InitialLayout />
+        </BottomSheetModalProvider>
+      </SQLiteProvider>
+    </GestureHandlerRootView>
   );
 }
