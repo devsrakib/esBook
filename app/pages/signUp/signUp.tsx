@@ -458,8 +458,6 @@ const SignupScreen = () => {
       <Stack.Screen
         options={{
           headerShown: false,
-          animation: "slide_from_right",
-          animationDuration: 50,
         }}
       />
       <ScrollView>

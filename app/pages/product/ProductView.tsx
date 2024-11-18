@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 
@@ -18,15 +18,26 @@ const ProductView = () => {
 
   const { top } = useSafeAreaInsets();
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
-  const { data: productDetail } = useApiHook(`product/${params?.id}/`);
+  const {
+    data: productDetail,
+    loading,
+    error,
+  } = useApiHook(`product/${params?.id}/`);
   console.log(productDetail);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error || !productDetail) {
+    return <Text>Error loading product details.</Text>;
+  }
+
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen
         options={{
           headerShown: false,
-          animation: "slide_from_right",
-          // animationDuration: 50,
         }}
       />
       <Header
@@ -92,7 +103,7 @@ const ProductView = () => {
               .stiffness(200)}
             style={styles.stock}
           >
-            Stock available: 900kg{" "}
+            Stock available: {productDetail?.quantity}
           </Animated.Text>
           <Animated.Text
             entering={FadeInDown.delay(500)
@@ -124,43 +135,6 @@ const ProductView = () => {
           >
             buying date: {new Date(productDetail?.createdAt).toDateString()}
           </Animated.Text>
-
-          <View style={styles.priceCon}>
-            <View>
-              <Animated.Text
-                entering={FadeInDown.delay(400)
-                  .duration(200)
-                  .damping(80)
-                  .springify()
-                  .stiffness(200)}
-                style={styles.buying}
-              >
-                Buying Price: 50Tk
-              </Animated.Text>
-              <Animated.Text
-                entering={FadeInDown.delay(440)
-                  .duration(200)
-                  .damping(80)
-                  .springify()
-                  .stiffness(200)}
-                style={[styles.buying, { fontWeight: "normal" }]}
-              >
-                buying date: 10/2/2024
-              </Animated.Text>
-            </View>
-            <View>
-              <Animated.Text
-                entering={FadeInDown.delay(500)
-                  .duration(200)
-                  .damping(80)
-                  .springify()
-                  .stiffness(200)}
-                style={styles.selling}
-              >
-                Selling Price: 55Tk
-              </Animated.Text>
-            </View>
-          </View>
           <Animated.Text
             entering={FadeInDown.delay(580)
               .duration(200)

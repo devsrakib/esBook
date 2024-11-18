@@ -369,8 +369,6 @@ const AddProduct = () => {
       <Stack.Screen
         options={{
           headerShown: false,
-          animation: "slide_from_right",
-          animationDuration: 100,
         }}
       />
       <Header

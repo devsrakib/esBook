@@ -14,7 +14,6 @@ import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { ScrollView } from "moti";
 import useApiHook from "@/hooks/all_api_hooks";
-import { IProduct } from "@/types/product/product";
 import { ISupplier } from "@/types/interfaces/supplier.interface";
 
 import ActivityIndicator from "../ActivityIndicator";
@@ -133,7 +132,6 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
             </View>
           </>
         )}
-        =======
         <ScrollView showsVerticalScrollIndicator={false}>
           {supplierData?.data?.map((item: ISupplier, index: number) => (
             <TouchableOpacity

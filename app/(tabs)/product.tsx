@@ -78,6 +78,7 @@ const Product = () => {
       setCategoryId(id); // Filter by category
     }
   };
+
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Header />

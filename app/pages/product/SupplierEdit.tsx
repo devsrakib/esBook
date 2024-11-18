@@ -321,8 +321,6 @@ const SupplierEdit = () => {
         options={{
           headerShown: false,
           presentation: "modal",
-          animation: "slide_from_right",
-          animationDuration: 100,
         }}
       />
       <Header

@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
   },
   defaultContainer: {
     flexDirection: "column", // Stacks components vertically on phones
-    padding: 10,
     gap: 20,
   },
   tabletContainer: {

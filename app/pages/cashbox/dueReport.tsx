@@ -57,8 +57,6 @@ const DueReport = ({ where }: { where: string }) => {
       <Stack.Screen
         options={{
           headerShown: false,
-          animation: "slide_from_right",
-          animationDuration: 100,
         }}
       />
       {where !== "report" && (

@@ -32,7 +32,7 @@ const InitialLayout = () => {
           setInitialRouteName("(tabs)");
         } else {
           // No token, navigate to login (index)
-          setInitialRouteName("/pages/login/Login");
+          setInitialRouteName("(tabs)");
         }
 
         // Hide splash screen after initialization

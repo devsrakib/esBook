@@ -179,6 +179,7 @@ const isTablet = width >= 600;
 
 const ProductCard = ({ item }: any) => {
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
+  console.log(item, "::::::::::::");
 
   return (
     <Link
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   textContainer: {
-    flex: 1,
+    // flex: 1,
   },
   title: {
     fontSize: Fonts.medium,

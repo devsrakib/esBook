@@ -46,7 +46,6 @@ const CreateSlip = () => {
       <Stack.Screen
         options={{
           headerShown: false,
-          animation: "slide_from_right",
         }}
       />
       <Header setIsSelectCustomer={setIsSelectCustomer} />

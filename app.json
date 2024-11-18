@@ -1,6 +1,6 @@
 {
   "expo": {
-"jsEngine": "hermes",
+    "jsEngine": "hermes",
     "name": "eBusiness",
     "slug": "eBusiness",
     "version": "1.0.0",
@@ -34,7 +34,16 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-barcode-scanner",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

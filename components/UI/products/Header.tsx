@@ -8,10 +8,9 @@ import { Link } from "expo-router";
 
 import useApiHook from "@/hooks/all_api_hooks";
 import { LinearGradient } from "expo-linear-gradient";
-import BarcodeScannerScreen from "../BarcodeScanner";
 
 const Header = () => {
-  const { data } = useApiHook("product/");
+  const { data, loading } = useApiHook("product/");
   return (
     <LinearGradient
       colors={["#168F88", "#006B60", "#4D89A1"]}
@@ -21,14 +20,24 @@ const Header = () => {
     >
       <View style={styles.titleCon}>
         <Text style={styles.text}>Products</Text>
-        <View style={styles.quantityCon}></View>
+        {data?.data?.length && (
+          <View style={styles.quantityCon}>
+            <Text>{data?.data?.length ? data?.data?.length : "..."}</Text>
+          </View>
+        )}
       </View>
-      <Link href={"/pages/product/AddProduct"} asChild>
-        <Pressable style={styles.addProduct}>
-          <Entypo name="plus" size={24} color={Colors.mainColor} />
-        </Pressable>
-      </Link>
-      <BarcodeScannerScreen />
+      <View style={styles.addProductCon}>
+        <Link href={"/pages/product/AddProduct"} asChild>
+          <Pressable style={styles.addProduct}>
+            <Entypo name="plus" size={24} color={Colors.mainColor} />
+          </Pressable>
+        </Link>
+        <Link href={"/pages/camera/barcodeScannerScreen"} asChild>
+          <Pressable style={styles.addProduct}>
+            <Entypo name="camera" size={24} color={Colors.mainColor} />
+          </Pressable>
+        </Link>
+      </View>
     </LinearGradient>
   );
 };
@@ -73,6 +82,11 @@ const styles = StyleSheet.create({
   titleCon: {
     flexDirection: "row",
     gap: 10,
+    alignItems: "center",
+  },
+  addProductCon: {
+    flexDirection: "row",
+    gap: 14,
     alignItems: "center",
   },
 });
