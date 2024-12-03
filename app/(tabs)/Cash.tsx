@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomTopTab from "@/routers/CustomTopTab";
@@ -24,6 +24,12 @@ const tab: tabProps[] = [
 ];
 const Cash = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+
+  const handleSearch = useCallback(() => {
+    setIsOpenSearch(!isOpenSearch);
+    
+  }, [isOpenSearch]); 
   const { bottom, top } = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: top }]}>
@@ -31,8 +37,10 @@ const Cash = () => {
         tab={tab}
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
+        isOpenSearch={isOpenSearch}
+        handleSearch={handleSearch}
       />
-      {selectedIndex === 0 ? <Cashbox /> : <Parties />}
+      {selectedIndex === 0 ? <Cashbox /> : <Parties isOpenSearch={isOpenSearch} />}
     </View>
   );
 };

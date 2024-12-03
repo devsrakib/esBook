@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: Colors.white,
     borderRadius: radius.regular,
-    width: "100%",
+    width: "90%",
     alignSelf: "center",
     marginTop: 20,
     flexDirection: "row",

@@ -28,12 +28,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import ActivityIndicator from "@/components/UI/ActivityIndicator";
 import EmptyState from "@/components/UI/EmptyState";
 
-const Parties = () => {
+type PartiesProps = {
+  isOpenSearch: boolean;
+};
+const Parties = ({isOpenSearch}: PartiesProps) => {
   // const { bottom, top } = useSafeAreaInsets();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  // const [customers, setCustomers] = useState<CustomerData[]>([]);
-  // const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
-  const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const routerData = useLocalSearchParams();
   // const db = useSQLiteContext();
@@ -91,10 +92,6 @@ const Parties = () => {
     setSelectedIndex(val);
   }, []);
 
-  // Toggle search bar
-  const handleSearch = useCallback(() => {
-    setIsOpenSearch((prev) => !prev);
-  }, []);
 
   return (
     <View style={styles.container}>

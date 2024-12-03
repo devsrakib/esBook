@@ -1,17 +1,24 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import Tab from "./Tab";
 import { tabProps } from "@/app/(tabs)/Cash";
 import { Colors } from "@/constants/Colors";
 
 import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { radius } from "@/constants/sizes";
 
 type props = {
   tab: tabProps[];
   selectedIndex: number;
   setSelectedIndex: Function;
+  handleSearch: () => void;
+  isOpenSearch: boolean;
 };
-const CustomTopTab = ({ tab, selectedIndex, setSelectedIndex }: props) => {
+const CustomTopTab = ({ tab, selectedIndex, setSelectedIndex, handleSearch, isOpenSearch }: props) => {
+
+  console.log(isOpenSearch);
+  
   return (
     <LinearGradient
       colors={["#168F88", "#006B60", "#4D89A1"]}
@@ -31,6 +38,11 @@ const CustomTopTab = ({ tab, selectedIndex, setSelectedIndex }: props) => {
           />
         );
       })}
+      {selectedIndex === 1 &&<View style={styles.searchContainer}>
+<TouchableOpacity onPress={() => handleSearch()}  style={styles.search}>
+ {isOpenSearch ? <Ionicons name="close" size={18} color={Colors.white} /> : <FontAwesome name="search" size={18} color="white" />}
+</TouchableOpacity>
+      </View>}
     </LinearGradient>
   );
 };
@@ -45,4 +57,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: Colors.mainColor,
   },
+  searchContainer:{
+    flex:1,
+    alignItems:'flex-end',
+    justifyContent:'center'
+  },search:{
+    borderRadius:radius.small,
+    alignItems:'center',
+    justifyContent:'center'
+  }
 });
