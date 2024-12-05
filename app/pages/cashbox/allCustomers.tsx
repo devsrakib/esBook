@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "@/components/UI/header/Header";
 import { Colors } from "@/constants/Colors";
@@ -9,11 +9,14 @@ import { getCustomers } from "@/databases/Database";
 import AllCustomers from "@/components/UI/AllCustomers";
 import useApiHook from "@/hooks/all_api_hooks";
 import EmptyState from "@/components/UI/EmptyState";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useSelector } from "react-redux";
+import { fetchCustomer } from "@/redux/features/customer/customerSlice";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
   const db = useSQLiteContext();
-  const { data: customer, loading } = useApiHook("customers/");
+  // const { data: customer, loading } = useApiHook("customers/");
 
   // const Page = () => {
   //   const { bottom, top } = useSafeAreaInsets();
@@ -28,7 +31,15 @@ const Page = () => {
   //     setup();
   //   }, []);
 
-  console.log(customer, "customer data");
+
+  const dispatch = useAppDispatch();
+  const {customer} = useSelector((state:any) => state.customers)
+
+
+  useEffect(() => {
+    dispatch(fetchCustomer());
+  }, []);
+
 
   return (
     <View

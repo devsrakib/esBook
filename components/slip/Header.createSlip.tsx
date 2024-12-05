@@ -24,7 +24,10 @@ const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
       {/* amount */}
       {/* <View style={styles.amountCon}> */}
       <BlurView intensity={80} tint="light" style={styles.amountCon}>
-        <Text style={styles.amount}>$9854348</Text>
+        <Text style={styles.amount}>$348</Text>
+        <View style={styles.quantityCon}>
+          <Text style={styles.quantity}>8</Text>
+        </View>
       </BlurView>
       {/* </View> */}
     </LinearGradient>
@@ -53,16 +56,32 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   amountCon: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingRight: 4,
+    paddingVertical: 2,
+    paddingLeft: 8,
+    gap: 10,
     borderRadius: radius.small,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     backgroundColor: Colors.white,
+    flexDirection: "row",
   },
   amount: {
     fontSize: Fonts.medium,
     color: Colors.mainColor,
     fontWeight: "500",
   },
+  quantityCon:{
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: radius.small,
+    backgroundColor: Colors.mainColor,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  quantity:{
+    fontSize: Fonts.medium,
+    color: Colors.white,
+    fontWeight: "500",
+  }
 });

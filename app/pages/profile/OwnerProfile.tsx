@@ -80,14 +80,14 @@ const OwnerProfile = () => {
   };
 
   useEffect(() => {
-    if (OwnerData?.data?.length > 0) {
+    if (OwnerData && OwnerData?.data && OwnerData?.data?.length > 0) {
       setProfileData(OwnerData?.data[0]);
     }
   }, [OwnerData]);
 
   useEffect(() => {
     if (selectedImage) {
-      setProfileData((prevState: any) => ({
+      setProfileData((prevState) => ({
         ...prevState,
         profilePhoto: selectedImage,
       }));
@@ -132,12 +132,12 @@ const OwnerProfile = () => {
       >
         <TouchableOpacity onPress={pickImage} style={styles.imageWrapper}>
           {profileData?.profilePhoto ? (
-            <Animated.Image
+            <Image
               source={{ uri: profileData.profilePhoto }}
               style={styles.profileImage}
             />
           ) : (
-            <Animated.Image
+            <Image
               source={require("../../../assets/images/placeholder.jpeg")}
               style={styles.profileImage}
             />

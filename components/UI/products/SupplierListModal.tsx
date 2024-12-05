@@ -131,19 +131,6 @@ const SupplierListModal = ({ setVisible, visible, setSupplier }: props) => {
             </View>
           </>
         )}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {supplierData?.data?.map((item: ISupplier, index: number) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.dropdownItem}
-              onPress={() => {
-                // toggleDropdown();
-              }}
-            >
-              <Text style={styles.dropdownItemText}>{item?.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
       </View>
     </Modal>
   );

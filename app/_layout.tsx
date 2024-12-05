@@ -10,6 +10,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Provider } from "react-redux";
+import store from "@/redux/store";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 // SplashScreen.preventAutoHideAsync();
@@ -77,12 +79,15 @@ const InitialLayout = () => {
 
 export default function RootLayout() {
   return (
+      <Provider store={store}>
     <GestureHandlerRootView style={{ flex: 1 }}>
+
       <SQLiteProvider databaseName="database.db" onInit={migrateDbIfNeeded}>
         <BottomSheetModalProvider>
           <InitialLayout />
         </BottomSheetModalProvider>
       </SQLiteProvider>
     </GestureHandlerRootView>
+      </Provider>
   );
 }
