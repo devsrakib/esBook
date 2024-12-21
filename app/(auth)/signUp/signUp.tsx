@@ -15,7 +15,7 @@ import { radius } from "@/constants/sizes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Fonts } from "@/constants/Fonts";
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 import Header from "@/components/UI/header/Header";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
@@ -26,6 +26,7 @@ import Animated, {
   FadeInDown,
 } from "react-native-reanimated";
 import BottomToast from "@/components/UI/shared/CustomModal";
+import { API_URL } from "@/constants/api_url";
 
 // Define type for the fields
 type FieldKeys = "name" | "email" | "password" | "password2";
@@ -85,7 +86,7 @@ const SignupScreen = () => {
   const signup = async () => {
     try {
       const response = await axios.post(
-        "http://10.0.2.2:8000/api/v1/user/register/",
+        `${API_URL}user/register/`,
         formData
       );
 console.log('response');
@@ -95,8 +96,9 @@ console.log('response');
 
         await AsyncStorage.setItem("access_token", access);
         await AsyncStorage.setItem("refresh_token", refresh);
-
+router.push('/(tabs)')
         Alert.alert("Signup Successful", "Welcome!");
+
       }
     } catch (error: any) {
       const errorData = error?.response?.data;

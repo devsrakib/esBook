@@ -29,7 +29,7 @@ import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import useImagePicker from "@/utils/UseImagePicker";
 import { Fonts } from "@/constants/Fonts";
-import SignupScreen from "./pages/signUp/signUp";
+import SignupScreen from "./signUp/signUp";
 
 const { width, height } = Dimensions.get("window");
 
