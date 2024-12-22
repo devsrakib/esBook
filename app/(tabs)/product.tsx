@@ -56,6 +56,7 @@ import ProductCard from "@/components/UI/products/ProductCard";
 import CategorySegment from "@/components/UI/products/CategorySegment";
 import useApiHook from "@/hooks/all_api_hooks";
 import EmptyState from "@/components/UI/EmptyState";
+import { useAppSelector } from "@/hooks/hooks";
 
 // Memoize ProductCard component to prevent unnecessary re-renders
 
@@ -63,6 +64,7 @@ const Product = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [categoryId, setCategoryId] = useState<string>("");
   const { bottom, top } = useSafeAreaInsets();
+  // const {product} = useAppSelector(state => state.products);
   const { data: product, loading } = useApiHook(
     categoryId ? `product/?category=${categoryId}` : "product/"
   );

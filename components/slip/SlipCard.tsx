@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
+
+
 
 import Animated, {
   FadeInDown,
@@ -18,12 +20,22 @@ import Animated, {
   FadeInUp,
   FlipInEasyX,
 } from "react-native-reanimated";
+import { IProduct } from "@/types/product/product";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { increment } from "@/redux/actions/slipCartQuantitySlice";
+import { handleUrlParams } from "expo-router/build/fork/getStateFromPath-forks";
 
-const SlipCard = ({ index }: { index: number }) => {
+const SlipCard = ({item, index }: {item: IProduct , index: number }) => {
+  const [quantity, setQuantity] = useState(0);
   const [addedSlip, setAddedSlip] = useState<boolean | null>(null);
   const { width } = Dimensions.get("window");
-
   const isTablet = width >= 600;
+
+  
+  const increment = () =>{
+    setQuantity(prev => prev + 1)
+  }
+
   return (
     <Animated.View
       entering={FadeInDown.delay(index * 50)
@@ -35,15 +47,16 @@ const SlipCard = ({ index }: { index: number }) => {
     >
       <View style={styles.info}>
         <View style={styles.imageCon}>
-          <Image
+          {/* <Image
             style={styles.image}
-            source={require("../../assets/images/onion.jpg")}
-          />
+            defaultSource={require("../../assets/images/onion.jpg")}
+          source={{uri: item?.image}}
+          /> */}
         </View>
         <View style={styles.stockCon}>
-          <Text style={styles.pname}>Onion</Text>
-          <Text>Stock: 90kg</Text>
-          <Text>selling Price: 55tk</Text>
+          <Text style={styles.pname}>{item?.product_name}</Text>
+          <Text>Stock: {item?.quantity}</Text>
+          <Text>selling Price: {item?.selling_price}tk</Text>
         </View>
       </View>
       <View style={styles.addQCon}>
@@ -51,8 +64,8 @@ const SlipCard = ({ index }: { index: number }) => {
           <TouchableOpacity>
             <AntDesign name="minuscircleo" size={24} color={Colors.red} />
           </TouchableOpacity>
-          <Text>Q: 5</Text>
-          <TouchableOpacity>
+          <Text>Q: {quantity}</Text>
+          <TouchableOpacity onPress={() => increment()}>
             <AntDesign name="pluscircleo" size={24} color={Colors.mainColor} />
           </TouchableOpacity>
         </View>

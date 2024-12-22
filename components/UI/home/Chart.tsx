@@ -130,15 +130,26 @@ const Chart = () => {
       </View>
 
       <LineChart
-        data={chartData}
-        width={Dimensions.get("window").width * 0.73}
-        height={200}
+        areaChart
+        stepChart
+        hideDataPoints
         isAnimated
-        dataPointsRadius={4}
-        color="#4ABFF4"
-        hideDataPoints={false}
-        showVerticalLines={false}
-        showFractionalValues
+        animationDuration={1200}
+        startFillColor="#0BA5A4"
+        startOpacity={1}
+        endOpacity={0.3}
+        initialSpacing={0}
+        data={chartData}
+        spacing={30}
+        thickness={5}
+        width={Dimensions.get('window').width-40}
+        hideRules
+        hideYAxisText
+        yAxisColor="#0BA5A4"
+        showVerticalLines
+        verticalLinesColor="rgba(14,164,164,0.5)"
+        xAxisColor="#0BA5A4"
+        color="#0BA5A4"
       />
 
       <View style={{ display: "none" }}>

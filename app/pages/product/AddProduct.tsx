@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  Image,
+  Modal,
+  Dimensions,
 } from "react-native";
 import React, { useCallback, useRef, useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -17,7 +20,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import Modal from "react-native-modal";
 import { radius } from "@/constants/sizes";
 import Button from "@/components/UI/Button";
 import CustomSelector from "@/components/UI/products/CustomSelector";
@@ -28,6 +30,9 @@ import CategoryListModal from "@/components/UI/products/CategoryListModel";
 import { getToken } from "@/utils/getToken";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import BottomSheet from "@/components/UI/BottomSheet";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Fonts } from "@/constants/Fonts";
+import useImagePicker from "@/utils/UseImagePicker";
 
 const AddProduct = () => {
   const { top } = useSafeAreaInsets();
@@ -41,7 +46,8 @@ const AddProduct = () => {
   const [supplier, setSupplier] = useState({ id: "", name: "" });
   const [supplierVisible, setSupplierVisible] = useState(false);
   const [categoryVisible, setCategoryVisible] = useState(false);
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { selectedImage, pickImage } = useImagePicker();
   // Shared value for dropdown height
   const dropdownHeight = useSharedValue(0);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
@@ -71,6 +77,11 @@ const AddProduct = () => {
     setCategory({ id, title });
   }, []);
 
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   // Create Product function
   const createProduct = async () => {
     try {
@@ -98,6 +109,8 @@ const AddProduct = () => {
     }
   };
 
+  
+
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen
@@ -113,6 +126,15 @@ const AddProduct = () => {
 
       <ScrollView>
         <View style={styles.inputContainer}>
+          <TouchableOpacity style={styles.productPicker} onPress={pickImage}>
+         
+          <MaterialCommunityIcons name="folder-image" size={22} color={Colors.orange} />
+            <Text style={styles.pickerButton}>Select Photo</Text>
+           {selectedImage&& <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.imageCon}>
+            <Image style={{width: '80%', height: '95%',marginLeft: 'auto', resizeMode: 'cover'}} source={{uri: selectedImage}} />
+            </TouchableOpacity>}
+         
+          </TouchableOpacity>
           <Text style={styles.label}>Product Name</Text>
           <TextInput
             style={styles.input}
@@ -186,6 +208,20 @@ const AddProduct = () => {
           onPress={createProduct}
         />
       </View>
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.modalCloseArea} onPress={closeModal}>
+            {selectedImage && (
+              <Image source={{ uri: selectedImage }} style={styles.fullImage} />
+            )}
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -217,5 +253,46 @@ const styles = StyleSheet.create({
   },
   buttonCon: {
     marginTop: "auto",
+  },
+  productPicker:{
+    flex: 1,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: radius.small,
+    backgroundColor: Colors.white,
+    borderColor: Colors.border,
+    paddingLeft: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    // justifyContent: 'center',
+    gap: 10, 
+  },
+  imageCon:{
+    width: '50%',
+    marginLeft: 'auto'
+  },
+  pickerButton:{
+    fontSize: Fonts.regular,
+    color: Colors.text
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalCloseArea: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: Dimensions.get('window').width - 60,
+    height: Dimensions.get('screen').height - 200, 
+    // borderRadius: radius.small
+  },
+  fullImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
 });
