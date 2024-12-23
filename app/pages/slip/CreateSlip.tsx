@@ -70,7 +70,7 @@ console.log(product,'::::::::::::::::');
       <Header setIsSelectCustomer={setIsSelectCustomer} />
 
       <View style={styles.body}>
-       {loading ? <CustomLoader /> : <FlatList
+       {!loading ? <CustomLoader /> : <FlatList
          data={product?.data} 
           contentContainerStyle={styles.content}
           renderItem={({ item, index }) => {
@@ -96,7 +96,7 @@ console.log(product,'::::::::::::::::');
             },
           ]}
         >
-         {CustomerLoader ?
+         {!CustomerLoader ?
           <>
           <Text style={styles.text}>Loading...</Text>
           <ActivityIndicator /> 

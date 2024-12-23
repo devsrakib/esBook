@@ -2,13 +2,11 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Image,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
@@ -24,18 +22,28 @@ import { currency } from "@/global/currency";
 import { Link } from "expo-router";
 import { IDashboardData } from "@/types/interfaces/home/dashboard.interface";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { fetchCustomer } from "@/redux/features/customer/customerSlice";
 
 const Dashboard = () => {
-  const [customers, setCustomers] = useState<number>(0);
+  // const [customers, setCustomers] = useState<number>(0);
+  const {customer} = useAppSelector((state:any) => state.customers)
   const [suppliers, setSuppliers] = useState<number>(0);
   const [cashSell, setCashSell] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const db = useSQLiteContext();
+  
+  const dispatch = useAppDispatch()
+
+  useEffect(() =>{
+dispatch(fetchCustomer())
+  }, [])
+
   const dashboardData: IDashboardData[] = [
     {
       text: "Total Customers",
       icon: require("../../assets/images/DUser.png"),
-      quantity: customers,
+      quantity: customer?.data?.length,
       bg_color: Colors.lavender,
 
       link: "/pages/cashbox/allCustomers",
@@ -62,8 +70,6 @@ const Dashboard = () => {
     },
   ];
 
-  const { width } = Dimensions.get("window");
-  const isTablet = width >= 600;
 
   useEffect(() => {
     async function customers() {
@@ -71,7 +77,7 @@ const Dashboard = () => {
       const suppliers = await getSuppliers(db);
       const cash_sell = await getCash_sell(db);
       const expense = await getExpense(db);
-      setCustomers(customers?.length);
+      // setCustomers(customers?.length);
       setSuppliers(suppliers?.length);
       const totalSaleAmount = cash_sell?.reduce(
         (sum: number, record: any) => sum + record?.collectedAmount,

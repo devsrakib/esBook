@@ -33,9 +33,13 @@ import BottomSheet from "@/components/UI/BottomSheet";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import useImagePicker from "@/utils/UseImagePicker";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { createProduct } from "@/redux/features/product/createProductSlice";
 
 const AddProduct = () => {
   const { top } = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state) => state.createProduct);
 
   const [productName, setProductName] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
@@ -82,32 +86,94 @@ const AddProduct = () => {
     setIsModalVisible(false);
   };
 
-  // Create Product function
-  const createProduct = async () => {
+
+ 
+  // const handleSubmit = () => {
+  //   if (!productName || !buyingPrice || !sellingPrice || !quantity || !category.id || !supplier.id) {
+  //     alert("Please fill all required fields.");
+  //     return;
+  //   }
+  
+  //   if (selectedImage) {
+  //     const fileName = selectedImage.split('/').pop();
+  //     const fileType = selectedImage.match(/[^.]+$/)?.[0];
+  //     formData.append("image", {
+  //       uri: selectedImage,
+  //       name: fileName,
+  //       type: `image/${fileType}`,
+  //     });
+  //   }
+
+  //   dispatch(
+  //     createProduct({
+  //       product_name: productName,
+  //       buying_price: buyingPrice,
+  //       selling_price: sellingPrice,
+  //       discount_price: discountPrice,
+  //       quantity: quantity,
+  //       category: category?.id,
+  //       supplier: supplier?.id,
+  //     })
+  //   );
+  // };
+
+
+  const handleSubmit = async () => {
     try {
-      const token = await getToken();
-      const response = await axios.post(
-        `${apiUrl}product/`,
-        {
-          product_name: productName,
-          buying_price: buyingPrice,
-          selling_price: sellingPrice,
-          discount_price: discountPrice,
-          quantity: quantity,
-          category: category?.id,
-          supplier: supplier?.id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response);
-    } catch (error: any) {
-      console.error(error.message);
+      const formData = new FormData();
+      formData.append("product_name", productName);
+      formData.append("buying_price", buyingPrice);
+      formData.append("selling_price", sellingPrice);
+      formData.append("discount_price", discountPrice);
+      formData.append("quantity", quantity);
+      formData.append("category", category?.id);
+      formData.append("supplier", supplier?.id);
+      
+      if (selectedImage) {
+        const formattedUri = selectedImage.startsWith("file://") ? selectedImage : `file://${selectedImage}`;
+        const fileName = formattedUri.split("/").pop();
+        formData.append("photo", {
+          uri: formattedUri,
+          name: fileName,
+          type: "image/jpeg", // Adjust based on the actual file type
+        });
+      }
+
+    dispatch(createProduct(formData))
+    // console.log(selectedImage);
+    
+    } catch (error) {
+      console.error("Error creating product:", error.response?.data || error.message);
     }
   };
+  
+
+  // Create Product function
+  // const createProduct = async () => {
+  //   try {
+  //     const token = await getToken();
+  //     const response = await axios.post(
+  //       `${apiUrl}product/`,
+  //       {
+  //         product_name: productName,
+  //         buying_price: buyingPrice,
+  //         selling_price: sellingPrice,
+  //         discount_price: discountPrice,
+  //         quantity: quantity,
+  //         category: category?.id,
+  //         supplier: supplier?.id,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response);
+  //   } catch (error: any) {
+  //     console.error(error.message);
+  //   }
+  // };
 
   
 
@@ -205,7 +271,7 @@ const AddProduct = () => {
           radius={radius.small}
           bg={Colors.mainColor}
           width={"90%"}
-          onPress={createProduct}
+          onPress={handleSubmit}
         />
       </View>
       <Modal

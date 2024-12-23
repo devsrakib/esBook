@@ -12,24 +12,28 @@ import { Fontisto } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import useApiHook from "@/hooks/all_api_hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { fetchProducts } from "@/redux/features/product/productSlice";
 
 const ProductView = () => {
   const params = useLocalSearchParams();
+const {id} = params
 
   const { top } = useSafeAreaInsets();
   const CustomPressable = Animated.createAnimatedComponent(Pressable);
-  const {
-    data: productDetail,
-    loading,
-    error,
-  } = useApiHook(`product/${params?.id}/`);
-  console.log(productDetail);
+  const dispatch = useAppDispatch();
+  const { singleProduct, loading, error } = useAppSelector((state) => state.product);
+
+  useEffect(() => {
+    dispatch(fetchProducts(id)); // Fetch product by id or all products if id is null
+  }, [dispatch, id]);
+
 
   if (loading) {
     return <Text>Loading...</Text>;
   }
 
-  if (error || !productDetail) {
+  if (error || !singleProduct) {
     return <Text>Error loading product details.</Text>;
   }
 
@@ -71,13 +75,13 @@ const ProductView = () => {
               <Text style={{ fontWeight: "500", color: "black" }}>
                 Product:
               </Text>{" "}
-              {productDetail?.product_name}
+              {singleProduct?.product_name}
             </Animated.Text>
             <Link
               href={{
                 pathname: "/pages/product/SellerInfo",
                 params: {
-                  id: productDetail?.supplier,
+                  id: singleProduct?.supplier,
                 },
               }}
               asChild
@@ -103,7 +107,7 @@ const ProductView = () => {
               .stiffness(200)}
             style={styles.stock}
           >
-            Stock available: {productDetail?.quantity}
+            Stock available: {singleProduct?.quantity}
           </Animated.Text>
           <Animated.Text
             entering={FadeInDown.delay(500)
@@ -113,7 +117,7 @@ const ProductView = () => {
               .stiffness(200)}
             style={styles.selling}
           >
-            Selling Price: {productDetail?.selling_price} Tk
+            Selling Price: {singleProduct?.selling_price} Tk
           </Animated.Text>
           <Animated.Text
             entering={FadeInDown.delay(400)
@@ -123,7 +127,7 @@ const ProductView = () => {
               .stiffness(200)}
             style={styles.buying}
           >
-            Buying Price: {productDetail?.buying_price}Tk
+            Buying Price: {singleProduct?.buying_price}Tk
           </Animated.Text>
           <Animated.Text
             entering={FadeInDown.delay(440)
@@ -133,7 +137,7 @@ const ProductView = () => {
               .stiffness(200)}
             style={[styles.buying, { fontWeight: "normal" }]}
           >
-            buying date: {new Date(productDetail?.createdAt).toDateString()}
+            buying date: {new Date(singleProduct?.createdAt).toDateString()}
           </Animated.Text>
           <Animated.Text
             entering={FadeInDown.delay(580)
@@ -143,7 +147,7 @@ const ProductView = () => {
               .stiffness(200)}
             style={styles.desc}
           >
-            {productDetail?.description}
+            {singleProduct?.description}
             Description Lorem ipsum dolor sit amet, consectetur adipisicing
             elit. Non, necessitatibus!
           </Animated.Text>

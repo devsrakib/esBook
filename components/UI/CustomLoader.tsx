@@ -82,7 +82,7 @@ const CustomLoader = ({ size = 30, colors = ['#007AFF', '#00E0FF'] }) => {
                     }}
                 />
             </Animated.View>
-                <Text style={{fontWeight: '900'}}>...</Text>
+                {/* <Text style={{fontWeight: '900'}}>...</Text> */}
         </View>
     );
 };

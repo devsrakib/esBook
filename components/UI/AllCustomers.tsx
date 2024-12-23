@@ -13,7 +13,7 @@ import getInitials from "@/utils/namePlaceholder";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import FormatDate from "@/utils/FormatDate";
 
-const AllCustomers = ({ item, index }: any) => {
+const AllCustomers = ({ item, index, router}: any) => {
   const navigation = useNavigation<any>();
   const [totalDue, setTotalDue] = useState<any>([]);
   const db = useSQLiteContext();
@@ -43,7 +43,7 @@ const AllCustomers = ({ item, index }: any) => {
           .damping(80)
           .springify()}
         href={{
-          pathname: "/pages/cashbox/details",
+          pathname: `${router}`,
           params: {
             id: item?.id,
             name: item?.name,

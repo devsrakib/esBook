@@ -12,6 +12,7 @@ import EmptyState from "@/components/UI/EmptyState";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { useSelector } from "react-redux";
 import { fetchCustomer } from "@/redux/features/customer/customerSlice";
+import CustomLoader from "@/components/UI/CustomLoader";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -33,7 +34,7 @@ const Page = () => {
 
 
   const dispatch = useAppDispatch();
-  const {customer} = useSelector((state:any) => state.customers)
+  const {customer, loading, error} = useSelector((state:any) => state.customers)
 
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const Page = () => {
         backgroundColor={Colors.mainColor}
       />
       <View style={styles.bodySection}>
-        <FlatList
+        {loading ? <CustomLoader /> : <FlatList
           data={customer?.data}
           contentContainerStyle={[
             styles.flatListContainer,
@@ -65,7 +66,7 @@ const Page = () => {
               styles.emptyListContainer,
           ]}
           renderItem={({ item, index }) => {
-            return <AllCustomers item={item} index={index} />;
+            return <AllCustomers item={item} index={index} router={"/pages/profile/profile"} />;
           }}
           ListEmptyComponent={
             <View style={styles.emptyStateContainer}>
@@ -77,7 +78,7 @@ const Page = () => {
               />
             </View>
           }
-        />
+        />}
       </View>
     </View>
   );
@@ -94,7 +95,6 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     paddingHorizontal: 10,
-    gap: 10,
     flexGrow: 1,
   },
   emptyListContainer: {

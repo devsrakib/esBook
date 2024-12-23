@@ -3,7 +3,7 @@ import customerReducer from '../features/customer/customerSlice';
 import slipReducer from '../features/slip/SlipSlice';
 import productReducer from '../features/product/productSlice';
 import counterReducer from "../actions/slipCartQuantitySlice";
-
+import createProductReducer from '../features/product/createProductSlice';
 
 
 
@@ -12,7 +12,8 @@ const store = configureStore({
         customers: customerReducer,
         slips: slipReducer,
         products: productReducer,
-        quantityCounter: counterReducer
+        quantityCounter: counterReducer,
+        createProduct: createProductReducer
     }
 })
 

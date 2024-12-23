@@ -36,7 +36,7 @@ const InitialLayout = () => {
           setInitialRouteName("(tabs)");
         } else {
           // No token, navigate to login (index)
-          setInitialRouteName("/pages/login/Login");
+          setInitialRouteName("/(auth)/login/Login");
         }
 
         // Hide splash screen after initialization
@@ -44,7 +44,7 @@ const InitialLayout = () => {
       } catch (error) {
         console.error("Initialization error:", error);
         // Fallback route if there's an error
-        setInitialRouteName("/index");
+        setInitialRouteName("/(auth)/login/Login");
         await SplashScreen.hideAsync();
       } finally {
         setIsLoading(false);

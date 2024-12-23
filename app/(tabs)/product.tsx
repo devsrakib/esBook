@@ -57,6 +57,7 @@ import CategorySegment from "@/components/UI/products/CategorySegment";
 import useApiHook from "@/hooks/all_api_hooks";
 import EmptyState from "@/components/UI/EmptyState";
 import { useAppSelector } from "@/hooks/hooks";
+import CustomLoader from "@/components/UI/CustomLoader";
 
 // Memoize ProductCard component to prevent unnecessary re-renders
 
@@ -89,7 +90,7 @@ const Product = () => {
         setActiveIndex={handleActiveIndex}
         setCategoryId={handleCategorySelect}
       />
-      <FlatList
+      {loading ? <CustomLoader />:<FlatList
         // data={product?.results} // Example data
         data={product?.data}
         contentContainerStyle={styles.contentCon}
@@ -109,7 +110,7 @@ const Product = () => {
             color={Colors.text}
           />
         }
-      />
+      />}
     </View>
   );
 };
