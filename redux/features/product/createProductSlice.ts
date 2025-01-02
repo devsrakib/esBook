@@ -10,6 +10,7 @@ export const createProduct = createAsyncThunk(
   async (postData, { rejectWithValue }) => {
     try {
         const token =await getToken()
+        if(!token) return
       const response = await axios.post(`${API_URL}product/`, postData, {
         headers: {
           Authorization: `Bearer ${token}`, 

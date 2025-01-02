@@ -31,7 +31,7 @@ const Customers = ({
   deleteFrom?: string;
 }) => {
   const [totalDue, setTotalDue] = useState<any>([]);
-  const db = useSQLiteContext();
+
 
   const getInitials = (name: string) => {
     return name
@@ -41,18 +41,18 @@ const Customers = ({
       .join("");
   };
 
-  useEffect(() => {
-    const getTotalDue = async () => {
-      if (text === "Supplier") {
-        const totalDue = await getCashBuyBySupplierId(db, item?.id);
-        setTotalDue(totalDue);
-      } else {
-        const totalDue = await getCashSellsByCustomerId(db, item?.id);
-        setTotalDue(totalDue);
-      }
-    };
-    getTotalDue();
-  }, [selectedIndex]);
+  // useEffect(() => {
+  //   const getTotalDue = async () => {
+  //     if (text === "Supplier") {
+  //       const totalDue = await getCashBuyBySupplierId(db, item?.id);
+  //       setTotalDue(totalDue);
+  //     } else {
+  //       const totalDue = await getCashSellsByCustomerId(db, item?.id);
+  //       setTotalDue(totalDue);
+  //     }
+  //   };
+  //   getTotalDue();
+  // }, [selectedIndex]);
 
   const due = totalDue?.reduce(
     (sum: number, record: any) => sum + record?.dueAmount,
@@ -100,7 +100,7 @@ const Customers = ({
           asChild
         >
           <TouchableOpacity style={styles.customerDetails}>
-            <View style={[styles.avatar, { backgroundColor: backgroundColor }]}>
+            <View style={[styles.avatar, { backgroundColor: Colors.mainColor }]}>
               {item?.profilePhoto ? (
                 <Image
                   style={styles.profile}
@@ -112,14 +112,19 @@ const Customers = ({
             </View>
             <View style={styles.nameSection}>
               <Text style={styles.name}>{item?.name}</Text>
-              <Text style={styles.date}>
+              
+                <Text>{item?.email}</Text>
+            </View>
+           <View style={styles.dateAndDueCon}>
+           <Text style={styles.date}>
                 {/* {format(item?.createdAt, "dd MMM, yyyy").toString()} */}
                 {FormatDate(item?.createdAt)}
               </Text>
-            </View>
-            <Text adjustsFontSizeToFit>
-              {currency} {due}
+            <Text adjustsFontSizeToFit style={[styles.money, {color: selectedIndex === 0 ? Colors.green : Colors.red }]}>
+              <Text style={{color: Colors.text}}>{currency}</Text> {due}
             </Text>
+           </View>
+
           </TouchableOpacity>
         </Link>
       </Fragment>
@@ -135,7 +140,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
-    height: 50,
+    // height: 50,
+    paddingVertical: 5,
     backgroundColor: Colors.VeroneseGreen,
     paddingHorizontal: 10,
     marginBottom: 10,
@@ -149,6 +155,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     width: 36,
     height: 36,
+    
   },
   nameSection: {
     flex: 1,
@@ -167,11 +174,20 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: radius.medium,
   },
+  money:{
+fontWeight: '600',
+fontSize: Fonts.medium,
+  },
   initials: {
     textDecorationStyle: "solid",
     textTransform: "uppercase",
     fontSize: Fonts.medium,
     fontWeight: "600",
+    color: Colors.white
   },
+  dateAndDueCon:{
+    flexDirection: 'column',
+    alignItems: 'flex-end'
+  }
 });
 export default memo(Customers);

@@ -1,46 +1,28 @@
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Header from "@/components/UI/header/Header";
 import { Colors } from "@/constants/Colors";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSQLiteContext } from "expo-sqlite";
-import { getCustomers } from "@/databases/Database";
 import AllCustomers from "@/components/UI/AllCustomers";
-import useApiHook from "@/hooks/all_api_hooks";
 import EmptyState from "@/components/UI/EmptyState";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { useSelector } from "react-redux";
-import { fetchCustomer } from "@/redux/features/customer/customerSlice";
 import CustomLoader from "@/components/UI/CustomLoader";
+import { RootState } from "@/redux/store";
+import { fetchCustomers } from "@/redux/features/customer/customerSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const db = useSQLiteContext();
-  // const { data: customer, loading } = useApiHook("customers/");
-
-  // const Page = () => {
-  //   const { bottom, top } = useSafeAreaInsets();
-  //   const [customer, setCustomer] = useState<any>();
-  //   const db = useSQLiteContext();
-  //   useEffect(() => {
-  //     async function setup() {
-  //       // const result = await getCustomers(db);
-  //       const { data, loading } = useApiHook("customers/");
-  //       setCustomer(data);
-  //     }
-  //     setup();
-  //   }, []);
-
-
   const dispatch = useAppDispatch();
-  const {customer, loading, error} = useSelector((state:any) => state.customers)
-
+  const { customers, loading, error } = useAppSelector((state: RootState) => state.customers);
 
   useEffect(() => {
-    dispatch(fetchCustomer());
+    dispatch(fetchCustomers());
   }, []);
 
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
 
   return (
     <View
@@ -58,16 +40,14 @@ const Page = () => {
       />
       <View style={styles.bodySection}>
         {loading ? <CustomLoader /> : <FlatList
-          data={customer?.data}
-          contentContainerStyle={[
-            styles.flatListContainer,
-            customer &&
-              customer?.data?.length === 0 &&
-              styles.emptyListContainer,
-          ]}
-          renderItem={({ item, index }) => {
-            return <AllCustomers item={item} index={index} router={"/pages/profile/profile"} />;
-          }}
+          data={customers?.data || []} // Fallback to an empty array
+          // contentContainerStyle={[
+          //   styles.flatListContainer,
+          //   customers?.data?.length === 0 && styles.emptyListContainer,
+          // ]}
+          renderItem={({ item, index }) => (
+            <AllCustomers item={item} index={index} router="/pages/profile/profile" />
+          )}
           ListEmptyComponent={
             <View style={styles.emptyStateContainer}>
               <EmptyState

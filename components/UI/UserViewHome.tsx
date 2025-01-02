@@ -1,48 +1,16 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { View,StyleSheet } from "react-native";
+import React from "react";
 import { Colors } from "@/constants/Colors";
-import { Fontisto } from "@expo/vector-icons";
-import { FontW, Fonts } from "@/constants/Fonts";
-import { useSQLiteContext } from "expo-sqlite";
-import { getOwnerProfile } from "@/databases/Database";
-import { IOwner } from "@/types/interfaces/home/owner.interface";
+import {  Fonts } from "@/constants/Fonts";
 import Animated, {
   FadeIn,
   FadeInDown,
   FadeInUp,
 } from "react-native-reanimated";
-import axios from "axios";
-import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
 
-const UserViewHome = () => {
-  // const [data, setData] = useState<IOwner>({
-  //   profilePhoto: null,
-  //   name: "",
-  //   email: "",
-  //   address: "",
-  //   phoneNumber: "",
-  //   taxNumber: 0,
-  //   createdAt: "",
-  //   id: "",
-  // });
+const UserViewHome = ({data}:any) => {
 
-  const db = useSQLiteContext();
-  const { data } = useApiHook("owners/");
-  console.log(data);
-
-  // useEffect(() => {
-  //   const getProfile = async () => {
-  //     const result = await getOwnerProfile(db);
-  //     // const user_data = result?.length > 0 ? result[0] : null;
-  //     const user_data = response?.data?.results[0];
-
-  //     console.log(user_data);
-
-  //     setData(user_data as IOwner);
-  //   };
-  //   getProfile();
-  // }, []);
+  if(!data)return
 
   const capitalizeFirstLetter = (text: string) => {
     if (!text) return "";

@@ -118,13 +118,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
     resizeMode: "stretch",
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.VeroneseGreen,
     borderRadius: radius.small,
     shadowColor: Colors.shadow,
     elevation: 10,
     overflow: "hidden",
-    borderWidth: 1,
-    borderColor: Colors.white,
+    borderWidth: 5,
+    borderColor: Colors.VeroneseGreen,
   },
   amountCon: {
     backgroundColor: Colors.red,
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 15,
     paddingLeft: 20,
+    borderRadius: radius.small
   },
   logo: {
     width: 35,

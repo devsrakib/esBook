@@ -4,130 +4,106 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, {  useMemo, } from "react";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { sharedStyle } from "@/constants/shared.style";
-import { useSQLiteContext } from "expo-sqlite";
-import {
-  getCash_sell,
-  getCustomers,
-  getExpense,
-  getSuppliers,
-} from "@/databases/Database";
 import { currency } from "@/global/currency";
-import { Link } from "expo-router";
-import { IDashboardData } from "@/types/interfaces/home/dashboard.interface";
+import { Link, useRouter } from "expo-router";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { fetchCustomer } from "@/redux/features/customer/customerSlice";
 
-const Dashboard = () => {
-  // const [customers, setCustomers] = useState<number>(0);
-  const {customer} = useAppSelector((state:any) => state.customers)
-  const [suppliers, setSuppliers] = useState<number>(0);
-  const [cashSell, setCashSell] = useState<number>(0);
-  const [expense, setExpense] = useState<number>(0);
-  const db = useSQLiteContext();
-  
-  const dispatch = useAppDispatch()
+const Dashboard = ({customers, customerLoader, customerError, suppliers, supplierError, supplierLoader}:any) => {
+const router = useRouter()
 
-  useEffect(() =>{
-dispatch(fetchCustomer())
-  }, [])
+  // if (customerLoading) {
+  //   return <ActivityIndicator size="large" color="#0000ff" />;
+  // }
+  if(!customers || !suppliers)return
 
-  const dashboardData: IDashboardData[] = [
+  if (customerError) {
+    return <Text>Error: {customerError}</Text>;
+  }
+
+
+  if (supplierError) {
+    return <Text>Error: {supplierError}</Text>;
+  }
+  // useEffect(() =>{
+  //  dispatch( fetchSupplier())
+  // }, [])
+
+  const dashboardData = useMemo(() => [
     {
       text: "Total Customers",
       icon: require("../../assets/images/DUser.png"),
-      quantity: customer?.data?.length,
+      quantity: customerLoader ? 0 : customers?.count || 0,
       bg_color: Colors.lavender,
-
       link: "/pages/cashbox/allCustomers",
     },
     {
       text: "Total Supplier",
       icon: require("../../assets/images/DHouse.png"),
-      quantity: suppliers,
+      quantity: supplierLoader ? 0 : suppliers?.count || 0,
       bg_color: Colors.purpleHalf,
       link: "/pages/cashbox/allSuppliers",
     },
     {
       text: "Total Cash",
       icon: require("../../assets/images/DMoney.png"),
-      amount: `${cashSell?.toLocaleString("en-US") || "0"}`,
+      amount: 12389,
       bg_color: Colors.VeroneseGreen,
     },
     {
       text: "Total Expenses",
       icon: require("../../assets/images/DDollar.png"),
-      amount: `${expense?.toLocaleString("en-US") || "0"}`,
+      amount: 5600,
       bg_color: Colors.OrangeRed,
       color: Colors.red,
     },
-  ];
-
-
-  useEffect(() => {
-    async function customers() {
-      const customers = await getCustomers(db);
-      const suppliers = await getSuppliers(db);
-      const cash_sell = await getCash_sell(db);
-      const expense = await getExpense(db);
-      // setCustomers(customers?.length);
-      setSuppliers(suppliers?.length);
-      const totalSaleAmount = cash_sell?.reduce(
-        (sum: number, record: any) => sum + record?.collectedAmount,
-        0
-      );
-      const totalExpenseAmount = expense?.reduce(
-        (sum: number, record: any) => sum + record?.amount,
-        0
-      );
-      setCashSell(totalSaleAmount);
-      setExpense(totalExpenseAmount);
-    }
-    customers();
-  }, [cashSell, expense]);
-
-  const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+  ], [customers, customerLoader,  suppliers, supplierLoader]); // Only re-compute when these dependencies change
+  
+  if(customerError){
+    return(
+      <Text>{customerError}</Text>
+    )
+  }
 
   return (
     <View style={sharedStyle.grid}>
       {dashboardData?.map((item, index) => {
         const StatusContent = (
-          <CustomTouchable
-            entering={FadeInDown.delay(index * 50)
-              .duration(400)
-              .damping(80)
-              .springify()}
+          <Animated.View  
+          key={index}
+          entering={FadeInDown.delay(index * 50)
+            .duration(400)
+            .damping(80)
+            .springify().stiffness(200)} style={styles.container}>
+            <TouchableOpacity
+            
             activeOpacity={item?.link ? 0.7 : 1}
-            key={index}
-            style={styles.container}
+            
+            style={styles.action}
           >
             <View style={[styles.logoCon, { backgroundColor: item?.bg_color }]}>
               <Image source={item?.icon} style={styles.logo} />
             </View>
             <Text style={styles.text}>{item?.text}</Text>
-            <Text style={[styles.amount, { color: item?.color }]}>
+           {customerLoader || supplierLoader? <Text>0</Text> : <Text style={[styles.amount, { color: item?.color }]}>
               {item?.amount ? currency : null}
               {item?.amount || item?.quantity}
-            </Text>
-          </CustomTouchable>
+            </Text>}
+          </TouchableOpacity>
+          </Animated.View>
         );
 
         return item?.link ? (
           <Link
             key={index}
             href={{
-              //@ts-ignore
-              pathname: item?.link,
-              params: {
-                text: item?.text,
-              },
+              pathname: `${item?.link}`,
+              params: { text: item?.text },
             }}
             asChild
           >
@@ -140,15 +116,14 @@ dispatch(fetchCustomer())
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     borderRadius: radius.small,
     width: "48.5%",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    gap: 10,
+    height: 120,
+
     shadowColor: Colors.shadow,
     elevation: 10,
   },
@@ -169,5 +144,13 @@ const styles = StyleSheet.create({
     fontSize: Fonts.medium,
     fontWeight: "bold",
   },
+  action:{
+    justifyContent: "center",
+    alignItems: "center",
+    width: '100%',
+    height: '100%',
+    padding: 10,
+    gap: 10,
+  }
 });
 export default Dashboard;

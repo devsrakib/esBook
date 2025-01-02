@@ -207,11 +207,11 @@ router.push('/(tabs)')
             width={"90%"}
           />
 
-          <Link href={"/pages/login/Login"} asChild>
-            <TouchableOpacity>
+          {/* <Link href={"/pages/login/Login"} asChild> */}
+            <TouchableOpacity onPress={() => router?.push('/(auth)/login/Login')}>
               <Text>I have an account</Text>
             </TouchableOpacity>
-          </Link>
+          {/* </Link> */}
         </View>
       </ScrollView>
 

@@ -15,22 +15,18 @@ import { Colors } from "@/constants/Colors";
 import Header from "../../../components/UI/header/Header";
 import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Animated, {
+import  {
   useSharedValue,
-  useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
 import { radius } from "@/constants/sizes";
 import Button from "@/components/UI/Button";
 import CustomSelector from "@/components/UI/products/CustomSelector";
 import SupplierListModal from "@/components/UI/products/SupplierListModal";
-import axios from "axios";
-import { apiUrl } from "@/hooks/all_api_hooks";
 import CategoryListModal from "@/components/UI/products/CategoryListModel";
-import { getToken } from "@/utils/getToken";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import BottomSheet from "@/components/UI/BottomSheet";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import useImagePicker from "@/utils/UseImagePicker";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";

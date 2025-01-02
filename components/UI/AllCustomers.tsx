@@ -15,23 +15,23 @@ import FormatDate from "@/utils/FormatDate";
 
 const AllCustomers = ({ item, index, router}: any) => {
   const navigation = useNavigation<any>();
-  const [totalDue, setTotalDue] = useState<any>([]);
-  const db = useSQLiteContext();
+  // const [totalDue, setTotalDue] = useState<any>([]);
+  // const db = useSQLiteContext();
 
-  useEffect(() => {
-    const getTotalDue = async () => {
-      const result = (await getCashSellsByCustomerId(db, item?.id))?.filter(
-        (item: any) => item?.dueAmount > 0
-      );
-      setTotalDue(result);
-    };
-    getTotalDue();
-  }, []);
+  // useEffect(() => {
+  //   const getTotalDue = async () => {
+  //     const result = (await getCashSellsByCustomerId(db, item?.id))?.filter(
+  //       (item: any) => item?.dueAmount > 0
+  //     );
+  //     setTotalDue(result);
+  //   };
+  //   getTotalDue();
+  // }, []);
 
-  const totalCash_buy = totalDue?.reduce(
-    (sum: number, record: any) => sum + record?.dueAmount,
-    0
-  );
+  // const totalCash_buy = totalDue?.reduce(
+  //   (sum: number, record: any) => sum + record?.dueAmount,
+  //   0
+  // );
 
   const CustomLink = Animated.createAnimatedComponent(Link);
 
@@ -71,11 +71,11 @@ const AllCustomers = ({ item, index, router}: any) => {
           <View style={styles.nameSection}>
             <Text style={styles.name}>{item?.name}</Text>
 
-            <Text style={styles.date}>{FormatDate(item?.createdAt)}</Text>
+            {/* <Text style={styles.date}>{FormatDate(item?.createdAt)}</Text> */}
           </View>
           {/* Display the total due */}
           <Text adjustsFontSizeToFit>
-            {currency} {totalCash_buy}
+            {currency} {0}
           </Text>
         </TouchableOpacity>
       </CustomLink>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderColor: Colors.border,
+    backgroundColor:Colors.mainColor,
     width: 38,
     height: 38,
   },

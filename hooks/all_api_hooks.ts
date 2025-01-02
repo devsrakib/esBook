@@ -22,7 +22,7 @@ const useApiHook = (endpoint: string) => {
         console.error("Error retrieving token from AsyncStorage:", err);
       }
     };
-
+ 
     getToken(); // Call the function to get token on mount
   }, []);
 
@@ -48,7 +48,7 @@ const useApiHook = (endpoint: string) => {
         setData(response.data);
       } catch (err) {
         setError(err);
-        console.error("Error fetching data:", err);
+        // console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }

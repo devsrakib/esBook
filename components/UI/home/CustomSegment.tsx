@@ -26,7 +26,6 @@ const CustomSegment = ({
   selectedIndex: number;
   handleIndexChange: (index: number) => void;
 }) => {
-  const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
   return (
     <View style={styles.segments}>

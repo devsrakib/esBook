@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { LineChart } from "react-native-gifted-charts";
+import { LineChart, PieChart, yAxisSides } from "react-native-gifted-charts";
 import { BarChart } from "react-native-gifted-charts";
 
 import { Colors } from "@/constants/Colors";
@@ -27,49 +27,25 @@ const Chart = () => {
   const [chartData, setChartData] = useState<IChart[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  const db = useSQLiteContext();
-  const { data } = useApiHook("cash-sells/");
-
+  
   const handleChartStatus = (text: string) => {
     setSelectedStatus(text);
   };
+    
 
-  // Move useEffect here to observe `data` and `selectedStatus` changes
-  useEffect(() => {
-    if (data?.data) {
-      processChartData(data?.data);
-    }
-  }, [data, selectedStatus]);
+  //   setChartData(lineChartData);
+  // };
 
-  // Moved data processing to a separate function
-  const processChartData = (apiData: ICashSell[]) => {
-    if (!apiData || apiData?.length === 0) return;
-
-    let groupedData: { [key: string]: number } = {};
-
-    // Iterate over the API data
-    apiData?.forEach((item) => {
-      const key = formatDate(new Date(item?.createdAt));
-      groupedData[key] = (groupedData[key] || 0) + (item?.sell_amount || 50);
-    });
-
-    // Prepare data for the LineChart
-    const colors: string[] = [
-      "#4ABFF4",
-      "#79C3DB",
-      "#28B2B3",
-      "#4ADDBA",
-      "#91E3E3",
-    ];
-    const lineChartData = Object.keys(groupedData)?.map((key, index) => ({
-      value: groupedData[key],
-      label: key,
-      dataPointColor: colors[index % colors?.length],
-      dataPointText: groupedData[key].toString(),
-    }));
-
-    setChartData(lineChartData);
-  };
+  const lineData = [
+    {value: 0},
+    {value: 20},
+    {value: 18},
+    {value: 40},
+    {value: 36},
+    {value: 60},
+    {value: 54},
+    {value: 85},
+  ];
 
   const formatDate = (date: Date) => {
     if (selectedStatus === "Weekly") {
@@ -84,6 +60,14 @@ const Chart = () => {
     }
     return "";
   };
+
+  const data = [
+    {value: 15, label: 'Jan'},
+    {value: 40, label: 'Feb'},
+    {value: 10, label: 'Mar'},
+    {value: 30, label: 'Apr'},
+  ];
+
 
   return (
     <Animated.View
@@ -129,29 +113,19 @@ const Chart = () => {
         )}
       </View>
 
-      <LineChart
-        areaChart
-        stepChart
-        hideDataPoints
-        isAnimated
-        animationDuration={1200}
-        startFillColor="#0BA5A4"
-        startOpacity={1}
-        endOpacity={0.3}
-        initialSpacing={0}
-        data={chartData}
-        spacing={30}
-        thickness={5}
-        width={Dimensions.get('window').width-40}
-        hideRules
-        hideYAxisText
-        yAxisColor="#0BA5A4"
-        showVerticalLines
-        verticalLinesColor="rgba(14,164,164,0.5)"
-        xAxisColor="#0BA5A4"
-        color="#0BA5A4"
+      <BarChart
+         data={data}
+         barWidth={15}
+         cappedBars
+         capColor={Colors.mainColor}
+         capThickness={4}
+         showGradient
+         
+         gradientColor={Colors.mainColor}
+         frontColor={Colors.VeroneseGreen}
+         width={220}
+        //  yAxisSide={yAxisSides.RIGHT}
       />
-
       <View style={{ display: "none" }}>
         {chartStatusTime?.map((text: string, index: number) => (
           <Text onPress={() => handleChartStatus(text)} key={index.toString()}>

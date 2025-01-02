@@ -26,12 +26,10 @@ import Button from "@/components/UI/Button";
 import useApiHook from "@/hooks/all_api_hooks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import CustomStatusBar from "@/components/UI/CustomStatusBar";
 
 const OwnerProfile = () => {
   const router = useRouter();
   const { selectedImage, pickImage } = useImagePicker();
-  const [focusInput, setFocusInput] = useState<boolean>(false);
   const [profileData, setProfileData] = useState<any>({
     id: 0,
     profilePhoto: "",
@@ -45,12 +43,10 @@ const OwnerProfile = () => {
 
   const { data: OwnerData, error } = useApiHook("owners/");
 
+ 
+
   const updateButtonWidth = useSharedValue(0);
   const logoutButtonWidth = useSharedValue(100);
-
-  const translateY = useSharedValue(0); // To track scroll position
-  const scale = useSharedValue(1); // To scale the profile image
-  const left = useSharedValue(0); // To move profile image left
 
   const handleInputChange = (value: string, key: string) => {
     setProfileData((prev: any) => ({ ...prev, [key]: value }));
@@ -73,13 +69,14 @@ const OwnerProfile = () => {
   const logout = async () => {
     try {
       await AsyncStorage.removeItem("access_token");
-      router.replace("/pages/signUp/signUp");
+      router.replace("/(auth)/signUp/signUp");
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
 
   useEffect(() => {
+    if(error)return
     if (OwnerData && OwnerData?.data && OwnerData?.data?.length > 0) {
       setProfileData(OwnerData?.data[0]);
     }
