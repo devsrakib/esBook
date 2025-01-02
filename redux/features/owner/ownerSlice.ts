@@ -9,8 +9,6 @@ export const fetchOwner = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = await AsyncStorage.getItem("access_token");
-      console.log(token);
-      
       if (!token) throw new Error("Token not found");
       const response = await axios.get(`${API_URL}owners/`, {
         headers: {

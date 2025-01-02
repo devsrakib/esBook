@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
@@ -21,9 +21,6 @@ import Animated, {
   FlipInEasyX,
 } from "react-native-reanimated";
 import { IProduct } from "@/types/product/product";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { increment } from "@/redux/actions/slipCartQuantitySlice";
-import { handleUrlParams } from "expo-router/build/fork/getStateFromPath-forks";
 
 const SlipCard = ({item, index }: {item: IProduct , index: number }) => {
   const [quantity, setQuantity] = useState(0);
@@ -47,11 +44,15 @@ const SlipCard = ({item, index }: {item: IProduct , index: number }) => {
     >
       <View style={styles.info}>
         <View style={styles.imageCon}>
-          {/* <Image
+          <Image
             style={styles.image}
-            defaultSource={require("../../assets/images/onion.jpg")}
-          source={{uri: item?.image}}
-          /> */}
+           
+            source={
+              item?.photo
+                ? { uri: item?.photo }
+                : require("../../assets/images/defoulProduct.png")
+            }
+          />
         </View>
         <View style={styles.stockCon}>
           <Text style={styles.pname}>{item?.product_name}</Text>

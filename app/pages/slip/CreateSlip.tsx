@@ -21,45 +21,25 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import useApiHook from "@/hooks/all_api_hooks";
 import EmptyState from "@/components/UI/EmptyState";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { useSelector } from "react-redux";
 import { fetchProducts } from "@/redux/features/product/productSlice";
-import { createSlip } from "@/redux/features/slip/SlipSlice";
 import CustomLoader from "@/components/UI/CustomLoader";
 
 const CreateSlip = () => {
   // const [data, setData] = useState<any>([])
   const [isSelectCustomer, setIsSelectCustomer] = useState<boolean>(false);
   const { top } = useSafeAreaInsets();
-  const db = useSQLiteContext();
+ 
   const { width } = Dimensions.get("window");
   const isTablet = width >= 600;
-  const { data, loading:CustomerLoader } = useApiHook("customers/");
+  const {customers, loading:CustomerLoading, error: CustomerError} = useAppSelector(state => state.customers);
   const dispatch = useAppDispatch();
   // const {slip} = useSelector((state:any) => state.slips)
-  const { product, loading, error } = useAppSelector(state => state.products);
+  const { products, loading, error } = useAppSelector(state => state.products);
 
   useEffect(() => {
       dispatch(fetchProducts());
   }, []);
-console.log(product,'::::::::::::::::');
-
-// console.log(product);
-
-  // useEffect(() => {
-  //   // dispatch(createSlip());
-  //   dispatch(fetchProducts())
-  // }, []);
-
-  // useEffect(() => {
-  //   async function customer() {
-  //     const result = await getCustomers(db);
-  //     console.log(result, "::::::::::");
-
-  //     setData(result);
-  //   }
-  //   customer();
-  // }, []);
-
+console.log(products,'::::::::::::::::');
   return (
     <View style={[styles.container, { paddingTop: top }]}>
       <Stack.Screen
@@ -70,8 +50,8 @@ console.log(product,'::::::::::::::::');
       <Header setIsSelectCustomer={setIsSelectCustomer} />
 
       <View style={styles.body}>
-       {!loading ? <CustomLoader /> : <FlatList
-         data={product?.data} 
+       {loading ? <CustomLoader /> : <FlatList
+         data={products?.data} 
           contentContainerStyle={styles.content}
           renderItem={({ item, index }) => {
             return <SlipCard index={index} item={item} />
@@ -86,7 +66,7 @@ console.log(product,'::::::::::::::::');
 
       <View style={styles.footer}>
         <TouchableOpacity
-        disabled={CustomerLoader ? true : false}
+        disabled={CustomerLoading ? true : false}
           onPress={() => setIsSelectCustomer(true)}
           style={[
             styles.selectCustomer,
@@ -96,7 +76,7 @@ console.log(product,'::::::::::::::::');
             },
           ]}
         >
-         {!CustomerLoader ?
+         {CustomerLoading ?
           <>
           <Text style={styles.text}>Loading...</Text>
           <ActivityIndicator /> 

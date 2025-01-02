@@ -8,7 +8,7 @@ import axios from "axios";
 // Define the asyncThunk
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (categoryId?: string, { rejectWithValue }) => {
+  async (categoryId: string, { rejectWithValue }) => {
     try {
       const token = await getToken()
       const endpoint = categoryId

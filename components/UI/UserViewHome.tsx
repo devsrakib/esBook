@@ -1,4 +1,4 @@
-import { View,StyleSheet } from "react-native";
+import { View,StyleSheet, TouchableOpacity, Text } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors";
 import {  Fonts } from "@/constants/Fonts";
@@ -7,6 +7,8 @@ import Animated, {
   FadeInDown,
   FadeInUp,
 } from "react-native-reanimated";
+import { FontAwesome } from "@expo/vector-icons";
+import { radius } from "@/constants/sizes";
 
 const UserViewHome = ({data}:any) => {
 
@@ -50,6 +52,14 @@ const UserViewHome = ({data}:any) => {
           {capitalizeFirstLetter(data?.data[0]?.name)}
         </Animated.Text>
       </View>
+      <TouchableOpacity style={styles.bellCon}>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>
+            3
+          </Text>
+        </View>
+      <FontAwesome name="bell-o" size={20} color={Colors.text} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -95,5 +105,31 @@ const styles = StyleSheet.create({
     fontSize: Fonts.large,
     color: Colors.text, // Use the function to get a random color
   },
+  bellCon:{
+    width: 46,
+    height: 46,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    alignItems: 'center', 
+    justifyContent: 'center',
+    marginRight: 10
+  },
+  badge:{
+    width: 20,
+    height: 20,
+    backgroundColor: 'red',
+    position: 'absolute',
+    top:-7,
+    right: 0,
+    borderRadius: radius.xxl,
+    alignItems: 'center',
+    justifyContent:'center',
+  },
+  badgeText:{
+    fontSize: Fonts.small,
+    color: Colors.white,
+
+  }
 });
 export default UserViewHome;
