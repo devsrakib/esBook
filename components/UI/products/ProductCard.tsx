@@ -223,8 +223,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   productPhoto: {
-    width: "50%",
-    height: "50%",
+    width: "100%",
+    height: "100%",
     borderRadius: radius.medium,
     resizeMode: "contain",
   },

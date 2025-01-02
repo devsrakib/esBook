@@ -10,10 +10,10 @@ import {
   Modal,
   Dimensions,
 } from "react-native";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import Header from "../../../components/UI/header/Header";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import  {
   useSharedValue,
@@ -35,8 +35,8 @@ import { createProduct } from "@/redux/features/product/createProductSlice";
 const AddProduct = () => {
   const { top } = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.createProduct);
-
+  const { loading, error, status } = useAppSelector((state) => state.createProduct);
+const router = useRouter();
   const [productName, setProductName] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
   const [buyingPrice, setBuyingPrice] = useState("");
@@ -83,37 +83,6 @@ const AddProduct = () => {
   };
 
 
- 
-  // const handleSubmit = () => {
-  //   if (!productName || !buyingPrice || !sellingPrice || !quantity || !category.id || !supplier.id) {
-  //     alert("Please fill all required fields.");
-  //     return;
-  //   }
-  
-  //   if (selectedImage) {
-  //     const fileName = selectedImage.split('/').pop();
-  //     const fileType = selectedImage.match(/[^.]+$/)?.[0];
-  //     formData.append("image", {
-  //       uri: selectedImage,
-  //       name: fileName,
-  //       type: `image/${fileType}`,
-  //     });
-  //   }
-
-  //   dispatch(
-  //     createProduct({
-  //       product_name: productName,
-  //       buying_price: buyingPrice,
-  //       selling_price: sellingPrice,
-  //       discount_price: discountPrice,
-  //       quantity: quantity,
-  //       category: category?.id,
-  //       supplier: supplier?.id,
-  //     })
-  //   );
-  // };
-
-
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
@@ -143,6 +112,11 @@ const AddProduct = () => {
     }
   };
   
+  useEffect(() =>{
+if(status === 'succeeded'){
+  router.push('/(tabs)/product')
+}
+  }, [status])
 
   // Create Product function
   // const createProduct = async () => {
