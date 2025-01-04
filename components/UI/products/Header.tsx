@@ -8,21 +8,22 @@ import { Link } from "expo-router";
 
 import useApiHook from "@/hooks/all_api_hooks";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAppSelector } from "@/hooks/hooks";
 
 const Header = () => {
-  const { data, loading } = useApiHook("product/");
+  const {products, loading, error}  = useAppSelector(state => state.products)
   return (
     <LinearGradient
-      colors={["#168F88", "#006B60", "#4D89A1"]}
+     colors={[Colors.lightGray, Colors.linearSecond, Colors.linearThird]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
       <View style={styles.titleCon}>
         <Text style={styles.text}>Products</Text>
-        {data?.data?.length && (
+        {products?.data?.length && (
           <View style={styles.quantityCon}>
-            <Text>{data?.data?.length ? data?.data?.length : "..."}</Text>
+            <Text>{products?.data?.length ? products?.data?.length : "..."}</Text>
           </View>
         )}
       </View>

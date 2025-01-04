@@ -8,7 +8,7 @@ export const fetchOwner = createAsyncThunk(
   "owners/fetchOwner",
   async (_, { rejectWithValue }) => {
     try {
-      const token = await AsyncStorage.getItem("access_token");
+      const token = await getToken();
       if (!token) throw new Error("Token not found");
       const response = await axios.get(`${API_URL}owners/`, {
         headers: {
@@ -52,7 +52,7 @@ const ownerSlice = createSlice({
       state.error = null;
     });
     build.addCase(fetchOwner.fulfilled, (state, action) => {
-      console.log(action, "))))))))))))))))))))))");
+      console.log(action,);
 
       state.owners = action.payload;
       state.loading = false;

@@ -46,7 +46,7 @@ const UserViewHome = ({data}:any) => {
           Store Owner,
         </Animated.Text>
         <Animated.Text
-          entering={FadeInDown.delay(50).duration(200).damping(6).springify()}
+          entering={FadeInDown.delay(50).duration(200).damping(80).springify().stiffness(200)}
           style={styles.userName}
         >
           {capitalizeFirstLetter(data?.data[0]?.name)}

@@ -96,7 +96,7 @@ const Parties = ({isOpenSearch}: PartiesProps) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#168F88", "#006B60", "#4D89A1"]}
+        colors={[Colors.lightGray, Colors.linearSecond, Colors.linearThird]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.topSection}

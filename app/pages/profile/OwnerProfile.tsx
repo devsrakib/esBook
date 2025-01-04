@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   ToastAndroid,
   StatusBar,
+  Modal,
+  Pressable,
 } from "react-native";
 import { Ionicons, MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -26,6 +28,14 @@ import Button from "@/components/UI/Button";
 import useApiHook from "@/hooks/all_api_hooks";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import { useAppSelector } from "@/hooks/hooks";
+import { useDispatch } from "react-redux";
+import { fetchOwner } from "@/redux/features/owner/ownerSlice";
+import CustomLoader from "@/components/UI/CustomLoader";
+import TopSection from "@/components/UI/profile/TopSection.owner";
+import LogoutConfirmationModal from "@/components/UI/CustomModal";
+import ColorPicker, { Panel1, Swatches, colorKit, PreviewText, HueCircular } from 'reanimated-color-picker';
+import type { returnedResults } from 'reanimated-color-picker';
 
 const OwnerProfile = () => {
   const router = useRouter();
@@ -40,10 +50,19 @@ const OwnerProfile = () => {
     storeName: "",
     ownerName: "",
   });
+const dispatch = useDispatch();
+  const {owners, loading, error} = useAppSelector(state => state.owner);
+ const [visible, setVisible] = useState(false);
 
-  const { data: OwnerData, error } = useApiHook("owners/");
+   
 
  
+console.log(owners?.data, ':::');
+
+
+  useEffect(() => {
+dispatch(fetchOwner())
+  }, [])
 
   const updateButtonWidth = useSharedValue(0);
   const logoutButtonWidth = useSharedValue(100);
@@ -77,19 +96,24 @@ const OwnerProfile = () => {
 
   useEffect(() => {
     if(error)return
-    if (OwnerData && OwnerData?.data && OwnerData?.data?.length > 0) {
-      setProfileData(OwnerData?.data[0]);
+    if (owners && owners?.data && owners?.data?.length > 0) {
+      setProfileData(owners?.data[0]);
     }
-  }, [OwnerData]);
+  }, [owners]);
 
   useEffect(() => {
     if (selectedImage) {
-      setProfileData((prevState) => ({
+      setProfileData((prevState:any) => ({
         ...prevState,
         profilePhoto: selectedImage,
       }));
     }
   }, [selectedImage]);
+
+
+  const onClose = () =>{
+    setVisible(false)
+}
 
   const infoData = [
     {
@@ -119,40 +143,28 @@ const OwnerProfile = () => {
     },
   ];
 
+
+  if(loading){
+    return <CustomLoader/>
+  }
+
+  const [showModal, setShowModal] = useState(false);
+
+  const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
+
+  const selectedColor = useSharedValue(customSwatches[0]);
+  const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
+
+  const onColorSelect = (color: returnedResults) => {
+    'worklet';
+    selectedColor.value = color.hex;
+  };
+
+
   return (
+    <>
     <ScrollView contentContainerStyle={[styles.container]}>
-      <LinearGradient
-        colors={["#168F88", "#006B60", "#4D89A1"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
-        <TouchableOpacity onPress={pickImage} style={styles.imageWrapper}>
-          {profileData?.profilePhoto ? (
-            <Image
-              source={{ uri: profileData.profilePhoto }}
-              style={styles.profileImage}
-            />
-          ) : (
-            <Image
-              source={require("../../../assets/images/placeholder.jpeg")}
-              style={styles.profileImage}
-            />
-          )}
-          <FontAwesome6
-            name="camera"
-            size={24}
-            color={Colors.white}
-            style={styles.cameraIcon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.profileName}>
-          {profileData?.name || "Your Name"}
-        </Text>
-        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-          <MaterialIcons name="logout" size={20} color={Colors.white} />
-        </TouchableOpacity>
-      </LinearGradient>
+      <TopSection profilePhoto={profileData?.profile_photo} name={profileData?.name} setVisible={setVisible} pickImage={pickImage} />
 
       <View style={styles.infoContainer}>
         {infoData?.map((item, index) => (
@@ -167,7 +179,7 @@ const OwnerProfile = () => {
               <TextInput
                 style={styles.input}
                 placeholder={`Enter ${item.label}`}
-                value={profileData?.[item.key]}
+                value={profileData?.[item?.key]}
                 onChangeText={(value) => handleInputChange(value, item.key)}
                 onFocus={handleFocus}
               />
@@ -187,6 +199,27 @@ const OwnerProfile = () => {
         />
       </View>
     </ScrollView>
+    <LogoutConfirmationModal onLogout={logout} visible={visible}  onClose={onClose} />
+    <Modal visible={showModal}>
+    <Animated.View style={[styles.container, backgroundColorStyle]}>
+          <View style={styles.pickerContainer}>
+            <ColorPicker value={selectedColor.value} sliderThickness={20} thumbSize={24} onChange={onColorSelect} boundedThumb>
+              <HueCircular containerStyle={styles.hueContainer} thumbShape='pill'>
+                <Panel1 style={styles.panelStyle} />
+              </HueCircular>
+              <Swatches style={styles.swatchesContainer} swatchStyle={styles.swatchStyle} colors={customSwatches} />
+              <View style={styles.previewTxtContainer}>
+                <PreviewText style={{ color: '#707070' }} colorFormat='hsl' />
+              </View>
+            </ColorPicker>
+          </View>
+
+          <Pressable style={styles.closeButton} onPress={() => setShowModal(false)}>
+            <Text style={{ color: '#707070', fontWeight: 'bold' }}>Close</Text>
+          </Pressable>
+        </Animated.View>
+       </Modal>
+    </>
   );
 };
 
@@ -195,38 +228,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: Colors.background,
   },
-  header: {
-    paddingVertical: 40,
-    paddingTop: 60,
-    alignItems: "center",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  imageWrapper: {
-    position: "relative",
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 2,
-    borderColor: Colors.white,
-  },
-  cameraIcon: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-  },
-  profileName: {
-    color: Colors.white,
-    fontSize: Fonts.extraLarge,
-    marginTop: 10,
-  },
-  logoutButton: {
-    position: "absolute",
-    bottom: 40,
-    right: 20,
-  },
+
   infoContainer: {
     paddingHorizontal: 16,
     marginTop: 20,
@@ -264,6 +266,91 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 30,
     paddingHorizontal: 16,
+  },
+  pickerContainer: {
+    alignSelf: 'center',
+    width: 300,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  hueContainer: {
+    justifyContent: 'center',
+  },
+  panelStyle: {
+    width: '70%',
+    height: '70%',
+    alignSelf: 'center',
+    borderRadius: 16,
+  },
+  previewTxtContainer: {
+    paddingTop: 20,
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderColor: '#bebdbe',
+  },
+  swatchesContainer: {
+    paddingTop: 20,
+    marginTop: 20,
+    borderTopWidth: 1,
+    borderColor: '#bebdbe',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    gap: 10,
+  },
+  swatchStyle: {
+    borderRadius: 20,
+    height: 30,
+    width: 30,
+    margin: 0,
+    marginBottom: 0,
+    marginHorizontal: 0,
+    marginVertical: 0,
+  },
+  openButton: {
+    width: '100%',
+    borderRadius: 20,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  closeButton: {
+    position: 'absolute',
+    bottom: 10,
+    borderRadius: 20,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
 });
 
