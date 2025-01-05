@@ -13,8 +13,9 @@ interface props {
     name: string,
     pickImage: () => void
     setVisible: Function
+    setShowModal:Function
 }
-const TopSection = ({profilePhoto, name, pickImage, setVisible }:props) => {
+const TopSection = ({profilePhoto, name, pickImage, setVisible, setShowModal }:props) => {
    
   return (
     <LinearGradient
@@ -46,7 +47,7 @@ const TopSection = ({profilePhoto, name, pickImage, setVisible }:props) => {
        {name || "Your Name"}
      </Text>
     <View style={styles.gearCon}>
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => setShowModal(true)}>
         <FontAwesome name="gear" size={24} color={Colors.white} />
         </TouchableOpacity>
     <TouchableOpacity onPress={() => setVisible(true)} style={styles.logoutButton}>

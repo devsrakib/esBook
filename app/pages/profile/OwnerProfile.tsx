@@ -36,6 +36,7 @@ import TopSection from "@/components/UI/profile/TopSection.owner";
 import LogoutConfirmationModal from "@/components/UI/CustomModal";
 import ColorPicker, { Panel1, Swatches, colorKit, PreviewText, HueCircular } from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
+import { setBackgroundColor } from "@/redux/actions/backgroundColorSlice";
 
 const OwnerProfile = () => {
   const router = useRouter();
@@ -53,11 +54,8 @@ const OwnerProfile = () => {
 const dispatch = useDispatch();
   const {owners, loading, error} = useAppSelector(state => state.owner);
  const [visible, setVisible] = useState(false);
-
+ const [showModal, setShowModal] = useState(false);
    
-
- 
-console.log(owners?.data, ':::');
 
 
   useEffect(() => {
@@ -144,27 +142,26 @@ dispatch(fetchOwner())
   ];
 
 
-  if(loading){
-    return <CustomLoader/>
-  }
+  // if(loading){
+  //   return <CustomLoader/>
+  // }
 
-  const [showModal, setShowModal] = useState(false);
+  
 
   const customSwatches = new Array(6).fill('#fff').map(() => colorKit.randomRgbColor().hex());
-
   const selectedColor = useSharedValue(customSwatches[0]);
   const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
-
   const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
+    dispatch(setBackgroundColor(color.hex));
   };
 
 
   return (
     <>
     <ScrollView contentContainerStyle={[styles.container]}>
-      <TopSection profilePhoto={profileData?.profile_photo} name={profileData?.name} setVisible={setVisible} pickImage={pickImage} />
+      <TopSection profilePhoto={profileData?.profile_photo} name={profileData?.name} setVisible={setVisible} pickImage={pickImage} setShowModal={setShowModal} />
 
       <View style={styles.infoContainer}>
         {infoData?.map((item, index) => (
@@ -200,8 +197,8 @@ dispatch(fetchOwner())
       </View>
     </ScrollView>
     <LogoutConfirmationModal onLogout={logout} visible={visible}  onClose={onClose} />
-    <Modal visible={showModal}>
-    <Animated.View style={[styles.container, backgroundColorStyle]}>
+    <Modal visible={showModal} animationType='none'>
+    <Animated.View style={[styles.ModalContainer, backgroundColorStyle]}>
           <View style={styles.pickerContainer}>
             <ColorPicker value={selectedColor.value} sliderThickness={20} thumbSize={24} onChange={onColorSelect} boundedThumb>
               <HueCircular containerStyle={styles.hueContainer} thumbShape='pill'>
@@ -292,6 +289,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 16,
   },
+  ModalContainer:{
+    flex: 1,
+    alignItems:'center',
+    justifyContent: 'center'
+  },
+
   previewTxtContainer: {
     paddingTop: 20,
     marginTop: 20,
