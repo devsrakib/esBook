@@ -12,7 +12,7 @@ import { Colors } from "@/constants/Colors";
 import { Entypo, FontAwesome, FontAwesome5, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Fonts } from "@/constants/Fonts";
 import { Link } from "expo-router";
-import Customers from "../shared/Customers";
+import Customers from "../Customers";
 import { getCustomers, getSuppliers } from "@/databases/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import Empty from "../Empty";

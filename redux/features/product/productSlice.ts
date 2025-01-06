@@ -8,12 +8,12 @@ import axios from "axios";
 // Define the asyncThunk
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (categoryId: string, { rejectWithValue }) => {
+  async ({ categoryId, productId }: { categoryId?: string; productId?: string }, { rejectWithValue }) => {
     try {
       const token = await getToken()
       const endpoint = categoryId
         ? `${API_URL}product/?category=${categoryId}`
-        : `${API_URL}product/`;
+        : productId ? `${API_URL}product/${productId}/`: `${API_URL}product/`;
       const response = await axios.get(endpoint,{
         headers:{
           Authorization: `Bearer ${token}`

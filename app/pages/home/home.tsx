@@ -38,7 +38,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchSupplier())
+    dispatch(fetchSupplier({supplierId:''}));
   }, [])
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Home = () => {
         message={"Failed to load data. Please check your connection."}
         onRetry={() => {
           dispatch(fetchCustomers());
-          dispatch(fetchSupplier());
+          dispatch(fetchSupplier({supplierId:''}));
           dispatch(fetchOwner());
         }}
       />

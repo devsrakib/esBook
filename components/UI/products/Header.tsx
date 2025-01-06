@@ -21,11 +21,9 @@ const Header = () => {
     >
       <View style={styles.titleCon}>
         <Text style={styles.text}>Products</Text>
-        {products?.data?.length && (
           <View style={styles.quantityCon}>
-            <Text>{products?.data?.length ? products?.data?.length : "..."}</Text>
+            <Text>{products?.data?.length ? products?.data?.length : 0}</Text>
           </View>
-        )}
       </View>
       <View style={styles.addProductCon}>
         <Link href={"/pages/product/AddProduct"} asChild>

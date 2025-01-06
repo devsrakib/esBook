@@ -7,12 +7,12 @@ import axios from "axios";
 
 export const fetchSupplier = createAsyncThunk(
     "supplier/fetchCustomers",
-    async (_, { rejectWithValue }) => {
+    async ({supplierId }:{ supplierId?: string; }, { rejectWithValue }) => {
       try {
         const token = await AsyncStorage.getItem("access_token");
         if (!token) throw new Error("Token not found");
         
-        const res = await axios.get(`${API_URL}suppliers/`, {
+        const res = await axios.get(supplierId ? `${API_URL}suppliers/${supplierId}/` : `${API_URL}suppliers/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -2,13 +2,13 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { MotiView } from "moti";
 import { radius } from "@/constants/sizes";
-import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { tabProps } from "@/app/(tabs)/Cash";
 import Animated, {
   FadeInRight,
   LinearTransition,
 } from "react-native-reanimated";
+import { Colors } from "@/constants/Colors";
 
 type props = {
   item: tabProps;
@@ -17,6 +17,7 @@ type props = {
   index: number;
 };
 const Tab = ({ item, isSelected, setSelectedIndex, index }: props) => {
+
   return (
     <MotiView
       animate={{

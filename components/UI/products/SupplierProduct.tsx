@@ -12,7 +12,7 @@ const SupplierProduct = ({ item }) => {
     <View style={styles.container}>
       <View style={styles.imageAndNameCon}>
         <View style={styles.imageCon}>
-          <Image style={styles.image} source={{ uri: item?.photo }} />
+          <Image style={styles.image} source={{ uri: item?.photo ? item?.photo : '../../../assets/images/defoulProduct.png' }} />
         </View>
         <View>
           <Text style={styles.productName}>{item?.product_name}</Text>
@@ -38,7 +38,7 @@ const SupplierProduct = ({ item }) => {
         deserunt numquam cumque iste optio quaerat excepturi dolor illo natus,
         eveniet a veniam quisquam explicabo. Culpa rerum, assumenda in commodi,
         cumque omnis, temporibus voluptas doloribus nemo nihil error ex maxime
-        natus aspernatur ratione pariatur! Odit ipsam delectus, nobis optio
+        natus aspernatur ratione pariatur! Odit ipsam delectus, nobis optior
         vitae quos sint maxime deleniti vel, libero qui iure incidunt quod!
         Nobis pariatur perferendis aperiam voluptatem impedit esse mollitia
         nihil nemo eos, quos hic ipsum ab debitis iure explicabo, qui est
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     marginHorizontal: 16,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 10,
   },
   imageAndNameCon: {
     flexDirection: "row",
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    borderRadius: radius.small
   },
   productName: {
     fontSize: Fonts.large,

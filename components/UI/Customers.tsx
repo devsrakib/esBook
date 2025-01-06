@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React, { Fragment, useEffect, useState, memo } from "react";
-import Divider from "../Divider";
+import Divider from "./Divider";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
 import { Colors } from "@/constants/Colors";
@@ -101,10 +101,10 @@ const Customers = ({
         >
           <TouchableOpacity style={styles.customerDetails}>
             <View style={[styles.avatar, { backgroundColor: Colors.mainColor }]}>
-              {item?.profilePhoto ? (
+              {item?.profile_photo ? (
                 <Image
                   style={styles.profile}
-                  source={{ uri: item?.profilePhoto }}
+                  source={{ uri: item?.profile_photo }}
                 />
               ) : (
                 <Text style={styles.initials}>{initials}</Text>
@@ -172,7 +172,8 @@ const styles = StyleSheet.create({
   profile: {
     width: "100%",
     height: "100%",
-    borderRadius: radius.medium,
+    borderRadius: radius.small,
+    resizeMode: 'cover'
   },
   money:{
 fontWeight: '600',

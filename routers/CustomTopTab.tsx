@@ -16,8 +16,6 @@ type props = {
   isOpenSearch: boolean;
 };
 const CustomTopTab = ({ tab, selectedIndex, setSelectedIndex, handleSearch, isOpenSearch }: props) => {
-
-  console.log(isOpenSearch);
   
   return (
     <LinearGradient

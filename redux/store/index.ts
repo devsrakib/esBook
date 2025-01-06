@@ -7,7 +7,8 @@ import createProductReducer from '../features/product/createProductSlice';
 import loginReducer from '../features/login/loginSlice'
 import supplierSlice  from "../features/supplier/supplierSlice";
 import ownerReducer from '../features/owner/ownerSlice';
-import backgroundColor from '../actions/backgroundColorSlice'
+import colorReducer from '../actions/colorSlice';
+import slipHistoryReducer from '../features/slip/slipHistorySlice';
 
 
 
@@ -21,7 +22,9 @@ export const store = configureStore({
         quantityCounter: counterReducer,
         createProduct: createProductReducer,
         owner: ownerReducer,
-        backgroundColor: backgroundColor
+        colors: colorReducer,
+        slipHistory: slipHistoryReducer
+
     }
 })
 

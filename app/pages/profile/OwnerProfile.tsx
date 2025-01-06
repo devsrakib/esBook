@@ -36,7 +36,6 @@ import TopSection from "@/components/UI/profile/TopSection.owner";
 import LogoutConfirmationModal from "@/components/UI/CustomModal";
 import ColorPicker, { Panel1, Swatches, colorKit, PreviewText, HueCircular } from 'reanimated-color-picker';
 import type { returnedResults } from 'reanimated-color-picker';
-import { setBackgroundColor } from "@/redux/actions/backgroundColorSlice";
 
 const OwnerProfile = () => {
   const router = useRouter();
@@ -154,7 +153,6 @@ dispatch(fetchOwner())
   const onColorSelect = (color: returnedResults) => {
     'worklet';
     selectedColor.value = color.hex;
-    dispatch(setBackgroundColor(color.hex));
   };
 
 

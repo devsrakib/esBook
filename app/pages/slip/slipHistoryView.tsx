@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import Header from "@/components/UI/header/Header";
-import ProfileView from "@/components/UI/shared/ProfileView";
+import ProfileView from "@/components/UI/ProfileView";
 
 const slipHistoryView = () => {
   const { top } = useSafeAreaInsets();

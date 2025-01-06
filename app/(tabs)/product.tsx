@@ -20,12 +20,10 @@ const Product = () => {
   );
 
   useEffect(() => {
-    console.log(categoryId, '********')
     
-    dispatch(fetchProducts( categoryId));
+    dispatch(fetchProducts( {categoryId: categoryId, productId: '' }));
   }, [categoryId]);
 
-  console.log(categoryId, ':::: c');
   
 
   const handleActiveIndex = useCallback((index: number) => {

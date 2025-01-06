@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
-import Customers from "@/components/UI/shared/Customers";
+import Customers from "@/components/UI/Customers";
 import AmountCon from "@/components/UI/AmountCon";
 import { FontAwesome } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, ScrollView, ToastAndroid } from "react-native";
 import React, { useEffect, useState } from "react";
 import Inputs from "@/components/UI/parties/Inputs";
 import AddPhoneBookButton from "./AddPhoneBookButton";
-import { Colors } from "@/constants/Colors";
+import { useDynamicColors } from "@/constants/Colors";
 import ImageInput from "./ImageInput";
 import Button from "@/components/UI/Button";
 import { radius } from "@/constants/sizes";
@@ -26,8 +26,8 @@ const Customers = () => {
     phone: "",
     address: "",
   });
-
-  const db = useSQLiteContext();
+const Colors = useDynamicColors()
+const styles = getStyle(Colors)
 
   const navigate = useRouter();
   useEffect(() => {
@@ -106,7 +106,7 @@ const Customers = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (Colors:any) =>({
   container: {
     flex: 1,
     paddingHorizontal: 20,

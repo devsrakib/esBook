@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Linking,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
@@ -14,15 +14,21 @@ import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import useApiHook from "@/hooks/all_api_hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { fetchSupplier } from "@/redux/features/supplier/supplierSlice";
 
 const ProfileView = ({ id }: { id: string }) => {
-  const { data: supplier } = useApiHook(`suppliers/${id}/`);
-
-  console.log(supplier?.phone);
+  const dispatch = useAppDispatch()
+   const {suppliers, loading, error} = useAppSelector(state => state.suppliers);
+  
+   
+   useEffect(() =>{
+  dispatch(fetchSupplier({supplierId: id}))
+   }, [])
 
   const handleCall = () => {
-    if (supplier?.phone) {
-      const phoneUrl = `tel:${supplier?.phone}`;
+    if (suppliers?.phone) {
+      const phoneUrl = `tel:${suppliers?.phone}`;
       Linking.openURL(phoneUrl).catch((err) =>
         console.error("Error opening dialer:", err)
       );
@@ -37,7 +43,7 @@ const ProfileView = ({ id }: { id: string }) => {
       <View style={styles.profileCon}>
         <Image
           style={styles.profile}
-          source={require("../../../assets/images/picture.png")}
+          source={require("../../assets/images/picture.png")}
         />
       </View>
 
@@ -51,13 +57,13 @@ const ProfileView = ({ id }: { id: string }) => {
               .springify()}
             style={styles.shopName}
           >
-            {supplier?.store_name}
+            {suppliers?.store_name}
           </Animated.Text>
           <Link
             href={{
               pathname: "/pages/product/SupplierEdit",
               params: {
-                id: supplier?.id,
+                id: suppliers?.id,
               },
             }}
             asChild
@@ -77,7 +83,7 @@ const ProfileView = ({ id }: { id: string }) => {
           entering={FadeInDown.delay(100).duration(400).damping(80).springify()}
           style={styles.owner}
         >
-          pro: {supplier?.name}
+          pro: {suppliers?.name}
         </Animated.Text>
 
         {/* Phone Number with Call Icon */}
@@ -85,7 +91,7 @@ const ProfileView = ({ id }: { id: string }) => {
           entering={FadeInDown.delay(150).duration(400).damping(80).springify()}
           style={styles.callIconCon}
         >
-          <Text style={styles.phoneNumber}>Phone: {supplier?.phone}</Text>
+          <Text style={styles.phoneNumber}>Phone: {suppliers?.phone}</Text>
           <TouchableOpacity
             onPress={() => handleCall()}
             style={styles.callIcon}
@@ -99,7 +105,7 @@ const ProfileView = ({ id }: { id: string }) => {
           entering={FadeInDown.delay(200).duration(400).damping(80).springify()}
           style={styles.location}
         >
-          Location: {supplier?.address}
+          Location: {suppliers?.address}
         </Animated.Text>
       </View>
     </Animated.View>
