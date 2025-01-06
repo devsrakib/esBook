@@ -46,7 +46,7 @@ const Page = () => {
           //   customers?.data?.length === 0 && styles.emptyListContainer,
           // ]}
           renderItem={({ item, index }) => (
-            <AllCustomers item={item} index={index} router="/pages/profile/profile" />
+            <AllCustomers item={item} index={index} router="/pages/cashbox/details" />
           )}
           ListEmptyComponent={
             <View style={styles.emptyStateContainer}>

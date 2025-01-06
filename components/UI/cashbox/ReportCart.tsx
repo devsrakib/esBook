@@ -12,6 +12,9 @@ import {
 } from "@/databases/Database";
 import { Link } from "expo-router";
 import FormatDate from "@/utils/FormatDate";
+import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { fetchCustomers } from "@/redux/features/customer/customerSlice";
 
 const ReportCart = ({
   item,
@@ -22,39 +25,51 @@ const ReportCart = ({
   text: string;
   selectedIndex?: number;
 }) => {
-  const [customer, setCustomer] = useState<any>({});
-  const [supplier, setSupplier] = useState<any>({});
-  const db = useSQLiteContext();
+  // const [customer, setCustomer] = useState<any>({});
+  // const [supplier, setSupplier] = useState<any>({});
+  // const db = useSQLiteContext();
+const dispatch = useAppDispatch()
+const {customers, loading, error} = useAppSelector(state => state.customers)
 
-  useEffect(() => {
-    const fetchCustomer = async () => {
-      try {
-        const customerData = await getCustomerById(db, item?.customerId);
-        setCustomer(customerData || {});
-        if (!customerData) {
-        }
-      } catch (error) {}
-    };
+useEffect(() =>{
+  dispatch(fetchCustomers(item?.customer))
+},[item?.customer])
+console.log(item?.customer);
 
-    if (item?.customerId) {
-      fetchCustomer();
-    }
-  }, [db, item?.customerId]);
+  // useEffect(() => {
+  //   const fetchCustomer = async () => {
+  //     try {
+  //       const customerData = await getCustomerById(db, item?.customerId);
+  //       setCustomer(customerData || {});
+  //       if (!customerData) {
+  //       }
+  //     } catch (error) {}
+  //   };
 
-  useEffect(() => {
-    const fetchSupplier = async () => {
-      try {
-        const supplierData = await getSupplierById(db, item?.supplierId);
-        setSupplier(supplierData || {});
-        if (!supplierData) {
-        }
-      } catch (error) {}
-    };
+  //   if (item?.customerId) {
+  //     fetchCustomer();
+  //   }
+  // }, [db, item?.customerId]);
 
-    if (item?.supplierId) {
-      fetchSupplier();
-    }
-  }, [db, item?.supplierId]);
+  // useEffect(() => {
+  //   const fetchSupplier = async () => {
+  //     try {
+  //       const supplierData = await getSupplierById(db, item?.supplierId);
+  //       setSupplier(supplierData || {});
+  //       if (!supplierData) {
+  //       }
+  //     } catch (error) {}
+  //   };
+
+  //   if (item?.supplierId) {
+  //     fetchSupplier();
+  //   }
+  // }, [db, item?.supplierId]);
+
+  // console.log(":::::::",item);
+  
+  console.log('customer form report', customers);
+  
 
   return (
     <View style={styles.container}>
@@ -105,7 +120,7 @@ const ReportCart = ({
               ? item?.dueAmount
               : text === "cash buy"
               ? item?.amount
-              : text === "cash sell" && item?.saleAmount}
+              : text === "cash sell" && item?.sell_amount}
           </Text>
         )}
       </View>
@@ -114,9 +129,13 @@ const ReportCart = ({
         <View style={styles.bottomSection}>
           <Image
             style={styles.img}
-            source={{ uri: customer?.profilePhoto || supplier?.profilePhoto }}
+            source={{ uri: customers?.profile_photo 
+              // || supplier?.profilePhoto
+             }}
           />
-          <Text style={styles.name}>{customer?.name || supplier?.name}</Text>
+          <Text style={styles.name}>{customers?.name 
+          // || supplier?.name
+          }</Text>
           <Text style={styles.amountText}>
             {text === "cash sell"
               ? "collection"
@@ -143,7 +162,7 @@ const ReportCart = ({
                 ? item?.dueAmount
                 : text === "cash buy"
                 ? item?.dueAmount
-                : text === "cash sell" && item?.collectedAmount}
+                : text === "cash sell" && item?.collected_amount}
             </Text>
           </Text>
         </View>

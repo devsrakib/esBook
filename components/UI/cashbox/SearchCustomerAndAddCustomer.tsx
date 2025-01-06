@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import React, { Fragment, memo, useEffect, useState } from "react";
-import { Feather } from "@expo/vector-icons";
+import { Entypo, Feather } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { radius } from "@/constants/sizes";
@@ -22,9 +22,11 @@ import { LinearGradient } from "expo-linear-gradient";
 const SearchCustomerAndAddCustomer = ({
   text,
   id,
+  setActiveModal
 }: {
   text: string;
   id: number;
+  setActiveModal: Function
 }) => {
   const [customerData, setCustomerData] = useState<any>([]);
   const db = useSQLiteContext();
@@ -72,10 +74,10 @@ const SearchCustomerAndAddCustomer = ({
           style={styles.inputContainer}
         >
           <View style={styles.userIconCon}>
-            {id && customerData?.profilePhoto ? (
+            {id && customerData?.profile_photo ? (
               <Image
                 style={styles.image}
-                source={{ uri: customerData?.profilePhoto }}
+                source={{ uri: customerData?.profile_photo }}
               />
             ) : (
               <Feather name="user" size={24} color={Colors.text} />
@@ -100,7 +102,7 @@ const SearchCustomerAndAddCustomer = ({
           )}
         </CustomTouchable>
       </Link>
-      <Link
+      {/* <Link
         href={{
           pathname: "/pages/parties/addNewParties",
           params: {
@@ -108,14 +110,16 @@ const SearchCustomerAndAddCustomer = ({
           },
         }}
         asChild
-      >
+      > */}
         <CustomTouchable
+        onPress={() => setActiveModal(true)}
           entering={FadeInDown.delay(100).duration(400).damping(80).springify()}
           style={styles.plusCon}
         >
-          <AntDesign name="plus" size={24} color="black" />
+          <Entypo name="plus" size={24} color={Colors.text} />
+          <Text style={styles.addText}>Add Slip</Text>
         </CustomTouchable>
-      </Link>
+      {/* </Link> */}
     </LinearGradient>
   );
 };
@@ -160,9 +164,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: radius.small,
     height: 50,
-    width: 50,
+    width: 100,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: 'row',
+    gap: 5,
+
+  },
+  addText:{
+    fontSize: Fonts.regular,
+    color: Colors.text,
   },
   image: {
     width: "100%",

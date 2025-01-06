@@ -26,10 +26,10 @@ const UserViewHome = ({data}:any) => {
         entering={FadeInUp.delay(50).duration(50)}
         style={styles.avatarContainer}
       >
-        {data?.data[0]?.profilePhoto ? (
+        {data?.data[0]?.profile_photo ? (
           <Animated.Image
             entering={FadeInUp.delay(50).duration(50)}
-            source={{ uri: data?.data[0]?.profilePhoto }}
+            source={{ uri: data?.data[0]?.profile_photo }}
             style={styles.userAvatar}
           />
         ) : (

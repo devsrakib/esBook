@@ -8,12 +8,12 @@ import { CustomerResponse, CustomerState } from "@/types/customer";
 // Async thunk to fetch customers
 export const fetchCustomers = createAsyncThunk<CustomerResponse, void, { rejectValue: string }>(
   "customers/fetchCustomers",
-  async (_, { rejectWithValue }) => {
+  async (customerId, { rejectWithValue }) => {
     try {
       const token = await AsyncStorage.getItem("access_token");
       if (!token) throw new Error("Token not found");
 
-      const response = await axios.get(`${API_URL}customers/`, {
+      const response = await axios.get(customerId ?  `${API_URL}customers/${customerId}/` : `${API_URL}customers/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

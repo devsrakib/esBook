@@ -12,6 +12,8 @@ import { radius } from "@/constants/sizes";
 import axios from "axios";
 import useApiHook, { apiUrl } from "@/hooks/all_api_hooks";
 import { getToken } from "@/utils/getToken";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { fetchSupplier } from "@/redux/features/supplier/supplierSlice";
 
 const SupplierEdit = () => {
   const { top } = useSafeAreaInsets();
@@ -26,7 +28,13 @@ const SupplierEdit = () => {
   const params = useLocalSearchParams();
 
   // Fetch supplier data
-  const { data } = useApiHook(`suppliers/${params?.id}/`);
+ const dispatch = useAppDispatch()
+   const {suppliers:data, loading: SupplierLoading, error} = useAppSelector(state => state.suppliers);
+  
+   
+   useEffect(() =>{
+  dispatch(fetchSupplier({supplierId: `${params.id}`}))
+   }, [])
 
   useEffect(() => {
     if (data) {
@@ -136,7 +144,11 @@ const SupplierEdit = () => {
           <Button
             title={loading ? "Updating..." : "Update"}
             onPress={updateSupplier}
-            disabled={loading}
+            bg={Colors.mainColor}
+            radius={radius.small}
+            width={'100%'}
+            titleColor={Colors.white}
+            // disabled={loading}
           />
         </Animated.View>
       </ScrollView>
@@ -153,6 +165,7 @@ const styles = StyleSheet.create({
   },
   form: {
     padding: 20,
+    flex: 1,
   },
   label: {
     fontSize: 14,
@@ -171,6 +184,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   buttonCon: {
-    marginTop: 20,
+    marginTop: 'auto',
   },
 });

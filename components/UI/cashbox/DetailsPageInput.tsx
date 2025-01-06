@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Modal } from "react-native";
 import React, { Fragment, memo } from "react";
 import { currency } from "@/global/currency";
 import { radius } from "@/constants/sizes";
@@ -6,6 +6,7 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import { Entypo } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 const DetailsPageInput = ({
   setTransaction,
   text,
@@ -21,6 +22,11 @@ const DetailsPageInput = ({
       [key]: value,
     }));
   };
+const dispatch = useAppDispatch()
+// const {slips, loading, error} = useAppSelector(state => state.)
+
+
+
   const CustomTextInput = Animated.createAnimatedComponent(TextInput);
   return (
     <View style={styles.container}>
@@ -91,6 +97,7 @@ const DetailsPageInput = ({
         placeholder="Type here"
         onChangeText={(e) => handleChange("description", e)}
       />
+      
     </View>
   );
 };

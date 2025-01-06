@@ -7,7 +7,7 @@ import {
   Image,
   ToastAndroid,
 } from "react-native";
-import React, { useState } from "react";
+import React, { act, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/cashbox/Header";
@@ -30,22 +30,27 @@ import {
 } from "@/databases/Database";
 import { ensureNonNegative } from "@/utils/ensureNonNegative";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import SlipModal from "./SlipModal";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { postCashSell } from "@/redux/features/cash_sell/cashSellSlice";
 
 const page = () => {
   const route = useLocalSearchParams<any>();
   const { bottom, top } = useSafeAreaInsets();
   const [transaction, setTransaction] = useState<any>();
-
+  const [activeModal, setActiveModal] = useState(false)
+ 
   const navigation = useRouter();
+console.log(route);
 
   let transactionData: any;
   if (route.text == "Cash Sell") {
     transactionData = {
-      customerId: route?.id,
-      saleAmount: transaction?.sale,
-      collectedAmount: transaction?.collect,
-      dueAmount: ensureNonNegative(transaction?.sale - transaction?.collect),
-      extraAmount: ensureNonNegative(transaction?.collect - transaction?.sale),
+      customer: route?.id,
+      sell_amount: transaction?.sale,
+      collected_amount: transaction?.collect,
+      // dueAmount: ensureNonNegative(transaction?.sale - transaction?.collect),
+      // extraAmount: ensureNonNegative(transaction?.collect - transaction?.sale),
       description: transaction?.description,
     };
   } else if (route.text == "Cash buy") {
@@ -90,11 +95,11 @@ const page = () => {
 
   const db = useSQLiteContext();
 
+  const dispatch = useAppDispatch()
+  
+
   const handleCashSell = async () => {
-    const result = await cash_sell(db, transactionData);
-    if (result.success) {
-      navigation.push("/(tabs)/cashbox");
-    }
+    dispatch(postCashSell(transactionData))
   };
 
   const handleExpense = async () => {
@@ -207,6 +212,7 @@ const page = () => {
           />
           {shouldRenderComponent && (
             <SearchCustomerAndAddCustomer
+            setActiveModal={setActiveModal}
               text={customerTextMapping[route?.text]}
               id={route?.id}
             />
@@ -241,6 +247,7 @@ const page = () => {
         onPress={() => handleInput()}
         width={"90%"}
       />
+      <SlipModal activeModal={activeModal} setActiveModal={setActiveModal} />
     </View>
   );
 };

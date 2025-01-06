@@ -17,6 +17,8 @@ import NonRelationReportCart from "@/components/UI/cashbox/nonRelationalReportCa
 import { MaterialIcons } from "@expo/vector-icons";
 import Empty from "@/components/UI/Empty";
 import DueReport from "./dueReport";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { fetchCashSell } from "@/redux/features/cash_sell/getCashSellSlice";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -24,18 +26,26 @@ const Page = () => {
   const [expenseReport, setExpenseReport] = useState<any>([]);
   const [depositedReport, setDepositedReport] = useState<any>([]);
   const [withdrawReport, setWithdrawReport] = useState<any>([]);
-  const [cashSellReport, setCashSellReport] = useState<any>([]);
   const [cashBuyReport, setCashBuyReport] = useState<any>([]);
   const [dueReport, setDueReport] = useState<any>([]);
   const [selectedChip, setSelectedChip] = useState<any>(router?.title);
   const db = useSQLiteContext();
+
+  const dispatch = useAppDispatch()
+  const {cashSells, loading, error} = useAppSelector(state => state.getCashSell)
+
+useEffect(() =>{
+  dispatch(fetchCashSell())
+},[])
+
+  console.log(cashSells?.data, 'cashShells: =======');
+  
 
   useEffect(() => {
     async function expense() {
       const expense = await getExpense(db);
       const deposit = await getDeposit(db);
       const withdraw = await getDeposit(db);
-      const cashSell = await getCash_sell(db);
       const cash_buy = await getCash_buy(db);
       const due = (await getCash_sell(db)).filter(
         (item: any) => item?.dueAmount > 0
@@ -44,7 +54,6 @@ const Page = () => {
       setExpenseReport(expense);
       setDepositedReport(deposit);
       setWithdrawReport(withdraw);
-      setCashSellReport(cashSell);
       setCashBuyReport(cash_buy);
     }
     expense();
@@ -58,7 +67,7 @@ const Page = () => {
       : selectedChip === "Withdraw"
       ? withdrawReport
       : selectedChip === "Cash Sell"
-      ? cashSellReport
+      ? cashSells?.data
       : selectedChip === "Due"
       ? dueReport
       : selectedChip === "Cash buy" && cashBuyReport;

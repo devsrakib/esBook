@@ -9,7 +9,8 @@ import supplierSlice  from "../features/supplier/supplierSlice";
 import ownerReducer from '../features/owner/ownerSlice';
 import colorReducer from '../actions/colorSlice';
 import slipHistoryReducer from '../features/slip/slipHistorySlice';
-
+import postCashSellReducer from '../features/cash_sell/cashSellSlice';
+import getCashSellReducer  from '..//features/cash_sell/getCashSellSlice'
 
 
 export const store = configureStore({
@@ -23,8 +24,9 @@ export const store = configureStore({
         createProduct: createProductReducer,
         owner: ownerReducer,
         colors: colorReducer,
-        slipHistory: slipHistoryReducer
-
+        slipHistory: slipHistoryReducer,
+        postCashSell: postCashSellReducer,
+getCashSell: getCashSellReducer
     }
 })
 

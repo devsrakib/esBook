@@ -13,7 +13,6 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
-import useApiHook from "@/hooks/all_api_hooks";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { fetchSupplier } from "@/redux/features/supplier/supplierSlice";
 
@@ -37,10 +36,20 @@ const ProfileView = ({ id }: { id: string }) => {
   return (
     <Animated.View
       entering={FadeInDown.delay(50).duration(400).damping(80).springify()}
-      style={styles.profileSection}
+      // style={styles.profileSection}
     >
+       <Link
+            href={{
+              pathname: "/pages/product/SupplierEdit",
+              params: {
+                id: suppliers?.id,
+              },
+            }}
+            asChild
+          >
       {/* Profile Image */}
-      <View style={styles.profileCon}>
+     <TouchableOpacity style={styles.profileSection} >
+     <View style={styles.profileCon}>
         <Image
           style={styles.profile}
           source={require("../../assets/images/picture.png")}
@@ -59,23 +68,13 @@ const ProfileView = ({ id }: { id: string }) => {
           >
             {suppliers?.store_name}
           </Animated.Text>
-          <Link
-            href={{
-              pathname: "/pages/product/SupplierEdit",
-              params: {
-                id: suppliers?.id,
-              },
-            }}
-            asChild
+          
+            <TouchableOpacity
+            onPress={() => handleCall()}
+            style={styles.callIcon}
           >
-            <TouchableOpacity style={styles.editCon}>
-              <FontAwesome5
-                name="user-edit"
-                size={18}
-                color={Colors.darkCharcoal}
-              />
-            </TouchableOpacity>
-          </Link>
+            <Ionicons name="call" size={16} color={Colors.mainColor} />
+          </TouchableOpacity>
         </View>
 
         {/* Owner Name */}
@@ -92,12 +91,7 @@ const ProfileView = ({ id }: { id: string }) => {
           style={styles.callIconCon}
         >
           <Text style={styles.phoneNumber}>Phone: {suppliers?.phone}</Text>
-          <TouchableOpacity
-            onPress={() => handleCall()}
-            style={styles.callIcon}
-          >
-            <Ionicons name="call" size={16} color={Colors.mainColor} />
-          </TouchableOpacity>
+          
         </Animated.View>
 
         {/* Location */}
@@ -108,6 +102,8 @@ const ProfileView = ({ id }: { id: string }) => {
           Location: {suppliers?.address}
         </Animated.Text>
       </View>
+     </TouchableOpacity>
+      </Link>
     </Animated.View>
   );
 };

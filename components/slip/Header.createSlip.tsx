@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { useDynamicColors } from "@/constants/Colors";
+import { Colors } from "@/constants/Colors";
 import GoBack from "../UI/header/GoBack";
 import { Fonts } from "@/constants/Fonts";
 import { radius } from "@/constants/sizes";
@@ -9,8 +9,6 @@ import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 
 const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
-  const Colors = useDynamicColors()
-  const styles  = getStyle(Colors)
   return (
     <LinearGradient
       colors={["#168F88", "#006B60", "#4D89A1"]}
@@ -38,7 +36,7 @@ const Header = ({ setIsSelectCustomer }: { setIsSelectCustomer: any }) => {
 
 export default Header;
 
-const getStyle =(Colors: any)=>({
+const styles =StyleSheet.create({
   container: {
     height: 60,
     backgroundColor: Colors.mainColor,
