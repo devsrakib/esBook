@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Button from "@/components/UI/Button";
-import { useDynamicColors } from "@/constants/Colors";
+import { Colors } from "@/constants/Colors";
 import { radius } from "@/constants/sizes";
 import { Fonts } from "@/constants/Fonts";
 import { Stack, useRouter } from "expo-router";
@@ -35,8 +35,6 @@ const LoginScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");  // Confirm password field
   const [showPasswordFields, setShowPasswordFields] = useState(false);  // To toggle reset password fields
   const [isModalVisible, setIsModalVisible] = useState(false);  // To control modal visibility
-  const Colors = useDynamicColors()
-  const styles = getStyle(Colors)
   // Select auth status and error from redux store
   const { status, error, user } = useAppSelector((state) => state.auth);
 
@@ -324,7 +322,7 @@ handleRouting()
 
 export default LoginScreen;
 
-const getStyle = (Colors: any)=>({
+const styles = StyleSheet.create({
   // Styles for the container, inputs, and buttons are defined here
   container: {
     flex: 1,

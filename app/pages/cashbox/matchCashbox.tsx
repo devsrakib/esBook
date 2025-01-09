@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
-  TouchableOpacity,
   ScrollView,
   AppState,
 } from "react-native";

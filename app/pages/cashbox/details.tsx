@@ -7,7 +7,7 @@ import {
   Image,
   ToastAndroid,
 } from "react-native";
-import React, { act, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "@/components/UI/cashbox/Header";
@@ -32,7 +32,13 @@ import { ensureNonNegative } from "@/utils/ensureNonNegative";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import SlipModal from "./SlipModal";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { postCashSell } from "@/redux/features/cash_sell/cashSellSlice";
+import { postCashSell } from "@/redux/features/cashboxDashboard/cashSellSlice";
+import { postDeposit } from "@/redux/features/cashboxDashboard/dipositeSlice";
+import { postExpense } from "@/redux/features/cashboxDashboard/expenseSlice";
+import { fetchCashSell } from "@/redux/features/cashboxDashboard/getCashSellSlice";
+import { fetchDeposit } from "@/redux/features/cashboxDashboard/getDepositSlice";
+import { fetchExpense } from "@/redux/features/cashboxDashboard/getExpenseSlice";
+import { fetchWithdraw } from "@/redux/features/cashboxDashboard/getWithdrawSlice";
 
 const page = () => {
   const route = useLocalSearchParams<any>();
@@ -41,7 +47,15 @@ const page = () => {
   const [activeModal, setActiveModal] = useState(false)
  
   const navigation = useRouter();
-console.log(route);
+
+const dispatch = useAppDispatch();
+
+  // Fetch data
+
+
+
+
+
 
   let transactionData: any;
   if (route.text == "Cash Sell") {
@@ -94,34 +108,25 @@ console.log(route);
   }
 
   const db = useSQLiteContext();
-
-  const dispatch = useAppDispatch()
   
 
   const handleCashSell = async () => {
     dispatch(postCashSell(transactionData))
   };
 
+  const handleDeposit = async () =>{
+    dispatch(postDeposit(transactionData))
+  }
+
   const handleExpense = async () => {
-    const result = await expense(db, transactionData);
-    if (result.success) {
-      navigation.push("/(tabs)/cashbox");
-    } else {
-      if (!result.success) {
-        ToastAndroid.showWithGravity(
-          result.message,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        );
-      }
-    }
+    dispatch(postExpense(transactionData))
   };
-  const handleDeposit = async () => {
-    const result = await deposit(db, transactionData);
-    if (result.success) {
-      navigation.push("/(tabs)/cashbox");
-    }
-  };
+  // const handleDeposit = async () => {
+  //   const result = await deposit(db, transactionData);
+  //   if (result.success) {
+  //     navigation.push("/(tabs)/cashbox");
+  //   }
+  // };
   const handleCashBuy = async () => {
     const result = await cash_buy(db, transactionData);
     if (result.success) {

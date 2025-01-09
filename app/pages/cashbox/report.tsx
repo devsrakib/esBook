@@ -18,7 +18,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Empty from "@/components/UI/Empty";
 import DueReport from "./dueReport";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { fetchCashSell } from "@/redux/features/cash_sell/getCashSellSlice";
+import { fetchCashSell } from "@/redux/features/cashboxDashboard/getCashSellSlice";
 
 const Page = () => {
   const { bottom, top } = useSafeAreaInsets();

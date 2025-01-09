@@ -10,14 +10,11 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Feature = ({ data, index }: { data: any; index: number }) => {
   const text = data?.text;
-  const CustomTouchable = Animated.createAnimatedComponent(Link);
+  const CustomTouchable = Animated.createAnimatedComponent(TouchableOpacity);
   return (
     <>
-      <CustomTouchable
-        entering={FadeInDown.delay(index * 100)
-          .duration(400)
-          .damping(80)
-          .springify()}
+      <Link
+       
         href={{
           pathname: `${data?.link ? data?.link : "/pages/cashbox/details"}` as
             | string
@@ -26,7 +23,10 @@ const Feature = ({ data, index }: { data: any; index: number }) => {
         }}
         asChild
       >
-        <TouchableOpacity style={styles.container}>
+        <CustomTouchable  entering={FadeInDown.delay(index * 100)
+          .duration(400)
+          .damping(80)
+          .springify()} style={styles.container}>
           <View style={[styles.imgCon, { backgroundColor: data?.color }]}>
             <Image style={styles.img} source={data?.icon} />
           </View>
@@ -38,9 +38,9 @@ const Feature = ({ data, index }: { data: any; index: number }) => {
             </Text>
             <AntDesign name="right" size={16} color={Colors.text} />
           </View>
-        </TouchableOpacity>
-      </CustomTouchable>
-      <Divider height={1} width={"90%"} aligns="center" />
+        </CustomTouchable>
+      </Link>
+      {<Divider height={1} width={"90%"} aligns="center" />}
     </>
   );
 };

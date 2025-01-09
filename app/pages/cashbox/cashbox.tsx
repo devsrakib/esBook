@@ -1,10 +1,7 @@
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
-  Image,
-  TouchableOpacity,
   Dimensions,
 } from "react-native";
 import React, { useCallback, useState } from "react";
@@ -14,12 +11,9 @@ import { Colors } from "@/constants/Colors";
 import { Fonts } from "@/constants/Fonts";
 import Dashboard from "@/components/UI/cashbox/Dashboard";
 import CashboxFeature from "@/components/UI/cashbox/CashboxFeature";
-import { Link, Stack } from "expo-router";
-import { Entypo } from "@expo/vector-icons";
 import Header from "@/components/UI/cashbox/cashbox.header";
 
 export const Cashbox = () => {
-  const { bottom, top } = useSafeAreaInsets();
   const [currentCash, setCurrentCash] = useState<number>(0);
   const handleCurrentCash = useCallback((amount: number) => {
     setCurrentCash(amount);

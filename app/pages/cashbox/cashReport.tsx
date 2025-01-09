@@ -11,19 +11,21 @@ import { Fonts } from "@/constants/Fonts";
 import FormatDate from "@/utils/FormatDate";
 import Empty from "@/components/UI/Empty";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import CustomLoader from "@/components/UI/CustomLoader";
+import { fetchCashBox } from "@/redux/features/matchCashbox/cashboxSlice";
+import EmptyState from "@/components/UI/EmptyState";
 
 const cashReport = () => {
   const { bottom, top } = useSafeAreaInsets();
-  const [cashReport, setCashReport] = useState<any>([]);
-  const db = useSQLiteContext();
+  const dispatch  = useAppDispatch()
+  const {cash_box, loading, error} = useAppSelector(state => state.cashbox)
+ useEffect(() =>{
+  dispatch(fetchCashBox())
+ },[])
 
-  useEffect(() => {
-    async function cashReport() {
-      const result = await getCashReport(db);
-      setCashReport(result);
-    }
-    cashReport();
-  }, []);
+ console.log(cash_box);
+ 
 
   return (
     <View
@@ -39,21 +41,9 @@ const cashReport = () => {
         children="Cash Report"
         backgroundColor={Colors.mainColor}
       />
-      <View style={styles.content}>
-        {cashReport?.length === 0 ? (
-          <Empty
-            icon={
-              <MaterialCommunityIcons
-                name="timer-sand-empty"
-                size={30}
-                color={Colors.text}
-              />
-            }
-            text="No Cash Report"
-          />
-        ) : (
+     {loading ? <CustomLoader /> : <View style={styles.content}>
           <FlatList
-            data={cashReport}
+            data={cash_box?.data}
             renderItem={({ item }) => {
               return (
                 <View style={styles.card}>
@@ -66,18 +56,22 @@ const cashReport = () => {
                     </View>
                     <View style={styles.textContainer}>
                       <Text style={styles.text}>Have Cashbox</Text>
-                      <Text style={styles.date}>{FormatDate(item?.date)}</Text>
+                      <Text style={styles.date}>{FormatDate(item?.createdAt)}</Text>
                     </View>
                   </View>
                   <Text style={styles.amount}>
-                    {currency} {item?.totalCash?.toLocaleString("en-US")}
+                    {currency} {item?.total_amount?.toLocaleString("en-US")}
                   </Text>
                 </View>
               );
             }}
+            ListEmptyComponent={() =>{
+              return(
+                <EmptyState message="No cash report found" />
+              )
+            }}
           />
-        )}
-      </View>
+      </View>}
     </View>
   );
 };

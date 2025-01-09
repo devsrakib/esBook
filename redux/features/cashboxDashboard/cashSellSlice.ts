@@ -21,13 +21,27 @@ export const postCashSell = createAsyncThunk('cashSell/postCashSell', async (dat
 }) 
 
 interface IInitialState{
-    cash_sells: [],
+    cash_sells: {
+        count: number,
+        data: [],
+        links:{
+            next: null,
+            previous: null
+        }
+    },
 loading: boolean,
 error: any
 }
 
 const initialState:IInitialState ={
-cash_sells: [],
+cash_sells: {
+    count: 0,
+    data:[],
+    links:{
+        next: null,
+        previous: null
+    }
+},
 loading: false,
 error: null
 }

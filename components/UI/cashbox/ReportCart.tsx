@@ -32,8 +32,8 @@ const dispatch = useAppDispatch()
 const {customers, loading, error} = useAppSelector(state => state.customers)
 
 useEffect(() =>{
-  dispatch(fetchCustomers(item?.customer))
-},[item?.customer])
+  dispatch(fetchCustomers())
+},[])
 console.log(item?.customer);
 
   // useEffect(() => {
@@ -68,7 +68,12 @@ console.log(item?.customer);
 
   // console.log(":::::::",item);
   
-  console.log('customer form report', customers);
+  // console.log('customer form report', customers);
+  
+  const filteredCustomer = customers?.data?.filter(data => data?.id === item?.customer);
+
+console.log
+(filteredCustomer)
   
 
   return (
